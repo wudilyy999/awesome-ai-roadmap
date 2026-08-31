@@ -1,0 +1,7361 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="从 LLM 到 Agent、RAG、Tools 与 LangChain 的中文 AI 知识图谱">
+      
+      
+      
+        <link rel="canonical" href="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/">
+      
+      
+        <link rel="prev" href="../08-agent-memory-implementation/">
+      
+      
+        <link rel="next" href="../../04-multi-agent/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>记忆与上下文压缩 - Awesome AI Roadmap</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Awesome AI Roadmap" class="md-header__button md-logo" aria-label="Awesome AI Roadmap" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Awesome AI Roadmap
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              记忆与上下文压缩
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zongyangbigpolo/awesome-ai-roadmap
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../llm/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LLM
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../tools/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tools
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../rag/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  RAG
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../langchain/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangChain
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Awesome AI Roadmap" class="md-nav__button md-logo" aria-label="Awesome AI Roadmap" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Awesome AI Roadmap
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zongyangbigpolo/awesome-ai-roadmap
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    LLM
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            LLM
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/01-foundations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    基础原理
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            基础原理
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/01-foundations/01-what-is-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    大语言模型与传统 NLP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/01-foundations/02-transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Transformer 架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/01-foundations/03-attention-variants/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention 变体
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/01-foundations/04-position-encoding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    位置编码
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/01-foundations/05-tokenizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tokenizer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/02-training-alignment/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    训练与对齐
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            训练与对齐
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/02-training-alignment/06-llm-training/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    三阶段训练流程
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/02-training-alignment/07-scaling-law-emergence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Scaling Law 与涌现
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/02-training-alignment/08-finetuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    大模型微调
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/02-training-alignment/09-lora/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LoRA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/02-training-alignment/10-post-training/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Post-Training
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/02-training-alignment/11-dpo-vs-ppo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DPO vs PPO
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/03-inference-serving/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    推理与部署
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            推理与部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/03-inference-serving/12-decoding-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    解码策略
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/03-inference-serving/13-temperature-top-p-top-k/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Temperature、Top-P、Top-K
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/03-inference-serving/14-kv-cache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    KV Cache 与 Prompt Caching
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/03-inference-serving/15-quantization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    模型量化
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/03-inference-serving/19-moe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MoE
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/03-inference-serving/20-deployment-frameworks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    部署框架选型
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/04-prompt-reliability/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Prompt 与可靠性
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Prompt 与可靠性
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/04-prompt-reliability/16-prompt-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prompt 工程
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/04-prompt-reliability/17-cot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CoT 思维链
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/04-prompt-reliability/18-hallucination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    幻觉的成因与缓解
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/05-evaluation-selection/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    评测与选型
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            评测与选型
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/05-evaluation-selection/21-evaluation-metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    能力评测指标
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/05-evaluation-selection/22-model-selection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    模型选型实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../llm/06-multimodal/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    多模态
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_7">
+            <span class="md-nav__icon md-icon"></span>
+            多模态
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../llm/06-multimodal/23-multimodal-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    多模态模型
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tools
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools/01-function-calling/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Function Calling
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Function Calling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/01-function-calling/01-function-calling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Function Calling 原理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/01-function-calling/02-tool-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LLM 如何学会调用工具
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/01-function-calling/03-tool-schema-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    工具定义与 Schema 工程
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/01-function-calling/07-reasoning-models-and-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    推理模型与 MCP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools/02-mcp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    MCP
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            MCP
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/02-mcp/04-what-is-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP 核心内容
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/02-mcp/05-mcp-components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP 三层组成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/02-mcp/06-mcp-vs-function-calling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP 与 Function Calling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/02-mcp/12-mcp-transport/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP 传输层
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/02-mcp/15-tool-protocol-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tool Protocol 安全
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools/03-skills/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Skills
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Skills
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/03-skills/08-what-is-skill/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Skill 是什么
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/03-skills/09-skill-vs-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Skill 与 MCP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/03-skills/10-fc-skill-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Function Calling、MCP、Skill
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools/04-agent-communication/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Agent 通信
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Agent 通信
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/04-agent-communication/11-a2a-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    A2A 协议
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools/05-transport-gateway/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    传输与网关
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            传输与网关
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/05-transport-gateway/13-sse-websocket-webrtc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SSE、WebSocket 与 WebRTC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/05-transport-gateway/14-llm-gateway/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LLM 网关
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Agent
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Agent
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../01-foundations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    基础与架构
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            基础与架构
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-foundations/01-agent-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    从大模型到 AI Agent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-foundations/02-agent-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent 现代系统架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-foundations/03-agentic-building-blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agentic Building Blocks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../02-reasoning-planning/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    推理、规划与反思
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            推理、规划与反思
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-reasoning-planning/04-agent-design-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent 设计范式
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-reasoning-planning/05-agent-reasoning-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    模型推理与搜索方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-reasoning-planning/06-task-decomposition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    复杂任务拆分与调度
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-reasoning-planning/11-llm-agent-planning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LLM 与 Agent 规划能力
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-reasoning-planning/12-agent-reflection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    反思、验证与自我改进
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    记忆与上下文
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            记忆与上下文
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-agent-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent 记忆机制
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-agent-memory-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    长短期记忆工程实现
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    记忆与上下文压缩
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    记忆与上下文压缩
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.1 为什么需要记忆压缩
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.2 四类基础方法
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103-sliding-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3 Sliding Window：按时间截断
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 Sliding Window：按时间截断">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1031" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.1 常见实现
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3.1 常见实现">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      按消息轮数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token" class="md-nav__link">
+    <span class="md-ellipsis">
+      按 Token 数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      按任务阶段
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1032" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.2 不能被普通窗口淘汰的信息
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1033-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.3 不要切断 Tool 交互
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1034-sliding-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.4 Sliding Window 的适用场景
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104-summarization" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4 Summarization：用摘要替换历史
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 Summarization：用摘要替换历史">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1041-rolling-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.1 Rolling Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1042-hierarchical-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.2 Hierarchical Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1043-query-focused-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.3 Query-focused Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1044-event-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.4 Event Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1045" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.5 高质量摘要应保留什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1046-summary-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.6 Summary Drift
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#105-importance-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5 Importance Filtering：按价值选择
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5 Importance Filtering：按价值选择">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1051" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5.1 重要性信号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1052-hard-rules-model-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5.2 Hard Rules 与 Model Scoring
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5.2 Hard Rules 与 Model Scoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hard-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hard Rules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Scoring
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1053-importance-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5.3 Importance Filtering 的风险
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#106-structured-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6 Structured Extraction：改变信息表示
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6 Structured Extraction：改变信息表示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1061" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6.1 示例
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1062" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6.2 适合抽取的内容
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6.2 适合抽取的内容">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task State
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Questions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entity-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entity Facts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1063-structured-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6.3 Structured Extraction 的风险
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#107" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.7 四种方法如何组合
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#108-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.8 额外方法：Deduplication
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#109-externalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.9 额外方法：Externalization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1010-hierarchical-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.10 额外方法：Hierarchical Memory
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1011-delta-state-compaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.11 额外方法：Delta 与 State Compaction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1012" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12 压缩触发时机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.12 压缩触发时机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10121-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.1 Token 阈值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10122" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.2 阶段切换
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10123-tool-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.3 Tool Result 过大
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10124-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.4 Checkpoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10125-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.5 Context 质量下降
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1013-token-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.13 Token Budget 分配
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1014-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.14 Prompt Caching 是什么
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1015-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.15 Prompt Caching 与记忆压缩的区别
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1016-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.16 Prompt Caching 与压缩如何配合
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1017-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.17 Prompt Caching 的限制
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1018-kv-cache-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.18 KV Cache 与 Prompt Caching
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1019" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19 压缩质量怎么评估
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.19 压缩质量怎么评估">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10191-compression-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.1 Compression Ratio
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10192-constraint-retention" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.2 Constraint Retention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10193-state-accuracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.3 State Accuracy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10194-task-success" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.4 Task Success
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10195-recoverability" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.5 Recoverability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1020" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20 压缩测试方法
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.20 压缩测试方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10201-needle-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.1 Needle Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10202-replay-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.2 Replay Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10203-differential-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.3 Differential Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10204-adversarial-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.4 Adversarial Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10205-long-horizon-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.5 Long-horizon Test
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1021" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21 常见反模式
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.21 常见反模式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10211-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.1 只保留最近 N 轮
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10212" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.2 每轮都重写一个总摘要
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10213" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.3 让模型自由判断什么都可以删
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10214" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.4 把代码和错误日志全部摘要
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10215" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.5 压缩后删除所有原始数据
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10216-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.6 把 Prompt Caching 当作扩展窗口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10217-compression-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.7 只追求最高 Compression Ratio
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10218" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.8 摘要把「未验证的结论」写成「已确认的事实」
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10219" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.9 只依赖上下文内的摘要链承载长期决策
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1022" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.22 推荐的生产级压缩管道
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1023" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.23 方法选择表
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1024" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.24 本章总结
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../04-multi-agent/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    多智能体系统
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            多智能体系统
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-multi-agent/09-single-vs-multi-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Single-Agent 与 Multi-Agent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-multi-agent/13-multi-agent-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multi-Agent 协作与路由
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../05-production/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    评估与安全
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            评估与安全
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-production/14-agent-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent 评估与 Benchmark
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-production/15-agent-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent 安全与 Prompt Injection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    RAG
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            RAG
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/01-foundations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    基础与选型
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            基础与选型
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/01-foundations/01-what-is-rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RAG 是什么
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/01-foundations/02-rag-finetune-longcontext/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RAG、微调与长上下文
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/02-ingestion-indexing/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    摄取与索引
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            摄取与索引
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/03-document-parsing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    文档解析与预处理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/04-chunking-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Chunking 策略
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    语义被切断怎么办
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/06-embedding-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Embedding 原理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/07-embedding-selection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Embedding 选型与评估
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/08-vector-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    向量数据库与 ANN
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/02-ingestion-indexing/09-vectordb-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    向量库生产实践
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/03-retrieval/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    在线检索
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            在线检索
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/03-retrieval/10-online-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RAG 在线链路
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/03-retrieval/11-retrieval-paradigms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    检索范式
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/03-retrieval/12-query-rewriting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Query 理解与改写
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/03-retrieval/13-hybrid-retrieval-rerank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    多路召回、RRF 与 Rerank
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/03-retrieval/14-retrieval-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RAG 优化五层框架
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/04-advanced/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    高级与多模态
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            高级与多模态
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/04-advanced/15-advanced-rag-paradigms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    高级 RAG 范式
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/04-advanced/16-graphrag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GraphRAG 与图检索
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/04-advanced/21-multimodal-rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    多模态 RAG
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/05-generation-evaluation/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    生成与评估
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_6" id="__nav_5_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_6">
+            <span class="md-nav__icon md-icon"></span>
+            生成与评估
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/05-generation-evaluation/17-generation-hallucination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    生成、Grounding 与幻觉
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/05-generation-evaluation/18-rag-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RAG 评估体系
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag/06-operations-security/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    运维与安全
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            运维与安全
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/06-operations-security/19-dynamic-update/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    动态更新与增量索引
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag/06-operations-security/20-rag-challenges-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RAG 落地难点与安全
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../langchain/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    LangChain
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            LangChain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../langchain/01-foundations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    基础架构
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            基础架构
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/01-foundations/01-agent-frameworks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Agent 开发框架概览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/01-foundations/02-chain-and-lcel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Chain 与 LCEL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/01-foundations/03-langchain-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangChain v1 架构
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../langchain/02-agent-building/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Agent 构建
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Agent 构建
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/02-agent-building/04-build-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    构建生产级 Agent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/02-agent-building/05-tool-registration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tool 注册与工具契约
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/02-agent-building/06-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    短期与长期记忆
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../langchain/03-ecosystem/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    生态与演进
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_4">
+            <span class="md-nav__icon md-icon"></span>
+            生态与演进
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/03-ecosystem/07-langchain-vs-llamaindex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangChain 与 LlamaIndex
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/03-ecosystem/08-langchain4j/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangChain4j
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/03-ecosystem/11-version-evolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangChain 版本演进
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../langchain/04-langgraph/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    LangGraph
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            LangGraph
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/04-langgraph/09-langchain-vs-langgraph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangChain 与 LangGraph
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/04-langgraph/10-langgraph-advantages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangGraph 核心优势
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../langchain/05-production/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    生产闭环
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_6" id="__nav_6_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_6">
+            <span class="md-nav__icon md-icon"></span>
+            生产闭环
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/05-production/12-deep-research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deep Research 实现逻辑
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../langchain/05-production/13-langsmith-production-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangSmith 生产质量闭环
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.1 为什么需要记忆压缩
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.2 四类基础方法
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103-sliding-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3 Sliding Window：按时间截断
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 Sliding Window：按时间截断">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1031" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.1 常见实现
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3.1 常见实现">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      按消息轮数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token" class="md-nav__link">
+    <span class="md-ellipsis">
+      按 Token 数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      按任务阶段
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1032" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.2 不能被普通窗口淘汰的信息
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1033-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.3 不要切断 Tool 交互
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1034-sliding-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.3.4 Sliding Window 的适用场景
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104-summarization" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4 Summarization：用摘要替换历史
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 Summarization：用摘要替换历史">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1041-rolling-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.1 Rolling Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1042-hierarchical-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.2 Hierarchical Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1043-query-focused-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.3 Query-focused Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1044-event-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.4 Event Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1045" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.5 高质量摘要应保留什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1046-summary-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.4.6 Summary Drift
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#105-importance-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5 Importance Filtering：按价值选择
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5 Importance Filtering：按价值选择">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1051" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5.1 重要性信号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1052-hard-rules-model-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5.2 Hard Rules 与 Model Scoring
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5.2 Hard Rules 与 Model Scoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hard-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hard Rules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Scoring
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1053-importance-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.5.3 Importance Filtering 的风险
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#106-structured-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6 Structured Extraction：改变信息表示
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6 Structured Extraction：改变信息表示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1061" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6.1 示例
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1062" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6.2 适合抽取的内容
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6.2 适合抽取的内容">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task State
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Questions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entity-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entity Facts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1063-structured-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.6.3 Structured Extraction 的风险
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#107" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.7 四种方法如何组合
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#108-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.8 额外方法：Deduplication
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#109-externalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.9 额外方法：Externalization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1010-hierarchical-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.10 额外方法：Hierarchical Memory
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1011-delta-state-compaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.11 额外方法：Delta 与 State Compaction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1012" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12 压缩触发时机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.12 压缩触发时机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10121-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.1 Token 阈值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10122" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.2 阶段切换
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10123-tool-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.3 Tool Result 过大
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10124-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.4 Checkpoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10125-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.12.5 Context 质量下降
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1013-token-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.13 Token Budget 分配
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1014-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.14 Prompt Caching 是什么
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1015-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.15 Prompt Caching 与记忆压缩的区别
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1016-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.16 Prompt Caching 与压缩如何配合
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1017-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.17 Prompt Caching 的限制
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1018-kv-cache-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.18 KV Cache 与 Prompt Caching
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1019" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19 压缩质量怎么评估
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.19 压缩质量怎么评估">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10191-compression-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.1 Compression Ratio
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10192-constraint-retention" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.2 Constraint Retention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10193-state-accuracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.3 State Accuracy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10194-task-success" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.4 Task Success
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10195-recoverability" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.19.5 Recoverability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1020" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20 压缩测试方法
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.20 压缩测试方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10201-needle-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.1 Needle Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10202-replay-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.2 Replay Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10203-differential-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.3 Differential Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10204-adversarial-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.4 Adversarial Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10205-long-horizon-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.20.5 Long-horizon Test
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1021" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21 常见反模式
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.21 常见反模式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10211-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.1 只保留最近 N 轮
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10212" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.2 每轮都重写一个总摘要
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10213" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.3 让模型自由判断什么都可以删
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10214" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.4 把代码和错误日志全部摘要
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10215" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.5 压缩后删除所有原始数据
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10216-prompt-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.6 把 Prompt Caching 当作扩展窗口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10217-compression-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.7 只追求最高 Compression Ratio
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10218" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.8 摘要把「未验证的结论」写成「已确认的事实」
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10219" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.21.9 只依赖上下文内的摘要链承载长期决策
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1022" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.22 推荐的生产级压缩管道
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1023" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.23 方法选择表
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1024" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.24 本章总结
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap/edit/main/docs/agent/03-memory-context/10-agent-memory-compression.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="agent">第十章：Agent 记忆与上下文压缩<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h1>
+<h2 id="101">10.1 为什么需要记忆压缩<a class="headerlink" href="#101" title="Permanent link">&para;</a></h2>
+<p>Agent 在长任务中会持续产生：</p>
+<ul>
+<li>用户与模型消息；</li>
+<li>Tool Call 与 Tool Result；</li>
+<li>计划和状态；</li>
+<li>搜索文档；</li>
+<li>代码、日志和表格；</li>
+<li>中间结论；</li>
+<li>错误与重试记录。</li>
+</ul>
+<p>如果将所有内容不断追加到 Context，会导致：</p>
+<ul>
+<li>超出模型 Context Window；</li>
+<li>输入 Token 成本增加；</li>
+<li>Prefill 延迟上升；</li>
+<li>关键信息被噪音稀释；</li>
+<li>模型更难找到当前目标；</li>
+<li>旧错误和无关信息持续影响后续决策。</li>
+</ul>
+<p>记忆压缩的目标不是简单地“让文本变短”，而是：</p>
+<blockquote>
+<p><strong>在有限 Token Budget 内，尽可能保留完成当前任务所需的信息。</strong></p>
+</blockquote>
+<p>可以将其抽象为：</p>
+<div class="arithmatex">\[
+J(C)=U(C)-\lambda L(C)
+\]</div>
+<p>并满足：</p>
+<div class="arithmatex">\[
+L(C)\le B
+\]</div>
+<p>其中：</p>
+<ul>
+<li><code>C</code> 是压缩后的 Context；</li>
+<li><code>U(C)</code> 是保留信息对当前任务的效用；</li>
+<li><code>L(C)</code> 是 Context 长度；</li>
+<li><code>B</code> 是可用 Token Budget；</li>
+<li><code>λ</code> 表示长度成本权重。</li>
+</ul>
+<h2 id="102">10.2 四类基础方法<a class="headerlink" href="#102" title="Permanent link">&para;</a></h2>
+<p>四种常见方法解决的是不同问题：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>解决的问题</th>
+<th>核心动作</th>
+<th style="text-align: right;">是否有损</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sliding Window</td>
+<td>历史太长，保留哪一段</td>
+<td>删除最早内容</td>
+<td style="text-align: right;">是</td>
+</tr>
+<tr>
+<td>Summarization</td>
+<td>历史太长，如何提炼</td>
+<td>用摘要替换原文</td>
+<td style="text-align: right;">是</td>
+</tr>
+<tr>
+<td>Importance Filtering</td>
+<td>信息价值不同，保留什么</td>
+<td>按任务价值选择</td>
+<td style="text-align: right;">通常是</td>
+</tr>
+<tr>
+<td>Structured Extraction</td>
+<td>对话文本是否是最佳表示</td>
+<td>转换为结构化状态</td>
+<td style="text-align: right;">取决于 Schema</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>flowchart TB
+    H[Long Interaction History] --&gt; W[Sliding Window&lt;br/&gt;按时间截断]
+    H --&gt; S[Summarization&lt;br/&gt;语义压缩]
+    H --&gt; I[Importance Filtering&lt;br/&gt;按价值选择]
+    H --&gt; E[Structured Extraction&lt;br/&gt;改变表示]
+
+    W --&gt; C[Compact Context]
+    S --&gt; C
+    I --&gt; C
+    E --&gt; C</code></pre>
+<p>这四种方法通常组合使用，而不是互相替代。</p>
+<h2 id="103-sliding-window">10.3 Sliding Window：按时间截断<a class="headerlink" href="#103-sliding-window" title="Permanent link">&para;</a></h2>
+<p>Sliding Window 只保留最近若干轮或若干 Token，删除更早的内容。</p>
+<pre class="mermaid"><code>flowchart LR
+    M1[Message 1] --&gt; M2[Message 2]
+    M2 --&gt; M3[Message 3]
+    M3 --&gt; M4[Message 4]
+    M4 --&gt; M5[Message 5]
+    M5 --&gt; M6[Message 6]
+
+    M1 -.丢弃.-&gt; X[Evicted]
+    M2 -.丢弃.-&gt; X
+    M3 --&gt; K[Current Window]
+    M4 --&gt; K
+    M5 --&gt; K
+    M6 --&gt; K</code></pre>
+<h3 id="1031">10.3.1 常见实现<a class="headerlink" href="#1031" title="Permanent link">&para;</a></h3>
+<h4 id="_1">按消息轮数<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
+<p>只保留最近 <code>N</code> 轮对话。</p>
+<p>优点：</p>
+<ul>
+<li>实现简单；</li>
+<li>速度快；</li>
+<li>行为容易预测。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>不同消息长度差异很大；</li>
+<li>不能精确控制 Token。</li>
+</ul>
+<h4 id="token">按 Token 数<a class="headerlink" href="#token" title="Permanent link">&para;</a></h4>
+<p>从最新消息向前装入，直到达到预算。</p>
+<p>优点：</p>
+<ul>
+<li>能控制模型输入大小；</li>
+<li>更适合不同长度的消息。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>仍然只按时间，不考虑价值；</li>
+<li>可能删除早期关键约束。</li>
+</ul>
+<h4 id="_2">按任务阶段<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
+<p>保留当前阶段的详细记录，将已完成阶段移出活跃窗口。</p>
+<p>这种方式比简单按轮数截断更符合 Agent 任务结构。</p>
+<h3 id="1032">10.3.2 不能被普通窗口淘汰的信息<a class="headerlink" href="#1032" title="Permanent link">&para;</a></h3>
+<p>以下内容通常需要 Pin：</p>
+<ul>
+<li>System Instructions；</li>
+<li>用户当前目标；</li>
+<li>安全和权限规则；</li>
+<li>成功标准；</li>
+<li>当前计划和状态；</li>
+<li>未解决问题；</li>
+<li>高风险操作约束。</li>
+</ul>
+<pre class="mermaid"><code>flowchart TB
+    PIN[Pinned Context] --&gt; CTX[Current Context]
+    RECENT[Recent Window] --&gt; CTX
+    RET[Retrieved Memory] --&gt; CTX</code></pre>
+<h3 id="1033-tool">10.3.3 不要切断 Tool 交互<a class="headerlink" href="#1033-tool" title="Permanent link">&para;</a></h3>
+<p>Tool Call 和对应 Tool Result 应视为一个逻辑单元。只保留调用、不保留结果，或只保留结果、不保留调用，都可能破坏上下文。</p>
+<p>同样需要避免切断：</p>
+<ul>
+<li>用户问题与 Agent 回答；</li>
+<li>错误与对应修复；</li>
+<li>计划步骤与执行结果；</li>
+<li>引用与其支持的结论。</li>
+</ul>
+<h3 id="1034-sliding-window">10.3.4 Sliding Window 的适用场景<a class="headerlink" href="#1034-sliding-window" title="Permanent link">&para;</a></h3>
+<ul>
+<li>最近内容明显比早期内容重要；</li>
+<li>对话任务短；</li>
+<li>可以从外部 State 恢复关键信息；</li>
+<li>需要低成本、低延迟压缩。</li>
+</ul>
+<p>它是截断策略，不是理解策略。</p>
+<h2 id="104-summarization">10.4 Summarization：用摘要替换历史<a class="headerlink" href="#104-summarization" title="Permanent link">&para;</a></h2>
+<p>Summarization 在删除早期历史前，先提取重要信息形成更短表示。</p>
+<pre class="mermaid"><code>flowchart LR
+    H[Old Messages] --&gt; S[Summarizer]
+    S --&gt; SUM[Compact Summary]
+    SUM --&gt; CTX[Current Context]
+    R[Recent Messages] --&gt; CTX</code></pre>
+<h3 id="1041-rolling-summary">10.4.1 Rolling Summary<a class="headerlink" href="#1041-rolling-summary" title="Permanent link">&para;</a></h3>
+<p>维护一个持续更新的摘要：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>new_summary = summarize(old_summary + newly_evicted_messages)
+</span></code></pre></div>
+<p>优点：</p>
+<ul>
+<li>实现简单；</li>
+<li>摘要长度稳定；</li>
+<li>适合连续对话。</li>
+</ul>
+<p>风险：</p>
+<ul>
+<li>多次重写会产生 Summary Drift；</li>
+<li>早期细节可能逐渐丢失；</li>
+<li>模型生成的错误可能进入后续摘要。</li>
+</ul>
+<h3 id="1042-hierarchical-summary">10.4.2 Hierarchical Summary<a class="headerlink" href="#1042-hierarchical-summary" title="Permanent link">&para;</a></h3>
+<p>先生成局部摘要，再合并成阶段或任务摘要：</p>
+<pre class="mermaid"><code>flowchart TB
+    M1[Messages 1-10] --&gt; S1[Stage Summary A]
+    M2[Messages 11-20] --&gt; S2[Stage Summary B]
+    M3[Messages 21-30] --&gt; S3[Stage Summary C]
+    S1 --&gt; T[Task Summary]
+    S2 --&gt; T
+    S3 --&gt; T</code></pre>
+<p>它比不断重写同一个摘要更容易：</p>
+<ul>
+<li>保留来源；</li>
+<li>定位丢失信息；</li>
+<li>按阶段展开；</li>
+<li>支持长周期任务。</li>
+</ul>
+<h3 id="1043-query-focused-summary">10.4.3 Query-focused Summary<a class="headerlink" href="#1043-query-focused-summary" title="Permanent link">&para;</a></h3>
+<p>摘要只保留与当前任务或阶段相关的信息。</p>
+<p>例如，Agent 从“资料收集”进入“报告撰写”阶段时，可以重点保留：</p>
+<ul>
+<li>已验证事实；</li>
+<li>来源；</li>
+<li>比较结论；</li>
+<li>未解决冲突。</li>
+</ul>
+<p>不再保留每一次搜索尝试的详细过程。</p>
+<h3 id="1044-event-summary">10.4.4 Event Summary<a class="headerlink" href="#1044-event-summary" title="Permanent link">&para;</a></h3>
+<p>按关键事件总结：</p>
+<ul>
+<li>决策；</li>
+<li>Tool 成功或失败；</li>
+<li>计划变化；</li>
+<li>用户确认；</li>
+<li>发现的新约束。</li>
+</ul>
+<h3 id="1045">10.4.5 高质量摘要应保留什么<a class="headerlink" href="#1045" title="Permanent link">&para;</a></h3>
+<ul>
+<li>原始目标；</li>
+<li>用户明确约束；</li>
+<li>已完成和未完成步骤；</li>
+<li>关键事实；</li>
+<li>重要 Tool 结果；</li>
+<li>决策及依据；</li>
+<li>错误与恢复状态；</li>
+<li>来源和 Artifact 引用。</li>
+</ul>
+<h3 id="1046-summary-drift">10.4.6 Summary Drift<a class="headerlink" href="#1046-summary-drift" title="Permanent link">&para;</a></h3>
+<p>多轮摘要可能发生：</p>
+<pre class="mermaid"><code>flowchart LR
+    RAW[Raw History] --&gt; S1[Summary 1]
+    S1 --&gt; S2[Summary 2]
+    S2 --&gt; S3[Summary 3]
+    S3 --&gt; D[Meaning Drift]</code></pre>
+<p>缓解方式：</p>
+<ul>
+<li>保存原始历史或 Artifact；</li>
+<li>摘要附带来源引用；</li>
+<li>不重复总结稳定结构化字段；</li>
+<li>周期性从原始数据重新生成摘要；</li>
+<li>对目标、权限和数字使用结构化状态；</li>
+<li>使用 Verifier 检查遗漏和矛盾。</li>
+</ul>
+<h2 id="105-importance-filtering">10.5 Importance Filtering：按价值选择<a class="headerlink" href="#105-importance-filtering" title="Permanent link">&para;</a></h2>
+<p>时间顺序不代表信息价值。用户第一轮给出的安全约束，可能比最近十轮普通消息更重要。</p>
+<p>Importance Filtering 根据当前任务选择应保留的内容。</p>
+<pre class="mermaid"><code>flowchart LR
+    H[History Items] --&gt; SCORE[Importance Scoring]
+    SCORE --&gt; HIGH[High Value&lt;br/&gt;保留]
+    SCORE --&gt; LOW[Low Value&lt;br/&gt;删除或外部化]</code></pre>
+<h3 id="1051">10.5.1 重要性信号<a class="headerlink" href="#1051" title="Permanent link">&para;</a></h3>
+<ul>
+<li>与当前目标的相关性；</li>
+<li>是否为用户明确约束；</li>
+<li>是否影响安全和权限；</li>
+<li>是否是未解决问题；</li>
+<li>是否被后续任务依赖；</li>
+<li>来源可信度；</li>
+<li>是否包含独特信息；</li>
+<li>时间新鲜度；</li>
+<li>是否能从外部系统重新获取。</li>
+</ul>
+<p>可以用一个基础效用分数表示：</p>
+<div class="arithmatex">\[
+U_i=
+\alpha R_i
++
+\beta I_i
++
+\gamma D_i
++
+\delta T_i
++
+\epsilon N_i
+-
+\zeta C_i
+\]</div>
+<p>其中：</p>
+<ul>
+<li><code>Rᵢ</code>：Goal Relevance；</li>
+<li><code>Iᵢ</code>：Importance；</li>
+<li><code>Dᵢ</code>：Dependency Value；</li>
+<li><code>Tᵢ</code>：Trust；</li>
+<li><code>Nᵢ</code>：Novelty；</li>
+<li><code>Cᵢ</code>：Token Cost。</li>
+</ul>
+<h3 id="1052-hard-rules-model-scoring">10.5.2 Hard Rules 与 Model Scoring<a class="headerlink" href="#1052-hard-rules-model-scoring" title="Permanent link">&para;</a></h3>
+<p>不应让模型独自决定所有信息的重要性。</p>
+<h4 id="hard-rules">Hard Rules<a class="headerlink" href="#hard-rules" title="Permanent link">&para;</a></h4>
+<p>必须保留：</p>
+<ul>
+<li>System Instructions；</li>
+<li>安全策略；</li>
+<li>用户明确目标；</li>
+<li>权限；</li>
+<li>当前任务状态；</li>
+<li>尚未解决的错误。</li>
+</ul>
+<h4 id="model-scoring">Model Scoring<a class="headerlink" href="#model-scoring" title="Permanent link">&para;</a></h4>
+<p>可以用于：</p>
+<ul>
+<li>判断历史事实与当前阶段的相关性；</li>
+<li>选择代表性 Episode；</li>
+<li>从重复 Tool 结果中提取重点。</li>
+</ul>
+<h3 id="1053-importance-filtering">10.5.3 Importance Filtering 的风险<a class="headerlink" href="#1053-importance-filtering" title="Permanent link">&para;</a></h3>
+<ul>
+<li>模型错误删除真正重要的信息；</li>
+<li>当前看似无关的信息之后可能变得重要；</li>
+<li>重要性评分受当前 Prompt 偏置；</li>
+<li>恶意内容可能伪装成高优先级指令。</li>
+</ul>
+<p>因此，被过滤内容最好外部化保存，而不是立即永久删除。</p>
+<h2 id="106-structured-extraction">10.6 Structured Extraction：改变信息表示<a class="headerlink" href="#106-structured-extraction" title="Permanent link">&para;</a></h2>
+<p>自然语言对话通常冗长、重复且难以精确更新。Structured Extraction 将历史转换为高密度状态。</p>
+<pre class="mermaid"><code>flowchart LR
+    CHAT[Conversation] --&gt; EX[Extractor]
+    EX --&gt; FACTS[Facts]
+    EX --&gt; STATE[Task State]
+    EX --&gt; TODO[Todo]
+    EX --&gt; DEC[Decisions]
+    EX --&gt; ENT[Entities]
+    EX --&gt; ART[Artifact References]</code></pre>
+<h3 id="1061">10.6.1 示例<a class="headerlink" href="#1061" title="Permanent link">&para;</a></h3>
+<p>原始对话：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>用户：不要创建 PR，直接把后续章节提交到 main。
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Agent：明白，后续直接提交到 main。
+</span></code></pre></div>
+<p>结构化后：</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"repository"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zongyangbigpolo/awesome-ai-roadmap"</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"publishing_policy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">"target_branch"</span><span class="p">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">"create_pull_request"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"explicit_user_instruction"</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>结构化表示：</p>
+<ul>
+<li>Token 更少；</li>
+<li>更容易精确更新；</li>
+<li>更适合规则执行；</li>
+<li>更容易检测冲突；</li>
+<li>不依赖语义猜测。</li>
+</ul>
+<h3 id="1062">10.6.2 适合抽取的内容<a class="headerlink" href="#1062" title="Permanent link">&para;</a></h3>
+<h4 id="task-state">Task State<a class="headerlink" href="#task-state" title="Permanent link">&para;</a></h4>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"完成 Agent 知识图谱"</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">"current_chapter"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"writing"</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">"pending"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="s2">"validate formatting"</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="s2">"publish to main"</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="decisions">Decisions<a class="headerlink" href="#decisions" title="Permanent link">&para;</a></h4>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">"decision"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Use GitHub-Flavored Markdown"</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GitHub and DeepWiki can render it directly"</span><span class="p">,</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="open-questions">Open Questions<a class="headerlink" href="#open-questions" title="Permanent link">&para;</a></h4>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">"question"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Should the next chapter cover evaluation?"</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">"owner"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="entity-facts">Entity Facts<a class="headerlink" href="#entity-facts" title="Permanent link">&para;</a></h4>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"predicate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"preferred_formula_format"</span><span class="p">,</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GitHub-compatible LaTeX"</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="1063-structured-extraction">10.6.3 Structured Extraction 的风险<a class="headerlink" href="#1063-structured-extraction" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Schema 设计遗漏信息；</li>
+<li>模型抽取错误；</li>
+<li>难以表达模糊和不确定内容；</li>
+<li>结构化字段可能失去原始语境；</li>
+<li>Schema 版本变化需要迁移。</li>
+</ul>
+<p>因此，应保留来源引用，并允许在需要时返回原文。</p>
+<h2 id="107">10.7 四种方法如何组合<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
+<p>推荐顺序不是简单四选一：</p>
+<pre class="mermaid"><code>flowchart TB
+    H[Full History] --&gt; PIN[Pin Hard Constraints]
+    PIN --&gt; EXT[Externalize Large Artifacts]
+    EXT --&gt; STR[Structured Extraction]
+    STR --&gt; IMP[Importance Filtering]
+    IMP --&gt; SUM[Summarize Older History]
+    SUM --&gt; WIN[Keep Recent Sliding Window]
+    WIN --&gt; PACK[Context Packing]</code></pre>
+<p>一种常见 Context 结构是：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1. System and safety instructions
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>2. Current goal and acceptance criteria
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>3. Structured task state
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>4. Important long-term memories
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>5. Summary of earlier stages
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>6. Recent message window
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>7. Current Tool results
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>8. Output token reserve
+</span></code></pre></div>
+<p>各方法分工如下：</p>
+<ul>
+<li>Sliding Window 保留近期细节；</li>
+<li>Summary 保留早期整体语义；</li>
+<li>Importance Filtering 保留跨时间的关键内容；</li>
+<li>Structured Extraction 保留精确状态和事实；</li>
+<li>External Artifact 保存大体积原始数据。</li>
+</ul>
+<h2 id="108-deduplication">10.8 额外方法：Deduplication<a class="headerlink" href="#108-deduplication" title="Permanent link">&para;</a></h2>
+<p>Agent 常产生大量重复内容：</p>
+<ul>
+<li>多轮重复说明目标；</li>
+<li>搜索结果重复引用同一网页；</li>
+<li>Tool 重试返回相同错误；</li>
+<li>多个 Agent 生成相似结论。</li>
+</ul>
+<p>Deduplication 可以：</p>
+<ul>
+<li>使用内容哈希删除完全重复；</li>
+<li>使用 Embedding 识别近似重复；</li>
+<li>合并同一实体的相同事实；</li>
+<li>将重复来源折叠为引用列表。</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+    I[Context Items] --&gt; H[Exact Hash]
+    H --&gt; S[Semantic Similarity]
+    S --&gt; E[Entity / Fact Merge]
+    E --&gt; O[Deduplicated Items]</code></pre>
+<p>去重时应避免误删：</p>
+<ul>
+<li>来自不同可信来源的相同结论；</li>
+<li>看似相似但时间不同的事件；</li>
+<li>数字不同的近似句子；</li>
+<li>正向与否定表达。</li>
+</ul>
+<h2 id="109-externalization">10.9 额外方法：Externalization<a class="headerlink" href="#109-externalization" title="Permanent link">&para;</a></h2>
+<p>Externalization 将大内容移出 Context，只保留摘要和引用。</p>
+<p>适合：</p>
+<ul>
+<li>长文档；</li>
+<li>代码库；</li>
+<li>日志；</li>
+<li>搜索结果；</li>
+<li>表格；</li>
+<li>图片和多模态数据；</li>
+<li>已完成阶段的详细轨迹。</li>
+</ul>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">"artifact_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tool-result-123"</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">"uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"artifact://tool-result-123.json"</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"包含 200 条搜索结果，已筛选 12 条高可信来源"</span><span class="p">,</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">"content_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sha256:..."</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">"schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search-results"</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>需要时通过 Tool 按片段重新读取。</p>
+<p>这种方法不是删除信息，而是将“始终在 Context 中”改为“按需加载”。</p>
+<h2 id="1010-hierarchical-memory">10.10 额外方法：Hierarchical Memory<a class="headerlink" href="#1010-hierarchical-memory" title="Permanent link">&para;</a></h2>
+<p>分层记忆同时保留不同粒度：</p>
+<pre class="mermaid"><code>flowchart TB
+    TASK[Task Summary] --&gt; S1[Stage Summary A]
+    TASK --&gt; S2[Stage Summary B]
+    S1 --&gt; E1[Raw Events]
+    S1 --&gt; E2[Artifacts]
+    S2 --&gt; E3[Raw Events]
+    S2 --&gt; E4[Artifacts]</code></pre>
+<p>Agent 先读取 Task Summary；只有需要细节时，才展开 Stage Summary 或 Raw Event。</p>
+<p>这是一种 Progressive Disclosure，可以显著降低无关上下文。</p>
+<h2 id="1011-delta-state-compaction">10.11 额外方法：Delta 与 State Compaction<a class="headerlink" href="#1011-delta-state-compaction" title="Permanent link">&para;</a></h2>
+<p>对持续变化的状态，不需要每次保存完整副本。</p>
+<p>例如计划更新：</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"operation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mark_completed"</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">"task_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"research-a"</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28T16:00:00Z"</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>系统可以：</p>
+<ul>
+<li>用 Delta 记录变化；</li>
+<li>周期性生成 Snapshot；</li>
+<li>从 Snapshot + Delta 恢复当前状态。</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+    SNAP[Snapshot] --&gt; D1[Delta 1]
+    D1 --&gt; D2[Delta 2]
+    D2 --&gt; D3[Delta N]
+    D3 --&gt; NEW[New Snapshot]</code></pre>
+<p>这种方法主要减少状态存储和传输，不等同于自然语言摘要。</p>
+<h2 id="1012">10.12 压缩触发时机<a class="headerlink" href="#1012" title="Permanent link">&para;</a></h2>
+<h3 id="10121-token">10.12.1 Token 阈值<a class="headerlink" href="#10121-token" title="Permanent link">&para;</a></h3>
+<p>当 Context 使用量接近预算时触发。</p>
+<p>不应等到窗口完全耗尽，因为还需要为以下内容保留空间：</p>
+<ul>
+<li>新 Tool Result；</li>
+<li>模型输出；</li>
+<li>错误恢复；</li>
+<li>用户追加信息。</li>
+</ul>
+<h3 id="10122">10.12.2 阶段切换<a class="headerlink" href="#10122" title="Permanent link">&para;</a></h3>
+<p>一个里程碑完成后：</p>
+<ul>
+<li>生成阶段摘要；</li>
+<li>提取结构化状态；</li>
+<li>外部化 Artifact；</li>
+<li>清理阶段内临时消息。</li>
+</ul>
+<h3 id="10123-tool-result">10.12.3 Tool Result 过大<a class="headerlink" href="#10123-tool-result" title="Permanent link">&para;</a></h3>
+<p>大型 Tool 输出应立即外部化，而不是先塞入完整 Context 再压缩。</p>
+<h3 id="10124-checkpoint">10.12.4 Checkpoint<a class="headerlink" href="#10124-checkpoint" title="Permanent link">&para;</a></h3>
+<p>任务暂停、转交 Agent 或持久化之前进行压缩和状态保存。</p>
+<h3 id="10125-context">10.12.5 Context 质量下降<a class="headerlink" href="#10125-context" title="Permanent link">&para;</a></h3>
+<p>即使尚未接近长度上限，如果出现：</p>
+<ul>
+<li>目标被遗忘；</li>
+<li>重复动作；</li>
+<li>无关历史持续干扰；</li>
+<li>Tool 选择变差；</li>
+</ul>
+<p>也应重新构建 Context。</p>
+<h2 id="1013-token-budget">10.13 Token Budget 分配<a class="headerlink" href="#1013-token-budget" title="Permanent link">&para;</a></h2>
+<p>总 Context Budget 不应全部用于历史：</p>
+<div class="arithmatex">\[
+B_{total}=
+B_{instruction}
++
+B_{goal}
++
+B_{state}
++
+B_{memory}
++
+B_{recent}
++
+B_{tool}
++
+B_{output}
+\]</div>
+<p>其中：</p>
+<ul>
+<li><code>B_instruction</code>：系统、安全和工具说明；</li>
+<li><code>B_goal</code>：目标与成功标准；</li>
+<li><code>B_state</code>：结构化状态；</li>
+<li><code>B_memory</code>：长期记忆；</li>
+<li><code>B_recent</code>：最近消息；</li>
+<li><code>B_tool</code>：当前 Tool 结果；</li>
+<li><code>B_output</code>：模型输出预留。</li>
+</ul>
+<p>预算应随任务阶段动态调整。例如：</p>
+<ul>
+<li>搜索阶段给 Tool Result 更多空间；</li>
+<li>写作阶段给 Evidence 和 Outline 更多空间；</li>
+<li>调试阶段给错误日志和代码更多空间。</li>
+</ul>
+<h2 id="1014-prompt-caching">10.14 Prompt Caching 是什么<a class="headerlink" href="#1014-prompt-caching" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>本节说明跨请求的计算复用；RAG 上下文增强中如何使用它控制索引成本，见<a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/">RAG：语义被切断怎么办</a>。</p>
+</blockquote>
+<p>Prompt Caching 缓存重复 Prompt 前缀的中间计算结果，使后续请求可以复用。</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant A as Application
+    participant C as Prompt Cache
+    participant M as Model
+
+    A-&gt;&gt;M: Stable Prefix + New Suffix
+    M-&gt;&gt;C: 缓存稳定前缀计算
+    A-&gt;&gt;M: Same Prefix + Another Suffix
+    C--&gt;&gt;M: 复用前缀计算
+    M--&gt;&gt;A: 更低 Prefill 成本或延迟</code></pre>
+<p>适合缓存：</p>
+<ul>
+<li>长 System Prompt；</li>
+<li>Tool Definitions；</li>
+<li>稳定项目说明；</li>
+<li>大段重复文档；</li>
+<li>多轮共享的固定前缀。</li>
+</ul>
+<h2 id="1015-prompt-caching">10.15 Prompt Caching 与记忆压缩的区别<a class="headerlink" href="#1015-prompt-caching" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Memory Compression</th>
+<th>Prompt Caching</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优化层次</td>
+<td>信息层</td>
+<td>计算层</td>
+</tr>
+<tr>
+<td>核心问题</td>
+<td>带哪些信息进入 Context</td>
+<td>重复 Context 如何少算一次</td>
+</tr>
+<tr>
+<td>是否减少 Context 长度</td>
+<td>是</td>
+<td>通常否</td>
+</tr>
+<tr>
+<td>是否改变信息内容</td>
+<td>可能改变或删除</td>
+<td>不改变</td>
+</tr>
+<tr>
+<td>是否释放 Context Window</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>是否降低重复 Prefill 成本</td>
+<td>间接</td>
+<td>是</td>
+</tr>
+<tr>
+<td>是否解决噪音问题</td>
+<td>是</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>最关键的一点是：</p>
+<blockquote>
+<p><strong>Prompt Caching 通常不会让 Context Window 变大，缓存 Token 仍属于模型输入上下文。</strong></p>
+</blockquote>
+<p>即使缓存命中，模型仍然“看到”相同内容，只是服务端可能复用计算，从而降低成本或延迟。</p>
+<h2 id="1016-prompt-caching">10.16 Prompt Caching 与压缩如何配合<a class="headerlink" href="#1016-prompt-caching" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    RAW[Raw Information] --&gt; COMP[Memory Compression]
+    COMP --&gt; KEEP[Selected Context]
+    KEEP --&gt; CACHE[Prompt Caching]
+    CACHE --&gt; MODEL[Model]</code></pre>
+<p>推荐顺序：</p>
+<ol>
+<li>先决定哪些信息真正需要进入 Context；</li>
+<li>再对其中稳定、重复的前缀使用 Prompt Caching。</li>
+</ol>
+<p>例如：</p>
+<ul>
+<li>System Instructions 和 Tool Definitions：适合缓存；</li>
+<li>当前任务状态：需要压缩和动态更新；</li>
+<li>旧对话：需要摘要或过滤；</li>
+<li>大型 Artifact：需要外部化和按需检索。</li>
+</ul>
+<h2 id="1017-prompt-caching">10.17 Prompt Caching 的限制<a class="headerlink" href="#1017-prompt-caching" title="Permanent link">&para;</a></h2>
+<ul>
+<li>通常要求前缀完全或高度一致；</li>
+<li>缓存有生命周期；</li>
+<li>不同模型或配置可能不能共享；</li>
+<li>动态内容放在前缀中会降低命中率；</li>
+<li>不能消除 Context 中的错误和噪音；</li>
+<li>不能替代权限过滤；</li>
+<li>不能替代长期记忆；</li>
+<li>具体费用和缓存规则由模型服务商决定。</li>
+</ul>
+<p>Prompt 设计时通常将稳定内容放在前面，动态内容放在后面，以提高缓存复用。</p>
+<h2 id="1018-kv-cache-prompt-caching">10.18 KV Cache 与 Prompt Caching<a class="headerlink" href="#1018-kv-cache-prompt-caching" title="Permanent link">&para;</a></h2>
+<p>KV Cache 是 Transformer 推理中缓存 Attention Key/Value 状态的底层机制。</p>
+<p>Prompt Caching 是模型服务对应用暴露的跨请求复用能力，底层可能利用 KV 或其他缓存实现。</p>
+<table>
+<thead>
+<tr>
+<th>KV Cache</th>
+<th>Prompt Caching</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型推理内部机制</td>
+<td>服务或 API 产品能力</td>
+</tr>
+<tr>
+<td>常用于一次生成过程</td>
+<td>通常跨请求复用前缀</td>
+</tr>
+<tr>
+<td>开发者未必直接控制</td>
+<td>开发者可以通过 Prompt 结构优化命中</td>
+</tr>
+</tbody>
+</table>
+<p>两者都属于计算优化，不属于语义记忆压缩。</p>
+<h2 id="1019">10.19 压缩质量怎么评估<a class="headerlink" href="#1019" title="Permanent link">&para;</a></h2>
+<h3 id="10191-compression-ratio">10.19.1 Compression Ratio<a class="headerlink" href="#10191-compression-ratio" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[
+CR=1-\frac{L_{after}}{L_{before}}
+\]</div>
+<p>压缩比例高不代表质量高。如果关键约束被删除，再短也没有价值。</p>
+<h3 id="10192-constraint-retention">10.19.2 Constraint Retention<a class="headerlink" href="#10192-constraint-retention" title="Permanent link">&para;</a></h3>
+<p>检查：</p>
+<ul>
+<li>用户目标；</li>
+<li>安全规则；</li>
+<li>验收条件；</li>
+<li>未解决问题；</li>
+<li>关键数字和实体；</li>
+</ul>
+<p>是否仍然保留。</p>
+<h3 id="10193-state-accuracy">10.19.3 State Accuracy<a class="headerlink" href="#10193-state-accuracy" title="Permanent link">&para;</a></h3>
+<p>压缩后的状态是否准确反映：</p>
+<ul>
+<li>已完成步骤；</li>
+<li>当前步骤；</li>
+<li>待执行步骤；</li>
+<li>错误和重试；</li>
+<li>Artifact。</li>
+</ul>
+<h3 id="10194-task-success">10.19.4 Task Success<a class="headerlink" href="#10194-task-success" title="Permanent link">&para;</a></h3>
+<p>比较压缩前后：</p>
+<ul>
+<li>任务成功率；</li>
+<li>Tool 选择正确率；</li>
+<li>重复调用；</li>
+<li>幻觉率；</li>
+<li>成本和延迟。</li>
+</ul>
+<h3 id="10195-recoverability">10.19.5 Recoverability<a class="headerlink" href="#10195-recoverability" title="Permanent link">&para;</a></h3>
+<p>Agent 能否从压缩后的 Context 和外部 State：</p>
+<ul>
+<li>恢复任务；</li>
+<li>解释已完成内容；</li>
+<li>找到原始证据；</li>
+<li>继续下一步。</li>
+</ul>
+<h2 id="1020">10.20 压缩测试方法<a class="headerlink" href="#1020" title="Permanent link">&para;</a></h2>
+<h3 id="10201-needle-test">10.20.1 Needle Test<a class="headerlink" href="#10201-needle-test" title="Permanent link">&para;</a></h3>
+<p>在长历史中放入关键约束，检查压缩后是否保留并正确使用。</p>
+<h3 id="10202-replay-test">10.20.2 Replay Test<a class="headerlink" href="#10202-replay-test" title="Permanent link">&para;</a></h3>
+<p>从 Checkpoint 和压缩 Context 恢复 Agent，观察能否继续任务。</p>
+<h3 id="10203-differential-test">10.20.3 Differential Test<a class="headerlink" href="#10203-differential-test" title="Permanent link">&para;</a></h3>
+<p>使用完整历史和压缩历史分别执行相同任务，比较结果差异。</p>
+<h3 id="10204-adversarial-test">10.20.4 Adversarial Test<a class="headerlink" href="#10204-adversarial-test" title="Permanent link">&para;</a></h3>
+<p>测试：</p>
+<ul>
+<li>早期安全约束；</li>
+<li>后期冲突指令；</li>
+<li>重复噪音；</li>
+<li>恶意 Prompt Injection；</li>
+<li>关键数字和否定关系。</li>
+</ul>
+<h3 id="10205-long-horizon-test">10.20.5 Long-horizon Test<a class="headerlink" href="#10205-long-horizon-test" title="Permanent link">&para;</a></h3>
+<p>让 Agent 执行几十或上百步，检查：</p>
+<ul>
+<li>Summary Drift；</li>
+<li>目标遗忘；</li>
+<li>状态错乱；</li>
+<li>重复动作；</li>
+<li>Artifact 丢失。</li>
+</ul>
+<h2 id="1021">10.21 常见反模式<a class="headerlink" href="#1021" title="Permanent link">&para;</a></h2>
+<h3 id="10211-n">10.21.1 只保留最近 N 轮<a class="headerlink" href="#10211-n" title="Permanent link">&para;</a></h3>
+<p>可能删除最初目标和安全约束。</p>
+<h3 id="10212">10.21.2 每轮都重写一个总摘要<a class="headerlink" href="#10212" title="Permanent link">&para;</a></h3>
+<p>容易产生累积失真。</p>
+<h3 id="10213">10.21.3 让模型自由判断什么都可以删<a class="headerlink" href="#10213" title="Permanent link">&para;</a></h3>
+<p>缺少 Hard Rules 和结构化状态保护。</p>
+<h3 id="10214">10.21.4 把代码和错误日志全部摘要<a class="headerlink" href="#10214" title="Permanent link">&para;</a></h3>
+<p>可能丢失精确行号、错误码和调用栈。应外部化并保留引用。</p>
+<h3 id="10215">10.21.5 压缩后删除所有原始数据<a class="headerlink" href="#10215" title="Permanent link">&para;</a></h3>
+<p>导致无法审计、验证或重新生成摘要。</p>
+<h3 id="10216-prompt-caching">10.21.6 把 Prompt Caching 当作扩展窗口<a class="headerlink" href="#10216-prompt-caching" title="Permanent link">&para;</a></h3>
+<p>缓存不减少输入长度，也不会消除信息噪音。</p>
+<h3 id="10217-compression-ratio">10.21.7 只追求最高 Compression Ratio<a class="headerlink" href="#10217-compression-ratio" title="Permanent link">&para;</a></h3>
+<p>会鼓励系统删除真正有价值的信息。</p>
+<h3 id="10218">10.21.8 摘要把「未验证的结论」写成「已确认的事实」<a class="headerlink" href="#10218" title="Permanent link">&para;</a></h3>
+<p>这是长周期 Agent 中危害最大、也最隐蔽的一种压缩失效。</p>
+<p>典型场景：某个命令因超时或被中断而只输出了部分结果，摘要却把它记录为「已执行成功，结果为 X」。这条虚假的确定性会随摘要一路传播到后续所有轮次，而且因为它以「事实」形式出现，<strong>后续不会有任何环节去重新验证它</strong>。</p>
+<p>缓解方式有三条：</p>
+<ol>
+<li>摘要中显式保留状态标记（<code>verified</code> / <code>unverified</code> / <code>failed</code>），而不是只记结论；</li>
+<li>保留工具调用的退出码与截断标记，不要在摘要阶段丢弃；</li>
+<li>对关键结论保留原始引用（日志位置、文件路径），使其可被重新核对。</li>
+</ol>
+<h3 id="10219">10.21.9 只依赖上下文内的摘要链承载长期决策<a class="headerlink" href="#10219" title="Permanent link">&para;</a></h3>
+<p>多轮压缩会累积信息损耗，早期的关键决策与约束在若干轮压缩后可能彻底消失，形成难以追溯的「历史债」。</p>
+<p>正确做法是把重要决策<strong>同时写入外部文件或结构化状态</strong>（即 10.9 节的 Externalization），让它不依赖摘要链的存续。压缩链负责「最近发生了什么」，外部文件负责「已经定下来的事」。</p>
+<h2 id="1022">10.22 推荐的生产级压缩管道<a class="headerlink" href="#1022" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TB
+    INPUT[Messages + Tool Results + State] --&gt; CLASS[Classify]
+
+    CLASS --&gt; PIN[Pinned Constraints]
+    CLASS --&gt; STATE[Structured State]
+    CLASS --&gt; LARGE[Large Artifacts]
+    CLASS --&gt; HISTORY[Historical Messages]
+
+    LARGE --&gt; EXT[Externalize + Reference]
+    HISTORY --&gt; DEDUP[Deduplicate]
+    DEDUP --&gt; IMP[Importance Filter]
+    IMP --&gt; SUM[Hierarchical Summary]
+    SUM --&gt; WIN[Recent Sliding Window]
+
+    PIN --&gt; PACK[Context Packer]
+    STATE --&gt; PACK
+    EXT --&gt; PACK
+    WIN --&gt; PACK
+    RET[Retrieved Long-term Memory] --&gt; PACK
+
+    PACK --&gt; CACHE[Prompt Cache Stable Prefix]
+    CACHE --&gt; MODEL[Model]
+
+    MODEL --&gt; OBS[New Observation]
+    OBS --&gt; INPUT</code></pre>
+<p>推荐默认策略：</p>
+<ol>
+<li>永久 Pin 系统、安全、目标和成功标准；</li>
+<li>将任务状态抽取为结构化数据；</li>
+<li>大型 Tool Result 立即外部化；</li>
+<li>对历史做去重和重要性过滤；</li>
+<li>已完成阶段使用分层摘要；</li>
+<li>保留最近交互窗口；</li>
+<li>长期记忆按当前任务检索；</li>
+<li>按 Token Budget 组装 Context；</li>
+<li>对稳定前缀使用 Prompt Caching；</li>
+<li>保留原始来源以支持恢复和审计。</li>
+</ol>
+<h2 id="1023">10.23 方法选择表<a class="headerlink" href="#1023" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>推荐方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最近对话最重要</td>
+<td>Sliding Window</td>
+</tr>
+<tr>
+<td>需要保留早期整体语义</td>
+<td>Summarization</td>
+</tr>
+<tr>
+<td>关键内容分散在整个历史</td>
+<td>Importance Filtering</td>
+</tr>
+<tr>
+<td>需要精确状态和事实</td>
+<td>Structured Extraction</td>
+</tr>
+<tr>
+<td>存在大量重复信息</td>
+<td>Deduplication</td>
+</tr>
+<tr>
+<td>Tool Result 或文档太大</td>
+<td>Externalization</td>
+</tr>
+<tr>
+<td>任务跨多个阶段</td>
+<td>Hierarchical Memory</td>
+</tr>
+<tr>
+<td>状态频繁变化</td>
+<td>Delta + Snapshot</td>
+</tr>
+<tr>
+<td>重复使用稳定 Prompt 前缀</td>
+<td>Prompt Caching</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1024">10.24 本章总结<a class="headerlink" href="#1024" title="Permanent link">&para;</a></h2>
+<p>四种基础压缩方法解决不同维度：</p>
+<ol>
+<li><strong>Sliding Window</strong>：按时间截断历史；</li>
+<li><strong>Summarization</strong>：在截断前提炼语义；</li>
+<li><strong>Importance Filtering</strong>：打破时间顺序，按价值选择；</li>
+<li><strong>Structured Extraction</strong>：将对话转换为高密度状态。</li>
+</ol>
+<p>现代系统通常还会结合：</p>
+<ul>
+<li>Deduplication；</li>
+<li>Artifact Externalization；</li>
+<li>Hierarchical Memory；</li>
+<li>Delta 与 Snapshot；</li>
+<li>Retrieval；</li>
+<li>Token Budget Packing。</li>
+</ul>
+<p>Prompt Caching 与这些方法位于不同层次：</p>
+<blockquote>
+<p><strong>记忆压缩决定带什么信息，Prompt Caching 决定重复信息如何减少计算。</strong></p>
+</blockquote>
+<p>两者互补，但 Prompt Caching 不会释放 Context Window，也不能替代摘要、过滤和结构化抽取。</p>
+<p>最终原则是：</p>
+<blockquote>
+<p><strong>关键约束结构化并固定保留，大型信息外部化，旧历史分层摘要，近期细节使用窗口，长期知识按需检索，稳定前缀再使用缓存。</strong></p>
+</blockquote>
+<h2 id="_3">参考资料<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2310.08560">MemGPT: Towards LLMs as Operating Systems</a></li>
+<li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic: Effective context engineering for AI agents</a></li>
+<li><a href="https://research.trychroma.com/context-rot">Chroma Research: Context Rot</a></li>
+<li><a href="https://blog.langchain.com/context-engineering-for-agents/">LangChain: Context Engineering for Agents</a></li>
+<li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching">Anthropic Prompt Caching</a></li>
+<li><a href="https://platform.openai.com/docs/guides/prompt-caching">OpenAI Prompt Caching</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/add-memory">LangGraph Memory</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../08-agent-memory-implementation/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 长短期记忆工程实现">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                长短期记忆工程实现
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../04-multi-agent/" class="md-footer__link md-footer__link--next" aria-label="下一页: 模块导览">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                模块导览
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.action.edit", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -8589,13 +8589,13 @@
 
 <h1 id="embedding">第六章：Embedding 原理与技术演进<a class="headerlink" href="#embedding" title="Permanent link">&para;</a></h1>
 <h2 id="61-embedding">6.1 Embedding 到底在做什么<a class="headerlink" href="#61-embedding" title="Permanent link">&para;</a></h2>
-<p>一句话：<strong>把文本映射成一个稠密向量，使得语义相近的文本在向量空间中距离更近。</strong></p>
+<p>可以先记住一句话：<strong>把文本映射成一个稠密向量，使得语义相近的文本在向量空间中距离更近。</strong></p>
 <p>这句话里有两个关键点，缺一个都不完整：</p>
 <ol>
 <li><strong>稠密</strong>：几百到几千维的实数向量，每一维没有独立的可解释含义，语义分布在整个向量上；</li>
 <li><strong>语义相近 → 距离近</strong>：这是靠训练目标<strong>刻意造出来的</strong>性质，不是自动出现的。</li>
 </ol>
-<p>第二点是理解 Embedding 的关键。<strong>「猫」和「狗」的向量为什么接近？不是因为模型"懂"它们都是动物，而是因为训练时它们大量出现在相似的上下文中，模型被优化成给它们相近的表示。</strong></p>
+<p>第二点是理解 Embedding 的关键。<strong>「猫」和「狗」的向量之所以接近，不是因为模型显式存着「它们都属于动物」这条知识，而是因为训练时它们大量出现在相似的上下文中，参数被优化成给出相近的表示。</strong></p>
 <h2 id="62-rag">6.2 为什么 RAG 需要它<a class="headerlink" href="#62-rag" title="Permanent link">&para;</a></h2>
 <p>关键词检索只能匹配<strong>字面</strong>。用户问「怎么请年假」，而文档写的是「带薪休假申请流程」——没有一个词重合，关键词检索直接失效。</p>
 <p>Embedding 把两者都映射到「休假申请」这个语义区域，从而能匹配上。</p>
@@ -8608,7 +8608,7 @@
     G1[第一代&lt;br/&gt;静态词向量] --&gt; G2[第二代&lt;br/&gt;上下文词向量]
     G2 --&gt; G3[第三代&lt;br/&gt;句向量 双塔]
     G3 --&gt; G4[第四代&lt;br/&gt;后期交互 多向量]</code></pre>
-<p><strong>理解每一代解决了上一代什么问题，比记住模型名字重要得多。</strong></p>
+<p>按代际看，更容易理解为什么后面的架构会变成这样。</p>
 <h3 id="631">6.3.1 第一代：静态词向量<a class="headerlink" href="#631" title="Permanent link">&para;</a></h3>
 <p>代表：Word2Vec、GloVe、FastText。</p>
 <p><strong>核心思想</strong>：一个词的含义由它周围经常出现的词决定。通过预测上下文（或用上下文预测中心词）来学习词向量。</p>
@@ -8619,7 +8619,7 @@
 <p>代表：ELMo、BERT。</p>
 <p><strong>核心突破</strong>：<strong>同一个词在不同句子里有不同的向量</strong>。BERT 通过双向 Transformer 编码整个句子，每个 Token 的表示都依赖于它的具体上下文。</p>
 <p>多义词问题就此解决。</p>
-<p><strong>但是——</strong>这里有个非常重要的坑，也是这道题最经典的考点：</p>
+<p>这里需要单独区分一个常见误解：</p>
 <blockquote>
 <p><strong>BERT 不能直接用于 RAG 检索。</strong></p>
 </blockquote>
@@ -8730,7 +8730,7 @@
 <p><strong>RAG 需要的是非对称检索能力。</strong> 用在对称任务上训练的模型做 RAG，效果会打折扣——这也是为什么不能只看模型在通用相似度榜单上的分数。</p>
 <h2 id="66">6.6 常见错误<a class="headerlink" href="#66" title="Permanent link">&para;</a></h2>
 <h3 id="661-bert-rag">6.6.1 说「BERT 就能做 RAG 检索」<a class="headerlink" href="#661-bert-rag" title="Permanent link">&para;</a></h3>
-<p>原生 BERT 句向量质量差，且 cross-encoder 架构在大规模检索中不可用。这是本章最重要的考点。</p>
+<p>原生 BERT 句向量质量差，且 cross-encoder 架构在大规模检索中不可用。这也是检索架构里最容易混淆的一点。</p>
 <h3 id="662">6.6.2 不知道为什么需要双塔<a class="headerlink" href="#662" title="Permanent link">&para;</a></h3>
 <p>答不出「文档向量必须能离线预计算」，说明没理解检索的工程约束。</p>
 <h3 id="663-embedding-rerank">6.6.3 把 Embedding 模型和 Rerank 模型混为一谈<a class="headerlink" href="#663-embedding-rerank" title="Permanent link">&para;</a></h3>
@@ -8751,10 +8751,6 @@
 <li><strong>两阶段架构的技术根源</strong>：双塔快但粗，cross-encoder 准但慢，所以粗排精排分离；</li>
 <li><strong>硬性约束</strong>：同一模型建库查询、注意长度上限、按模型卡加指令前缀、区分对称与非对称检索。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>Embedding 的演进史，就是在「精度」和「能不能离线预计算」这两个约束之间反复权衡的历史。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1301.3781">Efficient Estimation of Word Representations in Vector Space</a></li>

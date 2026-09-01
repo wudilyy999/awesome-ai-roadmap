@@ -8724,15 +8724,13 @@
 <h1 id="langchain-agent">第四章：用 LangChain 构建生产级 Agent 的七步<a class="headerlink" href="#langchain-agent" title="Permanent link">&para;</a></h1>
 <h2 id="41-agent">4.1 什么才算完整 Agent<a class="headerlink" href="#41-agent" title="Permanent link">&para;</a></h2>
 <p><strong>模型成功调用一次天气工具，只能说明 Demo 跑通了。</strong></p>
-<p>真正进入业务后，问题会一层层出现：</p>
+<p>进入业务后，问题会一层层出现：</p>
 <ul>
 <li>它能做什么、<strong>不能做什么</strong>？</li>
 <li>模型选中工具后，<strong>参数是否正确</strong>？失败或重复调用<strong>会不会带来副作用</strong>？</li>
 <li>流程跑得更久时：<strong>会话中断后能否恢复</strong>？最终结果能否稳定进入业务系统？<strong>线上出错后能不能复现</strong>？</li>
 </ul>
-<blockquote>
-<p><strong>完整 Agent 不是一次模型调用，而是一条从任务设计、能力接入、运行控制走到测试监控的工程链路。</strong></p>
-</blockquote>
+<p>完整 Agent 关注的不只是一次模型调用，而是一条从任务设计、能力接入、运行控制走到测试监控的工程链路。</p>
 <pre class="mermaid"><code>flowchart LR
     S1["① 明确任务边界"] --&gt; S2["② 选模型与 Tools"] --&gt; S3["③ 约束行为与输出"] --&gt; S4["④ 组装 Agent"] --&gt; S5["⑤ 补齐状态与安全"] --&gt; S6["⑥ 选择调用方式"] --&gt; S7["⑦ 测试与监控"]
 
@@ -8774,14 +8772,10 @@
 <li>约定什么算成功、什么算失败、<strong>什么时候停止</strong>；</li>
 <li>哪些情况<strong>必须转人工</strong>。</li>
 </ol>
-<blockquote>
-<p><strong>这些答案会继续决定后面的工具、Prompt 和测试用例。边界一旦模糊，模型就只能猜测什么行为算正确，后面再精细的工程配置也补不回来。</strong></p>
-</blockquote>
+<p>这些答案会继续决定后面的工具、Prompt 和测试用例。边界一旦模糊，模型就只能猜测什么行为算正确，后面的工程配置也很难补回来。</p>
 <h2 id="43-tools">4.3 第二步：选择模型与 Tools<a class="headerlink" href="#43-tools" title="Permanent link">&para;</a></h2>
 <p>模型需要支持项目所需的<strong>工具调用、结构化输出和上下文长度</strong>。</p>
-<blockquote>
-<p><strong>模型负责判断和规划，真正访问数据库、搜索资料、发送消息的动作应该由 Tool 执行。</strong></p>
-</blockquote>
+<p>模型负责判断和规划；访问数据库、搜索资料、发送消息这类动作应由 Tool 执行。</p>
 <h3 id="431-tool">4.3.1 Tool 为什么要尽量小而清楚<a class="headerlink" href="#431-tool" title="Permanent link">&para;</a></h3>
 <p><strong>因为模型主要依靠名称、描述和参数 Schema 来判断能不能调用。</strong></p>
 <ul>
@@ -8819,9 +8813,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>工具描述里的「只读」很重要，但 Prompt 中写「禁止退款」不能替代退款接口本身的身份校验。</strong></p>
-</blockquote>
+<p>工具描述里的「只读」能帮助模型少走错路，但 Prompt 中写「禁止退款」不能替代退款接口本身的身份校验。</p>
 <h2 id="44">4.4 第三步：约束行为与输出<a class="headerlink" href="#44" title="Permanent link">&para;</a></h2>
 <p><code>system_prompt</code> 应说明<strong>角色、目标、信息边界、工具规则和失败策略</strong>。例如：回答订单状态前必须查询工具，不能猜测数据库中不存在的信息，高风险请求必须转人工。</p>
 <h3 id="441">4.4.1 什么时候需要结构化输出<a class="headerlink" href="#441" title="Permanent link">&para;</a></h3>
@@ -8851,9 +8843,7 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">order_status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"订单状态"</span><span class="p">)</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">needs_human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"是否需要转人工"</span><span class="p">)</span>
 </span></code></pre></div>
-<blockquote>
-<p><strong>结构化输出可以约束字段和类型，但不能保证业务事实正确，也不会执行授权。</strong> 事实仍必须来自可信工具，权限仍必须由业务服务控制。</p>
-</blockquote>
+<p>结构化输出可以约束字段和类型，但不能保证业务事实正确，也不会执行授权。事实仍必须来自可信工具，权限仍必须由业务服务控制。</p>
 <h3 id="442">4.4.2 模型字段不是授权开关<a class="headerlink" href="#442" title="Permanent link">&para;</a></h3>
 <p><code>needs_human: bool</code> 只是模型产出的一个字段：模型可以漏填、误填，甚至被提示注入诱导填成 <code>false</code>。因此，<strong>不能用它决定敏感操作是否真的执行</strong>；同样，不能把「模型没有调用敏感工具」当作授权结论。</p>
 <p>把不可协商的策略放在确定性执行路径上。对标准工具调用 Agent，优先用 middleware 在工具执行前中断；工具服务仍要按可信身份再次授权：</p>
@@ -8941,9 +8931,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>不能因为二者都能落盘就混为一谈。</strong></p>
-</blockquote>
+<p>二者都能落盘，但职责不同，不能混用。</p>
 <h3 id="462-middleware">4.6.2 横切逻辑写在 Middleware<a class="headerlink" href="#462-middleware" title="Permanent link">&para;</a></h3>
 <p>重试、摘要、权限和审批<strong>往往会同时影响多个模型或工具调用</strong>。散落在每个节点里，规则很快就会重复。</p>
 <table>
@@ -9002,9 +8990,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>流式输出改善的是等待体验，并不会自动缩短工具执行时间。</strong> 超时、取消、并发限制和缓存仍要单独设计。</p>
-</blockquote>
+<p>流式输出改善的是等待体验，不会自动缩短工具执行时间。超时、取消、并发限制和缓存仍要单独设计。</p>
 <h2 id="48">4.8 第七步：测试与监控<a class="headerlink" href="#48" title="Permanent link">&para;</a></h2>
 <p><strong>Agent 输出具有概率性，所以测试不能只比较最终文本。</strong></p>
 <pre class="mermaid"><code>flowchart TB
@@ -9061,9 +9047,7 @@
 <li><strong>调用方式按产品形态选</strong>：invoke / 异步 / stream，流式不缩短执行时间；</li>
 <li><strong>三层测试</strong>：Tool → 轨迹 → 端到端与线上 Trace。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：用 LangChain 构建 Agent 的关键不在于把 create_agent 跑通，而在于沿着「边界、能力、约束、组装、状态、交互、验证」七步，把一个概率性的模型循环变成有边界、有状态、可测试、可观测的业务系统。</strong></p>
-</blockquote>
+<p>把 <code>create_agent</code> 跑通只是起点；要让 Agent 落到业务里，还得沿着边界、能力、约束、组装、状态、交互和验证七步，把概率性的模型循环收束成可测试、可观测的系统。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/agents">LangChain: Agents 概念文档</a></li>

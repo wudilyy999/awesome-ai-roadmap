@@ -8599,7 +8599,7 @@
 <h1 id="mcp">第五章：MCP 的三层组成<a class="headerlink" href="#mcp" title="Permanent link">&para;</a></h1>
 <h2 id="51">5.1 用三层把概念理清<a class="headerlink" href="#51" title="Permanent link">&para;</a></h2>
 <p>第一次接触 MCP，最劝退的是名词密度：Host、Client、Server、Tools、Resources、Prompts、JSON-RPC、stdio、Streamable HTTP、sampling、elicitation、roots……</p>
-<p>其实把它拆成三层就清楚了，而且它们在设计上尽量解耦：</p>
+<p>把它拆成三层来看，会清楚很多，而且这三层在设计上本来就是解耦的：</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph L1["第一层 · 角色架构：谁和谁在通信"]
         A["Host ── Client ── Server"]
@@ -8663,7 +8663,7 @@
     style BOUNDARY fill:#fff3cd</code></pre>
 <p>面对第三方 Server，Host 还应使用最小权限、进程/容器隔离、网络出口控制和参数过滤。只有这些运行时策略才能限制一个 Server 能读取和执行的范围。</p>
 <h3 id="523-host">5.2.3 Host 是唯一的权限把关者<a class="headerlink" href="#523-host" title="Permanent link">&para;</a></h3>
-<p>面试里最容易混的是 Host 和 Client。记住一句话：<strong>Client 只是管道，Host 才是决策者</strong>。</p>
+<p>Host 和 Client 经常被混在一起。Client 负责通信和转发，授权与策略决定仍在 Host。</p>
 <p>具体来说，这些决策全在 Host：</p>
 <ul>
 <li>用户是否授权某次工具调用；</li>
@@ -8758,7 +8758,7 @@
 <p>并非每个 Server 都使用这些能力。Host 应逐请求声明允许的 Client capabilities，并把用户交互、模型访问、预算和数据边界纳入授权策略。</p>
 <h2 id="54">5.4 第三层：传输协议<a class="headerlink" href="#54" title="Permanent link">&para;</a></h2>
 <h3 id="541">5.4.1 消息格式与传输方式是解耦的<a class="headerlink" href="#541" title="Permanent link">&para;</a></h3>
-<p>这是这一层最重要的设计点：</p>
+<p>这一层的设计点，就是把消息格式和传输方式分开：</p>
 <pre class="mermaid"><code>flowchart TB
     MSG["JSON-RPC 2.0&lt;br/&gt;消息格式（不变）"]
     MSG --&gt; T1["stdio&lt;br/&gt;本地子进程"]
@@ -8838,7 +8838,7 @@
     H-&gt;&gt;M: role=tool 消息
     M--&gt;&gt;H: 已创建 Issue，链接是……
     H-&gt;&gt;U: 最终答案</code></pre>
-<p>从这张图能看出三个关键事实：</p>
+<p>这次完整调用里，有三点最值得注意：</p>
 <ol>
 <li><strong>若 Host 使用模型 Function Calling</strong>，可将 MCP Tool 转为该模型的 schema；也可由规则、结构化输出或人工操作调用 MCP。MCP 对模型接口没有强制要求；</li>
 <li><strong>用户授权发生在 Host 层</strong>，在调用真正发出去之前；</li>
@@ -8868,9 +8868,6 @@
 <li><strong>消息格式与传输方式解耦</strong>，同一个 Server 换配置就能在本地和远程之间切换；</li>
 <li><strong>stdio 下 stdout 是协议专用通道</strong>，日志必须走 stderr。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：把 MCP 拆成角色、能力、传输三层，每层只回答一个问题，所有名词就各归其位了。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/architecture">MCP 架构说明</a></li>

@@ -5715,7 +5715,7 @@
         <li class="md-nav__item">
   <a href="#116-pydantic-2" class="md-nav__link">
     <span class="md-ellipsis">
-      11.6 Pydantic 2 值得重点背吗
+      11.6 Pydantic 2 在迁移中的位置
     </span>
   </a>
   
@@ -8442,7 +8442,7 @@
         <li class="md-nav__item">
   <a href="#116-pydantic-2" class="md-nav__link">
     <span class="md-ellipsis">
-      11.6 Pydantic 2 值得重点背吗
+      11.6 Pydantic 2 在迁移中的位置
     </span>
   </a>
   
@@ -8667,7 +8667,7 @@
 </table>
 <p><strong>拆分后的收益</strong>：项目只安装真正需要的集成，也降低了某个模型 SDK 升级对整个框架的影响。</p>
 <blockquote>
-<p><strong>不需要背出所有包名，重点是「稳定内核，释放边缘」这一架构思想。</strong></p>
+<p>重点不是记包名列表，而是理解「稳定内核，释放边缘」这条拆分思路。</p>
 </blockquote>
 <h2 id="113-runnable">11.3 节点二：Runnable 统一协议<a class="headerlink" href="#113-runnable" title="Permanent link">&para;</a></h2>
 <p><strong>早期为不同流程提供了大量 Chain 类，调用方式和扩展方式并不完全一致。</strong></p>
@@ -8732,12 +8732,12 @@
 <p><strong>不能把 v1 简单理解成「旧 API 全部删除」。</strong></p>
 <p><strong>更准确的说法是</strong>：新项目使用聚焦后的 Agent API，旧项目通过 <code>langchain-classic</code> 保持运行，再根据需要逐步迁移。</p>
 </blockquote>
-<h2 id="116-pydantic-2">11.6 Pydantic 2 值得重点背吗<a class="headerlink" href="#116-pydantic-2" title="Permanent link">&para;</a></h2>
+<h2 id="116-pydantic-2">11.6 Pydantic 2 在迁移中的位置<a class="headerlink" href="#116-pydantic-2" title="Permanent link">&para;</a></h2>
 <p><strong>Python 版本 v0.3 将内部数据模型迁移到 Pydantic 2，并停止使用 Pydantic 1 兼容层。</strong></p>
 <p><strong>这属于重要的迁移背景</strong>，因为工具 Schema、结构化输出和配置对象都依赖 Pydantic。</p>
 <blockquote>
-<p><strong>但面试时不需要展开 Pydantic 的全部版本差异。</strong> 说明它统一了数据模型与校验基线、旧项目升级时需要检查导入路径和模型定义即可。</p>
-<p><strong>相比之下，拆包、Runnable、LangGraph 和 v1 Agent 架构更能体现长期演进方向。</strong></p>
+<p>工程上不必把 Pydantic 的细节当成主线。知道它统一了数据模型与校验基线，旧项目升级时需要检查导入路径和模型定义，通常就够了。</p>
+<p>相比之下，拆包、Runnable、LangGraph 和 v1 Agent 架构更能体现长期演进方向。</p>
 </blockquote>
 <h2 id="117">11.7 升级时要注意什么<a class="headerlink" href="#117" title="Permanent link">&para;</a></h2>
 <p><strong>跨大版本升级不能只执行一次依赖更新。</strong></p>
@@ -8756,7 +8756,7 @@
 </blockquote>
 <p><strong>因此生产项目应该固定依赖版本，并尽量建立在公开稳定接口之上。</strong></p>
 <h2 id="118">11.8 演进方向是什么<a class="headerlink" href="#118" title="Permanent link">&para;</a></h2>
-<p><strong>把几次架构变化连起来，主线其实很清楚</strong>：</p>
+<p>把几次架构变化连起来，可以看到一条连续的路线：</p>
 <pre class="mermaid"><code>flowchart LR
     A["langchain-core&lt;br/&gt;稳定基础协议"] --&gt; B["集成拆包&lt;br/&gt;解决核心与外部 SDK&lt;br/&gt;节奏不一致"]
     B --&gt; C["Runnable + LCEL&lt;br/&gt;统一确定性流程的组合方式"]
@@ -8773,7 +8773,7 @@
 <h3 id="1191">11.9.1 把演进理解成「不断加功能」<a class="headerlink" href="#1191" title="Permanent link">&para;</a></h3>
 <p><strong>它是在反复重新划分边界</strong>：哪些稳定、哪些独立、哪些下沉。</p>
 <h3 id="1192-api">11.9.2 背诵每个小版本的 API 变化<a class="headerlink" href="#1192-api" title="Permanent link">&para;</a></h3>
-<p><strong>抓四个架构节点就够了</strong>，也不建议报当前最新补丁版本。</p>
+<p>把注意力放在四个架构节点即可，也不建议把当前最新补丁版本当成重点。</p>
 <h3 id="1193-v1-api">11.9.3 认为 v1 把旧 API 全删了<a class="headerlink" href="#1193-v1-api" title="Permanent link">&para;</a></h3>
 <p><strong>它们迁到了 <code>langchain-classic</code></strong>，存量项目可渐进迁移。</p>
 <h3 id="1194-langgraph-langchain">11.9.4 以为 LangGraph 是来替换 LangChain 的<a class="headerlink" href="#1194-langgraph-langchain" title="Permanent link">&para;</a></h3>
@@ -8802,7 +8802,7 @@
 <li><strong>总方向</strong>：稳定核心、解耦集成、组合确定性流程、图化 Agent 运行时。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：LangChain 的版本演进不是功能堆叠史，而是一条不断重划边界的路线——先把协议稳下来、把集成放出去，再用 Runnable 统一确定性流程、用 LangGraph 承接复杂执行，最后在高层用 create_agent 和 middleware 把易用性还给开发者。</strong></p>
+<p>可以把这条演进路线概括为：先把协议稳下来、把集成拆出去，再用 Runnable 统一确定性流程、用 LangGraph 承接复杂执行，最后在高层用 <code>create_agent</code> 和 middleware 收敛 Agent 开发入口。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

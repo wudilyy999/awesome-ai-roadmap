@@ -8403,7 +8403,7 @@
 
 <h1 id="_1">第十三章：反馈闭环与数据飞轮<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="131">13.1 反馈闭环是整个生产架构图的最后一环,也是第一环<a class="headerlink" href="#131" title="Permanent link">&para;</a></h2>
-<p>回到<a href="../../01-foundations/02-production-architecture-overview/">第 2 章</a>的架构全景图:所有环节最终都指向反馈闭环,而反馈闭环产出的数据又重新流回评测集和训练数据,成为下一轮迭代的起点。<strong>这一章讲的不是新的技术组件,而是怎么让第 7–12 章建立起来的各个环节真正首尾相连,形成飞轮。</strong></p>
+<p>回到<a href="../../01-foundations/02-production-architecture-overview/">第 2 章</a>的架构全景图:所有环节最终都指向反馈闭环,而反馈闭环产出的数据又重新流回评测集和训练数据,成为下一轮迭代的起点。<strong>这里不是再加一个新组件,而是把第 7–12 章那些已经搭好的评测、发布和训练数据入口真正接起来。</strong></p>
 <pre class="mermaid"><code>flowchart LR
     PROD["生产系统运行"] --&gt; SIGNAL["收集反馈信号"]
     SIGNAL --&gt; TRIAGE["脱敏 · 去重 · 归因分诊"]
@@ -8467,7 +8467,7 @@
     style B fill:#fff3cd</code></pre>
 <p><strong>数据飞轮的关键前提是"规模阈值"和"数据质量",不是"有反馈就直接拿去微调"。</strong> 未经清洗、未经去重、未经归因分诊的原始反馈直接用于训练,很容易把噪声甚至对抗性输入也学进模型里。</p>
 <h2 id="135">13.5 反馈闭环的治理边界<a class="headerlink" href="#135" title="Permanent link">&para;</a></h2>
-<p>反馈数据本质上也是用户数据,治理边界和<a href="../../04-evaluation-observability/08-online-observability-tracing/">第 8 章</a>讲的 Trace 数据边界原则一致:</p>
+<p>反馈数据也是用户数据,治理边界和<a href="../../04-evaluation-observability/08-online-observability-tracing/">第 8 章</a>讲的 Trace 数据边界原则一致:</p>
 <table>
 <thead>
 <tr>
@@ -8513,9 +8513,6 @@
 <li><strong>长周期闭环(数据飞轮,反馈→训练数据)需要规模和质量前提</strong>,不是"有反馈就直接拿去微调";</li>
 <li><strong>反馈数据的治理边界和 Trace 数据一致</strong>:脱敏、去重、授权,且不能让单次反馈未经验证直接改变系统行为。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:数据飞轮转起来的前提,不是收集了多少反馈,而是有没有把反馈经过脱敏、分诊、验证之后,真正喂回评测集和训练数据,让每一轮生产运行都比上一轮更懂自己的用户。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://platform.openai.com/docs/guides/fine-tuning">OpenAI: Fine-tuning</a></li>

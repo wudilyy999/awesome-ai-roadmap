@@ -9717,7 +9717,7 @@
 
 <h1 id="agent">第十二章：Agent 的反思、验证与自我改进<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h1>
 <h2 id="121-agent-reflection">12.1 什么是 Agent Reflection<a class="headerlink" href="#121-agent-reflection" title="Permanent link">&para;</a></h2>
-<p>Agent Reflection 不是模型进行神秘的“自省”，而是一种反馈驱动的控制机制：</p>
+<p>Agent Reflection 更接近一套反馈驱动的控制机制，而不是抽象的“自省”：</p>
 <blockquote>
 <p><strong>生成或执行 → 评价 → 定位问题 → 定向修订 → 再验证</strong></p>
 </blockquote>
@@ -9728,7 +9728,7 @@
     D --&gt;|否| F[Structured Feedback]
     F --&gt; R[Refine / Retry / Replan]
     R --&gt; G</code></pre>
-<p>反思的价值来自新增反馈，而不是单纯“再想一次”。反馈可以来自：</p>
+<p>反思要起作用，前提是系统拿到了新的反馈。反馈可以来自：</p>
 <ul>
 <li>Tool Result；</li>
 <li>编译器；</li>
@@ -9813,10 +9813,7 @@
 </tr>
 </tbody>
 </table>
-<p>最可靠的系统通常采用：</p>
-<blockquote>
-<p><strong>Verification 发现可证实的问题，Reflection 将问题转化为可执行改进。</strong></p>
-</blockquote>
+<p>更稳妥的做法是让 Verification 判断问题是否成立，再由 Reflection 把这些问题转成可执行的修订动作。</p>
 <p>例如：</p>
 <ul>
 <li>单元测试指出函数在空输入时失败；</li>
@@ -9910,7 +9907,7 @@
     M --&gt; V{Milestone Valid?}
     V --&gt;|是| NEXT[Next Milestone]
     V --&gt;|否| FIX[Repair Affected Stage]</code></pre>
-<p>它在成本与早期纠错之间提供平衡。</p>
+<p>这种做法的成本低于逐步检查，也比只看最终结果更容易尽早发现偏差。</p>
 <p>适合：</p>
 <ul>
 <li>一个阶段内部步骤较多；</li>
@@ -9936,7 +9933,7 @@
 <ul>
 <li>步骤相对独立；</li>
 <li>单步错误影响有限；</li>
-<li>整体一致性最重要；</li>
+<li>更关注整体一致性；</li>
 <li>最终结果容易统一评价；</li>
 <li>中间验证成本较高。</li>
 </ul>
@@ -9962,7 +9959,7 @@
 <li>根因可能被最终输出掩盖。</li>
 </ul>
 <h2 id="129-cross-task-consolidation">12.9 Cross-task Consolidation<a class="headerlink" href="#129-cross-task-consolidation" title="Permanent link">&para;</a></h2>
-<p>跨任务反思不是继续修改当前结果，而是总结：</p>
+<p>跨任务反思更像一次复盘，重点是总结：</p>
 <ul>
 <li>哪种策略有效；</li>
 <li>哪种错误反复出现；</li>
@@ -10038,7 +10035,7 @@
     R --&gt;|正常| NEXT[Continue]
     R --&gt;|异常| REFLECT[Reflect / Verify]
     REFLECT --&gt; FIX[Repair / Replan]</code></pre>
-<p>自适应触发通常比固定“每一步一次 Critic”更高效。</p>
+<p>相比固定“每一步一次 Critic”，自适应触发通常更容易把成本控制住。</p>
 <h2 id="1212">12.12 反思系统的基本组件<a class="headerlink" href="#1212" title="Permanent link">&para;</a></h2>
 <p>一个完整实现通常包含：</p>
 <ol>
@@ -10244,7 +10241,7 @@ C_{verify,r}
 <li>缺少真正的新证据；</li>
 <li>可能产生表面修改。</li>
 </ul>
-<p>Self-Reflection 可以改善结果，但不能被假设为客观验证。</p>
+<p>Self-Reflection 可以作为初筛，但不能当成客观验证。</p>
 <h2 id="1219-critic-agent">12.19 Critic Agent<a class="headerlink" href="#1219-critic-agent" title="Permanent link">&para;</a></h2>
 <p>Critic Agent 专门检查 Executor 的 Artifact 或轨迹。</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -10277,7 +10274,7 @@ C_{verify,r}
 </ul>
 <p>它仍可能与 Generator 共享错误，或为了批评而批评。</p>
 <blockquote>
-<p><strong>独立 Agent 身份不等于独立证据和独立误差。</strong></p>
+<p><strong>拆成独立 Critic Agent，不会自动带来独立证据，也不会自动消除共享误差。</strong></p>
 </blockquote>
 <p>提高独立性的方式：</p>
 <ul>
@@ -10673,10 +10670,7 @@ C_{verify,r}
 </tr>
 </tbody>
 </table>
-<p>最关键的指标不是“Critic 写了多少意见”，而是：</p>
-<blockquote>
-<p><strong>反思是否以可接受成本提高最终任务成功率，并减少风险。</strong></p>
-</blockquote>
+<p>评估时更该看反思是否以可接受成本提高最终任务成功率，并减少风险，而不是只统计 Critic 提了多少意见。</p>
 <h2 id="1232-ab">12.32 A/B 评估<a class="headerlink" href="#1232-ab" title="Permanent link">&para;</a></h2>
 <p>至少比较：</p>
 <ol>
@@ -10771,7 +10765,7 @@ C_{verify,r}
 <li>Task-level：检查整体一致性；</li>
 <li>Cross-task：提炼可复用经验。</li>
 </ul>
-<p>实现时最重要的是：</p>
+<p>落地时要看几件事：</p>
 <ul>
 <li>Critic 具有明确 Rubric；</li>
 <li>输出结构化 Finding；</li>
@@ -10781,7 +10775,7 @@ C_{verify,r}
 <li>设置硬性停止条件；</li>
 <li>不把未经验证的反思直接写入长期记忆。</li>
 </ul>
-<p>Self-Refine、Reflexion、Critic Agent、Debate 和 LATS 都是不同深度的反馈机制。它们能够提升质量，但都会增加成本，也都不能替代真实环境、测试、权威数据和人工责任。</p>
+<p>Self-Refine、Reflexion、Critic Agent、Debate 和 LATS 提供的是不同深度的反馈机制。它们有用，但都会增加成本，也都不能替代真实环境、测试、权威数据和人工责任。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2303.17651">Self-Refine: Iterative Refinement with Self-Feedback</a></li>

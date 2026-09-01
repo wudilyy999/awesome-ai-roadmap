@@ -8588,7 +8588,7 @@
 </tr>
 </tbody>
 </table>
-<p>跨境合规没有一刀切的技术方案，核心是<strong>先明确数据分类和适用的监管要求（如 GDPR、区域性数据保护法规），再反推架构上需要满足的驻留和访问控制约束</strong>，并把这些约束写进供应商合同和内部数据流转策略。</p>
+<p>跨境合规没有一刀切的技术方案，先要<strong>明确数据分类和适用的监管要求（如 GDPR、区域性数据保护法规），再反推架构上需要满足的驻留和访问控制约束</strong>，并把这些约束写进供应商合同和内部数据流转策略。</p>
 <h2 id="66">6.6 常见错误<a class="headerlink" href="#66" title="Permanent link">&para;</a></h2>
 <h3 id="661">6.6.1 认为参数量远大于数据量就不会记忆化<a class="headerlink" href="#661" title="Permanent link">&para;</a></h3>
 <p>低频、格式独特或重复出现的样本仍有较高概率被逐字记住，去重和差分隐私是必要的基础手段，不能仅凭模型规模大就假设安全。</p>
@@ -8606,9 +8606,6 @@
 <li>Agent 长期记忆存储必须带用户/租户维度过滤，写入前做敏感度分级，并提供用户可控的记忆管理入口；</li>
 <li>数据驻留与跨境合规需要先做数据分类，再反推架构约束，且必须覆盖日志、缓存、向量索引和记忆存储的完整删除链路，而不只是推理请求本身。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：AI 系统的隐私风险不止于"谁能访问数据库"，还包括"模型是否记住了不该记住的内容"和"记忆机制是否让信息串到了不该到的会话"，这两类风险需要独立于传统访问控制单独设计防御。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2012.07805">Extracting Training Data from Large Language Models</a></li>

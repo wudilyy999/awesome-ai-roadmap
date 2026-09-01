@@ -8426,7 +8426,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>越权识别不应该完全依赖模型自己判断该不该执行。</strong> 模型的拒绝行为可以被对抗性 Prompt 绕过,真正的权限边界应该在业务系统层面用确定性规则强制,模型层的拒绝只是第一道、不是唯一一道防线。</p>
+<p><strong>越权识别不应该完全依赖模型自己判断该不该执行。</strong> 模型的拒绝行为可以被对抗性 Prompt 绕过,权限边界应该在业务系统层面用确定性规则强制,模型层的拒绝只是第一道、不是唯一一道防线。</p>
 </blockquote>
 <h2 id="63">6.3 输出护栏:模型生成之后、返回用户之前<a class="headerlink" href="#63" title="Permanent link">&para;</a></h2>
 <table>
@@ -8540,14 +8540,11 @@
 <ol>
 <li><strong>Guardrails 和契约校验是两回事</strong>:前者管内容安全与业务边界,后者管格式是否可被程序消费;</li>
 <li><strong>输入护栏和输出护栏各有分工</strong>:前者在模型生成之前拦截风险请求,后者在返回用户之前拦截风险输出;</li>
-<li><strong>权限边界不应完全依赖模型自我拒绝</strong>,业务系统层面的确定性规则才是真正的防线;</li>
+<li><strong>权限边界不应完全依赖模型自我拒绝</strong>,业务系统层面的确定性规则才是最后兜底的防线;</li>
 <li><strong>降级应该是有梯度的阶梯</strong>,从换模型重试到模板兜底,风险越高触发的阶梯应该越靠后;</li>
 <li><strong>降级阶梯要按触发原因的风险等级匹配</strong>,高风险类别应直接跳到最保守的兜底路径;</li>
 <li><strong>护栏本身需要持续评测</strong>:监控误报率、漏报率,并用红队测试集验证有效性。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:Guardrails 的目标不是把系统变成"什么都不敢说",而是在拦下真正的风险之后,仍然有一整套有梯度的降级手段,让系统在大多数情况下保持"能用",只有面对高风险场景才彻底收紧。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://platform.openai.com/docs/guides/moderation">OpenAI: Moderation API</a></li>

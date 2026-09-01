@@ -8596,9 +8596,6 @@
 <li><strong>熔断器防止对已过载的服务继续加压</strong>,配合回退链路使用;</li>
 <li><strong>舱壁隔离防止故障在不同任务类型之间传染</strong>,不同优先级任务应有独立资源池。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:重试、超时、幂等、熔断这套模式本身不新,LLMOps 的工作是把它们的参数和触发条件,按 LLM 调用「慢、贵、部分非幂等」的特性重新校准一遍。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/retry-strategy">Google Cloud: Implementing exponential backoff</a></li>

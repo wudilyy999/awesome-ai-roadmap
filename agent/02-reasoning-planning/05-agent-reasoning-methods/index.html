@@ -9303,7 +9303,7 @@ P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
 <li>使用验证器评分；</li>
 <li>根据反馈重新生成。</li>
 </ul>
-<p>因此，现代推理系统更适合表示为：</p>
+<p>放到工程系统里，更接近下面这个过程：</p>
 <blockquote>
 <p><strong>生成候选 → 获取证据 → 验证候选 → 分配更多计算 → 选择结果</strong></p>
 </blockquote>
@@ -9388,14 +9388,12 @@ P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
 <li>模型已经非常熟悉的模式；</li>
 <li>延迟要求严格的场景。</li>
 </ul>
-<p>它的重要性在于提供基线。如果直接调用已经能稳定完成任务，就没有必要引入多轮推理、搜索或 Agent 循环。</p>
+<p>工程上先看它能不能当基线。直接调用如果已经稳定，就没必要再引入多轮推理、搜索或 Agent 循环。</p>
 <pre class="mermaid"><code>flowchart LR
     X[输入] --&gt; M[Model]
     M --&gt; Y[答案]</code></pre>
 <h2 id="55-chain-of-thought">5.5 Chain of Thought：链式推理<a class="headerlink" href="#55-chain-of-thought" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p>本节聚焦 CoT 的推理机制与局限；CoT 与行动规划的边界见<a href="../11-llm-agent-planning/">第十一章</a>，可记录的轨迹不等于隐藏 CoT，见<a href="../../05-production/14-agent-evaluation/">第十四章</a>。</p>
-</blockquote>
+<p>这里主要讨论 CoT 在推理层的机制与局限。CoT 与行动规划的边界见<a href="../11-llm-agent-planning/">第十一章</a>；可记录的轨迹不等于隐藏 CoT，见<a href="../../05-production/14-agent-evaluation/">第十四章</a>。</p>
 <h3 id="551">5.5.1 基本思想<a class="headerlink" href="#551" title="Permanent link">&para;</a></h3>
 <p>CoT（Chain of Thought）通过生成中间推理步骤，将复杂问题拆成一条连续推理链：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -9742,7 +9740,7 @@ y^*=\arg\max_{y_i} V(x,y_i)
     NEED --&gt;|是| T[调用 Tool]
     T --&gt; O[Observation]
     O --&gt; M</code></pre>
-<p>Tool-Augmented Reasoning 的关键不只是“允许调用工具”，还包括：</p>
+<p>工程上的工作主要集中在这些环节：</p>
 <ul>
 <li>判断何时需要 Tool；</li>
 <li>选择正确 Tool；</li>
@@ -9995,7 +9993,7 @@ B=(T,N,D,K)
 <li>错误是否可逆。</li>
 </ul>
 <h2 id="521">5.21 生产级推理控制器<a class="headerlink" href="#521" title="Permanent link">&para;</a></h2>
-<p>一个完整的推理控制器可以包含：</p>
+<p>一个能落地的推理控制器通常至少有这些环节：</p>
 <pre class="mermaid"><code>flowchart TB
     IN[Input] --&gt; SAFE[输入与权限检查]
     SAFE --&gt; ROUTER[难度 / 风险路由]
@@ -10016,10 +10014,7 @@ B=(T,N,D,K)
 
     GEN -.Trace.-&gt; OBS[Observability]
     VERIFY -.Metrics.-&gt; OBS</code></pre>
-<p>核心原则是：</p>
-<blockquote>
-<p><strong>推理系统不只负责生成，还必须负责验证、预算分配和失败报告。</strong></p>
-</blockquote>
+<p>推理系统不只负责生成，还要负责验证、预算分配和失败报告。</p>
 <h2 id="522">5.22 推理质量评估<a class="headerlink" href="#522" title="Permanent link">&para;</a></h2>
 <p>不能只看最终答案是否“像是正确”。至少应评估：</p>
 <table>
@@ -10129,7 +10124,7 @@ B=(T,N,D,K)
 <li>高风险结论是否需要人工审核？</li>
 </ul>
 <h2 id="525">5.25 本章总结<a class="headerlink" href="#525" title="Permanent link">&para;</a></h2>
-<p>Agent 推理方法可以理解为逐步增加推理时计算：</p>
+<p>可以把这些方法看成一条从低成本到高计算量的梯度：</p>
 <ol>
 <li><strong>Direct Answer</strong>：直接生成；</li>
 <li><strong>CoT</strong>：沿一条路径分步推理；</li>

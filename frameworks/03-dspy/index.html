@@ -8141,7 +8141,7 @@
 
 
 <h1 id="dspy">框架与编排 · DSPy 声明式优化<a class="headerlink" href="#dspy" title="Permanent link">&para;</a></h1>
-<p>LangChain 和 LlamaIndex 都还是「写死一个 Prompt，手工调参」的编程范式：Prompt 是字符串常量，改进方式是人工试错。DSPy 换了一种编程模型——<strong>把 Prompt 变成程序里的一个可优化对象</strong>，用「声明式签名 + 编译器」代替手写 Prompt，用「指标驱动的优化器」代替人工调参。</p>
+<p>与 LangChain 和 LlamaIndex 常见的「手写 Prompt、手工调参」做法相比，DSPy 把 Prompt 视为程序里的可优化对象。它用「声明式签名 + 编译器」替代手写 Prompt，用「指标驱动的优化器」替代人工试错。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="16-declarative-programming-model/">第十六章：DSPy 的声明式编程模型：Signature、Module 与 Program</a></li>
@@ -8156,9 +8156,9 @@
     E -.回填.-&gt; C</code></pre>
 <h2 id="_3">阅读建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>先理解「声明式」再理解「编译」</strong>：第十六章讲清楚 Signature/Module/Program 怎么把「做什么」和「怎么做」分开，第十七章再讲编译器怎么利用这种分离自动搜索最优实现；</li>
-<li><strong>和 LangChain/LlamaIndex 对照</strong>：两章都会标注 DSPy 的评测循环与 LangSmith 式可观测性的差异，建议先读过 <a href="../01-langchain/05-production/">LangChain 生态 · 生产闭环</a> 再来对比；</li>
-<li><strong>只关心该不该引入 DSPy</strong>：可直接跳到第十七章 17.4 节，再看 <a href="../06-selection-portability/">框架选型与可移植架构</a>。</li>
+<li>建议先读第十六章，理解 Signature / Module / Program 如何把「做什么」和「怎么做」分开；再读第十七章，看编译器如何利用这种分离自动搜索更优实现；</li>
+<li>如果想和 LangChain、LlamaIndex 对照，两章都会标注 DSPy 的评测循环与 LangSmith 式可观测性的差异，适合先读 <a href="../01-langchain/05-production/">LangChain 生态 · 生产闭环</a> 再回来比较；</li>
+<li>如果主要想判断是否值得引入 DSPy，可直接看第十七章 17.4 节，再对照 <a href="../06-selection-portability/">框架选型与可移植架构</a>。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
 

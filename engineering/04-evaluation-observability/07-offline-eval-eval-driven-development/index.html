@@ -8509,7 +8509,7 @@
 <h2 id="75">7.5 离线评测不能替代线上监测<a class="headerlink" href="#75" title="Permanent link">&para;</a></h2>
 <p>离线评测在固定测试集上运行,能发现的是"这个改动是否比基线更好",但测试集永远无法覆盖生产环境的全部输入分布。<strong>离线评测负责"改动前把关",线上可观测性(<a href="../08-online-observability-tracing/">第 8 章</a>)负责"上线后持续验证真实流量表现"</strong>,两者缺一不可。</p>
 <h2 id="76">7.6 与相邻章节的分工<a class="headerlink" href="#76" title="Permanent link">&para;</a></h2>
-<p>本章讲的是评测的通用方法论——如何建测试集、如何评分、如何设门禁。以下场景有更专门的评测方法,不在本章重复展开:</p>
+<p>这里先看评测的通用骨架——怎么建测试集、怎么评分、怎么设门禁。Agent 和 RAG 的专门方法放到各自主题里展开:</p>
 <table>
 <thead>
 <tr>
@@ -8550,11 +8550,8 @@
 <li><strong>评分方式分三层</strong>:确定性规则、人工评审、LLM-as-Judge,后者必须人工校准;</li>
 <li><strong>发布门禁要看关键用例是否回归</strong>,平均分提升不能抵消高风险用例的失败;</li>
 <li><strong>离线评测和线上监测互补而非互相替代</strong>,前者把关改动,后者验证真实流量表现;</li>
-<li><strong>Agent、RAG 场景有各自更专门的评测方法</strong>,本章讲的是通用方法论。</li>
+<li><strong>Agent、RAG 场景有各自更专门的评测方法</strong>,这里先保留通用骨架。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:Eval-Driven Development 的核心不是"多写几个测试用例",而是让每一次改动都必须先在业务切片和高风险用例上证明自己没有退化,才允许进入下一步的灰度发布。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/openai/evals">OpenAI Evals</a></li>

@@ -8589,7 +8589,7 @@
 
 <h1 id="rrf-rerank">第十三章：多路召回、RRF 融合与 Rerank<a class="headerlink" href="#rrf-rerank" title="Permanent link">&para;</a></h1>
 <h2 id="131">13.1 为什么必须多路召回<a class="headerlink" href="#131" title="Permanent link">&para;</a></h2>
-<p>第十一章已经说清了理论依据，这里再压缩成一句话：</p>
+<p>第十一章已经展开过理论依据，这里先压缩成一句话：</p>
 <blockquote>
 <p><strong>稠密检索和稀疏检索的失败模式是互补的，任何单路都存在无法通过调参消除的系统性盲区。</strong></p>
 </blockquote>
@@ -8611,7 +8611,7 @@
 </tr>
 </tbody>
 </table>
-<p>注意「系统性」这个词：这不是「偶尔漏几条」，而是<strong>某一整类 Query 永远召不回来</strong>。加大 Top-K、调高 <code>ef_search</code> 都无济于事。</p>
+<p>这里说的「系统性」不是「偶尔漏几条」，而是<strong>某一整类 Query 永远召不回来</strong>。加大 Top-K、调高 <code>ef_search</code> 都无济于事。</p>
 <h2 id="132">13.2 分数没法直接比较<a class="headerlink" href="#132" title="Permanent link">&para;</a></h2>
 <p>多路召回的第一个技术问题是<strong>融合</strong>。</p>
 <table>
@@ -8648,8 +8648,8 @@
 \]</div>
 <p>其中 <span class="arithmatex">\(R\)</span> 是所有召回路，<span class="arithmatex">\(\mathrm{rank}_r(d)\)</span> 是文档 <span class="arithmatex">\(d\)</span> 在第 <span class="arithmatex">\(r\)</span> 路结果中的排名，<span class="arithmatex">\(k\)</span> 是平滑常数，<strong>常用值为 60</strong>。</p>
 <h3 id="1331">13.3.1 为什么它管用<a class="headerlink" href="#1331" title="Permanent link">&para;</a></h3>
-<p><strong>（1）彻底规避量纲问题。</strong> 排名是无量纲的，第 1 名就是第 1 名，不管原始分数是 0.92 还是 34.7。</p>
-<p><strong>（2）<span class="arithmatex">\(k\)</span> 起到削峰作用。</strong> 当 <span class="arithmatex">\(k = 60\)</span> 时：</p>
+<p>排名本身没有量纲，第 1 名就是第 1 名，不管原始分数是 0.92 还是 34.7，这让 RRF 能直接绕开不同分数体系不可比的问题。</p>
+<p><span class="arithmatex">\(k\)</span> 则起到削峰作用。当 <span class="arithmatex">\(k = 60\)</span> 时：</p>
 <table>
 <thead>
 <tr>
@@ -8672,11 +8672,11 @@
 </tr>
 </tbody>
 </table>
-<p>第 1 名和第 2 名的差距很小。<strong>这个设计意味着：某一路把某文档排第 1，不足以让它压过"在两路里都排前十"的文档。</strong></p>
+<p>第 1 名和第 2 名的差距很小。<strong>这意味着：某一路把某文档排第 1，不足以让它压过“在两路里都排前十”的文档。</strong></p>
 <blockquote>
-<p><strong>RRF 天然偏好「多路共识」而非「单路极端自信」——这正是我们想要的行为。</strong> 因为单路的高分可能来自该路特有的偏见，而多路都认可的结果更可靠。</p>
+<p><strong>RRF 天然偏好「多路共识」而非「单路极端自信」。</strong> 因为单路的高分可能来自该路特有的偏见，而多路都认可的结果通常更可靠。</p>
 </blockquote>
-<p><strong>（3）零调参、零训练。</strong> <span class="arithmatex">\(k=60\)</span> 这个默认值在各种数据集上都表现稳健。</p>
+<p><span class="arithmatex">\(k=60\)</span> 这个默认值在各种数据集上都表现稳健，因此 RRF 基本不需要额外训练或复杂调参。</p>
 <h3 id="1332">13.3.2 它的局限<a class="headerlink" href="#1332" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>丢弃了分数的绝对信息</strong>：一个相似度 0.95 和一个 0.5 的结果，只要排名相同，贡献就相同；</li>
@@ -8700,7 +8700,7 @@
         D2[候选文档] --&gt; CAT
         CAT --&gt; M[交互式模型] --&gt; S2[相关性分数]
     end</code></pre>
-<p><strong>效果提升通常很明显</strong>，是单点投入产出比最高的优化——<strong>这也是为什么它应该在做复杂改造之前先上</strong>。</p>
+<p><strong>效果提升通常很明显</strong>，也是单点投入产出比很高的优化，因此往往会早于更复杂的改造进入链路。</p>
 <h3 id="1342-reranker">13.4.2 三类 Reranker<a class="headerlink" href="#1342-reranker" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8739,17 +8739,14 @@
 <p><strong>LLM listwise 的额外价值</strong>在于它一次看到所有候选，能做<strong>相对比较</strong>和去冗余（识别出「这两条说的是同一件事」），而 cross-encoder 是<strong>逐条独立打分</strong>的，看不到候选之间的关系。</p>
 <p><strong>但 5–20 倍的成本差距意味着：除非有明确证据表明标准 cross-encoder 不够用，否则不要上。</strong></p>
 <h3 id="1343">13.4.3 工程要点<a class="headerlink" href="#1343" title="Permanent link">&para;</a></h3>
-<p><strong>（1）候选数是延迟的主要驱动因素。</strong></p>
-<p>Rerank 的耗时与候选数近似线性。从 100 降到 50，延迟几乎减半。<strong>建议实测不同候选数下的效果曲线，找到收益开始平缓的拐点。</strong></p>
-<p><strong>（2）要有经校准的拒答策略。</strong></p>
+<p>候选数是延迟的主要驱动因素。Rerank 的耗时与候选数近似线性。从 100 降到 50，延迟几乎减半。<strong>建议实测不同候选数下的效果曲线，找到收益开始平缓的拐点。</strong></p>
+<p>同时要有经校准的拒答策略。</p>
 <blockquote>
 <p><strong>Rerank 之后不得无条件取 Top-K；但也不能把一个固定绝对分数当作所有 Query 的通用阈值。</strong></p>
 </blockquote>
 <p>不同 Query、语言、候选集和模型版本的分数分布不同。应在带“有依据/无依据”标注的业务评测集上校准置信度或拒答规则，例如结合首位分数、首二名间隔、候选一致性、来源质量和 Query 类型，并分别报告覆盖率与错误接受率。低置信度时返回空、请求澄清或走人工/外部检索路径，而不是硬凑不相关上下文。</p>
-<p><strong>（3）校准需持续回归。</strong></p>
 <p>更换 reranker、语料、语言分布或召回策略都会使校准失效。将拒答规则版本化，在评测集和线上抽样上重校准；不要把来自一个 Query 的裸分数直接同另一个 Query 比较。</p>
-<p><strong>（4）Rerank 可以降级。</strong></p>
-<p>超时或服务不可用时，直接用粗排的 Top-K。效果下降但系统可用，这比整体失败好。</p>
+<p>Rerank 也要有降级路径。超时或服务不可用时，直接用粗排的 Top-K。效果会下降，但系统仍可用，这比整体失败好。</p>
 <h2 id="135-">13.5 完整的召回-排序链路<a class="headerlink" href="#135-" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     Q[Query] --&gt; RW[Query 改写]
@@ -8765,7 +8762,7 @@
     TH --&gt;|是| CTX[组装上下文]
     TH --&gt;|否| REJ[拒答、澄清或降级]</code></pre>
 <p><strong>各阶段的数量收缩参考</strong>：每路召回 50–100 → 融合去重后 50–150 → Rerank 输入 50 → 最终 3–10。</p>
-<p><strong>注意最后一档不是越大越好</strong>（第二章 2.6 节），必须实测。</p>
+<p>最后一档不是越大越好（第二章 2.6 节），必须实测。</p>
 <h2 id="136">13.6 去重也很重要<a class="headerlink" href="#136" title="Permanent link">&para;</a></h2>
 <p>融合之后必须去重，否则会浪费 Prompt 预算：</p>
 <table>
@@ -8794,12 +8791,12 @@
 </tr>
 </tbody>
 </table>
-<p><strong>最后一行是最容易漏、后果最严重的</strong>：新旧版本同时进入上下文，会让模型面对矛盾信息，产出错误或含糊的答案。</p>
+<p>最后一行尤其容易漏掉：新旧版本同时进入上下文，会让模型面对矛盾信息，产出错误或含糊的答案。</p>
 <h2 id="137">13.7 常见错误<a class="headerlink" href="#137" title="Permanent link">&para;</a></h2>
 <h3 id="1371">13.7.1 直接加权融合不同量纲的分数<a class="headerlink" href="#1371" title="Permanent link">&para;</a></h3>
 <p>需要归一化，而归一化本身不稳定。RRF 是更好的默认选择。</p>
 <h3 id="1372-rrf">13.7.2 不知道 RRF 为什么用排名<a class="headerlink" href="#1372-rrf" title="Permanent link">&para;</a></h3>
-<p>答不出「规避量纲问题」和「偏好多路共识」，说明只是知道这个名词。</p>
+<p>如果只知道 RRF 这个名词，却说不出「规避量纲问题」和「偏好多路共识」，通常也很难判断它是否适合当前链路。</p>
 <h3 id="1373-k60">13.7.3 不知道 <span class="arithmatex">\(k=60\)</span> 的作用<a class="headerlink" href="#1373-k60" title="Permanent link">&para;</a></h3>
 <p>它起削峰作用，让排名靠前的差距变小，从而更看重多路共识。</p>
 <h3 id="1374-rerank-top-k">13.7.4 Rerank 后无条件取 Top-K<a class="headerlink" href="#1374-rerank-top-k" title="Permanent link">&para;</a></h3>
@@ -8823,10 +8820,6 @@
 <li><strong>必须采用经评测集校准的置信度/拒答策略并允许返回空</strong>，不能用固定裸分一刀切；</li>
 <li><strong>去重要覆盖多路重复、父块重复、内容冗余和新旧版本</strong>，其中新旧版本冲突后果最严重。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>多路召回改善覆盖，Rerank 改善排序，经评测集校准的置信度/拒答策略控制错误接受；三者都应以业务实测验证。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://cormack.uwaterloo.ca/cormacksigir09-rrf.pdf">Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods (SIGIR 2009)</a></li>

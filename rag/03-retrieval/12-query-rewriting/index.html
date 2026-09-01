@@ -8550,61 +8550,55 @@
     G3 --&gt; M3[查询分解]
     G4 --&gt; M4[Step-back 提问]</code></pre>
 <blockquote>
-<p><strong>回答这道题的关键，是把每种方法对应到它治的那种鸿沟，而不是罗列方法名。</strong></p>
+<p><strong>理解这些方法时，重点是它们分别对应哪种鸿沟，而不是只记方法名。</strong></p>
 </blockquote>
 <h2 id="122">12.2 直接改写<a class="headerlink" href="#122" title="Permanent link">&para;</a></h2>
-<p><strong>做法</strong>：用 LLM 把口语化的问题改写成更接近文档表述的形式，补充领域术语。</p>
+<p>直接改写通常用 LLM 把口语化的问题改成更接近文档表述的形式，并补充领域术语。</p>
 <p>「年假怎么请」→「带薪年休假的申请流程和审批要求」</p>
-<p><strong>适合</strong>：口语化输入、术语不匹配。</p>
-<p><strong>风险</strong>：改写方向错了，检索就全错了。所以<strong>要保留原始 Query 一起检索作为兜底</strong>（第十章 10.3.2）。</p>
+<p>这类方法适合处理口语化输入和术语不匹配，但改写一旦偏离原意，后续检索就会整体跑偏。所以<strong>要保留原始 Query 一起检索作为兜底</strong>（第十章 10.3.2）。</p>
 <h2 id="123">12.3 指代消解<a class="headerlink" href="#123" title="Permanent link">&para;</a></h2>
-<p><strong>做法</strong>：结合对话历史，把省略和指代还原成完整问题。</p>
+<p>指代消解会结合对话历史，把省略和指代还原成完整问题。</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>用户：iPhone 17 有几个版本？
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>助手：有标准版、Pro 和 Pro Max。
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>用户：Pro 的价格呢？    ← 直接拿去检索必然失败
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      ↓ 消解后
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      iPhone 17 Pro 的价格是多少？
 </span></code></pre></div>
-<p><strong>这在多轮对话场景里几乎是必需的</strong>，而不是可选优化。很多「多轮对话下 RAG 效果突然变差」的问题，根源就在这里。</p>
-<p><strong>实现要点</strong>：只传入最近若干轮历史即可，传太多反而会引入干扰。</p>
+<p>这在多轮对话场景里通常是必需环节，而不是可选优化。很多「多轮对话下 RAG 效果突然变差」的问题，根源就在这里。</p>
+<p>实现时通常只传入最近若干轮历史，传太多反而会引入干扰。</p>
 <h2 id="124-query">12.4 多 Query 扩展<a class="headerlink" href="#124-query" title="Permanent link">&para;</a></h2>
-<p><strong>做法</strong>：让 LLM 生成同一问题的多个不同表述，<strong>并行</strong>检索后合并结果。</p>
+<p>多 Query 扩展会让 LLM 生成同一问题的多个不同表述，<strong>并行</strong>检索后再合并结果。</p>
 <p>「年假怎么请」→</p>
 <ul>
 <li>「年假申请流程是什么」</li>
 <li>「带薪休假需要哪些审批」</li>
 <li>「休年假要提前多久提交」</li>
 </ul>
-<p><strong>原理</strong>：单个 Query 的表述是<strong>随机的一次采样</strong>，可能恰好没命中文档的措辞。多个表述能覆盖更大的语义邻域，<strong>降低"表述不巧"导致的漏召</strong>。</p>
-<p><strong>代价</strong>：一次 LLM 调用 + N 倍的检索开销（可并行）+ 需要融合去重。</p>
-<p><strong>适合</strong>：召回率优先、可以接受额外延迟的场景。</p>
+<p>单个 Query 的表述可以看作<strong>随机的一次采样</strong>，可能刚好没命中文档的措辞。多个表述能覆盖更大的语义邻域，<strong>降低“表述不巧”导致的漏召</strong>。</p>
+<p>代价也很明确：一次 LLM 调用、N 倍的检索开销（可并行），以及后续的融合去重。这更适合召回率优先、可以接受额外延迟的场景。</p>
 <h2 id="125-hyde">12.5 HyDE：假设性文档嵌入<a class="headerlink" href="#125-hyde" title="Permanent link">&para;</a></h2>
-<p><strong>这是最反直觉、也最能体现理解深度的一个方法。</strong></p>
-<p><strong>做法</strong>：不直接用 Query 检索，而是<strong>先让 LLM 生成一个"假想的答案文档"，再用这个假想文档去做向量检索</strong>。</p>
+<p>HyDE 不直接用 Query 检索，而是<strong>先让 LLM 生成一个“假想的答案文档”，再用这个假想文档去做向量检索</strong>。</p>
 <pre class="mermaid"><code>flowchart LR
     Q[Query: 年假怎么请] --&gt; LLM[LLM 生成假想答案]
     LLM --&gt; H["假想文档: 员工申请年休假&lt;br/&gt;需提前 3 个工作日在系统提交&lt;br/&gt;经直属主管审批..."]
     H --&gt; EMB[向量化]
     EMB --&gt; SEARCH[检索真实文档]</code></pre>
-<p><strong>为什么有效</strong>：向量检索本质上是在比较两段文本的相似度。而<strong>问题和答案在语义空间里并不天然接近</strong>——问题是疑问句、很短；文档是陈述句、很长。</p>
-<p>用一个<strong>形式上更像文档的假想答案</strong>去检索，匹配的是「文档 vs 文档」而不是「问题 vs 文档」，<strong>在语义空间里的距离更近</strong>。</p>
-<p><strong>关键点：假想文档的内容错了也没关系。</strong> 它不是用来回答问题的，只是用来<strong>提供检索信号</strong>的。它的措辞、结构、术语分布才是有用的部分。</p>
-<p><strong>这一点是这道题的核心考点</strong>——很多人的第一反应是「LLM 编的内容不可信怎么办」，能主动说清「不需要它正确，只需要它像」，说明真的理解了。</p>
-<p><strong>代价</strong>：一次额外的 LLM 调用，延迟增加几百毫秒。</p>
-<p><strong>局限</strong>：如果问题涉及模型完全没有先验知识的领域（企业内部黑话、全新的产品名），生成的假想文档可能与真实文档差得很远，<strong>反而降低效果</strong>。</p>
+<p>它之所以有效，是因为向量检索本质上在比较两段文本的相似度，而<strong>问题和答案在语义空间里并不天然接近</strong>：问题是疑问句、通常很短；文档是陈述句、通常更长。</p>
+<p>用一个<strong>形式上更像文档的假想答案</strong>去检索，匹配的就变成「文档 vs 文档」而不是「问题 vs 文档」，<strong>在语义空间里的距离往往更近</strong>。</p>
+<p>这里的关键是：假想文档的内容不必正确。它不是用来回答问题的，而是用来<strong>提供检索信号</strong>。真正有用的是它的措辞、结构和术语分布。</p>
+<p>代价是一次额外的 LLM 调用，延迟通常会增加几百毫秒。如果问题涉及模型几乎没有先验知识的领域（企业内部黑话、全新的产品名），生成的假想文档可能与真实文档差得很远，<strong>反而降低效果</strong>。</p>
 <h2 id="126-step-back">12.6 Step-back 提问<a class="headerlink" href="#126-step-back" title="Permanent link">&para;</a></h2>
-<p><strong>做法</strong>：先把具体问题<strong>抽象成一个更宽泛的问题</strong>，检索背景知识，再回来回答原问题。</p>
+<p>Step-back 提问会先把具体问题<strong>抽象成一个更宽泛的问题</strong>，先检索背景知识，再回来回答原问题。</p>
 <p>「XX 型号电池在零下 20 度的续航衰减多少」
 → 先问「锂电池在低温下的性能特性是什么」</p>
-<p><strong>原理</strong>：具体问题的答案可能在文档里根本没有直接写，但<strong>支撑推理的原理性内容是有的</strong>。先检索原理，再让模型基于原理推导。</p>
-<p><strong>适合</strong>：需要推理而非直接查找的问题；文档以原理性内容为主的知识库。</p>
-<p><strong>风险</strong>：抽象得太宽泛会召回一堆无关的通用内容。<strong>通常要与原始 Query 一起检索并合并结果。</strong></p>
+<p>有些具体问题在文档里并没有直接写出答案，但<strong>支撑推理的原理性内容是有的</strong>。这时先检索原理，再让模型基于原理推导，通常比硬查具体表述更有效。</p>
+<p>它适合需要推理而非直接查找的问题，也适合原理性内容较多的知识库。风险在于抽象过头后会召回大量无关的通用内容，所以<strong>通常要与原始 Query 一起检索并合并结果</strong>。</p>
 <h2 id="127">12.7 查询分解<a class="headerlink" href="#127" title="Permanent link">&para;</a></h2>
-<p><strong>做法</strong>：把复合问题拆成多个子问题，分别检索，再综合。</p>
+<p>查询分解会把复合问题拆成多个子问题，分别检索，再综合结果。</p>
 <p>「对比 A 方案和 B 方案的成本和风险」
 → 「A 方案的成本」「A 方案的风险」「B 方案的成本」「B 方案的风险」</p>
-<p><strong>这解决的是一类向量检索的结构性缺陷</strong>：一个包含多个实体和多个维度的复合 Query，其向量是这些成分的混合，<strong>对任何一个成分都不够聚焦</strong>，结果是每个都召回一点、每个都不全。</p>
-<p><strong>多跳问题是分解的特例</strong>：「A 公司 CEO 的母校在哪」需要先查出 CEO 是谁，再查这个人的母校——<strong>后一步依赖前一步的结果，必须串行</strong>。这已经进入 Agentic RAG 的范畴（第十五章）。</p>
+<p>它主要解决一类向量检索的结构性缺陷：一个包含多个实体和多个维度的复合 Query，其向量是这些成分的混合，<strong>对任何一个成分都不够聚焦</strong>，结果往往是每个都召回一点、每个都不完整。</p>
+<p>多跳问题可以看作分解的特例：「A 公司 CEO 的母校在哪」需要先查出 CEO 是谁，再查这个人的母校——<strong>后一步依赖前一步的结果，必须串行</strong>。这已经进入 Agentic RAG 的范畴（第十五章）。</p>
 <table>
 <thead>
 <tr>
@@ -8626,7 +8620,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>能区分这两种，是回答分解问题的加分点</strong>——它决定了延迟是「取最大值」还是「累加」。</p>
+<p>区分这两种分解方式很重要，因为它决定了延迟是「取最大值」还是「累加」。</p>
 <h2 id="128-query">12.8 Query 路由<a class="headerlink" href="#128-query" title="Permanent link">&para;</a></h2>
 <p>改写之外还有一类动作：<strong>判断这个问题该走哪条路</strong>。</p>
 <table>
@@ -8655,7 +8649,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>根据问题复杂度动态选择策略，是比"所有问题一视同仁"更优的做法</strong>。相关的研究方向（如 Adaptive-RAG）明确显示：<strong>对简单问题用重策略是浪费，对复杂问题用轻策略是无效</strong>。</p>
+<p>根据问题复杂度动态选择策略，通常比“所有问题一视同仁”更合适。相关研究方向（如 Adaptive-RAG）也表明：<strong>对简单问题用重策略是浪费，对复杂问题用轻策略则往往不够用</strong>。</p>
 <h2 id="129">12.9 方法对比与选择<a class="headerlink" href="#129" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -8719,24 +8713,24 @@
 </tr>
 </tbody>
 </table>
-<p><strong>实践中的推荐组合</strong>：</p>
+<p>实践中常见的组合方式如下：</p>
 <ol>
-<li><strong>多轮对话场景先做指代消解</strong>——这是必需项，不是优化项；</li>
-<li><strong>然后做轻量的路由</strong>（要不要检索、走哪个库），用规则或小模型，成本低；</li>
-<li><strong>再按需选一种改写方法</strong>——不要叠加多种，每种都要一次 LLM 调用；</li>
+<li><strong>多轮对话场景先做指代消解</strong>，否则后续检索很容易因为省略和指代而失败；</li>
+<li><strong>然后做轻量的路由</strong>（要不要检索、走哪个库），通常用规则或小模型，成本较低；</li>
+<li><strong>再按需选一种改写方法</strong>，不要叠加多种，因为每种都会增加一次 LLM 调用；</li>
 <li><strong>始终保留原始 Query 一起检索</strong>。</li>
 </ol>
 <h2 id="1210">12.10 常见错误<a class="headerlink" href="#1210" title="Permanent link">&para;</a></h2>
 <h3 id="12101">12.10.1 罗列方法但说不出各治什么问题<a class="headerlink" href="#12101" title="Permanent link">&para;</a></h3>
-<p>这是这道题最典型的浅层回答。必须建立「鸿沟 → 方法」的对应。</p>
+<p>只罗列方法名而不建立「鸿沟 → 方法」的对应关系，通常无法判断何时该用哪一种。</p>
 <h3 id="12102-hyde">12.10.2 认为 HyDE 的假想文档必须内容正确<a class="headerlink" href="#12102-hyde" title="Permanent link">&para;</a></h3>
-<p>它提供的是检索信号不是答案。这是本章最重要的考点。</p>
+<p>它提供的是检索信号，不是答案本身。</p>
 <h3 id="12103-query">12.10.3 改写后丢弃原始 Query<a class="headerlink" href="#12103-query" title="Permanent link">&para;</a></h3>
 <p>改写失败时没有兜底。</p>
 <h3 id="12104">12.10.4 多轮对话不做指代消解<a class="headerlink" href="#12104" title="Permanent link">&para;</a></h3>
 <p>必需项，缺了会导致大面积召回失败。</p>
 <h3 id="12105">12.10.5 不区分并列分解与多跳分解<a class="headerlink" href="#12105" title="Permanent link">&para;</a></h3>
-<p>前者可并行，后者必须串行，延迟差异巨大。</p>
+<p>前者可并行，后者必须串行，延迟特征完全不同。</p>
 <h3 id="12106">12.10.6 所有问题都走同一套重策略<a class="headerlink" href="#12106" title="Permanent link">&para;</a></h3>
 <p>简单问题用重策略是纯粹的成本浪费。</p>
 <h3 id="12107">12.10.7 叠加多种改写方法<a class="headerlink" href="#12107" title="Permanent link">&para;</a></h3>
@@ -8746,16 +8740,12 @@
 <li><strong>Query 改写解决的是四种鸿沟</strong>：表述、指代、粒度、抽象层级——<strong>每种方法对应一种鸿沟</strong>；</li>
 <li><strong>指代消解在多轮对话中是必需项</strong>；</li>
 <li><strong>多 Query 扩展</strong>通过覆盖更大的语义邻域降低"表述不巧"导致的漏召；</li>
-<li><strong>HyDE 的精髓</strong>：用形式上像文档的假想答案检索，把「问题 vs 文档」变成「文档 vs 文档」；<strong>内容不需要正确，只需要像</strong>；</li>
+<li><strong>HyDE 的做法</strong>：用形式上像文档的假想答案检索，把「问题 vs 文档」变成「文档 vs 文档」；<strong>内容不需要正确，只需要像</strong>；</li>
 <li><strong>Step-back</strong> 先检索原理再推导，适合答案没有被直接写出来的问题；</li>
 <li><strong>查询分解</strong>要区分并列（可并行）和多跳（必须串行）；</li>
 <li><strong>路由</strong>根据问题复杂度选择策略，避免简单问题用重策略；</li>
 <li><strong>始终保留原始 Query 兜底</strong>，不要叠加多种改写方法。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>Query 改写不是"把问题写得更好看"，而是把用户的表达方式，翻译成文档的表达方式。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2212.10496">Precise Zero-Shot Dense Retrieval without Relevance Labels</a></li>

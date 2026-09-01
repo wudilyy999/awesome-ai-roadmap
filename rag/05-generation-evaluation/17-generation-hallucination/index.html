@@ -4943,7 +4943,7 @@
         <li class="md-nav__item">
   <a href="#171" class="md-nav__link">
     <span class="md-ellipsis">
-      17.1 一句必须记住的话
+      17.1 幻觉不是单一检索问题
     </span>
   </a>
   
@@ -4962,7 +4962,7 @@
           <li class="md-nav__item">
   <a href="#1721" class="md-nav__link">
     <span class="md-ellipsis">
-      17.2.1 一个特别需要注意的子类：参数化知识覆盖
+      17.2.1 参数化知识覆盖
     </span>
   </a>
   
@@ -5034,9 +5034,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#178" class="md-nav__link">
+  <a href="#178-grounding" class="md-nav__link">
     <span class="md-ellipsis">
-      17.8 一个重要的概念澄清
+      17.8 Grounding 与事实正确性的边界
     </span>
   </a>
   
@@ -8359,7 +8359,7 @@
         <li class="md-nav__item">
   <a href="#171" class="md-nav__link">
     <span class="md-ellipsis">
-      17.1 一句必须记住的话
+      17.1 幻觉不是单一检索问题
     </span>
   </a>
   
@@ -8378,7 +8378,7 @@
           <li class="md-nav__item">
   <a href="#1721" class="md-nav__link">
     <span class="md-ellipsis">
-      17.2.1 一个特别需要注意的子类：参数化知识覆盖
+      17.2.1 参数化知识覆盖
     </span>
   </a>
   
@@ -8450,9 +8450,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#178" class="md-nav__link">
+  <a href="#178-grounding" class="md-nav__link">
     <span class="md-ellipsis">
-      17.8 一个重要的概念澄清
+      17.8 Grounding 与事实正确性的边界
     </span>
   </a>
   
@@ -8606,7 +8606,7 @@
 
 
 <h1 id="grounding">第十七章：生成、Grounding 与幻觉规避<a class="headerlink" href="#grounding" title="Permanent link">&para;</a></h1>
-<h2 id="171">17.1 一句必须记住的话<a class="headerlink" href="#171" title="Permanent link">&para;</a></h2>
+<h2 id="171">17.1 幻觉不是单一检索问题<a class="headerlink" href="#171" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p><strong>幻觉是多因素失效，不是单一检索问题。</strong></p>
 </blockquote>
@@ -8626,7 +8626,7 @@
     H2 --&gt; C6[参数化知识覆盖材料]
     H2 --&gt; C7[冲突材料被擅自消解]
     H3 --&gt; C8[缓存、版本或引用校验失效]</code></pre>
-<p><strong>这些来源需要不同但可组合的治法</strong>——只针对一个环节优化会遗漏其余失效模式。</p>
+<p>这些来源对应的治理手段不同，但可以组合使用；只优化单一环节，通常会遗漏其他失效模式。</p>
 <table>
 <thead>
 <tr>
@@ -8649,13 +8649,13 @@
 </tr>
 </tbody>
 </table>
-<h3 id="1721">17.2.1 一个特别需要注意的子类：参数化知识覆盖<a class="headerlink" href="#1721" title="Permanent link">&para;</a></h3>
+<h3 id="1721">17.2.1 参数化知识覆盖<a class="headerlink" href="#1721" title="Permanent link">&para;</a></h3>
 <p>模型自己的训练知识和检索到的材料<strong>冲突</strong>时，它可能会<strong>相信自己而不是材料</strong>。</p>
 <p>典型场景：企业内部规定与通用常识不同（比如公司规定的报销上限与行业惯例不同）。模型可能输出"常见的"数字而不是材料里的数字。</p>
 <p><strong>这类幻觉最危险</strong>，因为答案看起来完全合理，且与材料的差异很隐蔽。</p>
 <p><strong>治法</strong>：在 Prompt 里显式声明「<strong>材料中的信息优先于你的已有知识，两者冲突时以材料为准</strong>」。</p>
 <h2 id="173">17.3 第一道防线：拒答<a class="headerlink" href="#173" title="Permanent link">&para;</a></h2>
-<p><strong>这是最便宜、最有效、也最常被忽略的手段。</strong></p>
+<p>这是成本最低、也最常被漏掉的控制点之一。</p>
 <pre class="mermaid"><code>flowchart TB
     R[检索结果] --&gt; C1{有结果吗?}
     C1 --&gt;|无| REJ[拒答]
@@ -8665,13 +8665,10 @@
     GEN --&gt; C3{模型说材料不足?}
     C3 --&gt;|是| REJ2[输出无法回答 + 建议]
     C3 --&gt;|否| OUT[输出答案 + 引用]</code></pre>
-<p><strong>核心思想</strong>：<strong>根本不给模型编造的机会。</strong></p>
+<p>目标是在证据不足时不进入常规生成链路。</p>
 <p>如果检索结果为空，或经业务评测集校准的置信度不足，就直接返回「未找到足够依据的信息」、请求澄清或走受控降级，<strong>不进入常规生成环节</strong>（<a href="../../03-retrieval/13-hybrid-retrieval-rerank/">第十三章 13.4.3</a>）。</p>
-<p><strong>这里有一个必须承认的权衡</strong>：</p>
-<blockquote>
-<p><strong>拒答率和幻觉率是此消彼长的。</strong> 拒答规则更保守时，错误接受可能下降但拒答会增加；规则更宽松时，覆盖率提高但无依据回答风险上升。</p>
-</blockquote>
-<p><strong>校准目标和拒答代价应由业务场景决定</strong>：</p>
+<p>这里需要按业务代价校准：拒答规则更保守时，错误接受可能下降，但拒答会增加；规则更宽松时，覆盖率提高，但无依据回答风险上升。</p>
+<p>不同业务对拒答代价的容忍度不同：</p>
 <table>
 <thead>
 <tr>
@@ -8694,23 +8691,23 @@
 </tr>
 </tbody>
 </table>
-<p><strong>能主动说出这个权衡，比只说"要拒答"深一层。</strong></p>
+<p>因此，拒答策略需要和业务风险一起设计。</p>
 <h2 id="174-prompt">17.4 第二道防线：Prompt 约束<a class="headerlink" href="#174-prompt" title="Permanent link">&para;</a></h2>
-<p>一个可用的约束框架包含四条：</p>
+<p>常用的 Prompt 约束包括五条：</p>
 <p><strong>（1）限定信息来源</strong></p>
 <p>明确要求只依据给定材料回答，不使用材料之外的知识。</p>
 <p><strong>（2）声明材料优先级</strong></p>
 <p>材料中的信息优先于模型自身知识，冲突时以材料为准。</p>
 <p><strong>（3）提供不知道的出口</strong></p>
-<p><strong>这条最关键</strong>：必须明确告诉模型「材料不足时可以说不知道」，并说明这是<strong>被期望的行为而非失败</strong>。</p>
+<p>需要明确告诉模型：材料不足时可以直接回答不知道，并把这种行为定义为预期输出。</p>
 <blockquote>
-<p><strong>没有这个出口，模型会倾向于硬答</strong>——因为它的训练目标就是生成有用的回复。给它一条合法的退路，它才会用。</p>
+<p><strong>如果没有这条出口，模型更容易继续补全答案，而不是停在证据边界。</strong></p>
 </blockquote>
 <p><strong>（4）要求标注来源</strong></p>
 <p>每个结论后标注依据的材料编号。</p>
 <p><strong>（5）处理材料冲突</strong></p>
 <p>材料之间矛盾时，<strong>说明存在冲突并列出各方说法</strong>，而不是擅自选一个。</p>
-<p><strong>第五条经常被漏掉</strong>，但知识库里存在新旧版本、不同部门口径不一致，是非常常见的情况。</p>
+<p>知识库里经常同时存在新旧版本或不同部门口径，这条约束会直接影响输出是否可审计。</p>
 <h3 id="1741">17.4.1 上下文的组织方式也影响幻觉<a class="headerlink" href="#1741" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>给每个片段编号</strong>，才能做引用；</li>
@@ -8720,12 +8717,12 @@
 <li><strong>去除新旧版本冲突</strong>（第十三章 13.6）。</li>
 </ul>
 <h2 id="175">17.5 第三道防线：引用与可验证性<a class="headerlink" href="#175" title="Permanent link">&para;</a></h2>
-<p><strong>引用的价值不只是"看起来专业"，而是把「相信模型」变成「可以核查」。</strong></p>
-<p>但这里有一个<strong>必须知道的陷阱</strong>：</p>
+<p>引用的作用是把答案变成可核查对象，而不是增加表面可信感。</p>
+<p>这里有个常见问题：</p>
 <blockquote>
 <p><strong>模型会编造引用编号。</strong> 它可能标注 <code>[3]</code>，而实际内容来自 <code>[1]</code>，甚至压根不在任何材料里。</p>
 </blockquote>
-<p><strong>所以引用必须校验</strong>，至少做两级：</p>
+<p>因此引用至少要做两级校验：</p>
 <table>
 <thead>
 <tr>
@@ -8747,7 +8744,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>没有校验的引用，比没有引用更危险</strong>——因为它给了用户虚假的可信感。</p>
+<p>未校验的引用会放大误判风险，因为用户可能据此相信一条并不存在的依据。</p>
 <h2 id="176">17.6 第四道防线：事后校验<a class="headerlink" href="#176" title="Permanent link">&para;</a></h2>
 <p>生成完之后，用一次额外的调用检查答案的每个陈述是否被材料支撑。</p>
 <p><strong>成本</strong>：一次额外的 LLM 调用，延迟增加。</p>
@@ -8802,8 +8799,8 @@
 </tr>
 </tbody>
 </table>
-<p><strong>注意前三条的成本都很低。</strong> 很多团队跳过它们直接上复杂的校验方案，是典型的次序错误。</p>
-<h2 id="178">17.8 一个重要的概念澄清<a class="headerlink" href="#178" title="Permanent link">&para;</a></h2>
+<p>前三条的成本都较低，通常应先落地，再决定是否增加更昂贵的深度校验。</p>
+<h2 id="178-grounding">17.8 Grounding 与事实正确性的边界<a class="headerlink" href="#178-grounding" title="Permanent link">&para;</a></h2>
 <p><strong>「有依据」不等于「正确」。</strong></p>
 <ul>
 <li>材料本身就是错的（知识库里存了过期或错误的文档）→ <strong>答案忠实于材料，但事实上是错的</strong>；</li>
@@ -8812,7 +8809,7 @@
 <blockquote>
 <p><strong>所有生成层的手段，保证的都是「答案忠实于材料」，而不是「答案事实正确」。</strong> 事实正确性取决于知识库本身的质量。</p>
 </blockquote>
-<p><strong>这个区分在第十八章讲评估指标时会再次出现</strong>——Faithfulness 指标衡量的是前者，不是后者。<strong>混淆两者是评估环节最常见的误解。</strong></p>
+<p>第十八章里的 Faithfulness 指标衡量的是前者，而不是后者；评估时需要单独区分这两个目标。</p>
 <p><strong>推论</strong>：知识库的内容治理（去除过期文档、标注版本、定期审核）<strong>是幻觉治理的一部分</strong>，而且是最上游的一部分。</p>
 <h2 id="179">17.9 常见错误<a class="headerlink" href="#179" title="Permanent link">&para;</a></h2>
 <h3 id="1791-prompt">17.9.1 只讲 Prompt 技巧不讲检索<a class="headerlink" href="#1791-prompt" title="Permanent link">&para;</a></h3>
@@ -8845,10 +8842,6 @@
 <li><strong>忠实度校验成本高</strong>，可在线只做基础校验、离线抽样做深度校验；</li>
 <li><strong>「有依据」不等于「正确」</strong>：生成层只能保证忠实于材料，事实正确性取决于知识库治理。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>RAG 降低不实输出要同时治理可信且新鲜的证据、可靠检索、受约束生成、可核查引用与系统复用；没有任何单一步骤能够消除风险。</strong></p>
-</blockquote>
 <h2 id="_1">跨主题详解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Agent 读取不可信检索内容并调用工具时的风险与隔离方式，见<a href="../../../agent/05-production/15-agent-security/">Agent 安全</a>。</li>

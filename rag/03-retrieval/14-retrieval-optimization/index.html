@@ -8511,9 +8511,9 @@
 
 <h1 id="rag">第十四章：RAG 优化的五层框架<a class="headerlink" href="#rag" title="Permanent link">&para;</a></h1>
 <h2 id="141">14.1 为什么需要一个框架<a class="headerlink" href="#141" title="Permanent link">&para;</a></h2>
-<p>「RAG 效果不好怎么优化」是最开放也最容易答砸的问题。</p>
-<p><strong>答砸的典型方式</strong>：想到哪说到哪——「可以调 chunk 大小、可以换模型、可以加 rerank、可以做 query 改写……」。这些点都对，但<strong>罗列本身没有信息量</strong>，因为它不体现你知道什么时候该用哪个。</p>
-<p><strong>正确的答法是给出一个分层框架</strong>：把优化手段按它作用的环节归类，然后说明<strong>怎么定位问题落在哪一层</strong>。</p>
+<p>「RAG 效果不好怎么优化」通常牵涉多个环节。</p>
+<p>常见问题不是缺少可选手段，而是把「调 chunk 大小、换模型、加 rerank、做 query 改写」混在一起讨论。单纯罗列选项信息量很低，因为它没有回答问题究竟出在哪一层。</p>
+<p>分层框架的作用，就是把优化手段按所处环节归类，再据此定位问题发生的位置。</p>
 <pre class="mermaid"><code>flowchart TB
     L1[第一层 索引层&lt;br/&gt;存的东西对不对] --&gt; L2[第二层 查询层&lt;br/&gt;问的方式对不对]
     L2 --&gt; L3[第三层 召回层&lt;br/&gt;找的路径全不全]
@@ -8525,7 +8525,7 @@
     L3 -.-&gt; P3[盲区: 单路系统性缺失]
     L4 -.-&gt; P4[精度: 排序与上下文污染]
     L5 -.-&gt; P5[可信: 引用、冲突与拒答]</code></pre>
-<p><strong>每一层解决一个独立的问题，且顺序不能颠倒</strong>——索引层存错了，后面四层做得再好也没用。安全、观测和评估不是第六层，而是贯穿五层的横切能力。</p>
+<p><strong>每一层解决一个独立的问题，且顺序不能颠倒</strong>——索引层的数据如果就有问题，后面四层做得再好也没用。安全、观测和评估不是第六层，而是贯穿五层的横切能力。</p>
 <h2 id="142">14.2 第一层：索引层<a class="headerlink" href="#142" title="Permanent link">&para;</a></h2>
 <p><strong>要解决的核心矛盾</strong>：粒度太小语义碎片化，粒度太大语义被稀释（第四章 4.2）。</p>
 <table>
@@ -8569,7 +8569,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>这一层最容易被跳过，但它是所有效果的地基。</strong> 很多团队花几周调 Rerank，回头才发现知识库里的表格全是乱码。</p>
+<p>这一层经常被跳过，但它是所有效果的地基。很多团队花几周调 Rerank，最后才发现知识库里的表格全是乱码。</p>
 <h2 id="143">14.3 第二层：查询层<a class="headerlink" href="#143" title="Permanent link">&para;</a></h2>
 <p><strong>要解决的核心问题</strong>：用户的表达方式和文档的表达方式之间的鸿沟（第十二章 12.1）。</p>
 <table>
@@ -8610,7 +8610,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>这一层的成本特征是「每个手段一次 LLM 调用」</strong>，所以<strong>要选一个，不要叠加</strong>。</p>
+<p>这一层的成本特征是「每个手段通常都多一次 LLM 调用」，所以一般按问题类型选一种，而不是层层叠加。</p>
 <h2 id="144">14.4 第三层：召回层<a class="headerlink" href="#144" title="Permanent link">&para;</a></h2>
 <p><strong>要解决的核心问题</strong>：单路召回的系统性盲区（第十三章 13.1）。</p>
 <table>
@@ -8723,7 +8723,7 @@
 </tbody>
 </table>
 <h2 id="147">14.7 怎么定位问题在哪一层<a class="headerlink" href="#147" title="Permanent link">&para;</a></h2>
-<p><strong>这才是这道题真正的考点。</strong> 有框架但不会定位，等于有工具箱不会用。</p>
+<p>框架本身只负责分类，真正能指导优化的是定位能力。</p>
 <pre class="mermaid"><code>flowchart TB
     BAD[答案质量差] --&gt; C1{正确 chunk&lt;br/&gt;在 Top-50 里吗?}
     C1 --&gt;|不在| C2{知识库里&lt;br/&gt;有这个信息吗?}
@@ -8734,7 +8734,7 @@
     C1 --&gt;|在| C4{Top-5 里有吗?}
     C4 --&gt;|没有| FIX4[重排层: 加或换 Rerank]
     C4 --&gt;|有| FIX5[生成层: Prompt 约束不足&lt;br/&gt;见第十七章]</code></pre>
-<p><strong>这个决策树的价值在于：它把一个模糊的「效果不好」，变成了一系列可以用数据回答的是非题。</strong></p>
+<p>这个决策树的价值在于：它把一个模糊的「效果不好」，变成了一系列可以用数据回答的是非题。</p>
 <p>具体操作方法：</p>
 <ol>
 <li><strong>取一批效果差的真实 Query</strong>（不要用凭空构造的）；</li>
@@ -8744,7 +8744,7 @@
 <li><strong>在候选里但排名靠后</strong> → 重排层；</li>
 <li><strong>排在前列但答案还是错</strong> → 生成层。</li>
 </ol>
-<p><strong>统计一批 Query 的分布</strong>，就知道该优先投入哪一层。<strong>这个诊断过程本身，比任何优化手段都值钱。</strong></p>
+<p><strong>统计一批 Query 的分布</strong>，就能看出该优先投入哪一层。很多情况下，诊断本身比盲目加新组件更重要。</p>
 <h2 id="148">14.8 优化顺序建议<a class="headerlink" href="#148" title="Permanent link">&para;</a></h2>
 <p>按<strong>投入产出比</strong>排序：</p>
 <table>
@@ -8819,7 +8819,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>第 1 步不产生任何效果提升，但没有它，后面九步全是盲目试错。</strong> 这是最反直觉、也最重要的一条。</p>
+<p><strong>第 1 步本身不产生效果提升，但没有它，后面九步就很难判断改动是否真的有效。</strong></p>
 <h2 id="149">14.9 一个典型的组合方案<a class="headerlink" href="#149" title="Permanent link">&para;</a></h2>
 <p>多数中等规模的企业 RAG 系统，最终会收敛到类似的配置：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -8835,15 +8835,15 @@
         H --&gt; I[受约束生成 + 引用校验]
     end
     D -.-&gt; F</code></pre>
-<p><strong>这套方案没有依赖实验性组件</strong>，但它覆盖了五层的核心手段。每个组件是否适合仍需由业务评测集、延迟与成本预算验证。</p>
+<p><strong>这套方案没有依赖实验性组件</strong>，但覆盖了五层里的主要手段。每个组件是否适合，仍需由业务评测集、延迟与成本预算验证。</p>
 <blockquote>
-<p><strong>RAG 优化的现实是：把基础的东西全部做对，效果就已经超过 90% 的系统了。</strong> 高级范式（第十五、十六章）是在这个基础做扎实之后才考虑的。</p>
+<p><strong>RAG 优化通常先把基础环节做对，再考虑高级范式。</strong> 第十五、十六章提到的方案，更适合在这一基础上解决额外的结构性问题。</p>
 </blockquote>
 <h2 id="1410">14.10 常见错误<a class="headerlink" href="#1410" title="Permanent link">&para;</a></h2>
 <h3 id="14101">14.10.1 罗列手段但不分层<a class="headerlink" href="#14101" title="Permanent link">&para;</a></h3>
-<p>听起来是背的，且不体现判断力。</p>
+<p>这种写法无法体现问题定位和取舍判断。</p>
 <h3 id="14102">14.10.2 不会定位问题在哪一层<a class="headerlink" href="#14102" title="Permanent link">&para;</a></h3>
-<p>有框架不会用，等于没框架。</p>
+<p>有框架但不会归因，优化动作通常会失焦。</p>
 <h3 id="14103">14.10.3 跳过评测集直接优化<a class="headerlink" href="#14103" title="Permanent link">&para;</a></h3>
 <p>无法判断改动是好是坏，只能凭感觉。这是最常见也最致命的错误。</p>
 <h3 id="14104">14.10.4 从最复杂的手段开始<a class="headerlink" href="#14104" title="Permanent link">&para;</a></h3>
@@ -8864,10 +8864,6 @@
 <li><strong>建立评测集本身不带来效果提升，但没有它后面全是盲目试错</strong>；</li>
 <li><strong>把基础做对的收益，远大于引入前沿技术</strong>。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>RAG 优化不是"试遍所有技巧"，而是先定位问题落在哪一层，再从那一层里选投入产出比最高的手段——而定位的前提是有评测集。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2407.01219">Searching for Best Practices in Retrieval-Augmented Generation</a></li>

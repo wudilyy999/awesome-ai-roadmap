@@ -8522,7 +8522,7 @@
 <h2 id="81-prompt">8.1 从「重复贴 Prompt」的痛点说起<a class="headerlink" href="#81-prompt" title="Permanent link">&para;</a></h2>
 <p>每次让 AI 做代码审查，你都要贴一大段指令：检查哪几类问题、用什么格式输出、重点关注什么。第一次还行，第三次就开始烦了，而且每次贴的内容都略有出入，输出质量因此不稳定。</p>
 <p>一个人尚且如此，团队协作更糟：十个人做代码审查，十份不同的 Prompt，有人关注安全有人关注性能，审查标准完全无法统一。</p>
-<p>把 Prompt 写进共享文档让大家复制？这本质上还是靠人工维护和执行。文档更新了但有人还在用旧版，质量把控根本做不到。</p>
+<p>把 Prompt 写进共享文档让大家复制，还是靠人手工维护。文档更新后总会有人继续用旧版，审查质量自然也稳不住。</p>
 <blockquote>
 <p><strong>Skill 要解决的是：把反复使用的指令、流程、模板打包成标准化模块，让 Agent 自己知道什么时候该用、怎么用，不再依赖人工复制粘贴。</strong></p>
 </blockquote>
@@ -8557,9 +8557,9 @@
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="gu">## 第三步：输出报告</span>
 </span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>使用 assets/report_template.md 的模板格式输出。
 </span></code></pre></div>
-<p>和普通 Prompt 的区别就很清楚了：<strong>Prompt 是一段文字，用完就没了；Skill 是一个可以持续维护、纳入版本管理、全团队共享同一份的完整目录。</strong></p>
+<p>和普通 Prompt 的区别在于：<strong>Prompt 是一段临时文字，用完就散了；Skill 是一个可以持续维护、纳入版本管理、全团队共享同一份的完整目录。</strong></p>
 <h2 id="83-skill">8.3 渐进式加载：Skill 最聪明的设计<a class="headerlink" href="#83-skill" title="Permanent link">&para;</a></h2>
-<p>Skill 真正有意思的地方不是「能打包」，而是<strong>它怎么被加载</strong>。</p>
+<p>Skill 的价值不只在于「能打包」，更在于<strong>加载方式</strong>。</p>
 <h3 id="831">8.3.1 全量加载算不过来的账<a class="headerlink" href="#831" title="Permanent link">&para;</a></h3>
 <p>假设你有 20 个 Skill，每个的指令加参考文档平均 2000 token，全量加载就是 <strong>40,000 token 打底</strong>。</p>
 <p>在一个 200K 上下文的模型上，光 Skill 就吃掉了五分之一，剩下的要分给系统提示、对话历史、用户文件。更糟的是这 20 个里大部分在当前任务用不上——<strong>加载了纯属浪费</strong>。</p>
@@ -8610,7 +8610,7 @@
 <p>深层原因是 <strong>context window 是 Agent 最宝贵的资源</strong>。全量塞进去不只是浪费 token，更严重的是<strong>注意力被稀释</strong>——真正有用的任务信息淹没在一堆无关指令里，输出质量反而下降。</p>
 <p>这一点和 <a href="../../../agent/03-memory-context/10-agent-memory-compression/">Agent 的上下文压缩</a> 是同一个思路：不是能塞多少就塞多少，而是让模型在恰当的时候只看到恰当的东西。</p>
 <h3 id="834-description-skill">8.3.4 description 决定 Skill 能不能被用上<a class="headerlink" href="#834-description-skill" title="Permanent link">&para;</a></h3>
-<p>既然第一层只加载 <code>description</code>，那么<strong>这一句话就是 Skill 唯一的曝光机会</strong>。写得含糊，Agent 就发现不了它。</p>
+<p>第一层只加载 <code>description</code>，它基本决定了 Agent 能不能把这个 Skill 选出来。写得含糊，就容易漏匹配。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 差：太宽泛，什么任务都可能误匹配，或者都不匹配</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"帮助处理代码相关的任务"</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
@@ -8665,22 +8665,22 @@
 </tr>
 </tbody>
 </table>
-<p>两个关键区分：</p>
-<p><strong>Skill vs Tool</strong>：Tool 提供能力，Skill 提供用这些能力的方法。给新人配了电脑和所有系统权限，他也不知道该按什么流程做代码审查、先查什么后查什么、用什么格式输出。<strong>两者互补，不是替代</strong>。</p>
-<p><strong>Skill vs Slash Command</strong>：都是把指令保存下来复用，但 Slash Command 必须你手动输入 <code>/code-review</code> 才会触发；Skill 能被 Agent <strong>自动发现</strong>——它看到任务后自己判断该用哪个 Skill，主动加载执行。这个自动发现能力就是 Skill 比 Slash Command 更进一步的地方。</p>
+<p>两个容易混淆的边界是：</p>
+<p>Skill 和 Tool 的分工不同。Tool 提供能力，Skill 提供用这些能力的方法。给新人配了电脑和所有系统权限，他也不知道该按什么流程做代码审查、先查什么后查什么、用什么格式输出。<strong>两者互补，不是替代</strong>。</p>
+<p>Skill 和 Slash Command 也不是一回事。两者都能把指令保存下来复用，但 Slash Command 必须你手动输入 <code>/code-review</code> 才会触发；Skill 能被 Agent <strong>自动发现</strong>，它看到任务后会自己判断该用哪个 Skill，再主动加载执行。</p>
 <h2 id="85-skill">8.5 Skill 里可以放可执行脚本<a class="headerlink" href="#85-skill" title="Permanent link">&para;</a></h2>
-<p><code>scripts/</code> 目录是个容易被低估的设计。</p>
+<p><code>scripts/</code> 目录经常被忽略，但在工程上很有用。</p>
 <p>有些工作用代码做比用自然语言描述可靠得多——比如「检查所有 SQL 拼接的地方」，写个 AST 分析脚本比让模型逐行读代码准确率高、成本低。</p>
 <div class="language-markdown highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="gu">## 第二步：安全检查</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>先运行 scripts/check_security.py 拿到静态扫描结果，
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>再针对脚本标记的可疑位置做人工语义分析。
 </span></code></pre></div>
-<p>这体现了一种设计思路：<strong>能确定性完成的部分交给代码，需要判断的部分交给模型</strong>。Skill 提供了把两者打包在一起的载体。</p>
+<p>这里更像一种工程分工：<strong>能确定性完成的部分交给代码，需要判断的部分交给模型</strong>。Skill 刚好提供了把两者放在一起的载体。</p>
 <h2 id="86-anthropic">8.6 从 Anthropic 功能到开放标准<a class="headerlink" href="#86-anthropic" title="Permanent link">&para;</a></h2>
 <p>Agent Skills 是 Anthropic 在 2025 年 10 月推出的，最初只覆盖 Claude Code、Claude API 和 claude.ai 三个入口。</p>
 <p>两个月后，Anthropic 把规范作为<strong>开放标准</strong>发布出来，任何 Agent 平台都可以按规范实现。</p>
-<p><strong>为什么能开放</strong>：因为设计足够简单。一个 Skill 就是一个文件夹加一份 Markdown，不需要特殊运行时，不需要学新语言，任何支持文件系统的 Agent 平台理论上都能实现。这种零门槛设计让它有机会成为跨平台约定。</p>
-<p><strong>开放的意义</strong>：你写一份 Skill，未来有机会在不同 Agent 平台之间复用，而不是被某一家产品绑死。目前主要还是 Claude 生态在用，社区有项目在探索跨平台兼容，最终能走多远要看行业采纳。</p>
+<p>它能开放出来，一个重要原因是设计足够简单。一个 Skill 就是一个文件夹加一份 Markdown，不需要特殊运行时，也不用学新语言；任何支持文件系统的 Agent 平台，理论上都能实现。这种低门槛设计才让它有机会变成跨平台约定。</p>
+<p>开放之后的实际意义是：你写的一份 Skill，未来有机会在不同 Agent 平台之间复用，而不是被某一家产品绑死。目前主要还是 Claude 生态在用，社区也在探索跨平台兼容，最终能走多远还要看行业采纳。</p>
 <h2 id="87">8.7 常见错误<a class="headerlink" href="#87" title="Permanent link">&para;</a></h2>
 <h3 id="871-skill-prompt">8.7.1 把 Skill 说成「高级 Prompt 模板」<a class="headerlink" href="#871-skill-prompt" title="Permanent link">&para;</a></h3>
 <p>这是最常见的降格。Skill 是一个<strong>完整的目录</strong>，包含指令、可执行脚本、参考文档、输出模板，而且能被 Agent 自动发现和按需加载。说成 Prompt 模板，等于丢掉了它最有价值的两部分：可执行资源和渐进式加载。</p>
@@ -8699,14 +8699,14 @@
 <li><strong>Skill 解决的是「反复贴 Prompt」和「团队标准不统一」</strong>，把流程知识沉淀成可维护、可版本管理的模块；</li>
 <li><strong>结构上就是一个文件夹</strong>：必需的 <code>SKILL.md</code> 加可选的 scripts / references / assets；</li>
 <li><strong>渐进式加载是核心设计</strong>：启动只读元数据，匹配才加载指令，用到才取资源；</li>
-<li><strong>本质是 context 工程</strong>：省 token 是表象，避免注意力被无关内容稀释才是关键；</li>
+<li><strong>落到实现上，是在做 context 管理</strong>：省 token 只是表面收益，更重要的是别让无关内容稀释模型注意力；</li>
 <li><strong><code>description</code> 决定 Skill 能否被发现</strong>，写法要求和工具描述一致；</li>
 <li><strong>Tool 提供能力，Skill 提供方法</strong>，两者互补，Skill 的流程中会调用 Tool；</li>
 <li><strong>相比 Slash Command 多了自动发现</strong>，这让它能用于无人值守流程；</li>
 <li><strong>2025 年 10 月推出，12 月开放为标准</strong>，零运行时依赖是它有机会跨平台的原因。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：Tool 给 Agent 配电脑，Skill 给 Agent 发操作手册，而这份手册聪明在只有翻到需要的那一页时才会真正占用它的注意力。</strong></p>
+<p><strong>可以把它记成：Tool 给 Agent 配电脑，Skill 给 Agent 发操作手册；手册平时只露出目录，真用到时才展开细节。</strong></p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

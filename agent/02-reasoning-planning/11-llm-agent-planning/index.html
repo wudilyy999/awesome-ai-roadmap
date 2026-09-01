@@ -10010,7 +10010,7 @@
 <li>在局部问题上反复循环；</li>
 <li>无法估算成本和风险。</li>
 </ul>
-<p>显式规划的价值是：</p>
+<p>显式规划能把这些问题前置暴露出来：</p>
 <ul>
 <li>将目标转化为可执行步骤；</li>
 <li>暴露依赖和并行机会；</li>
@@ -10020,7 +10020,7 @@
 <li>根据真实 Observation 动态调整。</li>
 </ul>
 <blockquote>
-<p><strong>规划机制的核心不是让模型“把所有想法写出来”，而是产生可执行、可验证、可更新的控制结构。</strong></p>
+<p><strong>规划机制要产出可执行、可验证、可更新的控制结构；把思路展开只是其中一种手段。</strong></p>
 </blockquote>
 <h2 id="114">11.4 规划能力来自两个层次<a class="headerlink" href="#114" title="Permanent link">&para;</a></h2>
 <h3 id="1141-model-level-planning">11.4.1 Model-level Planning<a class="headerlink" href="#1141-model-level-planning" title="Permanent link">&para;</a></h3>
@@ -10192,7 +10192,7 @@
     A2 --&gt; E
     B1 --&gt; E
     B2 --&gt; E</code></pre>
-<p>ToT 解决的不是“保证纠正错误方向”，而是：</p>
+<p>ToT 给系统提供的是一套探索、选择和回溯候选路径的框架：</p>
 <blockquote>
 <p><strong>允许系统探索多个方向，并在评价函数有效时进行选择和回溯。</strong></p>
 </blockquote>
@@ -10400,7 +10400,7 @@ P_{t+1}=R(P_t,o_{t+1},s_t,g)
 <li>工具结果决定后续路径；</li>
 <li>任务可能随时被用户调整。</li>
 </ul>
-<p>它在全局计划和 ReAct 之间提供平衡。</p>
+<p>它适合放在全局计划和纯 ReAct 之间，兼顾前瞻性和响应速度。</p>
 <h2 id="1117-react">11.17 ReAct 在规划中的作用<a class="headerlink" href="#1117-react" title="Permanent link">&para;</a></h2>
 <p>ReAct 不是完整全局规划器，但适合执行计划中的局部开放任务：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -10533,7 +10533,7 @@ P_{t+1}=R(P_t,o_{t+1},s_t,g)
     R-&gt;&gt;M: 计划与约束结果
     M--&gt;&gt;U: 解释或执行计划</code></pre>
 <blockquote>
-<p><strong>能由确定性算法可靠解决的规划问题，不应完全依赖语言模型搜索。</strong></p>
+<p><strong>这类问题更适合让语言模型负责建模和解释，把搜索或求解交给确定性算法。</strong></p>
 </blockquote>
 <h2 id="1121">11.21 计划的表示方式<a class="headerlink" href="#1121" title="Permanent link">&para;</a></h2>
 <h3 id="11211-natural-language-list">11.21.1 Natural Language List<a class="headerlink" href="#11211-natural-language-list" title="Permanent link">&para;</a></h3>
@@ -10606,7 +10606,7 @@ P_{t+1}=R(P_t,o_{t+1},s_t,g)
     FAIL[Failures] --&gt; STATE
     BUDGET[Budget] --&gt; STATE
     STATE --&gt; RP[Replanner]</code></pre>
-<p>计划不能只存在于一次 Prompt 中，应保存在结构化 State Store 并支持 Checkpoint。</p>
+<p>计划若只留在单次 Prompt 中，执行过程中就很难追踪版本、恢复状态或安全重启。更稳妥的做法是把它存入结构化 State Store，并支持 Checkpoint。</p>
 <h2 id="1124-world-model">11.24 World Model<a class="headerlink" href="#1124-world-model" title="Permanent link">&para;</a></h2>
 <p>规划需要估计动作会如何改变环境。这个预测模型称为 World Model。</p>
 <p>LLM 可以隐式预测：</p>
@@ -10615,7 +10615,7 @@ P_{t+1}=R(P_t,o_{t+1},s_t,g)
 <li>某个动作是否满足前置条件；</li>
 <li>下一步会产生什么副作用。</li>
 </ul>
-<p>但高风险场景不应只相信语言模型预测，应使用：</p>
+<p>但在高风险场景里，仅靠语言模型预测还不够，通常还要结合：</p>
 <ul>
 <li>API Schema；</li>
 <li>模拟器；</li>
@@ -10712,7 +10712,7 @@ B=(N,D,K,T,C)
     A --&gt;|候选较多| T[ToT / Search]
     A --&gt;|严格约束| S[External Solver]
     A --&gt;|动态环境| R[Rolling Replanning]</code></pre>
-<p>这比所有任务都运行昂贵搜索更高效。</p>
+<p>对所有任务一律启用昂贵搜索，通常得不偿失。</p>
 <h2 id="1129">11.29 规划能力的训练方式<a class="headerlink" href="#1129" title="Permanent link">&para;</a></h2>
 <h3 id="11291-in-context-examples">11.29.1 In-context Examples<a class="headerlink" href="#11291-in-context-examples" title="Permanent link">&para;</a></h3>
 <p>提供高质量计划示例，包括依赖、成功标准和失败处理。</p>
@@ -10908,7 +10908,7 @@ B=(N,D,K,T,C)
 </tbody>
 </table>
 <h2 id="1135">11.35 本章总结<a class="headerlink" href="#1135" title="Permanent link">&para;</a></h2>
-<p>赋予 LLM 规划能力不能只靠一句“请一步步思考”。</p>
+<p>判断 LLM 有没有规划能力，不能只看它会不会“按步骤思考”，还要看计划能否执行、验证和更新。</p>
 <h3 id="11351">11.35.1 模型层<a class="headerlink" href="#11351" title="Permanent link">&para;</a></h3>
 <ul>
 <li>CoT 提供单路径中间推理；</li>
@@ -10926,9 +10926,8 @@ B=(N,D,K,T,C)
 <li>用 Replanner 动态修改计划；</li>
 <li>用 Verifier 和 Guardrails 保证质量与安全。</li>
 </ul>
-<p>最重要的原则是：</p>
 <blockquote>
-<p><strong>规划不是把思维过程写得更长，而是把目标转化为可执行、可验证、可更新并受预算约束的行动结构。</strong></p>
+<p><strong>落到工程实现，规划应表现为受预算约束的行动结构，能够执行、验证、更新。</strong></p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

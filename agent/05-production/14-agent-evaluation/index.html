@@ -9042,7 +9042,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>最常见的工程错误是只做 L3。</strong> 只看端到端成功率，成功时不知道为什么成功，失败时不知道错在哪一步。L1 和 L2 的价值在于<strong>归因</strong>：把一个「任务失败」拆解成「第 3 步检索没召回」或「第 5 步工具参数填错」。</p>
+<p>工程里很容易只盯 L3 端到端成功率。这样做的问题是：成功时说不清为什么成功，失败时也难定位卡在哪一步。L1 和 L2 的价值就在于<strong>归因</strong>，能把一个「任务失败」继续拆到「第 3 步检索没召回」或「第 5 步工具参数填错」。</p>
 <h2 id="143-agent-benchmark">14.3 主流 Agent Benchmark 全景<a class="headerlink" href="#143-agent-benchmark" title="Permanent link">&para;</a></h2>
 <p>理解学术基准的价值不在于刷分，而在于它们各自<strong>定义了一类能力</strong>，可以借鉴其评测设计思路来构造自己的业务评测集。</p>
 <pre class="mermaid"><code>flowchart TB
@@ -9481,21 +9481,10 @@
 <h3 id="1497">14.9.7 忽略安全指标<a class="headerlink" href="#1497" title="Permanent link">&para;</a></h3>
 <p>一个成功率 95% 但偶尔会执行越权删除的 Agent，比成功率 85% 但从不越权的 Agent 危险得多。<strong>安全违规应该是独立的、一票否决的指标</strong>，不能被平均进成功率里。</p>
 <h2 id="1410">14.10 本章总结<a class="headerlink" href="#1410" title="Permanent link">&para;</a></h2>
-<p>Agent 评估与 LLM 评估的根本区别在于：评估对象是<strong>轨迹和环境状态</strong>，而不是一段文本。</p>
-<p>工程上应该建立的体系是：</p>
-<ol>
-<li><strong>四层指标</strong>：组件层归因、轨迹层诊断、任务层主指标、系统层监控；</li>
-<li><strong>判定优先级</strong>：程序化断言 &gt; 校准过的 LLM-as-Judge &gt; 人工评估；</li>
-<li><strong>稳定性指标</strong>：无人值守场景看 <span class="arithmatex">\(\mathrm{pass}^{k}\)</span> 而非 <span class="arithmatex">\(\mathrm{pass@}k\)</span>，并验证轨迹的授权、状态转移与恢复；</li>
-<li><strong>成本联合报告</strong>：成功率必须与单位成功成本、P95 延迟一起看；</li>
-<li><strong>分层评测集</strong>：Smoke / Regression / Full 对应不同运行频率，线上失败样例持续回流；</li>
-<li><strong>在线可观测</strong>：完整轨迹落库，终止原因必须记录；</li>
-<li><strong>安全独立计分</strong>：越权与违规不参与平均，一票否决。</li>
-</ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>学术基准用来借鉴评测设计，业务评测集用来做决策；能用断言就不用模型打分；无人值守场景看一致性而不是能力上界。</strong></p>
-</blockquote>
+<p>Agent 评估与 LLM 评估的根本区别在于：前者看的不是一段文本，而是<strong>整条轨迹和环境状态</strong>。</p>
+<p>工程上更实用的做法，是把评估拆成四层：组件层负责归因，轨迹层看过程质量，任务层给端到端结论，系统层持续盯成本、延迟和安全。判定顺序也尽量固定：能用程序化断言就别交给模型打分，必须用 LLM-as-Judge 时先做校准；人工评估更适合做抽查和校准基线。</p>
+<p>无人值守场景别只看 <span class="arithmatex">\(\mathrm{pass@}k\)</span>，还要看 <span class="arithmatex">\(\mathrm{pass}^{k}\)</span>、单位成功成本、P95 延迟，以及轨迹里的授权、状态转移和恢复是否站得住。评测集也要分层运行：Smoke、Regression、Full 各跑各的频率，线上失败样例持续回流。上线后还要把完整轨迹和终止原因落库，并把越权、违规这类安全问题单独计分，不和成功率平均。</p>
+<p>学术基准更适合借鉴评测设计，真正做版本决策还得靠自己的业务评测集。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2310.06770">SWE-bench: Can Language Models Resolve Real-World GitHub Issues?</a></li>

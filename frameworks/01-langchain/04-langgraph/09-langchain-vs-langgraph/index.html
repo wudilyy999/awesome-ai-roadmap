@@ -8837,14 +8837,10 @@
 
 <h1 id="langchain-langgraph">第九章：LangChain 与 LangGraph 的层次关系<a class="headerlink" href="#langchain-langgraph" title="Permanent link">&para;</a></h1>
 <h2 id="91">9.1 两者处于同一层吗<a class="headerlink" href="#91" title="Permanent link">&para;</a></h2>
-<p><strong>很多人第一次看到这两个名字，会自然地问「哪个功能更多」。</strong></p>
+<p>只按功能多少来比较这两个框架，很容易忽略它们是<strong>上下层关系</strong>。</p>
 <blockquote>
-<p><strong>这个问题就像在比较一台咖啡机和它内部的控制系统</strong>——能列出差异，却很容易忽略两者是<strong>上下层关系</strong>。</p>
-</blockquote>
-<p><strong>先用一句人话理解</strong>：</p>
-<blockquote>
-<p><strong>LangChain 给我们一套装好的 Agent，LangGraph 让我们自己设计整条业务路线。</strong></p>
-<p><strong>本章只回答层次、选型和组合边界；第十章再展开 interrupt 审批协议、节点容错版本、流式脱敏和持久化实现。</strong> 这样不会把同一套运行时能力在两章各讲一遍。</p>
+<p><strong>LangChain 提供高层 Agent API，LangGraph 提供更低层的编排框架与运行时。</strong></p>
+<p>本章聚焦层次、选型和组合边界；<code>interrupt</code> 审批协议、节点容错版本、流式脱敏和持久化实现放在<a href="../10-langgraph-advantages/">第十章</a>展开。</p>
 </blockquote>
 <table>
 <thead>
@@ -8874,7 +8870,7 @@
     style C fill:#fff3cd</code></pre>
 <p><strong><code>create_agent</code> 会构建一个基于 LangGraph 的图运行时</strong>：Agent 在模型节点和工具节点之间循环，直到模型给出最终答案或命中停止条件。</p>
 <blockquote>
-<p><strong>这也解释了为什么两者既有重叠能力，又不能说「选哪个都一样」</strong>：</p>
+<p><strong>这也解释了为什么两者看起来能力重叠，却不能互相替代</strong>：</p>
 <ul>
 <li>用 <strong>LangChain</strong> 时，框架已经替你搭好了常见 Agent 的拓扑，<strong>你主要配置零件和生命周期钩子</strong>；</li>
 <li>用 <strong>LangGraph</strong> 时，<strong>节点怎么拆、状态怎么更新、下一步去哪，都由你来决定</strong>。</li>
@@ -8953,8 +8949,8 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>注意「持久化」「流式输出」「人工介入」都出现在两列——这不是写重复了。</strong></p>
-<p><strong>这些能力由 LangGraph 运行时提供，也能从 LangChain Agent 的高层接口中使用。两者差别主要是封装层级和控制粒度，不是简单的有或没有。</strong></p>
+<p><strong>「持久化」「流式输出」「人工介入」会同时出现在两列，是因为这些能力由 LangGraph 运行时提供，LangChain Agent 也能直接使用。</strong></p>
+<p>两者差别主要是封装层级和控制粒度，不是简单的有或没有。</p>
 </blockquote>
 <h2 id="93-langchain">9.3 「LangChain 只能线性执行」为什么是错的<a class="headerlink" href="#93-langchain" title="Permanent link">&para;</a></h2>
 <p><strong>它混淆了三个不同概念。</strong></p>
@@ -8987,9 +8983,9 @@
 <p><strong>更准确的边界</strong>：LangChain 能表达分支和循环，但它的高层 Agent API 主要围绕<strong>通用模型与工具循环</strong>组织；<strong>LangGraph 则允许开发者直接拥有整个工作流的拓扑控制权。</strong></p>
 </blockquote>
 <h2 id="94-middleware">9.4 Middleware 与图编排有何不同<a class="headerlink" href="#94-middleware" title="Permanent link">&para;</a></h2>
-<p><strong>既然 middleware 什么都能插，为什么还要 LangGraph？</strong></p>
+<p>middleware 能覆盖一部分定制需求，但它不等于图编排。</p>
 <blockquote>
-<p><strong>关键要看我们是在「改造同一台机器」，还是「重新规划整条生产线」。</strong></p>
+<p>区别在于：是在<strong>围绕同一套 Agent loop 加横切逻辑</strong>，还是要<strong>重新定义整条业务流程的拓扑</strong>。</p>
 </blockquote>
 <table>
 <thead>
@@ -9059,7 +9055,7 @@
 <p><strong>这段代码不是在把 LangChain「迁移」成 LangGraph，而是在正确分工。</strong> 内部研究 Agent 继续享受高层抽象，外部业务流程则获得显式路由。</p>
 </blockquote>
 <h2 id="95-state">9.5 State：默认状态与自由建模<a class="headerlink" href="#95-state" title="Permanent link">&para;</a></h2>
-<p><strong>Agent 为什么需要状态？</strong> 因为模型调用、工具结果、人工意见和中间产物不可能只靠函数局部变量一直传下去。</p>
+<p>Agent 需要状态，是因为模型调用、工具结果、人工意见和中间产物不能只靠函数局部变量一直传下去。</p>
 <table>
 <thead>
 <tr>
@@ -9085,14 +9081,13 @@
 </blockquote>
 <p><strong>这不是说 LangChain 没有 State</strong>——它的 Agent State 就运行在 LangGraph 上。区别在于：用 LangChain 时通常接受一套<strong>为标准 Agent loop 设计好的状态骨架</strong>；直接用 LangGraph 时，你要为整个业务工作流<strong>设计数据通道和更新规则</strong>，也因此拥有更大的自由度和责任。</p>
 <h2 id="96">9.6 谁提供持久化与记忆<a class="headerlink" href="#96" title="Permanent link">&para;</a></h2>
-<p><strong>这是最容易说错的地方。</strong></p>
-<p><strong>两种错误说法</strong>：</p>
+<p>这里常见两种误解：</p>
 <ul>
 <li>❌「LangChain 管记忆，LangGraph 管持久化」</li>
 <li>❌「只有 LangGraph 才能断点恢复」</li>
 </ul>
 <blockquote>
-<p><strong>两种说法都把上下层拆散了。</strong></p>
+<p>这两种说法都把上下层关系拆开了。</p>
 </blockquote>
 <h3 id="961-langgraph">9.6.1 LangGraph 的两套持久化机制<a class="headerlink" href="#961-langgraph" title="Permanent link">&para;</a></h3>
 <table>
@@ -9182,7 +9177,7 @@
 </blockquote>
 <p><strong>直接使用 LangGraph 时</strong>，业务步骤被拆成更明确的节点，往往更容易看到复杂路由走了哪条路径，并使用 checkpoint 做状态回放和时间旅行调试。<strong>但这种可见性来自图的建模粒度，不代表 LangChain 无法部署或调试。</strong></p>
 <blockquote>
-<p><strong>别把两个问题混成一个</strong>：是否使用托管平台，是<strong>部署选择</strong>；是否使用 LangChain 高层 Agent API，是<strong>开发抽象选择</strong>。</p>
+<p>这里要分清两个问题：是否使用托管平台，是<strong>部署选择</strong>；是否使用 LangChain 高层 Agent API，是<strong>开发抽象选择</strong>。</p>
 </blockquote>
 <h2 id="910-langgraph">9.10 什么时候下沉 LangGraph<a class="headerlink" href="#910-langgraph" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
@@ -9197,12 +9192,12 @@
 <h3 id="9101">9.10.1 更常见的做法是渐进式组合<a class="headerlink" href="#9101" title="Permanent link">&para;</a></h3>
 <p><strong>先用 LangChain 做出单个可用 Agent，等业务拓扑变复杂时，再把这个 Agent 作为 LangGraph 的节点或子图。</strong></p>
 <blockquote>
-<p><strong>官方推荐的路线也是「从高层开始，需要时下沉到细粒度控制」。</strong></p>
+<p>官方推荐的路线也是：先从高层入口开始，复杂度上来后再下沉到细粒度控制。</p>
 </blockquote>
 <h3 id="9102">9.10.2 最后一个误区<a class="headerlink" href="#9102" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p><strong>不要因为 LangGraph 更底层，就默认它更高级、更适合所有项目。</strong></p>
-<p><strong>控制权越大，需要自己设计和测试的状态、路由、恢复与副作用就越多。</strong> 一个标准 Agent 用几十个节点重新搭一遍，未必更可靠，反而可能增加维护成本。</p>
+<p><strong>LangGraph 更底层，不代表它天然更适合所有项目。</strong></p>
+<p>控制权越大，需要自己设计和测试的状态、路由、恢复与副作用就越多。一个标准 Agent 用几十个节点重搭一遍，未必更可靠，反而可能增加维护成本。</p>
 </blockquote>
 <h2 id="911_1">9.11 常见错误<a class="headerlink" href="#911_1" title="Permanent link">&para;</a></h2>
 <h3 id="9111">9.11.1 把两者当成并列的两套引擎比功能多少<a class="headerlink" href="#9111" title="Permanent link">&para;</a></h3>
@@ -9241,7 +9236,7 @@
 <li><strong>推荐路线是渐进式组合</strong>：先 LangChain 做出可用 Agent，业务拓扑变复杂时把它作为节点或子图嵌入 LangGraph。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：LangChain 和 LangGraph 不是二选一，而是同一套运行时的两个抽象高度——前者替你搭好了模型与工具的标准循环，后者把整张业务拓扑的控制权交还给你，绝大多数真实项目的最优解是用 LangChain 构建 Agent、再把它嵌进 LangGraph 的流程图里。</strong></p>
+<p>可以把两者的关系记成这样：LangChain 负责高层 Agent 入口和标准模型/工具循环，LangGraph 负责更细粒度的状态与流程控制。多数真实项目会先用 LangChain 构建 Agent，再按需要把它嵌进 LangGraph 的业务流程里。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

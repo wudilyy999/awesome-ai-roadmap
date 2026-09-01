@@ -8455,7 +8455,7 @@
 <h2 id="131-trace">13.1 为什么 Trace 不是「上线后再看日志」<a class="headerlink" href="#131-trace" title="Permanent link">&para;</a></h2>
 <p>一次 Agent 失败通常不是单一最终答案的问题：可能选错工具、超时、越权、引用不足，或在人工审批后重复执行。Trace 将输入、模型/工具步骤、输出、耗时和反馈关联起来，才能把线上问题变成可复现、可验证的改进工作。</p>
 <blockquote>
-<p><strong>生产闭环不是「看到失败就改 Prompt」：Trace 脱敏 → 归因与标注 → 数据集 → 离线实验 → 发布门禁 → 线上评测与反馈 → 失败 Trace 回归。</strong></p>
+<p>生产闭环通常沿着「Trace 脱敏 → 归因与标注 → 数据集 → 离线实验 → 发布门禁 → 线上评测与反馈 → 失败 Trace 回归」推进，而不是看到失败就只改 Prompt。</p>
 </blockquote>
 <pre class="mermaid"><code>flowchart LR
     A["线上 Trace&lt;br/&gt;先脱敏、最小化"] --&gt; B["筛选失败/反馈/抽样"]
@@ -8470,7 +8470,7 @@
     style E fill:#fff3cd
     style F fill:#e6f4ea</code></pre>
 <h2 id="132-trace">13.2 先定义 Trace 数据边界<a class="headerlink" href="#132-trace" title="Permanent link">&para;</a></h2>
-<p><strong>可观测不等于收集一切。</strong> 发送 Trace 前就应最小化输入、输出、metadata 和附件；不要期待事后在控制台隐藏字段就等于数据未被采集。</p>
+<p>可观测不等于收集一切。发送 Trace 前就应最小化输入、输出、metadata 和附件；不要把控制台隐藏字段当成“未采集”。</p>
 <table>
 <thead>
 <tr>
@@ -8652,7 +8652,7 @@
     D --&gt; X["离线实验与 Release gate"]
     X --&gt; P["灰度发布"]</code></pre>
 <blockquote>
-<p>不要把单次点赞当质量证明，也不要让用户文本直接改变系统 Prompt 或授权策略。反馈是评测与改进的输入，仍要经过确定性安全控制和人工审核。</p>
+<p>单次点赞不能直接当成质量证明，用户文本也不应直接改写系统 Prompt 或授权策略。反馈是评测与改进的输入，仍要经过确定性安全控制和人工审核。</p>
 </blockquote>
 <h2 id="137">13.7 常见错误<a class="headerlink" href="#137" title="Permanent link">&para;</a></h2>
 <h3 id="1371-prompt-tool">13.7.1 为了排障记录全部 Prompt、参数和 Tool 输出<a class="headerlink" href="#1371-prompt-tool" title="Permanent link">&para;</a></h3>
@@ -8675,7 +8675,7 @@
 <li><strong>反馈关联 Trace 后经分诊回流</strong>，持续丰富 Dataset 和回归门禁。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：LangSmith 的价值不在于多看几条 Trace，而在于把经过脱敏的生产证据持续转成 Dataset、离线实验、发布门禁和线上监测，让每一次真实失败都变成下一次发布前可阻止的回归。</strong></p>
+<p>可以把 LangSmith 在这里的作用概括为：把经过脱敏的生产证据持续转成 Dataset、离线实验、发布门禁和线上监测，让每一次真实失败都能在下一次发布前进入回归验证。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

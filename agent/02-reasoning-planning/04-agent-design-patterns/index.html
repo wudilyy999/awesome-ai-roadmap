@@ -3919,7 +3919,7 @@
         <li class="md-nav__item">
   <a href="#48-agentic-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      4.8 Agentic Workflow：生产环境的默认思路
+      4.8 Agentic Workflow：生产环境里的常见做法
     </span>
   </a>
   
@@ -8851,7 +8851,7 @@
         <li class="md-nav__item">
   <a href="#48-agentic-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      4.8 Agentic Workflow：生产环境的默认思路
+      4.8 Agentic Workflow：生产环境里的常见做法
     </span>
   </a>
   
@@ -8990,7 +8990,7 @@
 <li><strong>Plan-and-Execute</strong>：先建立全局计划，再执行和动态重规划；</li>
 <li><strong>Reflection / Reflexion</strong>：通过评估、反馈和经验总结改进下一次尝试。</li>
 </ol>
-<p>三者并不互斥。生产系统通常采用分层组合：</p>
+<p>这三类范式经常混用，实际系统里更常见的是分层组合：</p>
 <pre class="mermaid"><code>flowchart TB
     G[用户目标] --&gt; WF[Workflow / 安全边界]
     WF --&gt; P[Planner / 全局计划]
@@ -9140,7 +9140,7 @@ s_{t+1}=Update(s_t,a_t,o_{t+1})
 </span></code></pre></div>
 <p>结构化计划比自由文本列表更容易调度、验证和恢复。</p>
 <h3 id="432">4.3.2 动态重规划<a class="headerlink" href="#432" title="Permanent link">&para;</a></h3>
-<p>Plan-and-Execute 不等于“计划一次，然后机械执行”。每个关键步骤完成后，Replanner 应判断：</p>
+<p>如果计划只生成一次就不再调整，Plan-and-Execute 很快会失效。每个关键步骤完成后，Replanner 应判断：</p>
 <ul>
 <li>执行结果是否达到验收条件；</li>
 <li>关键假设是否仍然成立；</li>
@@ -9227,7 +9227,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li>只有高风险或低置信度时。</li>
 </ul>
 <h3 id="451">4.5.1 验证器的优先级<a class="headerlink" href="#451" title="Permanent link">&para;</a></h3>
-<p>Reflection 不应默认等于“让同一个 LLM 再看一遍”。能够使用确定性或外部验证时，应优先使用：</p>
+<p>在工程实现里，Reflection 不能停留在“让同一个 LLM 再看一遍”。只要拿得到确定性或外部验证信号，就优先用这些信号：</p>
 <ol>
 <li>编译器、单元测试和静态分析；</li>
 <li>Schema、规则和约束检查；</li>
@@ -9258,7 +9258,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <p>因此，需要最大反思轮数、最低改进阈值和清晰的成功标准。</p>
 <h2 id="46-reflexion">4.6 Reflexion：带经验记忆的反思<a class="headerlink" href="#46-reflexion" title="Permanent link">&para;</a></h2>
 <p>Reflexion 是 Reflection 的一种具体范式。它不更新模型权重，而是把任务反馈转化为自然语言经验，并将其保存在情景记忆中供下一次尝试使用。</p>
-<p>其经典结构包含：</p>
+<p>常见实现会拆成四个角色：</p>
 <ul>
 <li><strong>Actor</strong>：执行任务；</li>
 <li><strong>Evaluator</strong>：评价轨迹或结果；</li>
@@ -9303,7 +9303,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li>为长期经验记录来源、版本和适用范围。</li>
 </ol>
 <h2 id="47">4.7 三种范式如何组合<a class="headerlink" href="#47" title="Permanent link">&para;</a></h2>
-<p>一种常见的分层架构是：</p>
+<p>实际系统里常见的分层组合如下：</p>
 <pre class="mermaid"><code>flowchart TB
     G[目标] --&gt; P[Plan-and-Execute&lt;br/&gt;生成全局里程碑]
     P --&gt; S1[步骤 1]
@@ -9328,7 +9328,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li><strong>Reflection</strong>：检查质量并产生改进反馈；</li>
 <li><strong>Workflow</strong>：限制整体路径、权限和预算。</li>
 </ul>
-<h2 id="48-agentic-workflow">4.8 Agentic Workflow：生产环境的默认思路<a class="headerlink" href="#48-agentic-workflow" title="Permanent link">&para;</a></h2>
+<h2 id="48-agentic-workflow">4.8 Agentic Workflow：生产环境里的常见做法<a class="headerlink" href="#48-agentic-workflow" title="Permanent link">&para;</a></h2>
 <p>Agentic Workflow 用确定性流程包围概率性决策：</p>
 <pre class="mermaid"><code>flowchart LR
     IN[输入] --&gt; V[校验]
@@ -9462,7 +9462,7 @@ B=(N_{max},T_{max},C_{max},R_{max})
 </ul>
 <h2 id="412-anthropic">4.12 Anthropic 原则的准确理解<a class="headerlink" href="#412-anthropic" title="Permanent link">&para;</a></h2>
 <p>“能用 Workflow 解决，就不要用 Agent”是对 Anthropic 工程建议的通俗概括，但不是原文中的绝对规则。</p>
-<p>更准确的原则是：</p>
+<p>更接近原意的说法是：</p>
 <blockquote>
 <p><strong>从能够满足需求的最简单方案开始，只有在更高复杂度能够带来可测量收益时，才升级为多步 Workflow 或自主 Agent。</strong></p>
 </blockquote>

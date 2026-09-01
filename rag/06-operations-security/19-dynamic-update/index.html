@@ -5062,7 +5062,7 @@
         <li class="md-nav__item">
   <a href="#191" class="md-nav__link">
     <span class="md-ellipsis">
-      19.1 为什么这道题能区分做过和没做过
+      19.1 为什么动态更新不能按记录增量处理
     </span>
   </a>
   
@@ -5099,7 +5099,7 @@
           <li class="md-nav__item">
   <a href="#1941-id-alias" class="md-nav__link">
     <span class="md-ellipsis">
-      19.4.1 这要求 ID、版本与 Alias 设计支持原子发布
+      19.4.1 ID、版本与 Alias 设计
     </span>
   </a>
   
@@ -8401,7 +8401,7 @@
         <li class="md-nav__item">
   <a href="#191" class="md-nav__link">
     <span class="md-ellipsis">
-      19.1 为什么这道题能区分做过和没做过
+      19.1 为什么动态更新不能按记录增量处理
     </span>
   </a>
   
@@ -8438,7 +8438,7 @@
           <li class="md-nav__item">
   <a href="#1941-id-alias" class="md-nav__link">
     <span class="md-ellipsis">
-      19.4.1 这要求 ID、版本与 Alias 设计支持原子发布
+      19.4.1 ID、版本与 Alias 设计
     </span>
   </a>
   
@@ -8690,13 +8690,10 @@
 
 
 <h1 id="_1">第十九章：知识库的动态更新与增量索引<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="191">19.1 为什么这道题能区分做过和没做过<a class="headerlink" href="#191" title="Permanent link">&para;</a></h2>
-<p>Demo 阶段的知识库是一次性建好的。<strong>但真实系统里，文档每天都在变。</strong></p>
-<p>而 RAG 的更新有一个别的系统没有的特殊约束：</p>
-<blockquote>
-<p><strong>文档改一个字，它的 chunk 边界可能整体偏移，导致后面所有 chunk 的内容都变了。</strong></p>
-</blockquote>
-<p>这意味着<strong>你无法像改数据库记录那样"局部更新一条"</strong>。理解这一点，是回答这道题的起点。</p>
+<h2 id="191">19.1 为什么动态更新不能按记录增量处理<a class="headerlink" href="#191" title="Permanent link">&para;</a></h2>
+<p>Demo 阶段的知识库往往一次性建好，但生产系统里的文档会持续变化。</p>
+<p>RAG 更新和普通数据库更新的差异在于：<strong>文档哪怕只改一个字，也可能让 chunk 边界整体偏移，后续 chunk 的内容随之改变。</strong></p>
+<p>这意味着<strong>很多场景都不能按数据库记录那样"局部改一条"</strong>，而要按文档或版本重建。</p>
 <h2 id="192">19.2 完整的更新链路<a class="headerlink" href="#192" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     S[数据源变化] --&gt; D[1. 变更检测]
@@ -8744,7 +8741,7 @@
 <p><strong>为什么用内容哈希而不是修改时间</strong>：很多系统的"修改时间"会因为元数据变动、重新保存、格式转换而更新，<strong>内容其实没变</strong>。用内容哈希能避免大量无谓的重建。</p>
 <p><strong>混合方案的必要性</strong>：事件驱动会丢消息（服务重启、网络故障、数据源没发出事件）。<strong>定期全量对账是唯一能发现"漏了什么"的手段</strong>——建议至少每天跑一次哈希对账。</p>
 <h2 id="194-copy-on-write-alias">19.4 第二步：版本化 Copy-on-Write + 原子 Alias<a class="headerlink" href="#194-copy-on-write-alias" title="Permanent link">&para;</a></h2>
-<p><strong>这是本章最核心的发布点。</strong> 文档开头插入一段话后，后续 chunk 的边界可能整体偏移，因而不应尝试在正在服务的索引中逐条“修补”。但“先删后增”会制造读空窗口：写入失败或索引尚未就绪时，用户既看不到旧版，也看不到新版。</p>
+<p>发布流程的关键约束在这里。文档开头插入一段话后，后续 chunk 的边界可能整体偏移，因而不应尝试在正在服务的索引中逐条“修补”。但“先删后增”会制造读空窗口：写入失败或索引尚未就绪时，用户既看不到旧版，也看不到新版。</p>
 <p>正确做法是把一次文档变更作为不可变版本进行 <strong>copy-on-write</strong>：在候选版本中完整解析、切分、向量化和建索引；校验通过后，才把查询使用的 <code>active</code> alias（或路由指针）<strong>原子地</strong>切到新版本。旧版本保留到回滚窗口结束，再异步回收。</p>
 <pre class="mermaid"><code>flowchart TB
     A[doc_id: v17 active] --&gt; B[构建隔离的 v18&lt;br/&gt;解析、切分、向量化、索引]
@@ -8754,7 +8751,7 @@
     D --&gt; F[观察、可回滚]
     F --&gt; G[回收 v17]</code></pre>
 <p>这同时避免了边界偏移造成的残留旧 chunk 和删后写入的不可用窗口。查询必须在一次请求内绑定同一个已发布版本；不得让同一上下文混入两个版本的片段。合规删除另有物理擦除要求，不能只依赖延迟回收。</p>
-<h3 id="1941-id-alias">19.4.1 这要求 ID、版本与 Alias 设计支持原子发布<a class="headerlink" href="#1941-id-alias" title="Permanent link">&para;</a></h3>
+<h3 id="1941-id-alias">19.4.1 ID、版本与 Alias 设计<a class="headerlink" href="#1941-id-alias" title="Permanent link">&para;</a></h3>
 <p><code>doc_id</code> 用于定位文档；<code>version_id</code> 标识不可变构建产物；<code>active</code> alias 只指向一个经过验证的可查询版本。批量删除是旧版本回收和合规流程的一项能力，而不是用户查询路径上的发布机制。</p>
 <p>推荐的元数据设计：</p>
 <table>
@@ -8800,7 +8797,7 @@
 <h2 id="195">19.5 第三步：删除的两个技术陷阱<a class="headerlink" href="#195" title="Permanent link">&para;</a></h2>
 <h3 id="1951-hnsw">19.5.1 HNSW 没有真正的删除<a class="headerlink" href="#1951-hnsw" title="Permanent link">&para;</a></h3>
 <p>如第八章 8.2.1 所述，HNSW 图结构被破坏后难以修复，工程上普遍采用<strong>软删除 + 定期重建</strong>。</p>
-<p>这带来两个必须处理的问题：</p>
+<p>这会带来两个直接后果：</p>
 <p><strong>（1）软删除会累积。</strong> 被标记删除的向量仍占内存、仍参与图遍历、仍消耗 <code>ef</code> 预算，但会在结果中被过滤掉。<strong>累积到一定比例后，实际召回率会显著下降</strong>（第九章 9.6.4 的排查项之一）。</p>
 <p><strong>应对</strong>：<strong>监控软删除比例</strong>，超过阈值（比如 20%）触发重建。</p>
 <p><strong>（2）重建期间的可用性。</strong> 全量重建可能耗时数小时。始终采用<strong>构建新版本 → 校验 → 原子切换 alias</strong>，并保留旧版本供在途查询和回滚；代价是切换期间需要双份内存（第九章 9.3.3）。</p>
@@ -8810,9 +8807,8 @@
 <ul>
 <li>记录删除请求，<strong>确保在下次重建后数据真正消失</strong>；</li>
 <li>或使用支持真删除的索引结构（如 DiskANN 系）；</li>
-<li><strong>检查关联位置</strong>：原文存储、缓存、日志、备份里的副本。</li>
+<li><strong>检查关联位置</strong>：原文存储、缓存、日志、备份里的副本。只删向量而保留这些副本，合规审计仍然不通过。</li>
 </ul>
-<p><strong>最后一条最容易被忽略</strong>：向量删了，但缓存里还有、日志里还记着原文——这在合规审计中是不合格的。</p>
 <h2 id="196">19.6 第四步：一致性校验<a class="headerlink" href="#196" title="Permanent link">&para;</a></h2>
 <p>更新完成后必须验证：</p>
 <table>
@@ -8845,7 +8841,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>最后一条容易被忽略</strong>：很多向量库的新写入数据会先进入一个未建索引的缓冲区，<strong>要等到达到阈值或手动触发才合并进主索引</strong>。这段时间内，新数据可能检索不到，或者走的是低效路径。</p>
+<p>很多向量库的新写入数据会先进入一个未建索引的缓冲区，<strong>要等到达到阈值或手动触发才合并进主索引</strong>。这段时间内，新数据可能检索不到，或者走的是低效路径。</p>
 <p><strong>这是第九章 9.6.4「召回率突然下降」排查清单里的第 2 条。</strong></p>
 <h2 id="197">19.7 第五步：灰度与回滚<a class="headerlink" href="#197" title="Permanent link">&para;</a></h2>
 <p>大批量更新（换 Embedding 模型、改切分策略、导入新语料）<strong>必须灰度</strong>。</p>
@@ -8856,10 +8852,10 @@
     R -.-&gt;|对比指标| M[监控]
     M -.-&gt;|异常| RB[回滚到旧索引]</code></pre>
 <p><strong>做法</strong>：新旧索引并存，先切小比例流量，对比检索指标和线上反馈，确认无退化后再全量切换，<strong>并保留旧索引一段时间以便回滚</strong>。</p>
-<p><strong>代价是双份存储</strong>，但相比"全量切换后发现效果退化却回不去"，这个代价是值得的。</p>
+<p>代价是切换期需要双份存储，用来换取可回滚和对比窗口。</p>
 <p><strong>必须监控的对比指标</strong>：固定评测集的 Hit@K、线上点踩率、拒答率、P95 延迟。</p>
 <h2 id="198">19.8 权限隔离与多租户<a class="headerlink" href="#198" title="Permanent link">&para;</a></h2>
-<p><strong>这是学术界几乎没有覆盖、但企业场景绕不开的一块。</strong></p>
+<p>这一块在企业场景里通常绕不开。</p>
 <h3 id="1981">19.8.1 三种实现方式<a class="headerlink" href="#1981" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8891,7 +8887,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>推荐</strong>：<strong>租户级隔离用分索引，租户内的细粒度权限用元数据过滤。</strong></p>
+<p>常见做法是：<strong>租户级隔离用分索引，租户内的细粒度权限用元数据过滤。</strong></p>
 <h3 id="1982">19.8.2 三个必须注意的点<a class="headerlink" href="#1982" title="Permanent link">&para;</a></h3>
 <p><strong>（1）后过滤有信息泄漏风险。</strong> 如果先检索再过滤，被过滤掉的结果虽然没返回，但<strong>"有结果被过滤"这个事实本身可能泄漏信息</strong>（比如返回结果数、延迟差异）。高敏感场景应使用预过滤或分索引。</p>
 <p><strong>（2）权限变更要能即时生效。</strong> 用户被移出某个部门后，应立即无法检索到该部门的文档。<strong>如果权限标签是写死在 chunk 元数据里的，权限变更就需要更新大量 chunk</strong>——更好的做法是<strong>存资源标识，在查询时映射到当前的权限</strong>。</p>
@@ -8937,10 +8933,6 @@
 <li><strong>大批量更新必须灰度</strong>，新旧索引并存、小流量对比、保留回滚能力；</li>
 <li><strong>权限隔离</strong>：租户级用分索引，细粒度用元数据过滤；<strong>注意后过滤的泄漏风险、权限变更的即时性、缓存必须带权限维度</strong>。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>RAG 知识库的更新不是"改几条数据"，而是"以文档为单位的原子替换"——而这个约束会一路传导到 ID 设计、索引选型、权限方案和发布流程。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2105.09613">FreshDiskANN: A Fast and Accurate Graph-Based ANN Index for Streaming Similarity Search</a></li>

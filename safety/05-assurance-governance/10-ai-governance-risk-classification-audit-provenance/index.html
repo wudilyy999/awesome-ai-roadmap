@@ -8550,7 +8550,7 @@
 
 <h1 id="ai">第十章：AI 治理、风险分级、审计与内容出处<a class="headerlink" href="#ai" title="Permanent link">&para;</a></h1>
 <h2 id="101">10.1 治理是把前九章的技术控制"制度化"<a class="headerlink" href="#101" title="Permanent link">&para;</a></h2>
-<p>前九章讨论的都是具体的技术防御。但技术控制要长期有效，需要制度保证：谁批准一个高风险 Agent 上线、谁对模型行为负责、出了事故按什么流程处理、监管要求怎么落地为内部checklist。这是 NIST AI RMF 中 <strong>Govern</strong> 功能覆盖的范畴，也是本章要系统化的内容。</p>
+<p>前九章讨论的都是具体的技术防御。但技术控制要长期有效，需要制度保证：谁批准一个高风险 Agent 上线、谁对模型行为负责、出了事故按什么流程处理、监管要求怎么落地为内部checklist。这正是 NIST AI RMF 中 <strong>Govern</strong> 功能覆盖的范畴：把这些责任、流程和检查项固定下来。</p>
 <pre class="mermaid"><code>flowchart TB
     G[治理] --&gt; G1[风险分级&lt;br/&gt;10.2]
     G --&gt; G2[审计与可追溯&lt;br/&gt;10.3]
@@ -8661,7 +8661,7 @@
 <li><strong>披露义务</strong>：涉及用户数据的事件按适用的数据保护法规履行披露义务（第六章跨境合规是前置条件）；涉及高风险场景的模型行为异常，即使不构成传统意义的数据泄漏，也应考虑主动向受影响方披露。</li>
 </ul>
 <h2 id="107">10.7 供应商与第三方风险管理<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
-<p>前几章讨论的模型供应链（第五章）、数据来源（第四章）本质上都是第三方风险管理的技术侧面，治理层面需要把它们纳入统一的供应商准入流程：</p>
+<p>前几章讨论的模型供应链（第五章）、数据来源（第四章）都落在第三方风险管理的技术侧面，治理层面需要把它们纳入统一的供应商准入流程：</p>
 <ul>
 <li>采购/接入任何外部模型 API、第三方微调服务、MCP Server/工具、数据标注供应商前，走统一的安全评估流程而非各团队自行决定；</li>
 <li>合同中明确数据处理边界（是否用于训练、保留期限、区域限制）、安全责任划分、事件通知时限；</li>
@@ -8695,9 +8695,6 @@
 <li>模型卡、系统卡和用户披露构成透明度文档体系，需要随模型和系统的重大变更持续更新；</li>
 <li>内容出处（如 C2PA 一类的加密签名标准）与水印是应对"内容是否可信"这一独立问题的技术手段，事件响应、供应商风险管理共同构成组织级 AI 治理的完整闭环。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：技术防御决定了单次攻击能否被挡住，治理决定了整个组织能否在模型、数据和供应商持续变化的情况下，始终知道自己的风险敞口在哪里、该由谁负责、出事后怎么办。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI RMF: Govern Function</a></li>

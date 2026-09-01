@@ -8877,7 +8877,7 @@
 </tr>
 </tbody>
 </table>
-<p>理解了这个差异，下面五种策略的取舍就都好理解了。</p>
+<p>后面几种策略的取舍，本质上都落在这两种任务假设上。</p>
 <h2 id="122">12.2 贪心解码：最简单也最容易踩坑<a class="headerlink" href="#122" title="Permanent link">&para;</a></h2>
 <p>每一步无脑选概率最高的 token，拼到序列后面，进入下一步。</p>
 <h3 id="1221">12.2.1 优点<a class="headerlink" href="#1221" title="Permanent link">&para;</a></h3>
@@ -8910,7 +8910,7 @@
 <p><strong>为什么？</strong> 模型某一步生成了「He is so cute」，下一步在概率分布里发现这个模式刚出现过、上下文里概率很高，又选了它；再下一步又选一遍。</p>
 <p><strong>贪心一旦走进这种自我加强的循环，就出不来了。</strong></p>
 <h3 id="1223">12.2.3 更隐蔽的问题：乏味<a class="headerlink" href="#1223" title="Permanent link">&para;</a></h3>
-<p>每步都选最稳的路，最终生成的是「最大众化的表达」，读起来很 boring。对代码生成、信息抽取可能没问题，但对创意写作、对话场景太单调。</p>
+<p>每步都选最稳的路，最终生成的是「最大众化的表达」，读起来很乏味。对代码生成、信息抽取可能没问题，但对创意写作、对话场景太单调。</p>
 <h3 id="1224">12.2.4 但它有最佳战场<a class="headerlink" href="#1224" title="Permanent link">&para;</a></h3>
 <p><strong>输出有标准答案的精确任务</strong>：代码生成、SQL 生成、JSON 抽取。贪心反而是首选——<strong>确定、不会乱写</strong>。</p>
 <h2 id="123-beam-search">12.3 Beam Search：翻译时代的王者<a class="headerlink" href="#123-beam-search" title="Permanent link">&para;</a></h2>
@@ -8940,7 +8940,7 @@
 <p>Beam Search 优化的是「找到整体概率最高的那条序列」。</p>
 <p>翻译时代合理，因为「I love you → 我爱你」确实有最优答案。但在<strong>写故事、对话、回答开放问题</strong>里，根本不存在最优答案，存在的只是<strong>一个广阔的合理回答空间</strong>。</p>
 <h3 id="1242-beam-search-curse">12.4.2 反直觉的失效模式：Beam Search Curse<a class="headerlink" href="#1242-beam-search-curse" title="Permanent link">&para;</a></h3>
-<p>更糟的是，它在长序列上会<strong>输出最 boring、最重复的内容</strong>。</p>
+<p>更糟的是，它在长序列上会<strong>输出最乏味、最重复的内容</strong>。</p>
 <p>因果链是这样的：</p>
 <pre class="mermaid"><code>flowchart LR
     A["优化目标：&lt;br/&gt;整体概率最高"] --&gt; B["等价于：&lt;br/&gt;每步都选最稳的词"]
@@ -9011,7 +9011,7 @@
 <div class="arithmatex">\[
 p_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}
 \]</div>
-<p>三者的详细调参见 <a href="../13-temperature-top-p-top-k/">第十三章</a>。本章只需记住：<strong>采样族通过「引入随机性 + 截断长尾」，在多样性和质量之间找平衡。</strong></p>
+<p>三者的详细调参见 <a href="../13-temperature-top-p-top-k/">第十三章</a>。<strong>采样族通过「引入随机性 + 截断长尾」，在多样性和质量之间找平衡。</strong></p>
 <h2 id="126">12.6 实际选型<a class="headerlink" href="#126" title="Permanent link">&para;</a></h2>
 <p>本质是看任务对「确定性」和「多样性」的需求：</p>
 <table>
@@ -9117,9 +9117,6 @@ p_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}
 <li><strong>选型看任务需要确定性还是多样性</strong>，精确任务 <span class="arithmatex">\(T=0\)</span>，对话 <span class="arithmatex">\(T=0.7/P=0.9\)</span>，创意 <span class="arithmatex">\(T=1.0+\)</span>；</li>
 <li><strong>推测解码提速 2–3 倍且结果等价</strong>，<strong>Self-Consistency 在推理任务上提升 5–15 个点</strong>，两者都是叠加而非替代。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Beam Search 不是被更快的算法淘汰的，而是被任务本身淘汰的——当问题从「找唯一正确译文」变成「写一段好回答」，「概率最高」就不再等于「最好」了。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1904.09751">The Curious Case of Neural Text Degeneration（Top-P / Nucleus Sampling）</a></li>

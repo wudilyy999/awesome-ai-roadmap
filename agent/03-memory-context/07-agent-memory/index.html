@@ -9513,7 +9513,7 @@
 <li><strong>实体记忆</strong>描述信息的结构与内容类型。</li>
 </ul>
 <p>实体记忆既可以暂存在当前任务中，也可以作为长期记忆持久化，因此不应与短期、长期记忆严格并列。</p>
-<p>更准确的做法是从三条轴理解 Agent Memory：</p>
+<p>工程上通常会从三条轴理解 Agent Memory：</p>
 <pre class="mermaid"><code>flowchart TB
     M[Agent Memory] --&gt; T[时间与生命周期]
     M --&gt; C[内容与认知类型]
@@ -9574,7 +9574,7 @@
     RET --&gt; CB
     OBS[Recent Observations] --&gt; CB
     CB --&gt; CTX[Current Model Context]</code></pre>
-<p>需要特别注意：</p>
+<p>工程上容易混淆的点有四个：</p>
 <ul>
 <li>Context Window 是模型本次调用的输入空间，不等于全部记忆；</li>
 <li>Messages 只是 Working Memory 的一种载体；</li>
@@ -9732,7 +9732,7 @@
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="p">]</span>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>Entity Memory 信息密度通常较高，也便于更新和精确查询。但它本质上通常属于结构化 Semantic Memory，而不是独立的时间层级。</p>
+<p>Entity Memory 信息密度通常较高，也便于更新和精确查询。从建模上看，它通常仍属于结构化 Semantic Memory，而不是独立的时间层级。</p>
 <p>适合使用：</p>
 <ul>
 <li>关系数据库；</li>
@@ -9745,7 +9745,7 @@
 <blockquote>
 <p>2026 年 8 月 28 日，用户在 Agent 知识图谱项目中明确要求所有文档直接推送到 main。</p>
 </blockquote>
-<p>它可以同时表示为：</p>
+<p>落到系统表示时，往往会拆成几类记忆：</p>
 <ul>
 <li>Episodic Memory：记录一次具体交互；</li>
 <li>Entity Memory：更新用户或项目偏好；</li>
@@ -9769,7 +9769,7 @@
     U --&gt; FB[Feedback]
     FB --&gt; UP[Update / Decay / Delete]
     UP --&gt; I</code></pre>
-<p>可以归纳为六个工程问题：</p>
+<p>工程实现通常会落到六个问题：</p>
 <ol>
 <li>存什么？</li>
 <li>如何表示和存储？</li>
@@ -9801,7 +9801,7 @@
 <li>Prompt Injection 中要求持久化的恶意指令。</li>
 </ul>
 <h3 id="793">7.9.3 写入决策信号<a class="headerlink" href="#793" title="Permanent link">&para;</a></h3>
-<p>Memory Writer 可以综合：</p>
+<p>Memory Writer 通常会综合这些信号：</p>
 <ul>
 <li>Importance：未来价值；</li>
 <li>Novelty：是否提供新信息；</li>
@@ -9951,7 +9951,7 @@
 </span></code></pre></div>
 <p>来源和版本非常重要。否则系统无法区分用户明确声明、Tool 返回事实和模型自己推测的内容。</p>
 <h2 id="712-retrieval-trigger">7.12 什么时候取：Retrieval Trigger<a class="headerlink" href="#712-retrieval-trigger" title="Permanent link">&para;</a></h2>
-<p>你的理解中“任务开始前主动检索、执行中按需检索”是正确的，可以扩展为四种触发方式。</p>
+<p>检索触发点通常分成四类，其中最常见的是任务开始前主动检索和执行中按需检索。</p>
 <h3 id="7121">7.12.1 任务开始前<a class="headerlink" href="#7121" title="Permanent link">&para;</a></h3>
 <p>加载：</p>
 <ul>
@@ -10200,7 +10200,7 @@ D(\Delta t)=e^{-\lambda \Delta t}
 </table>
 <h2 id="720-agent">7.20 多 Agent 记忆<a class="headerlink" href="#720-agent" title="Permanent link">&para;</a></h2>
 <p>多 Agent 系统不应默认让所有 Agent 共享全部记忆。</p>
-<p>可以划分：</p>
+<p>常见做法会把共享范围分成几层：</p>
 <ul>
 <li><strong>Private Memory</strong>：单个 Agent 的局部状态；</li>
 <li><strong>Task Workspace</strong>：同一任务内共享的计划和 Artifact；</li>
@@ -10342,7 +10342,7 @@ D(\Delta t)=e^{-\lambda \Delta t}
 </tr>
 </tbody>
 </table>
-<p>记忆系统的价值最终应体现在：</p>
+<p>这些指标最后还是要落到几类结果上：</p>
 <ul>
 <li>更高任务成功率；</li>
 <li>更少重复询问；</li>
@@ -10449,11 +10449,11 @@ D(\Delta t)=e^{-\lambda \Delta t}
 <li>Knowledge Graph；</li>
 <li>Event / Artifact Store。</li>
 </ul>
-<p>工程上最关键的问题是：</p>
+<p>工程设计最终要回答的是：</p>
 <blockquote>
 <p><strong>存什么、如何表示、何时检索、怎样排序、如何更新遗忘，以及如何保证安全与隐私。</strong></p>
 </blockquote>
-<p>最终目标不是让 Agent “记住一切”，而是：</p>
+<p>系统上线后，更有价值的状态不是“记住一切”，而是：</p>
 <blockquote>
 <p><strong>在正确时间，以正确权限，为当前任务提供最小充分且可信的记忆。</strong></p>
 </blockquote>

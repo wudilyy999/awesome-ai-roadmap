@@ -8477,9 +8477,9 @@
 
 <h1 id="langchain-llamaindex">第七章：LangChain 与 LlamaIndex 的分工<a class="headerlink" href="#langchain-llamaindex" title="Permanent link">&para;</a></h1>
 <h2 id="71">7.1 为什么容易混淆<a class="headerlink" href="#71" title="Permanent link">&para;</a></h2>
-<p><strong>两个框架都支持模型调用、Tools、RAG、Agent 和 Workflow</strong>，所以按功能清单比较，很容易得出「它们差不多」的结论。</p>
+<p>两个框架都支持模型调用、Tools、RAG、Agent 和 Workflow。只看功能清单，很容易得出「它们差不多」的结论。</p>
 <blockquote>
-<p><strong>真正应该比较的是设计重心</strong>：</p>
+<p>更有区分度的是设计重心：</p>
 <ul>
 <li><strong>LangChain</strong> 更关心如何<strong>统一模型与工具，并快速组装通用 Agent</strong>；</li>
 <li><strong>LlamaIndex</strong> 更关心如何把<strong>私有数据加工成高质量上下文</strong>，再交给模型或 Agent 使用。</li>
@@ -8565,12 +8565,12 @@
     style B fill:#e8f0fe
     style D fill:#e8f0fe</code></pre>
 <blockquote>
-<p><strong>它的价值不在于记住每个组件名字，而在于它把「如何得到高质量上下文」作为核心工程问题。</strong></p>
+<p><strong>LlamaIndex 把「如何得到高质量上下文」当作主要工程问题。</strong></p>
 </blockquote>
 <p>企业文档、多数据源路由和复杂检索是它更自然的应用入口。</p>
-<p><strong>但准确的说法是「LlamaIndex 以数据为优势重心」，而不是「LlamaIndex 只能做 RAG」</strong>——它同样提供 Agent 和事件驱动 Workflow。</p>
+<p>更准确地说，<strong>LlamaIndex 的优势重心在数据</strong>，而不是「只能做 RAG」——它同样提供 Agent 和事件驱动 Workflow。</p>
 <h2 id="75">7.5 应该如何选型<a class="headerlink" href="#75" title="Permanent link">&para;</a></h2>
-<p><strong>可以直接问一句：这个项目最怕哪件事做不好？</strong></p>
+<p>选型时先看项目最怕哪类风险。</p>
 <table>
 <thead>
 <tr>
@@ -8670,12 +8670,12 @@
 <li><strong>复杂流程可以从 LangChain 下沉到 LangGraph</strong>，不必推翻已有模型与工具定义；</li>
 <li><strong>LlamaIndex 的价值在把「如何得到高质量上下文」当成核心工程问题</strong>，链路拆得更细；</li>
 <li><strong>RAG 的困难是链式传递的</strong>，不是某个向量库能单独解决；</li>
-<li><strong>选型问一句「这个项目最怕哪件事做不好」</strong>，按主要风险决定优先评估谁；</li>
+<li><strong>选型先看项目最怕哪类风险</strong>，再决定优先评估谁；</li>
 <li><strong>最常见的组合边界是 Tool</strong>：LlamaIndex 管数据与检索，LangChain 管模型和工具选择，LangGraph 管状态与恢复；</li>
 <li><strong>组合有成本</strong>，只有两边各自存在独立难题时才值得。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：LangChain 和 LlamaIndex 的分界不在功能清单，而在它们各自把哪个问题当成第一难题——前者是「模型和工具怎么统一起来并被可靠调度」，后者是「私有数据怎么变成高质量上下文」，需要两个答案时就用 Tool 把它们接起来。</strong></p>
+<p>可以把分界记成这样：LangChain 先解决模型与工具怎么统一和调度，LlamaIndex 先解决私有数据怎么变成高质量上下文；两类问题同时存在时，再用 Tool 把它们接起来。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

@@ -9823,7 +9823,7 @@
 <li>单个步骤可能失败并需要重试；</li>
 <li>整体任务无法放入一次模型调用。</li>
 </ul>
-<p>任务拆分的目标不是单纯把任务“切碎”，而是将复杂目标转化为一组：</p>
+<p>任务拆分要做的是把复杂目标改写成一组：</p>
 <blockquote>
 <p><strong>可执行、可验证、可调度、可恢复的任务单元。</strong></p>
 </blockquote>
@@ -9849,13 +9849,7 @@
 <p>拆分后，每个子任务只需要最小充分上下文，并通过 Artifact、状态或引用传递结果。</p>
 <h3 id="622">6.2.2 降低单步推理难度<a class="headerlink" href="#622" title="Permanent link">&para;</a></h3>
 <p>让模型一次完成“调研、分析、比较、验证、写报告”通常比让它分别完成这些步骤更不稳定。</p>
-<p>拆分可以使每个模型调用：</p>
-<ul>
-<li>目标更明确；</li>
-<li>输入更聚焦；</li>
-<li>输出格式更确定；</li>
-<li>成功标准更容易定义。</li>
-</ul>
+<p>拆开后，每次模型调用的目标和输入都会更聚焦，输出格式也更容易约束，成功标准也更容易定义。</p>
 <h3 id="623">6.2.3 支持独立验证<a class="headerlink" href="#623" title="Permanent link">&para;</a></h3>
 <p>完整任务失败时，很难定位问题来自搜索、分析还是结果合成。拆分后，可以为每个步骤设置验收条件：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -10123,7 +10117,7 @@
     M2 --&gt; T21[功能对比]
     M2 --&gt; T22[价格对比]
     M2 --&gt; T23[风险分析]</code></pre>
-<p>这种方式类似 Hierarchical Task Network 的思想：</p>
+<p>这和 Hierarchical Task Network 的思路很接近：</p>
 <ul>
 <li>高层任务描述目标；</li>
 <li>方法定义如何展开；</li>
@@ -10422,7 +10416,7 @@ Saving=1-\frac{70}{160}=56.25\%
 </ul>
 <p>这可以降低上下文重复和信息污染。</p>
 <h2 id="616-plannerschedulerexecutor-verifier">6.16 Planner、Scheduler、Executor 与 Verifier<a class="headerlink" href="#616-plannerschedulerexecutor-verifier" title="Permanent link">&para;</a></h2>
-<p>复杂任务拆分系统通常包含四个不同角色：</p>
+<p>复杂任务的拆分系统，通常会把下面四类职责分开：</p>
 <pre class="mermaid"><code>flowchart LR
     G[Goal] --&gt; P[Planner]
     P --&gt; DAG[Task DAG]
@@ -10501,7 +10495,7 @@ Saving=1-\frac{70}{160}=56.25\%
     C --&gt;|计划失效| P[重新规划]
     C --&gt;|不可逆副作用| H[补偿或人工处理]</code></pre>
 <h2 id="618">6.18 自适应拆分控制器<a class="headerlink" href="#618" title="Permanent link">&para;</a></h2>
-<p>一个完整的自适应拆分控制器可以这样工作：</p>
+<p>一个能落地的自适应拆分控制器大致会这样运行：</p>
 <pre class="mermaid"><code>flowchart TB
     G[Goal] --&gt; P[Hierarchical Planner]
     P --&gt; DAG[Task DAG]
@@ -10613,7 +10607,7 @@ Saving=1-\frac{70}{160}=56.25\%
 
     DEP --&gt; PAR[并行调度]
     PAR --&gt; ADAPT[运行时自适应调整]</code></pre>
-<p>推荐默认顺序：</p>
+<p>落地时通常按这个顺序收敛：</p>
 <ol>
 <li>优先确定性静态拆分；</li>
 <li>对未知部分使用动态 Planner；</li>
@@ -10703,7 +10697,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <li>持久化 Artifact；</li>
 <li>设置验证、重试、回退和人工介入。</li>
 </ul>
-<p>最重要的粒度原则是：</p>
+<p>归根结底，粒度要同时满足两个要求：</p>
 <blockquote>
 <p><strong>每个任务应当足够小，以便独立执行、验证和重试；同时足够大，能够产生有意义、可复用的业务结果。</strong></p>
 </blockquote>

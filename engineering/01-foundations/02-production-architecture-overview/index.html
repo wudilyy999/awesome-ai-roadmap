@@ -8403,7 +8403,7 @@
 
 <h1 id="ai">第二章：AI 应用生产架构全景<a class="headerlink" href="#ai" title="Permanent link">&para;</a></h1>
 <h2 id="21-api">2.1 从「调用一次 API」到「一个生产系统」<a class="headerlink" href="#21-api" title="Permanent link">&para;</a></h2>
-<p>Demo 阶段的 LLM 应用往往就是一次 <code>client.chat.completions.create()</code> 调用。要撑住真实流量，这一次调用的前后会长出一整条链路。本章给出一张贯穿全主题的参考架构图，后续每一章都在填充图中某一个方框的细节。</p>
+<p>Demo 阶段的 LLM 应用往往就是一次 <code>client.chat.completions.create()</code> 调用。要撑住真实流量，这一次调用的前后会长出一整条链路：网关、编排、输出校验、可观测性、评测和发布都得补上。</p>
 <pre class="mermaid"><code>flowchart TB
     U["用户 / 上游服务"] --&gt; GW["模型网关&lt;br/&gt;路由 · 回退 · 鉴权 · 限流"]
     GW --&gt; ORCH["编排层&lt;br/&gt;Agent / RAG / 工具调用"]
@@ -8430,7 +8430,7 @@
     style VALIDATE fill:#fff3cd
     style OBS fill:#e6f4ea
     style CICD fill:#fce8e6</code></pre>
-<p>这张图不是某一家公司的具体实现，而是把 OpenAI、Anthropic 官方生产指南和大厂工程博客（Netflix、Uber、Stripe 等）里反复出现的模块抽象出来的<strong>共性骨架</strong>。下面按图中链路顺序过一遍每个方框对应本主题的哪一章。</p>
+<p>这张图不是某一家公司的具体实现，而是把 OpenAI、Anthropic 官方生产指南和大厂工程博客（Netflix、Uber、Stripe 等）里反复出现的模块抽象出来的<strong>共性骨架</strong>。沿着请求链路往下看，先是网关和编排层，再到输出校验、可观测性、评测、发布和反馈回流。</p>
 <h2 id="22">2.2 请求路径：网关、编排、供应商<a class="headerlink" href="#22" title="Permanent link">&para;</a></h2>
 <p>请求进来先经过<strong>模型网关</strong>：统一鉴权、按策略路由到具体模型、失败时回退到备用模型。网关本身怎么搭建（多模型统一接口、限流配额、Key 管理）属于 <a href="../../../tools/05-transport-gateway/14-llm-gateway/">Tools · LLM 网关</a>，本主题<a href="../../02-request-reliability/03-model-gateway-routing-fallback/">第 3 章</a>讲的是路由策略和回退链路怎么设计,<a href="../../02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/">第 4 章</a>讲调用失败时的重试与熔断。</p>
 <p>网关之后是<strong>编排层</strong>——单次问答可能只是一次模型调用，但 Agent 需要多轮工具调用与规划（见 <a href="../../../agent/">Agent</a>），知识密集型任务需要先检索再生成（见 <a href="../../../rag/">RAG</a>）。编排层最终落到具体的<strong>模型供应商</strong>：可能是托管 API，也可能是自研部署（部署细节见 <a href="../../../llm/03-inference-serving/">LLM · 推理与部署</a>）。</p>
@@ -8492,9 +8492,6 @@
 <li><strong>架构不是一步到位的</strong>,小团队应从精简版起步,随规模增长逐步补齐;</li>
 <li><strong>反馈闭环必须真正回流</strong>到评测和发布决策,否则收集反馈没有意义。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:生产架构的价值不在画出多少个方框,而在于让「一次调用出问题」的影响半径,被网关、校验、可观测性和评测这几层各自兜住一部分,不至于一路穿透到用户。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://platform.openai.com/docs/guides/production-best-practices">OpenAI: Production best practices</a></li>

@@ -892,9 +892,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#541-caveat" class="md-nav__link">
+  <a href="#541" class="md-nav__link">
     <span class="md-ellipsis">
-      5.4.1 一个经验规则和它的重要 caveat
+      5.4.1 一个经验规则和它的适用边界
     </span>
   </a>
   
@@ -8487,9 +8487,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#541-caveat" class="md-nav__link">
+  <a href="#541" class="md-nav__link">
     <span class="md-ellipsis">
-      5.4.1 一个经验规则和它的重要 caveat
+      5.4.1 一个经验规则和它的适用边界
     </span>
   </a>
   
@@ -8815,7 +8815,7 @@
 <li><strong>常用汉字直接作为独立 token</strong>（每个汉字出现频率足够高，不需要拆）；</li>
 <li><strong>常见词语</strong>（如「人工智能」）可能被合并成单个 token，也可能是「人工」+「智能」两个——取决于训练数据里的频率。</li>
 </ul>
-<h3 id="541-caveat">5.4.1 一个经验规则和它的重要 caveat<a class="headerlink" href="#541-caveat" title="Permanent link">&para;</a></h3>
+<h3 id="541">5.4.1 一个经验规则和它的适用边界<a class="headerlink" href="#541" title="Permanent link">&para;</a></h3>
 <p>粗估：<strong>1000 个汉字大约对应 1000–1500 个 token</strong>（汉字 token 化效率略低于英文，因为英文的合并词能覆盖更多字符）。</p>
 <blockquote>
 <p><strong>但这只是粗估。</strong> Qwen、Llama、OpenAI、Claude 的 tokenizer 完全不一样；中文、英文、代码、表格混在一起时比例会明显变化。<strong>正式算成本前一定要用目标模型的 tokenizer 实际跑一遍。</strong></p>
@@ -8920,9 +8920,6 @@
 <li><strong>特殊 token 传递结构信息</strong>，EOS 决定模型何时停止，chat template 不一致会导致停不下来；</li>
 <li><strong>四个工程影响</strong>：成本估算、上下文管理、截断边界、模型的字符级与数学能力。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Tokenizer 决定了模型「看到的世界长什么样」——它既是按 token 计费的账本，也是模型数不清 strawberry 里有几个 r 的元凶。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1508.07909">Neural Machine Translation of Rare Words with Subword Units（BPE）</a></li>

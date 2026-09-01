@@ -8141,7 +8141,7 @@
 
 
 <h1 id="semantic-kernel">框架与编排 · Semantic Kernel 企业级编排<a class="headerlink" href="#semantic-kernel" title="Permanent link">&para;</a></h1>
-<p>前三个模块（LangChain、LlamaIndex、DSPy）都以 Python 生态为默认假设。Semantic Kernel 从一开始就是<strong>多语言、企业优先</strong>的设计：同一套核心抽象在 C#、Python、Java 三种语言里保持对等，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关心的不是「它能不能做 Agent」，而是「企业级组织在选择编排框架时，除了功能之外还必须评估哪些治理和可移植性问题」。</p>
+<p>前面三个模块默认站在 Python 生态看问题。Semantic Kernel 则从一开始就强调<strong>多语言、企业优先</strong>：同一套核心抽象覆盖 C#、Python、Java，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关注的是这些能力如何影响治理、合规和可移植性判断。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="18-kernel-plugin-planner/">第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner</a></li>
@@ -8155,9 +8155,9 @@
     PL --&gt; AF["Agent Framework&lt;br/&gt;多智能体协作"]</code></pre>
 <h2 id="_3">阅读建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>来自 .NET/企业技术栈的读者</strong>：直接看第十八章，理解 Kernel 作为依赖注入容器的定位；</li>
-<li><strong>关心和 LangGraph/AutoGen 对比编排模型的读者</strong>：直接看第十九章 19.3 节；</li>
-<li><strong>评估企业采购/合规风险的读者</strong>：两章的「常见错误」和「本章总结」都包含治理与 lock-in 判断，建议配合 <a href="../06-selection-portability/">框架选型与可移植架构</a> 一起读。</li>
+<li>如果来自 .NET 或其他企业技术栈，可先看第十八章，理解 Kernel 作为依赖注入容器的定位；</li>
+<li>如果主要想和 LangGraph、AutoGen 对比编排模型，可直接看第十九章 19.3 节；</li>
+<li>如果重点在企业采购或合规风险，两章的「常见错误」和「本章总结」都包含治理与 lock-in 判断，适合配合 <a href="../06-selection-portability/">框架选型与可移植架构</a> 一起读。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
 

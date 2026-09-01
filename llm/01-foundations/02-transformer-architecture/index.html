@@ -8927,8 +8927,7 @@
 <h2 id="26">2.6 位置编码：注入顺序信息<a class="headerlink" href="#26" title="Permanent link">&para;</a></h2>
 <p>Self-Attention 有一个天然缺陷：<strong>它的计算是对称的，不考虑词的顺序</strong>。</p>
 <p>「我打你」和「你打我」对 Attention 来说可能得到一样的结果——它只看哪些词相关，不看谁在前谁在后。</p>
-<p>所以需要显式给每个 token 注入位置信息。具体方案有 sin/cos、RoPE、ALiBi 等多种，各有不同的设计哲学和长上下文外推能力，<a href="../04-position-encoding/">第四章</a> 专门展开。</p>
-<p>本节只需知道：<strong>Transformer 靠加上位置编码来让模型感知词序</strong>。</p>
+<p>所以需要显式给每个 token 注入位置信息。这里先记住结论：<strong>Transformer 要靠位置编码感知词序</strong>。具体方案有 sin/cos、RoPE、ALiBi 等多种，<a href="../04-position-encoding/">第四章</a> 会展开讲。</p>
 <h2 id="27-ffn">2.7 前馈网络（FFN）的作用<a class="headerlink" href="#27-ffn" title="Permanent link">&para;</a></h2>
 <p>每个 Transformer 块里除了注意力层，还有一个前馈网络——两层全连接加一个激活函数：</p>
 <div class="arithmatex">\[
@@ -8988,7 +8987,7 @@
 </table>
 <p><strong>因果掩码</strong>的实现很简单：在 softmax 之前把注意力分数矩阵的上三角置为负无穷，这样每个位置对未来位置的注意力权重就变成 0。</p>
 <h2 id="29-decoder-only">2.9 为什么 Decoder-only 赢了<a class="headerlink" href="#29-decoder-only" title="Permanent link">&para;</a></h2>
-<p>这是面试里最容易被追问的点。三个原因：</p>
+<p>Decoder-only 胜出，主要是三个工程原因：</p>
 <h3 id="291">2.9.1 目标极其统一<a class="headerlink" href="#291" title="Permanent link">&para;</a></h3>
 <p>所有类型的任务——问答、写作、推理、代码生成、翻译——都能统一表达成<strong>「续写」</strong>这一件事。不需要区分「这是理解任务」还是「那是生成任务」，一套训练目标搞定一切。</p>
 <h3 id="292">2.9.2 可以直接在海量无标注文本上自监督训练<a class="headerlink" href="#292" title="Permanent link">&para;</a></h3>
@@ -9035,9 +9034,6 @@
 <li><strong>Decoder-only 胜出的三个原因</strong>：目标统一、可在无标注数据上高效自监督、规模化后能力涌现；</li>
 <li><strong>另外两种架构仍有价值</strong>，Encoder-only 在检索与嵌入场景是主力。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Transformer 用「每个位置直接看向所有位置」换掉了 RNN 的逐步传递，代价是平方复杂度，收益是可并行与无衰减的长距离依赖——而 Decoder-only 之所以胜出，是因为它把所有任务压缩成了一个可以无限 scale 的训练目标。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></li>

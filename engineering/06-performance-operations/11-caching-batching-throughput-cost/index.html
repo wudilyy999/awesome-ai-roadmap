@@ -8439,7 +8439,7 @@
 
 <h1 id="_1">第十一章：缓存、批处理、吞吐与成本优化<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="111">11.1 成本优化的四个杠杆<a class="headerlink" href="#111" title="Permanent link">&para;</a></h2>
-<p>LLM 应用的成本主要由 token 用量和调用次数决定。四个可独立操作的杠杆:<strong>减少重复调用(缓存)、合并调用(批处理)、换更便宜的模型(路由)、压缩上下文(减少 token)</strong>。本章聚焦前两个应用层杠杆,路由降本已在<a href="../../02-request-reliability/03-model-gateway-routing-fallback/">第 3 章</a>讨论,推理引擎内部的量化、KV Cache 等降本手段见 <a href="../../../llm/03-inference-serving/">LLM · 推理与部署</a>,本章不重复展开。</p>
+<p>LLM 应用的成本主要由 token 用量和调用次数决定。四个可独立操作的杠杆:<strong>减少重复调用(缓存)、合并调用(批处理)、换更便宜的模型(路由)、压缩上下文(减少 token)</strong>。这里先看前两个应用层杠杆,路由降本已在<a href="../../02-request-reliability/03-model-gateway-routing-fallback/">第 3 章</a>讨论,推理引擎内部的量化、KV Cache 等降本手段见 <a href="../../../llm/03-inference-serving/">LLM · 推理与部署</a>,不再重复展开。</p>
 <pre class="mermaid"><code>flowchart TB
     COST["调用成本"] --&gt; CACHE["缓存:&lt;br/&gt;避免重复计算"]
     COST --&gt; BATCH["批处理:&lt;br/&gt;摊薄单位开销"]
@@ -8557,16 +8557,13 @@
 <p>不知道哪个场景真正烧钱,优化精力容易投入到影响不大的地方。</p>
 <h2 id="119">11.9 本章总结<a class="headerlink" href="#119" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>成本优化有四个杠杆</strong>:缓存、批处理、路由降本、上下文压缩,本章聚焦前两个应用层手段;</li>
+<li><strong>成本优化有四个杠杆</strong>:缓存、批处理、路由降本、上下文压缩,这里先看前两个应用层手段;</li>
 <li><strong>语义缓存命中率要按业务场景拆分统计</strong>,而非只看全局数字;</li>
 <li><strong>Prompt Caching 要求前缀字节级一致才能命中</strong>,Prompt 结构设计应把固定内容放在前面;</li>
 <li><strong>能容忍延迟的后台任务应分流到批量 API</strong>,通常能降本约 50%,不应和实时流量混在一起处理;</li>
 <li><strong>上下文压缩(检索精简、对话摘要)直接减少输入 token</strong>,是最容易被忽视的降本手段;</li>
 <li><strong>成本可观测性是优化的前提</strong>,应按场景、团队、模型版本建立报表。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:LLM 应用层的成本优化不需要碰推理引擎内部,靠缓存策略、Prompt 结构设计、批量与实时流量分流这几个应用层杠杆,通常就能拿到大部分收益。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching">Anthropic: Prompt caching</a></li>

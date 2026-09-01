@@ -9174,7 +9174,7 @@ L(N) \approx \left(\frac{N_c}{N}\right)^{\alpha_N}
 <h3 id="782-120">7.8.2 把 1:20 当成硬性规则<a class="headerlink" href="#782-120" title="Permanent link">&para;</a></h3>
 <p>它是 Chinchilla 实验条件下的 compute-optimal 经验点。Llama 3 的 1:1875 和 Qwen3 的 1:60000 都远超它，且效果更好。</p>
 <h3 id="783-llama-3-chinchilla">7.8.3 认为 Llama 3 推翻了 Chinchilla<a class="headerlink" href="#783-llama-3-chinchilla" title="Permanent link">&para;</a></h3>
-<p><strong>没有推翻，是优化目标不同</strong>。Chinchilla 优化训练算力最优，Llama 3 优化推理成本最优。这是这道题最能体现理解深度的一句话。</p>
+<p><strong>没有推翻，是优化目标不同</strong>。Chinchilla 优化训练算力最优，Llama 3 优化推理成本最优。把这点讲清楚，才不会把两条路线误判成互相否定。</p>
 <h3 id="784">7.8.4 把涌现讲成神秘魔法<a class="headerlink" href="#784" title="Permanent link">&para;</a></h3>
 <p>必须提 Mirage 论文：很多「突变」是 exact match 这类离散指标造成的测量假象。</p>
 <h3 id="785">7.8.5 认为存在统一的「涌现规模」<a class="headerlink" href="#785" title="Permanent link">&para;</a></h3>
@@ -9182,7 +9182,7 @@ L(N) \approx \left(\frac{N_c}{N}\right)^{\alpha_N}
 <h3 id="786">7.8.6 选型时无视任务是否依赖涌现<a class="headerlink" href="#786" title="Permanent link">&para;</a></h3>
 <p>简单分类抽取用 7B 就够，硬上 70B 是浪费。反过来多步推理任务上 7B 会直接做不了，不是调 prompt 能救的。</p>
 <h3 id="787-scaling-law">7.8.7 说不出 Scaling Law 的天花板<a class="headerlink" href="#787-scaling-law" title="Permanent link">&para;</a></h3>
-<p>数据墙 + 算力墙，以及合成数据、多模态、RL 这三个应对方向。能聊到这层说明在思考未来趋势。</p>
+<p>数据墙 + 算力墙，以及合成数据、多模态、RL 这三个应对方向。后续路线为什么转向这些方向，基本都能从这两堵墙推出来。</p>
 <h2 id="79">7.9 本章总结<a class="headerlink" href="#79" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>Scaling Law 讲的是 loss 与 <span class="arithmatex">\(N\)</span>、<span class="arithmatex">\(D\)</span>、<span class="arithmatex">\(C\)</span> 的幂律关系</strong>，OpenAI 2020 年提出；</li>
@@ -9198,7 +9198,7 @@ L(N) \approx \left(\frac{N_c}{N}\right)^{\alpha_N}
 <li><strong>两个天花板</strong>：数据墙与算力墙，应对方向是合成数据、多模态、强化学习与测试时计算。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：Scaling Law 把「加大模型」从赌博变成了可计算的工程决策，而 Chinchilla 到 Llama 3 的演进说明——真正的问题从来不是「多大」，而是「你在优化训练成本还是推理成本」。</strong></p>
+<p>Scaling Law 解决的是「投入大致能换来多少 loss 改善」，而 Chinchilla 到 Llama 3 的变化解决的是「同样的预算该花在参数、数据还是部署成本上」。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

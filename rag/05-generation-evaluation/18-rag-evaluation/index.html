@@ -5009,7 +5009,7 @@
           <li class="md-nav__item">
   <a href="#1831" class="md-nav__link">
     <span class="md-ellipsis">
-      18.3.1 必须知道的四条局限
+      18.3.1 四个使用边界
     </span>
   </a>
   
@@ -8441,7 +8441,7 @@
           <li class="md-nav__item">
   <a href="#1831" class="md-nav__link">
     <span class="md-ellipsis">
-      18.3.1 必须知道的四条局限
+      18.3.1 四个使用边界
     </span>
   </a>
   
@@ -8692,9 +8692,7 @@
     E --&gt; E2[生成层&lt;br/&gt;忠实吗 切题吗]
     E --&gt; E3[端到端&lt;br/&gt;用户问题解决了吗]
     E --&gt; E4[线上&lt;br/&gt;真实用户怎么反馈的]</code></pre>
-<blockquote>
-<p><strong>只测端到端 = 知道病了但不知道病因；只测检索 = 知道零件合格但不知道整机能不能跑。两个都要。</strong></p>
-</blockquote>
+<p>只看端到端分数只能发现退化，不能定位病因；只看检索又无法判断整条链路是否完成任务。两类评测需要同时存在。</p>
 <h2 id="182">18.2 检索层指标<a class="headerlink" href="#182" title="Permanent link">&para;</a></h2>
 <p>前提：需要一个<strong>标注了每个 Query 对应哪些 chunk 是正确依据</strong>的评测集。</p>
 <table>
@@ -8734,7 +8732,7 @@
 </tbody>
 </table>
 <h3 id="1821">18.2.1 怎么用这些指标定位问题<a class="headerlink" href="#1821" title="Permanent link">&para;</a></h3>
-<p><strong>这才是重点，而不是背定义。</strong></p>
+<p>更有用的是把这些指标组合起来定位问题。</p>
 <table>
 <thead>
 <tr>
@@ -8766,7 +8764,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>这张表本身就是一个诊断工具</strong>，比任何单个指标的定义都有用。</p>
+<p>实际分析时，通常把这组指标作为诊断表来定位问题。</p>
 <h2 id="183">18.3 生成层指标<a class="headerlink" href="#183" title="Permanent link">&para;</a></h2>
 <p>RAGAS 这类框架提供了几个常用的无参考答案指标：</p>
 <table>
@@ -8795,22 +8793,22 @@
 </tr>
 </tbody>
 </table>
-<h3 id="1831">18.3.1 必须知道的四条局限<a class="headerlink" href="#1831" title="Permanent link">&para;</a></h3>
-<p><strong>只会说"用 RAGAS"是浅层回答，能说出局限才说明真用过。</strong></p>
+<h3 id="1831">18.3.1 四个使用边界<a class="headerlink" href="#1831" title="Permanent link">&para;</a></h3>
+<p>使用这些指标时，需要同时看清它们的边界。</p>
 <p><strong>（1）Faithfulness 不等于事实正确性</strong></p>
-<p><strong>这是最重要的一条</strong>（与第十七章 17.8 呼应）：</p>
+<p>首先要区分这一点（与第十七章 17.8 呼应）：</p>
 <blockquote>
 <p><strong>Faithfulness 衡量的是「答案忠实于材料」，不是「答案事实正确」。</strong> 材料本身错了，忠实度依然满分。</p>
 </blockquote>
 <p><strong>（2）Faithfulness 可以被"我不知道"刷满</strong></p>
 <p>模型回答「材料中没有相关信息」时，这个陈述完全忠实于材料，<strong>忠实度得分很高</strong>。</p>
-<p><strong>推论：Faithfulness 必须与 Answer Relevancy 一起看</strong>，否则一个只会拒答的系统能拿到很好的忠实度分数。</p>
+<p>因此 Faithfulness 需要和 Answer Relevancy 联合解释，否则一个倾向拒答的系统也可能拿到很高的忠实度分数。</p>
 <p><strong>（3）LLM-as-Judge 的循环性问题</strong></p>
 <p>用 LLM 评估 LLM 的输出，存在<strong>同源偏见</strong>：评判模型可能偏好与自己风格相似的回答，也可能与被评模型犯同样的错误。</p>
 <p><strong>缓解</strong>：用与生成模型<strong>不同</strong>的模型做评判；用人工标注的子集<strong>校准</strong>评判模型的一致性。</p>
 <p><strong>（4）无参考答案带来的噪声</strong></p>
 <p>Context Recall 等指标在没有标准答案时依赖 LLM 推断，<strong>方差较大</strong>。</p>
-<p><strong>结论</strong>：<strong>这些指标适合看趋势和做相对比较，不适合当作绝对分数。</strong> 「Faithfulness 从 0.82 涨到 0.85」这种说法要谨慎。</p>
+<p>这些指标更适合看趋势和相对比较，不适合当作绝对分数。像「Faithfulness 从 0.82 涨到 0.85」这样的变化，需要结合评测集和判定方差一起解释。</p>
 <h2 id="184">18.4 端到端评估<a class="headerlink" href="#184" title="Permanent link">&para;</a></h2>
 <p>最终还是要回答「用户的问题解决了吗」。</p>
 <table>
@@ -8850,7 +8848,7 @@
 </tbody>
 </table>
 <p><strong>推荐组合</strong>：<strong>程序化断言做主体</strong>（快速、确定性、可回归），<strong>LLM-as-Judge 做补充</strong>（覆盖开放性问题），<strong>定期人工抽查做校准</strong>（验证前两者的可信度）。</p>
-<p><strong>LLM-as-Judge 必须校准</strong>：用一批人工标注的样本，检查评判模型的打分与人工的一致性。<strong>没校准过的 Judge 分数没有意义。</strong></p>
+<p>LLM-as-Judge 需要先校准：用一批人工标注样本检查评判模型与人工的一致性。未校准的 Judge 分数不应直接用于决策。</p>
 <h3 id="1841-citation">18.4.1 Citation、时效与鲁棒性<a class="headerlink" href="#1841-citation" title="Permanent link">&para;</a></h3>
 <p>端到端“答案正确”不足以说明系统可审计、可用于当前事实，或能抵抗输入扰动。对需要依据的答案，至少增加以下维度：</p>
 <table>
@@ -8891,7 +8889,7 @@
 </table>
 <p>时效评测必须固定“查询时刻”和可见版本；否则系统可能引用今天正确、当时错误的材料。鲁棒性不应只报告攻击成功率，还要报告正常任务效用，避免以全拒答获得表面高分（安全细节见<a href="../../06-operations-security/20-rag-challenges-security/">第二十章</a>）。</p>
 <h2 id="185">18.5 评测集怎么建<a class="headerlink" href="#185" title="Permanent link">&para;</a></h2>
-<p><strong>这是整个评估体系里最花时间、也最有价值的部分。</strong></p>
+<p>这一部分通常最耗时，但决定评估体系是否可用。</p>
 <h3 id="1851">18.5.1 分三档<a class="headerlink" href="#1851" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8936,7 +8934,7 @@
 <li><strong>知识库里没有答案的问题</strong>（<strong>测拒答能力</strong>）；</li>
 <li><strong>诱导性问题</strong>（前提本身是错的，看模型是否会顺着编）。</li>
 </ul>
-<p><strong>最后两类最容易被漏掉，但它们是检验系统可信度的关键。</strong></p>
+<p>最后两类直接关系到系统的可信度，评测集里不能缺。</p>
 <h3 id="1853">18.5.3 数据来源<a class="headerlink" href="#1853" title="Permanent link">&para;</a></h3>
 <p><strong>优先级从高到低</strong>：</p>
 <ol>
@@ -8944,7 +8942,7 @@
 <li><strong>业务专家出题</strong>——覆盖重要但低频的场景；</li>
 <li><strong>LLM 生成</strong>——补充规模，但<strong>必须人工审核</strong>。</li>
 </ol>
-<p><strong>关于 LLM 生成的评测集有个陷阱</strong>：直接让 LLM 读一个 chunk 然后出题，生成的问题会<strong>过度贴合该 chunk 的措辞</strong>，导致检索"虚假地容易"。<strong>必须人工改写成用户真实会问的样子。</strong></p>
+<p>LLM 生成评测集时有个常见偏差：直接让 LLM 读一个 chunk 然后出题，生成的问题会<strong>过度贴合该 chunk 的措辞</strong>，导致检索"虚假地容易"。题目需要人工改写成真实用户会使用的问法。</p>
 <h2 id="186">18.6 公开基准的价值与局限<a class="headerlink" href="#186" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -8969,7 +8967,7 @@
 </tbody>
 </table>
 <p><strong>公开基准的作用是横向比较方法，而不是预测你的系统在你的数据上的表现。</strong></p>
-<p><strong>一个值得记住的参考点</strong>：在 CRAG Benchmark 这类贴近真实的评测上，<strong>即使是当时最好的系统，准确率也只在 50% 上下</strong>。这说明 RAG 远未被解决——<strong>知道这个数字，能避免对 RAG 能力的过度承诺</strong>。</p>
+<p>以 CRAG Benchmark 这类更贴近真实场景的评测为例，<strong>即使是当时最好的系统，准确率也只在 50% 上下</strong>。这说明 RAG 仍有明显边界，也能避免对外给出过高承诺。</p>
 <h2 id="187">18.7 线上指标<a class="headerlink" href="#187" title="Permanent link">&para;</a></h2>
 <p>离线评测跑得再好，也要看真实用户的反馈。</p>
 <table>
@@ -9015,7 +9013,7 @@
     S4 --&gt; S5[5. 引入 LLM-as-Judge 并校准]
     S5 --&gt; S6[6. 接入线上反馈回流]
     S6 --&gt; S1</code></pre>
-<p><strong>注意这是一个闭环</strong>：线上反馈会不断补充评测集，评测集又指导下一轮优化。</p>
+<p>这是一条闭环流程：线上反馈会不断补充评测集，评测集再指导下一轮优化。</p>
 <h2 id="189">18.9 常见错误<a class="headerlink" href="#189" title="Permanent link">&para;</a></h2>
 <h3 id="1891">18.9.1 只看端到端不分层<a class="headerlink" href="#1891" title="Permanent link">&para;</a></h3>
 <p>知道效果差，不知道差在哪。</p>
@@ -9048,10 +9046,6 @@
 <li><strong>公开基准用于横向比较</strong>；真实场景分数依赖数据、任务和评判口径，不能脱离版本横比；</li>
 <li><strong>线上点踩数据是高价值的问题来源</strong>，经过脱敏、分诊和标注后再进入评测闭环。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>评估的目的不是给系统打个分，而是每次改动之后能明确回答「变好了还是变差了，以及是哪一层变的」。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2309.15217">Ragas: Automated Evaluation of Retrieval Augmented Generation</a></li>

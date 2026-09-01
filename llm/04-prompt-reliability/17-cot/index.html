@@ -8728,10 +8728,10 @@
 </span></code></pre></div>
 <p><strong>每一步都很容易验证，错误自然就少了。</strong></p>
 <h2 id="172-cot">17.2 CoT 的核心思路<a class="headerlink" href="#172-cot" title="Permanent link">&para;</a></h2>
-<p><strong>本质是让模型「推出来」而不是「直接猜出来」。</strong></p>
+<p>CoT 要做的事，是让模型把中间推导写出来，而不是直接猜答案。</p>
 <p>对复杂问题，答案无法直接从训练数据里召回，但可以通过一步步推理得到——每一步都基于上一步的结论。</p>
 <h3 id="1721">17.2.1 为什么这个机制天然成立<a class="headerlink" href="#1721" title="Permanent link">&para;</a></h3>
-<p><strong>关键洞见：语言模型的生成方式本身就支持逐步推理。</strong></p>
+<p>原因在于语言模型本来就是逐 token 生成的。</p>
 <p>模型是一个 token 接一个 token 生成的，<strong>每生成一个新 token 时都能看到前面所有已生成的内容</strong>。所以让它先生成推理步骤，相当于<strong>给后续的答案生成提供了更多「工作记忆」</strong>。</p>
 <h3 id="1722">17.2.2 一个必须区分的点<a class="headerlink" href="#1722" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -8816,7 +8816,7 @@
 </table>
 <p>温度采样的机制见 <a href="../../03-inference-serving/13-temperature-top-p-top-k/">第十三章</a>。</p>
 <h2 id="176-cot">17.6 CoT 的四个局限<a class="headerlink" href="#176-cot" title="Permanent link">&para;</a></h2>
-<p><strong>这是最容易被追问、也最能拉开差距的部分。</strong></p>
+<p>这些局限决定了 CoT 适不适合进生产链路。</p>
 <h3 id="1761-token">17.6.1 token 消耗大<a class="headerlink" href="#1761-token" title="Permanent link">&para;</a></h3>
 <p>推理链会额外生成几百甚至上千个 token，<strong>API 成本和响应时间都显著增加</strong>。</p>
 <h3 id="1762">17.6.2 对简单问题适得其反<a class="headerlink" href="#1762" title="Permanent link">&para;</a></h3>
@@ -8824,7 +8824,7 @@
 <h3 id="1763">17.6.3 推理链本身也会出错<a class="headerlink" href="#1763" title="Permanent link">&para;</a></h3>
 <p><strong>如果第 2 步推理错了，第 3、4 步会基于错误前提继续推导</strong>，最终答案大概率也是错的。</p>
 <blockquote>
-<p><strong>CoT 能减少跳跃性错误，但不能消除推理错误。</strong> 这是它和「让模型变正确」之间的本质差别。</p>
+<p><strong>CoT 能减少跳跃性错误，但不会自动纠正错误前提。</strong> 如果前面某一步已经错了，后面往往只是在把这个错误展开。</p>
 </blockquote>
 <h3 id="1764">17.6.4 对纯记忆类任务没帮助<a class="headerlink" href="#1764" title="Permanent link">&para;</a></h3>
 <p>比如「2020 年奥运会在哪里举办」——<strong>这类问题根本不需要推理</strong>，展开推理链毫无收益。</p>
@@ -8879,7 +8879,7 @@
 <li><strong>生产环境让模型内部推理，只对外输出简要依据或可核查结论</strong>。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：CoT 的价值不在于让模型变聪明，而在于把原本挤在一次 forward 里的隐式推理摊开成一串可以互相支撑、也可以被检查的中间结论。</strong></p>
+<p>CoT 的价值，不是凭空增加知识，而是把中间推导摊出来，让后续步骤能利用前文，也让人有机会检查每一步。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

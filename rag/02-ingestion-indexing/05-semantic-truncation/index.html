@@ -8571,8 +8571,8 @@
 
 <h1 id="_1">第五章：语义被切断怎么办<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="51">5.1 问题的两个方向<a class="headerlink" href="#51" title="Permanent link">&para;</a></h2>
-<p>上一章说清了粒度的核心矛盾。这一章要解决的是它的直接后果：<strong>一段话被切开后，片段丢失了理解它所必需的上下文</strong>。</p>
-<p>解决这个问题的方法可以分成两个完全不同的方向，<strong>把它们分开讲是回答好这道题的关键</strong>：</p>
+<p>上一章讨论的是粒度权衡。这一章关注它的直接后果：<strong>一段话被切开后，片段丢失了理解它所必需的上下文</strong>。</p>
+<p>常见解法可以分成两个方向：</p>
 <pre class="mermaid"><code>flowchart TB
     P[语义被切断] --&gt; D1[方向一: 切的时候别切错]
     P --&gt; D2[方向二: 切完了把上下文补回来]
@@ -8605,7 +8605,7 @@
 <p>理论上很优雅，<strong>但如第四章所述，实证对比显示它成本高、收益不稳定</strong>。列出来是为了知道它存在，而不是推荐默认使用。</p>
 <h2 id="53">5.3 方向二：切完了把上下文补回来<a class="headerlink" href="#53" title="Permanent link">&para;</a></h2>
 <h3 id="531">5.3.1 句子窗口检索<a class="headerlink" href="#531" title="Permanent link">&para;</a></h3>
-<p><strong>思路</strong>：用<strong>小单元</strong>（句子或短片段）建索引参与检索，命中后返回它<strong>前后若干个单元</strong>一起送给模型。</p>
+<p>做法是用<strong>小单元</strong>（句子或短片段）建索引参与检索，命中后返回它<strong>前后若干个单元</strong>一起送给模型。</p>
 <pre class="mermaid"><code>flowchart LR
     Q[Query] --&gt; IDX[小片段索引]
     IDX --&gt; HIT[命中片段 N]
@@ -8666,7 +8666,7 @@
 </ul>
 <p><strong>所以它适合高价值、语料规模可控的场景，不适合海量语料。</strong></p>
 <h3 id="534-contextual-retrieval">5.3.4 上下文增强（Contextual Retrieval）<a class="headerlink" href="#534-contextual-retrieval" title="Permanent link">&para;</a></h3>
-<p><strong>这是目前工程上最推荐的方案之一。</strong></p>
+<p>这是近年常用的方案之一。</p>
 <p><strong>思路</strong>：不改写原文，而是在每个 chunk 前<strong>拼接一段由 LLM 生成的、说明该片段在整篇文档中位置和背景的短说明</strong>，然后再做向量化和关键词索引。</p>
 <pre class="mermaid"><code>flowchart LR
     DOC[整篇文档] --&gt; LLM[LLM 生成上下文说明]
@@ -8708,7 +8708,6 @@
 </tbody>
 </table>
 <p><strong>成本上的关键点</strong>：给每个 chunk 生成上下文说明需要把整篇文档作为输入，看起来非常贵。但配合 <strong>Prompt Caching</strong>（整篇文档只算一次，后续 chunk 复用缓存），实测成本约为<strong>每百万文档 Token 一美元量级</strong>。</p>
-<p><strong>这里必须区分清楚一个概念</strong>：</p>
 <blockquote>
 <p><strong>Prompt Caching 是「计算层」的优化，它降低的是重复输入的计算成本；上下文增强是「信息层」的改造，它改变的是被索引的内容。两者是配合关系，不是替代关系。</strong></p>
 </blockquote>
@@ -8821,9 +8820,9 @@
 </ol>
 <h2 id="55">5.5 常见错误<a class="headerlink" href="#55" title="Permanent link">&para;</a></h2>
 <h3 id="551">5.5.1 只答重叠切分<a class="headerlink" href="#551" title="Permanent link">&para;</a></h3>
-<p>重叠只是最基础的兜底，只答这一个说明对这道题理解很浅。</p>
+<p>重叠只解决「不要在边界上截断」的问题，不能保证语义完整。</p>
 <h3 id="552">5.5.2 不区分「预防」和「补救」两个方向<a class="headerlink" href="#552" title="Permanent link">&para;</a></h3>
-<p>把六七种方法平铺罗列，听起来是背的。分成两个方向再讲，逻辑立刻清晰。</p>
+<p>把六七种方法平铺罗列，设计和调参时就很难判断自己是在改善切分，还是在补上下文。</p>
 <h3 id="553-prompt-caching">5.5.3 把 Prompt Caching 说成一种压缩或补上下文的方法<a class="headerlink" href="#553-prompt-caching" title="Permanent link">&para;</a></h3>
 <p>Prompt Caching 的机制、与 KV Cache/记忆压缩的边界及生命周期限制见<a href="../../../agent/03-memory-context/10-agent-memory-compression/">Agent 记忆与上下文压缩</a>；本节只讨论其在上下文增强索引成本中的作用。</p>
 <p>它是计算层优化，不改变被索引的内容。混淆这一点是典型的概念不清。</p>
@@ -8844,10 +8843,6 @@
 <li><strong>Late Chunking</strong> 在编码阶段注入全文语境，思路优雅但工具链尚不成熟；</li>
 <li><strong>实施顺序</strong>：结构化切分 → 父子切分 → 上下文增强 → 更前沿方案。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>不要试图找到一个"完美的切分点"，而应该接受「检索用小的、生成用大的」这个分离设计，然后把上下文在使用时补回来。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.anthropic.com/engineering/contextual-retrieval">Anthropic: Introducing Contextual Retrieval</a></li>

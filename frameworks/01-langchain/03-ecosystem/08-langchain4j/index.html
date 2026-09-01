@@ -5627,7 +5627,7 @@
           <li class="md-nav__item">
   <a href="#811" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.1 这个区别为什么重要
+      8.1.1 为什么这个区别重要
     </span>
   </a>
   
@@ -5660,7 +5660,7 @@
           <li class="md-nav__item">
   <a href="#821" class="md-nav__link">
     <span class="md-ellipsis">
-      8.2.1 真正的收益不是「一行代码切换任意模型」
+      8.2.1 统一接口的收益在哪里
     </span>
   </a>
   
@@ -5669,7 +5669,7 @@
           <li class="md-nav__item">
   <a href="#822" class="md-nav__link">
     <span class="md-ellipsis">
-      8.2.2 为什么不能吹成完全无锁定
+      8.2.2 为什么不能把它理解成完全无锁定
     </span>
   </a>
   
@@ -5702,7 +5702,7 @@
           <li class="md-nav__item">
   <a href="#832" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.2 结构化输出的三个时效性细节
+      8.3.2 结构化输出的三个工程细节
     </span>
   </a>
   
@@ -8527,7 +8527,7 @@
           <li class="md-nav__item">
   <a href="#811" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.1 这个区别为什么重要
+      8.1.1 为什么这个区别重要
     </span>
   </a>
   
@@ -8560,7 +8560,7 @@
           <li class="md-nav__item">
   <a href="#821" class="md-nav__link">
     <span class="md-ellipsis">
-      8.2.1 真正的收益不是「一行代码切换任意模型」
+      8.2.1 统一接口的收益在哪里
     </span>
   </a>
   
@@ -8569,7 +8569,7 @@
           <li class="md-nav__item">
   <a href="#822" class="md-nav__link">
     <span class="md-ellipsis">
-      8.2.2 为什么不能吹成完全无锁定
+      8.2.2 为什么不能把它理解成完全无锁定
     </span>
   </a>
   
@@ -8602,7 +8602,7 @@
           <li class="md-nav__item">
   <a href="#832" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.2 结构化输出的三个时效性细节
+      8.3.2 结构化输出的三个工程细节
     </span>
   </a>
   
@@ -8921,12 +8921,12 @@
 
 <h1 id="langchain4j-java">第八章：LangChain4j 与 Java 生态<a class="headerlink" href="#langchain4j-java" title="Permanent link">&para;</a></h1>
 <h2 id="81-langchain-java">8.1 它是 LangChain 的 Java 版吗<a class="headerlink" href="#81-langchain-java" title="Permanent link">&para;</a></h2>
-<p><strong>这是这道题的第一个雷。</strong></p>
+<p>容易先入为主地把它理解成 LangChain 的 Java 对应物。</p>
 <blockquote>
 <p><strong>官方定位很明确</strong>：LangChain4j 是<strong>从 Java 习惯出发设计的 JVM 开源库</strong>，重视类型安全、POJO、注解、接口和依赖注入。</p>
 <p><strong>它的 API、内部实现和发布周期都独立于 Python LangChain。</strong> 更准确的说法是「它吸收了 LLM 应用生态中的通用模式」，而不是「逐项复刻 LangChain」。</p>
 </blockquote>
-<h3 id="811">8.1.1 这个区别为什么重要<a class="headerlink" href="#811" title="Permanent link">&para;</a></h3>
+<h3 id="811">8.1.1 为什么这个区别重要<a class="headerlink" href="#811" title="Permanent link">&para;</a></h3>
 <p><strong>因为它解释了 LangChain4j 最有辨识度的能力为什么叫 AI Services。</strong></p>
 <p>Java 开发者熟悉的是<strong>接口、类型和服务层</strong>，而不是在业务代码里到处拼消息数组和 JSON。<strong>LangChain4j 选择顺着 Java 的思维方式，把一次 AI 能力包装成一个可调用的服务接口。</strong></p>
 <h3 id="812">8.1.2 两层抽象<a class="headerlink" href="#812" title="Permanent link">&para;</a></h3>
@@ -8980,11 +8980,11 @@
 </tbody>
 </table>
 <p><strong>具体厂商能力放进独立集成模块，业务代码尽量依赖核心接口。</strong></p>
-<h3 id="821">8.2.1 真正的收益不是「一行代码切换任意模型」<a class="headerlink" href="#821" title="Permanent link">&para;</a></h3>
+<h3 id="821">8.2.1 统一接口的收益在哪里<a class="headerlink" href="#821" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p><strong>而是把变化关在适配层里。</strong> 单元测试可以替换模型实现，试验不同向量库时也不用推翻上层 RAG 流程。</p>
+<p><strong>收益主要在于把变化关在适配层里。</strong> 单元测试可以替换模型实现，试验不同向量库时也不用推翻上层 RAG 流程。</p>
 </blockquote>
-<h3 id="822">8.2.2 为什么不能吹成完全无锁定<a class="headerlink" href="#822" title="Permanent link">&para;</a></h3>
+<h3 id="822">8.2.2 为什么不能把它理解成完全无锁定<a class="headerlink" href="#822" title="Permanent link">&para;</a></h3>
 <p><strong>因为抽象只能覆盖交集。</strong></p>
 <ul>
 <li>某个模型是否支持<strong>工具调用、原生 JSON Schema、图片输入、思考内容或特殊采样参数</strong>，仍要查官方能力矩阵；</li>
@@ -9061,7 +9061,7 @@
     E --&gt; F["框架把模型输出转换成 SupportReply"]
 
     style F fill:#e6f4ea</code></pre>
-<h3 id="832">8.3.2 结构化输出的三个时效性细节<a class="headerlink" href="#832" title="Permanent link">&para;</a></h3>
+<h3 id="832">8.3.2 结构化输出的三个工程细节<a class="headerlink" href="#832" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>返回 record 或 POJO 时</strong>，LangChain4j 可以自动生成 Schema 并解析响应；</li>
 <li><strong>想用模型供应商原生的 JSON Schema 约束</strong>，要确认对应 <code>ChatModel</code> 支持并<strong>显式启用</strong>——模型不支持时框架可能退回到 <strong>Prompt 格式指令，可靠性更弱</strong>；</li>
@@ -9184,7 +9184,7 @@
 <p><strong>但框架只提供积木</strong>——文档质量、切分策略、召回率、权限过滤、引用溯源和离线评测仍决定最终效果。</p>
 </blockquote>
 <h2 id="87-java">8.7 Java 生态如何集成<a class="headerlink" href="#87-java" title="Permanent link">&para;</a></h2>
-<p><strong>选哪种集成，先看团队原来用什么服务框架，而不是先背一遍支持列表。</strong></p>
+<p>选型先看团队现有的服务框架、配置方式和监控体系。</p>
 <table>
 <thead>
 <tr>
@@ -9208,7 +9208,7 @@
 </tbody>
 </table>
 <h2 id="88-guardrails">8.8 可观测性与 Guardrails 的边界<a class="headerlink" href="#88-guardrails" title="Permanent link">&para;</a></h2>
-<p><strong>一次客服回答错了，应该先看什么？</strong> 不能只盯最终文本，因为一次调用可能已经经过 RAG 检索、模型判断和工具执行。</p>
+<p>排查一次客服回答出错，不能只盯最终文本，因为一次调用可能已经经过 RAG 检索、模型判断和工具执行。</p>
 <pre class="mermaid"><code>flowchart LR
     A["送给模型的消息"] --&gt; B["Retriever 找回了什么"] --&gt; C["Tool 的参数与结果"] --&gt; D["输入输出校验是否拦住异常内容"]
 
@@ -9310,7 +9310,7 @@
 <li><strong>选型用小型真实 PoC 验证</strong>，而不是比功能清单。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：LangChain4j 的价值不是「让 Java 也能写 LangChain」，而是顺着 Java 的接口、类型和依赖注入习惯，把 Prompt、Tools、Memory、RAG 和结构化输出收拢成一个类型化的服务接口——但统一 API 不等于厂商能力一致，memory 不等于 history，Guardrails 也不等于权限系统。</strong></p>
+<p>可以把它理解为：LangChain4j 顺着 Java 的接口、类型和依赖注入习惯，把 Prompt、Tools、Memory、RAG 和结构化输出收拢成类型化的服务接口；但统一 API 不等于厂商能力一致，memory 不等于 history，Guardrails 也不等于权限系统。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

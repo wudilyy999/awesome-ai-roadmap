@@ -8367,12 +8367,12 @@
 
 <h1 id="dspy">第十七章：DSPy 的编译器与优化器<a class="headerlink" href="#dspy" title="Permanent link">&para;</a></h1>
 <h2 id="171-prompt">17.1 从「手工调 Prompt」到「指标驱动的自动搜索」<a class="headerlink" href="#171-prompt" title="Permanent link">&para;</a></h2>
-<p>第十六章讲的 <code>Signature</code> 和 <code>Module</code> 只是声明式编程的前半段；DSPy 真正的杀手锏是<strong>编译</strong>——给定一个 <code>Program</code>、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错。</p>
+<p>第十六章讲的 <code>Signature</code> 和 <code>Module</code> 只是声明式编程的前半段；DSPy 的关键能力在<strong>编译</strong>阶段——给定一个 <code>Program</code>、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错。</p>
 <p>用一个不涉及具体实现细节的抽象目标来描述这个过程：给定程序参数 <span class="arithmatex">\(\theta\)</span>（可以是 few-shot 示例集合、指令措辞、也可以是模型权重）、验证集 <span class="arithmatex">\(D\)</span> 和评估指标 <span class="arithmatex">\(\mu\)</span>，编译器求解</p>
 <div class="arithmatex">\[
 \theta^{*} = \arg\max_{\theta} \frac{1}{|D|} \sum_{(x, y) \in D} \mu\bigl(f_\theta(x), y\bigr)
 \]</div>
-<p>这正是 <a href="../../../llm/">评测与选型主题</a> 中「能力评测指标」一章讨论的评测方法论，在 DSPy 里被反过来当成了<strong>优化目标</strong>，而不只是事后打分工具。</p>
+<p>这与 <a href="../../../llm/">评测与选型主题</a> 中「能力评测指标」一章讨论的是同一套量化方法，只是在 DSPy 里它直接成为<strong>优化目标</strong>，而不只是事后打分工具。</p>
 <h2 id="172">17.2 三类优化器：从少样本引导到跨模型迁移<a class="headerlink" href="#172" title="Permanent link">&para;</a></h2>
 <p>DSPy 提供的优化器（<code>teleprompter</code>）大体分三类，复杂度和适用场景依次递进：</p>
 <table>
@@ -8410,9 +8410,7 @@
     MI --&gt; C
     GE --&gt; C
     C --&gt; D["可直接替换原 Program，接口不变"]</code></pre>
-<blockquote>
-<p><strong>编译产物替换原 <code>Program</code> 时，调用方代码完全不需要修改</strong>——<code>compiled_program = optimizer.compile(program, trainset=trainset)</code> 之后，<code>compiled_program</code> 和 <code>program</code> 暴露的调用接口是一致的，优化只发生在内部的 Prompt 和示例上。</p>
-</blockquote>
+<p>编译产物替换原 <code>Program</code> 时，调用方代码通常不需要修改。<code>compiled_program = optimizer.compile(program, trainset=trainset)</code> 之后，<code>compiled_program</code> 和 <code>program</code> 暴露的调用接口是一致的，优化只发生在内部的 Prompt 和示例上。</p>
 <h2 id="173-langsmith">17.3 评测与优化的一体化：和 LangSmith 式可观测性的差异<a class="headerlink" href="#173-langsmith" title="Permanent link">&para;</a></h2>
 <p><a href="../../01-langchain/05-production/13-langsmith-production-loop/">LangSmith 生产质量闭环</a> 描述的是一种<strong>事后回路</strong>：先上线，采集 Trace 和生产反馈，离线组建 Dataset，人工或半自动分析后再改 Prompt，本质上是「观测 → 人工决策 → 修改」。</p>
 <p>DSPy 的评测循环发生在<strong>编译阶段之内</strong>，是「评测即优化」：</p>
@@ -8491,7 +8489,7 @@
 <p>优化器只能在给定模型的能力范围内搜索更好的 Prompt 和示例组合，模型本身做不到的推理（比如复杂数值计算），换多少种 Prompt 措辞也解决不了，这类问题应该交给 <code>ProgramOfThought</code> 生成代码执行，而不是继续加大搜索预算。</p>
 <h2 id="176">17.6 本章总结<a class="headerlink" href="#176" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>DSPy 编译的本质是指标驱动的自动搜索</strong>：给定 <code>Program</code>、数据集和评估指标，优化器搜索能让指标最优的具体实现；</li>
+<li><strong>DSPy 编译可以理解为指标驱动的自动搜索</strong>：给定 <code>Program</code>、数据集和评估指标，优化器搜索能让指标最优的具体实现；</li>
 <li><strong><code>BootstrapFewShot</code>、<code>MIPROv2</code>、<code>GEPA</code> 代表复杂度递增的三类策略</strong>：分别是自举示例、联合搜索指令与示例、基于失败反思的进化搜索；</li>
 <li><strong>编译产物与原 <code>Program</code> 接口一致</strong>，可以无缝替换，优化只发生在内部实现上；</li>
 <li><strong>DSPy 的「评测即优化」和 LangSmith 式的「观测后人工决策」是两个不同阶段的能力，互补而非互斥</strong>；</li>

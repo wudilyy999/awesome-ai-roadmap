@@ -8891,7 +8891,7 @@
 <p><strong>② 安全对齐缺失</strong></p>
 <p>SFT 数据里可能没覆盖「怎么造毒」「怎么诈骗」这类场景，SFT 模型遇到可能就一本正经地回答了。Post-Training 的任务之一就是教会模型<strong>什么不能说、不知道就说不知道</strong>。</p>
 <h3 id="1012-post-training">10.1.2 Post-Training 是个上位概念<a class="headerlink" href="#1012-post-training" title="Permanent link">&para;</a></h3>
-<p>它覆盖 SFT 之后所有继续训练的方法。下面五大类是工业界最主流的方案，<strong>每一类的设计哲学都不一样</strong>。</p>
+<p>它覆盖 SFT 之后所有继续训练的方法。工业界主流的 post-training 方案大致可以分成五类，<strong>而且每一类解决的问题都不一样</strong>。</p>
 <h2 id="102-rlhf4">10.2 RLHF：经典方案，4 模型架构<a class="headerlink" href="#102-rlhf4" title="Permanent link">&para;</a></h2>
 <p>由 OpenAI 在 InstructGPT 中开创，也是 ChatGPT 早期版本的核心训练方法。</p>
 <h3 id="1021">10.2.1 三步流程<a class="headerlink" href="#1021" title="Permanent link">&para;</a></h3>
@@ -9004,7 +9004,7 @@
 <p><strong>Llama 2-Chat 要单独记</strong>：它不是 DPO 的代表，而是 <strong>SFT + 拒绝采样 + PPO/RLHF</strong> 的经典案例。</p>
 </blockquote>
 <h2 id="104-grpo-value-model-ppo">10.4 GRPO：砍掉 Value Model 的 PPO 进化版<a class="headerlink" href="#104-grpo-value-model-ppo" title="Permanent link">&para;</a></h2>
-<p>由 DeepSeek 在 DeepSeek-Math 论文里提出，后来 DeepSeek-R1 把它推向风口浪尖。<strong>现在问对齐方法，GRPO 几乎是必问题。</strong></p>
+<p>由 DeepSeek 在 DeepSeek-Math 论文里提出，后来 DeepSeek-R1 把它推向风口浪尖。<strong>最近公开讨论对齐方法时，GRPO 几乎绕不过去。</strong></p>
 <h3 id="1041-ppo-value-model">10.4.1 先搞清楚 PPO 为什么需要 Value Model<a class="headerlink" href="#1041-ppo-value-model" title="Permanent link">&para;</a></h3>
 <p>在强化学习里，<strong>优势（Advantage）</strong>表示「这个动作比平均水平好多少」，PPO 用它决定参数往哪调。</p>
 <div class="arithmatex">\[
@@ -9225,7 +9225,7 @@ A = r - V(s)
 <li><strong>Llama 2-Chat</strong>：SFT + 拒绝采样 + PPO/RLHF；</li>
 <li><strong>DeepSeek-R1</strong>：SFT 冷启动 + GRPO 多轮迭代 + 拒绝采样筛数据。</li>
 </ul>
-<p>把这五类当成「五选一」是这道题最大的误区。</p>
+<p>把这五类当成「五选一」，会直接看错真实训练流程。</p>
 <h2 id="108">10.8 常见错误<a class="headerlink" href="#108" title="Permanent link">&para;</a></h2>
 <h3 id="1081-sft">10.8.1 认为 SFT 之后就够了<a class="headerlink" href="#1081-sft" title="Permanent link">&para;</a></h3>
 <p>SFT 只学到「合格」不是「优质」，且<strong>安全对齐完全没做</strong>。</p>
@@ -9257,7 +9257,7 @@ A = r - V(s)
 <li><strong>五类方法不是互斥的</strong>，真实流程是组合使用——这是这道题最核心的认知。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：Post-Training 这条线的演进主轴就是「在保住 RL 探索能力的前提下，一个个砍掉需要维护的模型」——RLHF 四个，GRPO 三个，DPO 两个，拒绝采样干脆退回监督学习。</strong></p>
+<p>post-training 的一个明显趋势是尽量减少要维护的模型和训练不稳定性；RLHF、GRPO、DPO、拒绝采样分别代表了几种不同的取舍。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

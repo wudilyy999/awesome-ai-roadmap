@@ -6473,7 +6473,7 @@
         <li class="md-nav__item">
   <a href="#231-lock-in" class="md-nav__link">
     <span class="md-ellipsis">
-      23.1 Lock-in 从哪里来:三个具体来源，而不是一个抽象概念
+      23.1 Lock-in 的三个主要来源
     </span>
   </a>
   
@@ -6482,7 +6482,7 @@
         <li class="md-nav__item">
   <a href="#232" class="md-nav__link">
     <span class="md-ellipsis">
-      23.2 可移植架构:用适配器把「业务逻辑」和「框架细节」分开
+      23.2 可移植架构：用适配器分离业务逻辑和框架细节
     </span>
   </a>
   
@@ -8239,7 +8239,7 @@
         <li class="md-nav__item">
   <a href="#231-lock-in" class="md-nav__link">
     <span class="md-ellipsis">
-      23.1 Lock-in 从哪里来:三个具体来源，而不是一个抽象概念
+      23.1 Lock-in 的三个主要来源
     </span>
   </a>
   
@@ -8248,7 +8248,7 @@
         <li class="md-nav__item">
   <a href="#232" class="md-nav__link">
     <span class="md-ellipsis">
-      23.2 可移植架构:用适配器把「业务逻辑」和「框架细节」分开
+      23.2 可移植架构：用适配器分离业务逻辑和框架细节
     </span>
   </a>
   
@@ -8366,7 +8366,7 @@
 
 
 <h1 id="lock-in">第二十三章：Lock-in 识别、可移植架构与迁移策略<a class="headerlink" href="#lock-in" title="Permanent link">&para;</a></h1>
-<h2 id="231-lock-in">23.1 Lock-in 从哪里来:三个具体来源，而不是一个抽象概念<a class="headerlink" href="#231-lock-in" title="Permanent link">&para;</a></h2>
+<h2 id="231-lock-in">23.1 Lock-in 的三个主要来源<a class="headerlink" href="#231-lock-in" title="Permanent link">&para;</a></h2>
 <p>「框架锁定」经常被当作一个模糊的风险提示，但拆开看，它总是来自三个具体来源之一：</p>
 <ol>
 <li><strong>状态格式锁定</strong>：业务的中间状态被序列化成框架私有的格式（比如 LangGraph 的 <code>Checkpointer</code> 快照结构、LlamaIndex Workflows 的 <code>Context</code> 序列化格式），换框架意味着这些历史状态无法直接迁移；</li>
@@ -8377,10 +8377,8 @@
     L["Lock-in 风险"] --&gt; L1["状态格式锁定&lt;br/&gt;私有序列化结构"]
     L --&gt; L2["编排逻辑锁定&lt;br/&gt;调用顺序/失败处理耦合执行引擎"]
     L --&gt; L3["运维资产锁定&lt;br/&gt;私有 Trace 格式、私有评测工具链"]</code></pre>
-<blockquote>
-<p><strong>识别 lock-in 的第一步，是明确「如果今天要换框架，这三类资产里哪一类的迁移成本最高」</strong>——大多数团队直觉上担心的是「代码要重写」，但实践中真正昂贵的往往是<strong>历史状态数据</strong>和<strong>运维资产</strong>的迁移，而不是业务逻辑代码本身。</p>
-</blockquote>
-<h2 id="232">23.2 可移植架构:用适配器把「业务逻辑」和「框架细节」分开<a class="headerlink" href="#232" title="Permanent link">&para;</a></h2>
+<p>识别 lock-in 时，先要判断「如果今天切换框架，这三类资产里哪一类迁移成本最高」。很多团队直觉上担心的是「代码要重写」，但实践中真正昂贵的往往是<strong>历史状态数据</strong>和<strong>运维资产</strong>的迁移，而不是业务逻辑代码本身。</p>
+<h2 id="232">23.2 可移植架构：用适配器分离业务逻辑和框架细节<a class="headerlink" href="#232" title="Permanent link">&para;</a></h2>
 <p>解决 lock-in 的通用架构模式借用了软件工程里熟悉的<strong>六边形架构（Hexagonal Architecture）/端口适配器模式</strong>：把业务核心逻辑放在一个不依赖任何具体框架的内核里，框架特定的代码全部收缩到「适配器」层。</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph Core["业务核心（框架无关）"]
@@ -8403,11 +8401,9 @@
 <li><strong>评测标准放在核心层</strong>：评测指标、Golden Dataset 应该独立于任何框架的 Trace 格式存在（比如用普通的输入输出对存成结构化文件），这样即使换了编排框架，历史积累的评测能力依然可以复用；</li>
 <li><strong>编排逻辑允许适配器层有差异</strong>：不强求「一套编排代码到处跑」，而是明确接受「编排细节是框架特定的，核心业务规则和评测标准才是需要跨框架保护的资产」。</li>
 </ul>
-<blockquote>
-<p><strong>这不是说所有项目都必须一开始就搭一层完整的适配器架构</strong>——对于短生命周期、试验性质的项目，直接绑定单一框架反而效率更高。适配器架构的投入应该和「这个系统预期的生命周期」以及「未来更换框架的概率」成正比,过度设计同样是一种成本。</p>
-</blockquote>
+<p>这并不意味着所有项目都该从一开始就搭完整的适配器层。对于短生命周期、试验性质的项目，直接绑定单一框架通常更高效。适配器架构的投入应该和系统预期生命周期、未来更换框架的概率一起评估，过度设计同样是一种成本。</p>
 <h2 id="233">23.3 框架选型决策流程<a class="headerlink" href="#233" title="Permanent link">&para;</a></h2>
-<p>结合本主题前 22 章的内容，选型可以归纳成一个决策流程：</p>
+<p>结合前面的分析，选型可以归纳成一个决策流程：</p>
 <pre class="mermaid"><code>flowchart TB
     Q1{"团队技术栈是否强制约束&lt;br/&gt;（如企业只用 .NET）？"}
     Q1 --&gt;|"是"| SK["优先评估 Semantic Kernel"]
@@ -8423,9 +8419,7 @@
     Q5{"Prompt 有明确评估指标，&lt;br/&gt;且需要跨模型迁移？"}
     LC -.可选叠加.-&gt; Q5
     Q5 --&gt;|"是"| DS["叠加评估 DSPy 做子任务编译优化"]</code></pre>
-<blockquote>
-<p><strong>这张图不是唯一正确答案，而是一种把本主题讨论过的判断标准串起来的方式</strong>——真实项目往往需要同时满足多个条件（比如既要长时间运行又要多智能体协作），这种情况下常见的做法是<strong>组合而非二选一</strong>：用 LangGraph 做整体状态编排，某个节点内部再调用 AutoGen 或 CrewAI 完成一段多智能体协作子任务，正如 <a href="../../01-langchain/03-ecosystem/07-langchain-vs-llamaindex/">LangChain 生态 · 第七章</a> 已经示范过的「用 Tool 做边界」的组合方式。</p>
-</blockquote>
+<p>这张图不是唯一答案，而是把本主题讨论过的判断标准串成一条路径。真实项目往往需要同时满足多个条件，例如既要长时间运行又要多智能体协作；这种情况下更常见的是<strong>组合而非二选一</strong>：用 LangGraph 做整体状态编排，在某个节点内部再调用 AutoGen 或 CrewAI 完成一段多智能体协作子任务。这和 <a href="../../01-langchain/03-ecosystem/07-langchain-vs-llamaindex/">LangChain 生态 · 第七章</a> 展示的「用 Tool 做边界」是同一种思路。</p>
 <h2 id="234">23.4 迁移策略：从单一框架到可移植架构<a class="headerlink" href="#234" title="Permanent link">&para;</a></h2>
 <p>如果现有系统已经深度绑定某个框架，想要降低 lock-in 或迁移到另一个框架，直接「推倒重写」风险很高。更稳妥的路径借鉴了传统系统迁移里的成熟模式：</p>
 <ol>
@@ -8455,10 +8449,10 @@
 <li><strong>可移植架构的核心是把业务核心（工具定义、评测标准）和框架细节（编排执行引擎）分层</strong>，用适配器隔离框架特定代码，但这层投入应该和系统预期生命周期成正比，不是所有项目都需要；</li>
 <li><strong>框架选型可以归纳成一套决策流程</strong>：先看技术栈约束，再看核心难题是数据还是编排，再看是否需要长时间运行和多智能体协作，真实项目常常需要组合多个框架而不是二选一；</li>
 <li><strong>迁移应该走契约测试 + Strangler Fig 灰度切换的路径</strong>，避免大爆炸式重写，历史状态数据需要单独设计迁移方案；</li>
-<li><strong>贯穿本主题的核心判断始终是同一个</strong>：不要按框架的名字和功能清单做选型决策，而要按状态模型、持久化粒度、工具契约可移植性、评测与可观测性这几个技术维度,结合项目自身的生命周期和团队约束做判断。</li>
+<li><strong>选型时最终仍要回到同一组技术维度</strong>：不要按框架名字和功能清单做决策，而要按状态模型、持久化粒度、工具契约可移植性、评测与可观测性这些维度，结合项目自身的生命周期和团队约束做判断。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：框架选型和迁移不是一次性的「选哪个更好」的决策，而是一套持续的工程纪律——把真正需要长期保护的资产（工具定义、评测标准、业务规则）和框架特定的实现细节分开管理，用灰度迁移代替大爆炸式重写，才能让「换框架」始终是一个可控的工程选项，而不是一场推倒重来的风险。</strong></p>
+<p>长期可移植性依赖于资产分层管理：把工具定义、评测标准和业务规则独立出来，用灰度迁移替代大爆炸式重写，这样更换框架才会是一项可控的工程工作。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

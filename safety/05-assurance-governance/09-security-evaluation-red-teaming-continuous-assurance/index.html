@@ -8448,7 +8448,7 @@
 
 <h1 id="_1">第九章：安全评测、红队与持续保障<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="91">9.1 安全评测为什么不能只是一次性的上线检查<a class="headerlink" href="#91" title="Permanent link">&para;</a></h2>
-<p>前面章节多次提到"某类攻击在标准评测中不可见""对齐是概率性缓解"——这意味着 AI 系统的安全水位不是一次测试能确定的常量，而是随模型版本、Prompt 变化、新工具接入、新越狱手法公开而持续波动的变量。<a href="../../../agent/05-production/15-agent-security/">Agent 安全 15.13</a> 和 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全 20.4</a> 已经给出了单个应用场景下"ASR（攻击成功率）与 Utility（效用）必须成对报告"的评测原则，本章把这个原则扩展为组织级的红队方法论、自动化工具链和持续保障流程。</p>
+<p>前面章节多次提到"某类攻击在标准评测中不可见""对齐是概率性缓解"——这意味着 AI 系统的安全水位不是一次测试能确定的常量，而是随模型版本、Prompt 变化、新工具接入、新越狱手法公开而持续波动的变量。<a href="../../../agent/05-production/15-agent-security/">Agent 安全 15.13</a> 和 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全 20.4</a> 已经给出了单个应用场景下"ASR（攻击成功率）与 Utility（效用）必须成对报告"的评测原则；放到组织里，就得把它变成红队方法论、自动化工具链和持续保障流程。</p>
 <pre class="mermaid"><code>flowchart LR
     A[上线前红队] --&gt; B[持续自动化评测]
     B --&gt; C[生产监控与事件响应]
@@ -8584,9 +8584,6 @@
 <li>CI 安全门禁、分级评测集和生产监控闭环应把安全评测嵌入日常研发流程，模型版本变更必须触发完整回归；</li>
 <li>指标体系除 ASR/Utility 外，还应跟踪 MTTD/MTTR、护栏误报率、攻击面覆盖广度和红队问题修复 SLA 达成率。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：安全评测的价值不在于产出一份"通过"的报告，而在于把红队发现、自动化回归和生产监控串成一个持续运转的闭环，跟上模型和攻击手法本身的变化速度。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI RMF: Measure Function</a></li>

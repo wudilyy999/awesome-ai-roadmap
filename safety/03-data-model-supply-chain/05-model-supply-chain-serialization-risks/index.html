@@ -8465,7 +8465,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>关于「远程自定义代码」的特别提醒</strong>：部分模型仓库允许模型附带自定义 Python 代码（用于自定义架构或 Tokenizer 逻辑），加载时如果开启了信任远程代码的选项，这段代码会被直接执行——这本质上和执行任意脚本没有区别，应仅对来源明确、经过审查的模型开启，且应在隔离环境中首次执行。</p>
+<p><strong>关于「远程自定义代码」的特别提醒</strong>：部分模型仓库允许模型附带自定义 Python 代码（用于自定义架构或 Tokenizer 逻辑），加载时如果开启了信任远程代码的选项，这段代码会被直接执行——这和执行任意脚本没有区别，应仅对来源明确、经过审查的模型开启，且应在隔离环境中首次执行。</p>
 <h2 id="55-ml-bom">5.5 出处、签名与 ML-BOM<a class="headerlink" href="#55-ml-bom" title="Permanent link">&para;</a></h2>
 <p>供应链治理的核心手段是让「这份工件从哪来、经过了谁的手、内容是否被篡改」变得可验证，而不是依赖信任。</p>
 <table>
@@ -8524,9 +8524,6 @@
 <li>「信任远程自定义代码」选项等同于执行任意脚本，默认应关闭；</li>
 <li>模型签名、ML-BOM、模型卡和可复现构建是让供应链可验证、可审计的核心手段，为第十章的治理与审计提供基础物料。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：模型文件不是"安全的机器学习产物"，而是需要供应链治理的可执行工件——来源要可验证，格式要不可执行任意代码，版本要锁定且可追溯。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://genai.owasp.org/llmrisk/llm03-supply-chain/">OWASP LLM03:2025 Supply Chain Vulnerabilities</a></li>

@@ -5335,11 +5335,11 @@
         <li class="md-nav__item">
   <a href="#21-chain" class="md-nav__link">
     <span class="md-ellipsis">
-      2.1 为什么需要 Chain
+      2.1 Chain 解决什么问题
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2.1 为什么需要 Chain">
+    <nav class="md-nav" aria-label="2.1 Chain 解决什么问题">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -5378,7 +5378,7 @@
           <li class="md-nav__item">
   <a href="#221" class="md-nav__link">
     <span class="md-ellipsis">
-      2.2.1 更准确的理解
+      2.2.1 更准确地说
     </span>
   </a>
   
@@ -5387,7 +5387,7 @@
           <li class="md-nav__item">
   <a href="#222-chain-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      2.2.2 这也解释了 Chain 和 Agent 最容易混淆的地方
+      2.2.2 Chain 与 Agent 的分界
     </span>
   </a>
   
@@ -5420,7 +5420,7 @@
           <li class="md-nav__item">
   <a href="#232-runnable" class="md-nav__link">
     <span class="md-ellipsis">
-      2.3.2 最巧妙的一点：组合后的结果仍然是 Runnable
+      2.3.2 组合后的结果仍然是 Runnable
     </span>
   </a>
   
@@ -5462,7 +5462,7 @@
           <li class="md-nav__item">
   <a href="#242" class="md-nav__link">
     <span class="md-ellipsis">
-      2.4.2 一个容易说得太满的细节
+      2.4.2 流式能力的限制
     </span>
   </a>
   
@@ -5494,11 +5494,11 @@
         <li class="md-nav__item">
   <a href="#27-chain" class="md-nav__link">
     <span class="md-ellipsis">
-      2.7 为什么弃用旧式 Chain
+      2.7 旧式 Chain 为什么被弃用
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2.7 为什么弃用旧式 Chain">
+    <nav class="md-nav" aria-label="2.7 旧式 Chain 为什么被弃用">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8451,11 +8451,11 @@
         <li class="md-nav__item">
   <a href="#21-chain" class="md-nav__link">
     <span class="md-ellipsis">
-      2.1 为什么需要 Chain
+      2.1 Chain 解决什么问题
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2.1 为什么需要 Chain">
+    <nav class="md-nav" aria-label="2.1 Chain 解决什么问题">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8494,7 +8494,7 @@
           <li class="md-nav__item">
   <a href="#221" class="md-nav__link">
     <span class="md-ellipsis">
-      2.2.1 更准确的理解
+      2.2.1 更准确地说
     </span>
   </a>
   
@@ -8503,7 +8503,7 @@
           <li class="md-nav__item">
   <a href="#222-chain-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      2.2.2 这也解释了 Chain 和 Agent 最容易混淆的地方
+      2.2.2 Chain 与 Agent 的分界
     </span>
   </a>
   
@@ -8536,7 +8536,7 @@
           <li class="md-nav__item">
   <a href="#232-runnable" class="md-nav__link">
     <span class="md-ellipsis">
-      2.3.2 最巧妙的一点：组合后的结果仍然是 Runnable
+      2.3.2 组合后的结果仍然是 Runnable
     </span>
   </a>
   
@@ -8578,7 +8578,7 @@
           <li class="md-nav__item">
   <a href="#242" class="md-nav__link">
     <span class="md-ellipsis">
-      2.4.2 一个容易说得太满的细节
+      2.4.2 流式能力的限制
     </span>
   </a>
   
@@ -8610,11 +8610,11 @@
         <li class="md-nav__item">
   <a href="#27-chain" class="md-nav__link">
     <span class="md-ellipsis">
-      2.7 为什么弃用旧式 Chain
+      2.7 旧式 Chain 为什么被弃用
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2.7 为什么弃用旧式 Chain">
+    <nav class="md-nav" aria-label="2.7 旧式 Chain 为什么被弃用">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8788,8 +8788,8 @@
 
 
 <h1 id="chain-lcel">第二章：Chain 的设计理念与 LCEL<a class="headerlink" href="#chain-lcel" title="Permanent link">&para;</a></h1>
-<h2 id="21-chain">2.1 为什么需要 Chain<a class="headerlink" href="#21-chain" title="Permanent link">&para;</a></h2>
-<p>假设做一个最简单的商品评价分类功能。完整过程<strong>不是只调用一次模型</strong>，而是：</p>
+<h2 id="21-chain">2.1 Chain 解决什么问题<a class="headerlink" href="#21-chain" title="Permanent link">&para;</a></h2>
+<p>以最简单的商品评价分类为例。完整过程<strong>不是只调用一次模型</strong>，而是：</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>清洗用户输入 → 把变量填进 Prompt → 调用模型 → 把返回的消息解析成业务需要的字符串
 </span></code></pre></div>
 <h3 id="211">2.1.1 全部手写会遇到什么<a class="headerlink" href="#211" title="Permanent link">&para;</a></h3>
@@ -8798,10 +8798,7 @@
 <li>同步调用写一套，异步调用再写一套；</li>
 <li>想加流式输出、批处理、重试和链路追踪，<strong>又得分别改造每一步</strong>。</li>
 </ul>
-<p><strong>步骤只有三个时还能忍</strong>，等流程变成「问题改写 → 检索 → 文档整理 → Prompt → 模型 → 结构化解析」：</p>
-<blockquote>
-<p><strong>维护起来就像拿很多根散落的电线临时接出一台机器——每加一个零件，都要重新确认接口能不能接上。</strong></p>
-</blockquote>
+<p>步骤只有三个时还能手写维护；等流程变成「问题改写 → 检索 → 文档整理 → Prompt → 模型 → 结构化解析」，接口转换、中间结果搬运和错误处理就会快速散落在各个步骤里。</p>
 <h3 id="212-chain">2.1.2 Chain 的两个视角<a class="headerlink" href="#212-chain" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8821,10 +8818,9 @@
 </tr>
 </tbody>
 </table>
-<p><strong>它先让每个零件暴露相对统一的插口，再把它们按数据流接成一台完整机器。</strong> 调用方不用逐个驱动内部步骤，只需要给整条链输入、从整条链拿输出。</p>
+<p><strong>它先把各个零件收拢到统一调用协议，再按数据流接成完整任务。</strong> 调用方不用逐个驱动内部步骤，只需要给整条链输入、从整条链拿输出。</p>
 <h2 id="22-chain">2.2 Chain 只能线性执行吗<a class="headerlink" href="#22-chain" title="Permanent link">&para;</a></h2>
-<p>看到 Chain 这个词，很自然会把它理解成从左到右的一根直线。<strong>这个直觉只对了一半。</strong></p>
-<p>最简单的 Chain 确实是线性的：</p>
+<p>Chain 常被理解成从左到右的一根直线。最简单的 Chain 确实如此：</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>用户输入 → Prompt 模板 → Chat Model → 输出解析器 → 字符串答案
 </span></code></pre></div>
 <p><strong>但真实应用还可能出现并行分支和条件分支</strong>：</p>
@@ -8836,12 +8832,12 @@
     M --&gt; L["模型"]
 
     style M fill:#e8f0fe</code></pre>
-<h3 id="221">2.2.1 更准确的理解<a class="headerlink" href="#221" title="Permanent link">&para;</a></h3>
+<h3 id="221">2.2.1 更准确地说<a class="headerlink" href="#221" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p><strong>Chain 描述了一张事先确定好的数据流图。</strong> 节点负责处理数据，连接关系决定数据往哪里走。</p>
 <p><strong>即使某个节点内部调用了结果不确定的 LLM，流程拓扑本身仍然是开发者提前写好的。</strong></p>
 </blockquote>
-<h3 id="222-chain-agent">2.2.2 这也解释了 Chain 和 Agent 最容易混淆的地方<a class="headerlink" href="#222-chain-agent" title="Permanent link">&para;</a></h3>
+<h3 id="222-chain-agent">2.2.2 Chain 与 Agent 的分界<a class="headerlink" href="#222-chain-agent" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -8861,11 +8857,7 @@
 </tbody>
 </table>
 <h2 id="23-runnable">2.3 Runnable 解决了什么<a class="headerlink" href="#23-runnable" title="Permanent link">&para;</a></h2>
-<p><strong>关键问题</strong>：Prompt、模型、检索器和解析器明明不是同一种东西，为什么能接在一起？</p>
-<p><strong>答案是 Runnable。</strong></p>
-<blockquote>
-<p><strong>可以把 Runnable 想成 LangChain 给不同组件定的一份「电器插头标准」。</strong> 组件内部怎么工作可以不同，但只要遵守这份标准，就能被统一调用，也能继续和其他组件组合。</p>
-</blockquote>
+<p>Prompt、模型、检索器和解析器之所以能接在一起，是因为它们都实现了 Runnable。Runnable 是 LangChain 的统一调用协议：组件内部实现可以不同，只要遵守这套协议，就能被统一调用，也能继续和其他组件组合。</p>
 <h3 id="231">2.3.1 统一的执行接口<a class="headerlink" href="#231" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8890,11 +8882,8 @@
 </tbody>
 </table>
 <p>执行方式统一之后，<code>with_config</code>、<code>with_retry</code>、<code>with_fallbacks</code> 才能在同一抽象上附加配置、重试和降级能力。</p>
-<h3 id="232-runnable">2.3.2 最巧妙的一点：组合后的结果仍然是 Runnable<a class="headerlink" href="#232-runnable" title="Permanent link">&para;</a></h3>
-<blockquote>
-<p><strong>两个组件接成一条小链后，这条小链又可以作为一个普通步骤接到更大的链里。</strong></p>
-<p>就像乐高——两个小块拼成一辆小车，小车还可以继续成为整座城市的一部分。</p>
-</blockquote>
+<h3 id="232-runnable">2.3.2 组合后的结果仍然是 Runnable<a class="headerlink" href="#232-runnable" title="Permanent link">&para;</a></h3>
+<p>两个组件接成一条小链后，这条小链还可以继续接到更大的链里。因此可以先封装局部流程，再把它挂到更大的数据流上。</p>
 <p>Runnable 还暴露<strong>输入、输出和配置的 schema</strong>，并允许通过 config 携带标签、元数据。这些能力让框架更容易检查数据契约，也方便 LangSmith 之类的追踪系统识别整条调用链里的<strong>父子运行关系</strong>。</p>
 <h3 id="233-runnable">2.3.3 但别把 Runnable 理解成魔法<a class="headerlink" href="#233-runnable" title="Permanent link">&para;</a></h3>
 <p><strong>前一个步骤输出什么类型，后一个步骤就必须能够接住什么类型。</strong></p>
@@ -8923,7 +8912,7 @@
 <p><strong>类型接不上，链照样会在运行时报错。</strong></p>
 <h2 id="24-lcel">2.4 LCEL 不只是语法糖<a class="headerlink" href="#24-lcel" title="Permanent link">&para;</a></h2>
 <p>LCEL 全称 <strong>LangChain Expression Language</strong>，最显眼的写法是用 <code>|</code> 把 Runnable 接起来。</p>
-<p><strong>为什么一个符号值得单独起名字？</strong> 因为这不是普通的 Python 管道：</p>
+<p>这里的 <code>|</code> 不是普通的 Python 管道：</p>
 <blockquote>
 <p><code>prompt | model | parser</code> <strong>声明的是三个 Runnable 的组合关系</strong>，LangChain 会据此构造一个 <code>RunnableSequence</code>。在这个序列里，前一步的输出会作为后一步的输入。</p>
 </blockquote>
@@ -8951,14 +8940,10 @@
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="p">})</span>
 </span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </span></code></pre></div>
-<blockquote>
-<p><strong>关键：<code>chain</code> 不是执行结果，而是一份已经组装好的「可执行流程」。</strong> 只有调用 <code>invoke</code> 时，数据才真正从左向右流动。</p>
-</blockquote>
+<p>这里的 <code>chain</code> 不是执行结果，而是一份已经组装好的「可执行流程」。只有调用 <code>invoke</code> 时，数据才真正从左向右流动。</p>
 <p><strong>要异步不用重写内部流程</strong>，改成 <code>await chain.ainvoke(...)</code>；批量用 <code>chain.batch([...])</code>；流式遍历 <code>chain.stream(...)</code>。</p>
-<blockquote>
-<p><strong>这种统一执行方式，才是 LCEL 比手写函数嵌套更有价值的地方。</strong></p>
-</blockquote>
-<h3 id="242">2.4.2 一个容易说得太满的细节<a class="headerlink" href="#242" title="Permanent link">&para;</a></h3>
+<p>LCEL 的价值在于流程只组装一次，后续可以用同一套接口执行同步、异步、批量和流式调用。</p>
+<h3 id="242">2.4.2 流式能力的限制<a class="headerlink" href="#242" title="Permanent link">&para;</a></h3>
 <p><code>RunnableSequence</code> 会<strong>尽量</strong>保留各组件的流式能力，<strong>但如果中间某个组件不支持流式转换，输出就要等它完成后才能继续流出</strong>。</p>
 <p>例如普通 <code>RunnableLambda</code> 默认不实现流式转换，<strong>放错位置就可能推迟首个输出块</strong>。</p>
 <h2 id="25">2.5 并行与汇合<a class="headerlink" href="#25" title="Permanent link">&para;</a></h2>
@@ -8999,11 +8984,9 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>在 LCEL 里字典也可以在组合上下文中被自动转换为 <code>RunnableParallel</code>。</strong> 但讲原理时建议<strong>先说清楚显式类名，再补充字典简写</strong>——这样才能证明你知道背后真正生成了什么，而不是只记住了一个看起来很酷的写法。</p>
-</blockquote>
+<p>在 LCEL 里，字典也可以在组合上下文中被自动转换为 <code>RunnableParallel</code>。显式写出类名时，执行模型会更直观。</p>
 <h2 id="26">2.6 为什么统一协议能不断扩展<a class="headerlink" href="#26" title="Permanent link">&para;</a></h2>
-<p>只说「方便串起来」还不够。<strong>真正值得理解的是：一套统一协议如何让小流程逐渐长成大流程。</strong></p>
+<p>统一协议的价值不只在「方便串起来」，还在于它让流程可以逐步扩展：</p>
 <pre class="mermaid"><code>flowchart TB
     A["① 可组合&lt;br/&gt;每个步骤只处理自己的输入输出&lt;br/&gt;小链可以继续组成大链&lt;br/&gt;换掉某个模型/解析器/检索器&lt;br/&gt;不必推翻整条业务流程"]
     A --&gt; B["② 执行方式统一&lt;br/&gt;单次、异步、批量、流式收拢到统一接口&lt;br/&gt;组合后的流程才有机会继承这些能力"]
@@ -9012,14 +8995,12 @@
     D --&gt; E["生产排查时看到的不再只是最终报错&lt;br/&gt;而是这次运行究竟经过了哪些子步骤"]
 
     style E fill:#e6f4ea</code></pre>
-<blockquote>
-<p><strong>注意第二步的 caveat</strong>：接口统一只代表调用方式一致，<strong>最终效果仍取决于内部组件是否真正支持对应模式</strong>。</p>
-</blockquote>
-<h2 id="27-chain">2.7 为什么弃用旧式 Chain<a class="headerlink" href="#27-chain" title="Permanent link">&para;</a></h2>
-<p><strong>这是版本坑最集中的地方。</strong></p>
+<p>这里的限制也要一并看到：接口统一只代表调用方式一致，<strong>最终效果仍取决于内部组件是否真正支持对应模式</strong>。</p>
+<h2 id="27-chain">2.7 旧式 Chain 为什么被弃用<a class="headerlink" href="#27-chain" title="Permanent link">&para;</a></h2>
+<p>这是版本迁移里最常见的混淆点。</p>
 <h3 id="271-chain">2.7.1 旧式 Chain 的问题<a class="headerlink" href="#271-chain" title="Permanent link">&para;</a></h3>
 <p>早期 LangChain 提供大量<strong>面向具体场景的类</strong>：<code>LLMChain</code> 封装 Prompt 加模型，<code>SequentialChain</code> 把多条旧式 Chain 顺序连接。它们在老项目和老教程里非常常见，<strong>所以很多人会误以为这就是今天的标准答案</strong>。</p>
-<p><strong>框架后来遇到的问题是</strong>：</p>
+<p>问题在于：</p>
 <blockquote>
 <p>专用 Chain 类越来越多，<strong>每个类的输入字段、返回结构和扩展方式不完全一致</strong>。开发者既要记住大量类名，又很难把它们自由拼装。</p>
 </blockquote>
@@ -9033,7 +9014,7 @@
 </blockquote>
 <p><strong>正确的态度</strong>：看到老代码里的 <code>LLMChain</code> 要能读懂它过去解决了什么问题；写新代码时优先用 Runnable 与 LCEL。</p>
 <h2 id="28">2.8 三种编排方式怎么选<a class="headerlink" href="#28" title="Permanent link">&para;</a></h2>
-<p><strong>Chain 好用，是不是所有流程都该塞进一条超长 LCEL？当然不是。</strong></p>
+<p>Chain 适合固定数据流，不适合把所有流程都塞进一条超长 LCEL。</p>
 <pre class="mermaid"><code>flowchart TB
     Q1{"开发前就知道&lt;br/&gt;下一步去哪里?"}
     Q1 --&gt;|是| C["Chain（Runnable + LCEL）&lt;br/&gt;文本清洗、检索增强问答、分类后解析&lt;br/&gt;结构直接、调用统一、容易追踪"]
@@ -9044,10 +9025,8 @@
     style C fill:#e6f4ea
     style A fill:#e8f0fe
     style G fill:#fff3cd</code></pre>
-<blockquote>
-<p><strong>一个简洁的判断方法</strong>：开发前就知道下一步去哪，优先 Chain；运行时要由模型决定下一步，考虑 Agent；流程需要显式状态图和恢复能力，考虑 LangGraph。</p>
-<p><strong>LangGraph 不是为了取代每一条简单 Chain</strong>，而是处理 Chain 难以清楚表达的长时、有状态工作流。</p>
-</blockquote>
+<p>开发前就知道下一步去哪时，优先 Chain；运行时要由模型决定下一步时，考虑 Agent；流程需要显式状态图和恢复能力时，考虑 LangGraph。</p>
+<p>LangGraph 不是为了取代每一条简单 Chain，而是处理 Chain 难以清楚表达的长时、有状态工作流。</p>
 <h2 id="29">2.9 常见错误<a class="headerlink" href="#29" title="Permanent link">&para;</a></h2>
 <h3 id="291-chain-llm">2.9.1 把 Chain 缩小成「一次 LLM 调用」<a class="headerlink" href="#291-chain-llm" title="Permanent link">&para;</a></h3>
 <p><strong>一次模型调用只能算流程中的一个节点。</strong></p>
@@ -9070,7 +9049,7 @@
 <li><strong>Chain 解决的是胶水逻辑爆炸</strong>：类型不匹配、同步异步各写一套、横切能力要逐步改造；</li>
 <li><strong>它是确定性的数据流编排</strong>——事先确定好的数据流图，节点处理数据、连接决定走向；</li>
 <li><strong>Chain 与 Agent 的分界是「谁决定下一步」</strong>：开发者 vs 模型；</li>
-<li><strong>Runnable 是组件的统一插头标准</strong>，收拢了 invoke / batch / stream 及其异步版本；</li>
+<li><strong>Runnable 提供统一调用协议</strong>，收拢了 invoke / batch / stream 及其异步版本；</li>
 <li><strong>组合后的结果仍是 Runnable</strong>，所以小链能继续嵌进大链；</li>
 <li><strong>但类型必须接得上</strong>，Runnable 不是魔法；</li>
 <li><strong>LCEL 的 <code>|</code> 声明的是组合关系</strong>，生成 <code>RunnableSequence</code>，<code>chain</code> 是流程不是结果；</li>
@@ -9080,9 +9059,7 @@
 <li><strong>旧式 Chain 被移入 <code>langchain-classic</code></strong>，方向是从「专用类」转向「少量统一原语自由组合」；</li>
 <li><strong>三层选型</strong>：固定数据流用 Chain，动态工具决策用 <code>create_agent</code>，有状态长流程用 LangGraph。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Chain 的本质不是「把 Prompt 和模型串起来」，而是给所有组件定一份统一插头标准，让固定数据流可以被声明、被组合、被统一执行，并顺带继承重试、流式和追踪这些横切能力。</strong></p>
-</blockquote>
+<p>可以把 Chain 理解为一套统一调用协议：它让固定数据流能够被声明、组合和统一执行，并附着重试、流式和追踪等横切能力。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain 官方文档</a></li>

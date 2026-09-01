@@ -8592,7 +8592,7 @@
 
 <h1 id="a2a">第十一章：A2A 协议<a class="headerlink" href="#a2a" title="Permanent link">&para;</a></h1>
 <h2 id="111-agent">11.1 单个 Agent 的三个天花板<a class="headerlink" href="#111-agent" title="Permanent link">&para;</a></h2>
-<p>一个 Agent 的本质是 <strong>一个 LLM + 一组工具 + 一段上下文窗口</strong>。这三个维度各有上限：</p>
+<p>一个 Agent 可以近似看成 <strong>一个 LLM + 一组工具 + 一段上下文窗口</strong>。这三个维度各有上限：</p>
 <table>
 <thead>
 <tr>
@@ -8641,7 +8641,7 @@
 <p>调度 Agent 的上下文里只多了一份摘要，而不是几十个网页原文。<strong>这就是多 Agent 协作在上下文层面的核心收益：把调研过程的上下文压力隔离在专业 Agent 内部。</strong></p>
 <h2 id="112-agent">11.2 基础问题：Agent 之间怎么互相认识<a class="headerlink" href="#112-agent" title="Permanent link">&para;</a></h2>
 <p>Agent A 要把任务委托给 Agent B，前提是它得知道 B 能做什么。</p>
-<p><strong>最笨的方案</strong>是写死配置：A 的代码里硬编码「B 可以做竞品分析」。B 的能力一变，A 的代码就得改，完全没法维护。</p>
+<p>最直接但也最难维护的方案，是把配置写死：A 的代码里硬编码「B 可以做竞品分析」。B 的能力一变，A 的代码就得改。</p>
 <p><strong>A2A 的方案</strong>是让 B 主动「发名片」——<strong>Agent Card</strong>。</p>
 <h3 id="1121-agent-card">11.2.1 Agent Card<a class="headerlink" href="#1121-agent-card" title="Permanent link">&para;</a></h3>
 <p>Agent Card 是 JSON 能力声明。部署可通过配置、目录或 <code>/.well-known/agent-card.json</code> 等发现约定取得它；调用方应使用已知或可信的 Card URL，而非把任意网络位置自动视为可信。</p>
@@ -8670,7 +8670,7 @@
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>名片里最关键的是 <strong>skills 列表</strong>。调度 Agent 靠这些描述做路由决策——「这个任务和哪个 Agent 的哪个 skill 最匹配」。</p>
-<p>这和 <a href="../../01-function-calling/03-tool-schema-design/">工具的 description</a> 起的作用完全一致：<strong>都是在被选择的那一刻，对方唯一能看到的信息</strong>。写得含糊，这个 Agent 就永远不会被派到活。</p>
+<p>这和 <a href="../../01-function-calling/03-tool-schema-design/">工具的 description</a> 起的作用完全一致：<strong>都是在被选择的那一刻，对方唯一能看到的信息</strong>。写得含糊，这个 Agent 就很难被正确路由到任务。</p>
 <blockquote>
 <p>注意这里的 <code>skills</code> 和 <a href="../../03-skills/08-what-is-skill/">第八章</a> 讲的 Agent Skill <strong>不是一回事</strong>。A2A 的 skill 是「对外声明的能力条目」，Agent Skill 是「Agent 内部的流程知识模块」。名字撞车，层次完全不同。</p>
 </blockquote>
@@ -8846,11 +8846,11 @@
 <p>判断依据是：<strong>这个委托更像「调一次接口」还是「派一个活」</strong>。</p>
 <h2 id="117">11.7 常见错误<a class="headerlink" href="#117" title="Permanent link">&para;</a></h2>
 <h3 id="1171-a2a-mcp">11.7.1 把 A2A 当成 MCP 的竞品<a class="headerlink" href="#1171-a2a-mcp" title="Permanent link">&para;</a></h3>
-<p>这是这道题最大的雷。两者面向的对象完全不同——一个连工具，一个连 Agent。它们互补且常常同时使用。</p>
+<p>这是最容易混淆的点。两者面向的对象完全不同——一个连工具，一个连 Agent。它们互补，而且经常同时出现。</p>
 <h3 id="1172-a2a-http-api">11.7.2 只把 A2A 当成一种 HTTP API<a class="headerlink" href="#1172-a2a-http-api" title="Permanent link">&para;</a></h3>
 <p>A2A 定义的是跨实现共享的数据模型、任务生命周期、发现和安全语义，不只是一组 HTTP endpoint。v1.0 提供 JSON-RPC、HTTP/REST、gRPC 和 custom binding；SSE 是相应 binding 的流式承载方式，WebSocket/WebRTC 不属于核心 binding。</p>
 <h3 id="1173-task">11.7.3 忽略 Task 状态机的设计动机<a class="headerlink" href="#1173-task" title="Permanent link">&para;</a></h3>
-<p>状态机不是为了好看，是因为 A2A 专为<strong>长时间异步任务</strong>设计。同步阻塞的场景根本不需要这么复杂的状态管理。</p>
+<p>状态机不是为了把协议做得完整好看，而是因为 A2A 专门面向<strong>长时间异步任务</strong>。如果调用天然就是同步阻塞，确实用不上这么细的状态管理。</p>
 <h3 id="1174-a2a-skill-agent-skill">11.7.4 把 A2A 的 skill 和 Agent Skill 混为一谈<a class="headerlink" href="#1174-a2a-skill-agent-skill" title="Permanent link">&para;</a></h3>
 <p>名字撞车但层次不同：A2A 的 skill 是对外的能力声明条目，Agent Skill 是 Agent 内部的流程知识模块。</p>
 <h3 id="1175-a2a-a2a">11.7.5 认为有了 A2A 就必须用 A2A<a class="headerlink" href="#1175-a2a-a2a" title="Permanent link">&para;</a></h3>
@@ -8869,7 +8869,7 @@
 <li><strong>不是所有多 Agent 系统都需要 A2A</strong>，单进程内协作用共享状态更简单，A2A 面向跨团队跨部署的场景。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：MCP 让 Agent 有工具箱，A2A 让 Agent 有同事——前者是纵向的能力接入，后者是横向的任务交接。</strong></p>
+<p><strong>可以把它理解成：MCP 负责给 Agent 接工具，A2A 负责让 Agent 之间交接任务；一个管纵向能力，一个管横向协作。</strong></p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

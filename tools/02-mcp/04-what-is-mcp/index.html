@@ -8604,7 +8604,7 @@
 
 <h1 id="mcp">第四章：MCP 模型上下文协议的核心内容<a class="headerlink" href="#mcp" title="Permanent link">&para;</a></h1>
 <h2 id="41-mcp-function-calling">4.1 MCP 解决的不是 Function Calling 解决的问题<a class="headerlink" href="#41-mcp-function-calling" title="Permanent link">&para;</a></h2>
-<p>先把边界划清楚，这是理解 MCP 的前提。</p>
+<p>MCP 要先和 Function Calling 分开看。</p>
 <p><a href="../../01-function-calling/01-function-calling/">Function Calling</a> 解决的是「<strong>模型怎么表达调用意图</strong>」——一个模型层的输出格式约定。</p>
 <p>MCP 解决的是完全不同的一组问题：</p>
 <ul>
@@ -8613,7 +8613,7 @@
 <li>同一个工具，<strong>能不能被不同的 AI 应用复用</strong>？</li>
 <li>工具变更了，<strong>接入方要不要改代码</strong>？</li>
 </ul>
-<p>一句话：</p>
+<p>边界可以概括成：</p>
 <blockquote>
 <p><strong>Function Calling 是一种常见的模型—应用接口；MCP 是 Host/Client—Server 的开放协议。二者可在同一应用中配合，但 MCP 本身不规定、更不必然依赖某家模型的 Function Calling。</strong></p>
 </blockquote>
@@ -8849,9 +8849,6 @@
 <li><strong>版本语义发生过结构性变化</strong>：当前版本按请求携带版本与能力，旧初始化/会话模型只在兼容路径出现；</li>
 <li><strong>生态起飞靠两点</strong>：SDK 让实现成本降到 30 行，头部工具第一时间提供官方 Server。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：MCP 是 AI 工具生态的 USB 标准，它不改变模型怎么调工具，改变的是工具怎么被接进来。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://modelcontextprotocol.io/docs/getting-started/intro">Model Context Protocol 官方文档</a></li>

@@ -8451,7 +8451,7 @@
 
 <h1 id="_1">第二十三章：多模态模型<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="231-prompt">23.1 多模态不是“把图片塞进 Prompt”<a class="headerlink" href="#231-prompt" title="Permanent link">&para;</a></h2>
-<p>多模态模型将图像、音频或视频编码成可与文本模型交互的表示，再生成文本、结构化结果或其他模态。核心问题是：不同采样率、长度和结构的信号，如何映射到共同的语义空间，同时保留任务所需细节。</p>
+<p>多模态模型将图像、音频或视频编码成可与文本模型交互的表示，再生成文本、结构化结果或其他模态。难点在于：不同采样率、长度和结构的信号，如何映射到共同的语义空间，同时保留任务所需细节。</p>
 <table>
 <thead>
 <tr>
@@ -8584,7 +8584,7 @@ p(y\mid x_m,x_t)=\mathrm{LLM}(h,x_t)
 <li>评测应拆分感知、推理、可靠性、鲁棒性和安全。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：多模态模型的关键不是“能收文件”，而是用合适表示和 connector 保留证据、控制序列成本，并在训练、评测和安全上分别验证感知、推理与行动边界。</strong></p>
+<p>多模态落地要同时回答三件事：证据怎么保留下来、序列成本怎么控住、感知和行动边界怎么分别验证。</p>
 </blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>

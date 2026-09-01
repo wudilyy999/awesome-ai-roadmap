@@ -2790,9 +2790,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#1252" class="md-nav__link">
+  <a href="#1252-sse" class="md-nav__link">
     <span class="md-ellipsis">
-      12.5.2 一个重要澄清
+      12.5.2 SSE 还在，只是端点合并了
     </span>
   </a>
   
@@ -8511,9 +8511,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#1252" class="md-nav__link">
+  <a href="#1252-sse" class="md-nav__link">
     <span class="md-ellipsis">
-      12.5.2 一个重要澄清
+      12.5.2 SSE 还在，只是端点合并了
     </span>
   </a>
   
@@ -8646,7 +8646,7 @@
 
 <h1 id="mcp">第十二章：MCP 的传输层<a class="headerlink" href="#mcp" title="Permanent link">&para;</a></h1>
 <h2 id="121">12.1 传输方式与消息格式是解耦的<a class="headerlink" href="#121" title="Permanent link">&para;</a></h2>
-<p>这是理解 MCP 通信最重要的一句话。</p>
+<p>先把消息格式和传输方式分开看：</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph MSG["消息层 · 不变"]
         J["JSON-RPC 2.0&lt;br/&gt;method / params / id / result / error"]
@@ -8668,7 +8668,7 @@
 <p>当前 MCP 标准传输是 stdio 与 Streamable HTTP。<strong>WebSocket 不是标准传输</strong>，但规范允许 Client 与 Server 以可插拔方式实现自定义传输；双方明确协商并正确承载 UTF-8 JSON-RPC 时，可以选择 WebSocket。不能把它误称为标准 MCP transport 或假定所有客户端兼容。</p>
 <h2 id="122-json-rpc-20">12.2 消息格式：JSON-RPC 2.0<a class="headerlink" href="#122-json-rpc-20" title="Permanent link">&para;</a></h2>
 <h3 id="1221">12.2.1 为什么选它<a class="headerlink" href="#1221" title="Permanent link">&para;</a></h3>
-<p>原因很朴素：MCP 需要的通信模式就是「Client 调用 Server 的方法，Server 返回结果」——这本质上是<strong>远程过程调用（RPC）</strong>。</p>
+<p>原因很朴素：MCP 需要的就是「Client 调用 Server 的方法，Server 返回结果」这类<strong>远程过程调用（RPC）</strong>。</p>
 <p>JSON-RPC 2.0 是现成的、足够轻量的 RPC 规范：JSON 易读易调试，任何语言都能实现。Server 是 Python 写的还是 TypeScript 写的，消息格式完全一样，不需要额外的序列化工具（对比 gRPC 要编译 protobuf、Thrift 要生成 stub）。</p>
 <h3 id="1222">12.2.2 消息长什么样<a class="headerlink" href="#1222" title="Permanent link">&para;</a></h3>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// 请求（Client → Server）</span>
@@ -8712,7 +8712,7 @@
     S-&gt;&gt;OS: 写入 stdout: {"jsonrpc":"2.0","id":1,"result":...}
     OS-&gt;&gt;C: 从 stdout 读出
     Note over C,S: Client 退出时子进程一并终止</code></pre>
-<p>「管道」是什么？可以理解成<strong>操作系统在内存里给两个进程分配的一段先进先出缓冲区</strong>。Client 往里塞一行 JSON，Server 从另一头读出来处理，处理完往另一条管道塞回去。</p>
+<p>这里的「管道」可以理解成<strong>操作系统在内存里给两个进程分配的一段先进先出缓冲区</strong>。Client 往里塞一行 JSON，Server 从另一头读出来处理，处理完往另一条管道塞回去。</p>
 <p>整个过程<strong>不经过网卡、不经过 TCP/IP 协议栈</strong>，数据在 RAM 里走了一趟就到了。</p>
 <h3 id="1232-stdio">12.3.2 stdio 的三个优点<a class="headerlink" href="#1232-stdio" title="Permanent link">&para;</a></h3>
 <table>
@@ -8816,7 +8816,7 @@
 <p>同一个对话被拆成了两条通道，具体问题是<strong>状态管理复杂</strong>：</p>
 <p>Client POST 了一条消息后网络突然断了——<strong>那条消息到底被处理了没？SSE 流会不会推回结果？</strong> Client 没有简单办法判断，排查链路很长。</p>
 <p>而且两条通道对负载均衡器很不友好：POST 和 SSE 长连接可能被路由到不同的后端实例。</p>
-<h3 id="1252">12.5.2 一个重要澄清<a class="headerlink" href="#1252" title="Permanent link">&para;</a></h3>
+<h3 id="1252-sse">12.5.2 SSE 还在，只是端点合并了<a class="headerlink" href="#1252-sse" title="Permanent link">&para;</a></h3>
 <p><strong>Streamable HTTP 并没有抛弃 SSE。</strong></p>
 <p>流式推送的部分底层依然是 SSE（<code>Content-Type: text/event-stream</code>），只是把端点从两个合并成了一个。变的是架构，不是底层技术。</p>
 <h2 id="126">12.6 标准传输与自定义传输<a class="headerlink" href="#126" title="Permanent link">&para;</a></h2>
@@ -8828,7 +8828,7 @@
 <h3 id="1272-http">12.7.2 本地场景想成 HTTP<a class="headerlink" href="#1272-http" title="Permanent link">&para;</a></h3>
 <p>「在本机起个服务，通过 localhost 访问」——想复杂了。stdio 直接走进程管道，不需要网络栈，也不用开端口。</p>
 <h3 id="1273">12.7.3 把消息格式和传输方式混为一谈<a class="headerlink" href="#1273" title="Permanent link">&para;</a></h3>
-<p>这是这道题最关键的加分点。JSON-RPC 2.0 是消息格式，stdio / Streamable HTTP 是传输方式，两者解耦。切换传输不影响上层逻辑。</p>
+<p>消息格式和传输方式不要混在一起。JSON-RPC 2.0 是消息格式，stdio / Streamable HTTP 是传输方式，两者解耦。切换传输不影响上层逻辑。</p>
 <h3 id="1274-streamable-http-sse">12.7.4 认为 Streamable HTTP 抛弃了 SSE<a class="headerlink" href="#1274-streamable-http-sse" title="Permanent link">&para;</a></h3>
 <p>它内部流式推送仍然用 SSE，变的是端点数量（两个合成一个），不是底层技术。</p>
 <h3 id="1275-stdio-stdout">12.7.5 stdio 场景里往 stdout 打日志<a class="headerlink" href="#1275-stdio-stdout" title="Permanent link">&para;</a></h3>
@@ -8846,9 +8846,6 @@
 <li><strong>Streamable HTTP 内部仍用 SSE</strong>，变的是架构不是技术；</li>
 <li><strong>标准 transport 之外可使用 custom transport</strong>；例如 WebSocket 需由双方显式支持，不能冒充通用标准。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：MCP 的消息永远是 JSON-RPC 2.0，变的只是把它送过去的方式——本地靠一根内存管道，远程靠一个能吐 JSON 也能吐流的 HTTP 端点。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/transports">MCP 规范 2026-07-28：Transports</a></li>

@@ -8764,7 +8764,7 @@
 <blockquote>
 <p><strong>模型从来没有「查询失败」这个状态，它永远会输出点什么——因为它的全部使命就是「续写」。</strong></p>
 </blockquote>
-<p><strong>这是幻觉的元根源。</strong> 往下可以拆成三层具体成因。</p>
+<p>模型会幻觉，先要从这里理解：它不会像数据库那样返回「查无此项」，只会继续往下生成。后面的三类成因，都是这个机制在不同环节的放大。</p>
 <h2 id="183">18.3 根因一：训练数据本身就有错<a class="headerlink" href="#183" title="Permanent link">&para;</a></h2>
 <p>训练数据来自互联网语料 + 公开语料 + 书籍 + 代码仓库，TB 级别，里面什么都有：</p>
 <ul>
@@ -8779,7 +8779,7 @@
 <p><strong>但训练数据只是冰山一角——即使数据 100% 正确干净，模型还是会幻觉。</strong></p>
 </blockquote>
 <h2 id="184">18.4 根因二：生成机制是「续写」不是「查询」<a class="headerlink" href="#184" title="Permanent link">&para;</a></h2>
-<p><strong>这是最深的根因，也是最容易问倒人的地方。</strong></p>
+<p>最难处理的是这一层：生成过程不会先判断「知道/不知道」，只会继续选下一个 token。</p>
 <h3 id="1841">18.4.1 模型对「自己知不知道」没有显式信号<a class="headerlink" href="#1841" title="Permanent link">&para;</a></h3>
 <p>你问「鲁迅是谁的笔名？」，模型的处理流程<strong>不是</strong>「查知识库 → 找到周树人 → 输出」，<strong>而是</strong>「在我的参数里，给定这个上下文，下一个 token 最高概率是什么？」</p>
 <ul>
@@ -8958,7 +8958,7 @@
 </table>
 <p><strong>优点是最有效、可观测、可追溯；缺点是引入额外延迟和系统复杂度。对企业级应用几乎是必选项。</strong></p>
 <h2 id="188">18.8 为什么幻觉不可能完全消除<a class="headerlink" href="#188" title="Permanent link">&para;</a></h2>
-<p><strong>回到最开始那句话</strong>：LLM 的本质是按概率续写下一个 token，<strong>这个机制天然就带着「会编」的可能性</strong>。</p>
+<p>原因还是前面那条：LLM 按概率续写下一个 token，<strong>这个机制天然就带着「会编」的可能性</strong>。</p>
 <p>无论怎么对齐、怎么 RAG、怎么核查，<strong>只要模型还是按概率生成的，就一定有概率生成错误内容</strong>。</p>
 <h3 id="1881">18.8.1 现实的工程目标<a class="headerlink" href="#1881" title="Permanent link">&para;</a></h3>
 <table>
@@ -8984,7 +8984,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>能说出「幻觉不可能消除，工程目标是降低发生率 + 让用户识别」，就已经比绝大多数人深刻一个层次。</strong> 这个认知背后是对 LLM 概率本质的理解。</p>
+<p>工程上更实际的目标是：把幻觉率压低，让用户看得出哪些内容需要核查，并在高风险场景加人工复核。</p>
 </blockquote>
 <h2 id="189">18.9 常见错误<a class="headerlink" href="#189" title="Permanent link">&para;</a></h2>
 <h3 id="1891">18.9.1 把幻觉说成「模型出错」<a class="headerlink" href="#1891" title="Permanent link">&para;</a></h3>
@@ -9018,7 +9018,7 @@
 <li><strong>幻觉不可能被彻底消除</strong>，工程目标是降低发生率、让用户能识别、限定高风险场景。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：幻觉不是模型的 bug，而是「按概率续写」这个设计的必然副产物——所以真正的工程问题从来不是怎么消灭它，而是怎么把它压到可接受范围并让用户看得出来。</strong></p>
+<p>幻觉不是一个补丁就能修掉的 bug，更像概率生成系统的长期噪声；工程上要做的是检索、校准和核查，把它控制在业务能承受的范围内。</p>
 </blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>

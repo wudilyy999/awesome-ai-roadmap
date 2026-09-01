@@ -4265,7 +4265,7 @@
         <li class="md-nav__item">
   <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
-      2.1 这道题的常见错法
+      2.1 不要把它当成单选题
     </span>
   </a>
   
@@ -4274,7 +4274,7 @@
         <li class="md-nav__item">
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
-      2.2 三种方案的本质区别
+      2.2 三种方案的区别
     </span>
   </a>
   
@@ -4293,7 +4293,7 @@
           <li class="md-nav__item">
   <a href="#231" class="md-nav__link">
     <span class="md-ellipsis">
-      2.3.1 微调真正擅长的
+      2.3.1 微调更适合什么
     </span>
   </a>
   
@@ -4311,7 +4311,7 @@
           <li class="md-nav__item">
   <a href="#233" class="md-nav__link">
     <span class="md-ellipsis">
-      2.3.3 一个容易答错的点
+      2.3.3 微调可以学知识，但不适合当知识库
     </span>
   </a>
   
@@ -4374,9 +4374,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#26" class="md-nav__link">
+  <a href="#26-top-k" class="md-nav__link">
     <span class="md-ellipsis">
-      2.6 一个必须纠正的常见做法
+      2.6 Top-K 不是越大越好
     </span>
   </a>
   
@@ -8359,7 +8359,7 @@
         <li class="md-nav__item">
   <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
-      2.1 这道题的常见错法
+      2.1 不要把它当成单选题
     </span>
   </a>
   
@@ -8368,7 +8368,7 @@
         <li class="md-nav__item">
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
-      2.2 三种方案的本质区别
+      2.2 三种方案的区别
     </span>
   </a>
   
@@ -8387,7 +8387,7 @@
           <li class="md-nav__item">
   <a href="#231" class="md-nav__link">
     <span class="md-ellipsis">
-      2.3.1 微调真正擅长的
+      2.3.1 微调更适合什么
     </span>
   </a>
   
@@ -8405,7 +8405,7 @@
           <li class="md-nav__item">
   <a href="#233" class="md-nav__link">
     <span class="md-ellipsis">
-      2.3.3 一个容易答错的点
+      2.3.3 微调可以学知识，但不适合当知识库
     </span>
   </a>
   
@@ -8468,9 +8468,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#26" class="md-nav__link">
+  <a href="#26-top-k" class="md-nav__link">
     <span class="md-ellipsis">
-      2.6 一个必须纠正的常见做法
+      2.6 Top-K 不是越大越好
     </span>
   </a>
   
@@ -8606,10 +8606,10 @@
 
 
 <h1 id="rag">第二章：RAG、微调与长上下文的三方取舍<a class="headerlink" href="#rag" title="Permanent link">&para;</a></h1>
-<h2 id="21">2.1 这道题的常见错法<a class="headerlink" href="#21" title="Permanent link">&para;</a></h2>
-<p>被问到「RAG 和微调怎么选」时，最容易踩的坑是<strong>二选一思维</strong>——把它答成一道单选题，说完 RAG 的优点就结束了。</p>
-<p>2026 年这道题还多了一个维度：模型上下文窗口已经足够大，很多人会直接问「既然能塞进去，为什么还要检索」。</p>
-<p>所以现在的正确答法是<strong>三方比较</strong>，并且最终落到「组合使用」而不是「选一个」。</p>
+<h2 id="21">2.1 不要把它当成单选题<a class="headerlink" href="#21" title="Permanent link">&para;</a></h2>
+<p>讨论 RAG 和微调时，最常见的误区是<strong>二选一思维</strong>：把它们当成互斥选项，说完其中一个的优点就结束了。</p>
+<p>2026 年还多了一个维度：模型上下文窗口已经足够大，很多场景会先问「既然能直接塞进去，为什么还要检索」。</p>
+<p>更合适的比较方式，是把微调、长上下文和 RAG 放在一起看，再决定是否组合使用。</p>
 <pre class="mermaid"><code>flowchart TB
     NEED[需求] --&gt; Q1{要改变的是&lt;br/&gt;知识还是行为?}
     Q1 --&gt;|行为/风格/格式| FT[微调]
@@ -8619,8 +8619,8 @@
     FT --&gt; COMBO[实践中通常组合使用]
     LC --&gt; COMBO
     RAG --&gt; COMBO</code></pre>
-<h2 id="22">2.2 三种方案的本质区别<a class="headerlink" href="#22" title="Permanent link">&para;</a></h2>
-<p>一句话区分：</p>
+<h2 id="22">2.2 三种方案的区别<a class="headerlink" href="#22" title="Permanent link">&para;</a></h2>
+<p>可以先这样区分：</p>
 <table>
 <thead>
 <tr>
@@ -8652,9 +8652,9 @@
 </tbody>
 </table>
 <p>微调改的是<strong>模型本身</strong>，另外两个都是<strong>在推理时提供材料</strong>，区别只在于材料是「全塞」还是「先检索再塞」。</p>
-<p><strong>这个区分很重要</strong>：长上下文和 RAG 并不是同一层次的对立选项，RAG 多出来的是「筛选」这一步。所以真正的问题不是「要不要 RAG」，而是<strong>「需不需要在把材料给模型之前先筛一遍」</strong>。</p>
+<p>这个区分决定了后面的判断方式：长上下文和 RAG 都是在推理时提供材料，区别在于 RAG 多了一步「筛选」。因此真正要判断的不是「要不要 RAG」，而是<strong>「需不需要在把材料给模型之前先筛一遍」</strong>。</p>
 <h2 id="23">2.3 微调：把能力烧进参数<a class="headerlink" href="#23" title="Permanent link">&para;</a></h2>
-<h3 id="231">2.3.1 微调真正擅长的<a class="headerlink" href="#231" title="Permanent link">&para;</a></h3>
+<h3 id="231">2.3.1 微调更适合什么<a class="headerlink" href="#231" title="Permanent link">&para;</a></h3>
 <p>微调擅长的是<strong>改变模型的行为方式</strong>，而不是灌输事实：</p>
 <ul>
 <li>固定输出格式（严格的 JSON、特定的报告结构）；</li>
@@ -8663,7 +8663,7 @@
 <li>特定任务的能力提升（分类、抽取这类结构化任务）；</li>
 <li>让小模型在窄任务上逼近大模型，从而降低推理成本。</li>
 </ul>
-<p><strong>最后一条是被严重低估的价值</strong>：微调一个小模型专做某个任务，长期推理成本可能远低于持续调用大模型。</p>
+<p>最后一条在长期运行的窄任务里尤其重要：微调一个小模型专做某个任务，长期推理成本可能远低于持续调用大模型。</p>
 <h3 id="232">2.3.2 微调不擅长的<a class="headerlink" href="#232" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>注入大量事实知识</strong>。这需要足够多的样本反复强化，成本高且效果不稳定；</li>
@@ -8671,9 +8671,9 @@
 <li><strong>溯源</strong>。参数里的知识无法指出来源，这在合规场景是硬伤；</li>
 <li><strong>权限隔离</strong>。模型不知道「谁能看哪些知识」，一旦训进去，所有用户都能问出来。</li>
 </ul>
-<p><strong>「不可溯源」和「无法做权限隔离」这两条，是很多企业最终必须用 RAG 的决定性原因</strong>，而不是效果好坏的问题。</p>
-<h3 id="233">2.3.3 一个容易答错的点<a class="headerlink" href="#233" title="Permanent link">&para;</a></h3>
-<p>「用微调给模型灌知识」这件事不是完全做不到，而是<strong>性价比极低且不可控</strong>。面试时不要说「微调学不到知识」，正确说法是：</p>
+<p><strong>「不可溯源」和「无法做权限隔离」这两条，往往是企业选择 RAG 的关键原因之一</strong>，而不只是效果好坏的问题。</p>
+<h3 id="233">2.3.3 微调可以学知识，但不适合当知识库<a class="headerlink" href="#233" title="Permanent link">&para;</a></h3>
+<p>「用微调给模型灌知识」不是完全做不到，而是<strong>性价比极低且不可控</strong>。更准确的说法是：</p>
 <blockquote>
 <p><strong>微调可以改变模型对已有知识的组织和表达方式，但把它当作知识库来用，在成本、时效和可控性上都不划算。</strong></p>
 </blockquote>
@@ -8681,7 +8681,7 @@
 <p>模型窗口变大后，一个很自然的想法是：把所有资料一次性放进 Prompt，让模型自己找。</p>
 <p>这个做法在特定条件下<strong>确实是最优解</strong>：材料总量能装下、内容稳定、不需要按用户过滤。它省掉了整条检索链路，工程复杂度大幅下降，而且没有「检索不到」这个失败模式。</p>
 <p>配合 Prompt Caching，重复使用同一批材料的成本还能进一步降低。</p>
-<p><strong>所以不要一上来就否定长上下文。</strong> 如果你的知识库只有几十篇稳定文档，直接全塞往往比搭一套 RAG 更快更好。</p>
+<p>如果知识库只有几十篇稳定文档，直接全塞往往比搭一套 RAG 更快，工程复杂度也更低。</p>
 <h3 id="241">2.4.1 但它有四个硬约束<a class="headerlink" href="#241" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
     LC[长上下文直接塞] --&gt; C1[规模约束]
@@ -8693,7 +8693,7 @@
     C2 --&gt; D2[高频更新导致缓存频繁失效]
     C3 --&gt; D3[无法按用户过滤可见材料]
     C4 --&gt; D4[上下文越长 有效利用率越低]</code></pre>
-<p>前三条是显而易见的工程约束，<strong>第四条才是关键，也是最多人不知道的</strong>。</p>
+<p>前三条是常见工程约束，<strong>第四条直接影响最终效果</strong>。</p>
 <h3 id="242">2.4.2 上下文越长，模型用得越差<a class="headerlink" href="#242" title="Permanent link">&para;</a></h3>
 <p>这不是猜测，而是有系统性实验证据的。</p>
 <p>早期的 <strong>Lost in the Middle</strong> 研究发现：模型对上下文<strong>开头和结尾</strong>的信息利用得更好，放在中间的关键信息容易被忽略。</p>
@@ -8705,7 +8705,7 @@
 <li>经典的「大海捞针」测试拿满分，<strong>不代表</strong>模型在真实长上下文任务中可靠——因为它只考察字面匹配。</li>
 </ul>
 <p>这个现象通常被称为 <strong>Context Rot</strong>（上下文腐化）。</p>
-<p><strong>它的直接推论是：无脑塞更多材料不但不会提升效果，反而可能降低效果。</strong> 这条结论同时也否定了 RAG 里另一个常见做法——见 2.6 节。</p>
+<p><strong>它的直接推论是：单纯塞更多材料不一定提升效果，反而可能降低效果。</strong> 这条结论同时也否定了 RAG 里另一个常见做法——见 2.6 节。</p>
 <h3 id="243-rag">2.4.3 长上下文能取代 RAG 吗<a class="headerlink" href="#243-rag" title="Permanent link">&para;</a></h3>
 <p>已有研究直接测试了这个假设，结论是<strong>目前不能</strong>。长上下文模型在以下情况仍然失败：</p>
 <ol>
@@ -8787,10 +8787,8 @@
 </tbody>
 </table>
 <p><strong>注意成本那两行的方向相反</strong>：微调是前期贵、后期便宜；长上下文是前期便宜、后期每次调用都贵。<strong>语料稳定且调用量大时，这个差异会主导总成本。</strong></p>
-<h2 id="26">2.6 一个必须纠正的常见做法<a class="headerlink" href="#26" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p><strong>「多召回一些 chunk 总没坏处」——这是错的。</strong></p>
-</blockquote>
+<h2 id="26-top-k">2.6 Top-K 不是越大越好<a class="headerlink" href="#26-top-k" title="Permanent link">&para;</a></h2>
+<p>「多召回一些 chunk 总没坏处」并不成立。</p>
 <p>很多人默认 Top-K 越大越好，反正模型自己会挑。但 2.4.2 节的证据表明，无关或语义相近但错误的内容会<strong>主动损害</strong>答案质量，模型并不会干净地忽略它们。</p>
 <p>正确的做法是：</p>
 <ul>
@@ -8812,7 +8810,7 @@
     D --&gt;|否| E{调用量大吗?}
     E --&gt;|是| RAG2[RAG 更省成本]
     E --&gt;|否| LC[长上下文直接塞]</code></pre>
-<p>判断顺序可以总结为四个问题：<strong>装不装得下 → 更不更新 → 要不要过滤 → 调用量大不大</strong>。任何一个答案指向 RAG，就用 RAG。</p>
+<p>可以按四个问题依次判断：<strong>装不装得下 → 更不更新 → 要不要过滤 → 调用量大不大</strong>。任何一个答案指向 RAG，就优先考虑 RAG。</p>
 <h2 id="28">2.8 组合使用才是常态<a class="headerlink" href="#28" title="Permanent link">&para;</a></h2>
 <p>这三者不是互斥的，生产系统中经常同时存在：</p>
 <table>
@@ -8837,11 +8835,11 @@
 </tr>
 </tbody>
 </table>
-<p><strong>「微调解决怎么说，RAG 解决说什么」是这道题最值钱的一句话</strong>，因为它一次性说清了两者的正交关系——它们改的根本不是同一个东西，所以不存在互斥。</p>
+<p><strong>「微调解决怎么说，RAG 解决说什么」说明了两者的分工</strong>：它们处理的不是同一个问题，因此通常不是互斥关系。</p>
 <p>还有一种把两者揉在一起的思路：<strong>针对 RAG 场景微调模型</strong>，专门训练它在给定材料中区分有用信息与干扰信息，并在材料不足时拒答。这类方法能同时改善「被干扰内容带偏」和「材料不足仍硬答」这两个 RAG 固有失败模式。</p>
 <h2 id="29">2.9 常见错误<a class="headerlink" href="#29" title="Permanent link">&para;</a></h2>
 <h3 id="291">2.9.1 把问题答成单选题<a class="headerlink" href="#291" title="Permanent link">&para;</a></h3>
-<p>不提组合使用，是这道题最大的减分项。</p>
+<p>如果完全不考虑组合使用，往往会遗漏实际系统里的常见做法。</p>
 <h3 id="292">2.9.2 说「微调学不到知识」<a class="headerlink" href="#292" title="Permanent link">&para;</a></h3>
 <p>不准确。应该说性价比低、不可控、不可溯源。</p>
 <h3 id="293-rag">2.9.3 认为长上下文已经淘汰了 RAG<a class="headerlink" href="#293-rag" title="Permanent link">&para;</a></h3>
@@ -8854,19 +8852,15 @@
 <p>在企业场景里，这两条经常直接决定方案选型，且不可通过「效果更好」来弥补。</p>
 <h2 id="210">2.10 本章总结<a class="headerlink" href="#210" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>三者改的不是同一个东西</strong>：微调改模型行为，长上下文和 RAG 都是提供材料，区别在于 RAG 多了「筛选」这一步；</li>
-<li><strong>微调擅长</strong>格式、风格、领域表达和小模型降本，<strong>不擅长</strong>灌事实、频繁更新、溯源和权限隔离；</li>
-<li><strong>长上下文在语料小且稳定时是最优解</strong>，但受规模、时效、权限、质量四个约束；</li>
-<li><strong>上下文腐化是真实存在的</strong>：长度增加会持续降低有效利用率，「大海捞针」满分不等于长上下文可靠；</li>
-<li><strong>长上下文不能取代 RAG</strong>，两者互补：RAG 负责筛，长上下文负责读；</li>
-<li><strong>Top-K 不是越大越好</strong>，必须按模型和任务实测调优；</li>
-<li><strong>判断顺序</strong>：装不装得下 → 更不更新 → 要不要过滤 → 调用量大不大；</li>
-<li><strong>组合才是常态</strong>：微调解决怎么说，RAG 解决说什么。</li>
+<li>微调改的是模型行为；长上下文和 RAG 都是在推理时提供材料，区别在于 RAG 先做筛选；</li>
+<li>微调更适合格式、风格、领域表达和小模型降本，不适合承载大量事实知识、频繁更新、溯源和权限隔离；</li>
+<li>长上下文在语料小且稳定时很有效，但仍受规模、时效、权限和质量四个约束；</li>
+<li>上下文腐化是真实存在的：输入变长后，有效利用率会持续下降，「大海捞针」满分不代表真实任务可靠；</li>
+<li>长上下文不能直接取代 RAG，两者更常见的关系是互补：RAG 负责筛，长上下文负责读；</li>
+<li>Top-K 需要按模型和任务实测调优，不存在一组固定答案；</li>
+<li>实际判断通常按四个问题展开：装不装得下、是否频繁更新、是否需要过滤、调用量是否足够大；</li>
+<li>生产系统里，微调、RAG 和长上下文组合使用比单独选一个更常见。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>微调改的是模型，RAG 改的是材料，长上下文改的是材料的给法。它们正交，所以答案永远是组合，不是选择。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2307.03172">Lost in the Middle: How Language Models Use Long Contexts</a></li>

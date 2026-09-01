@@ -2837,7 +2837,7 @@
           <li class="md-nav__item">
   <a href="#932" class="md-nav__link">
     <span class="md-ellipsis">
-      9.3.2 加载方式的差异更值得说
+      9.3.2 另一个经常被忽略的差异：加载方式
     </span>
   </a>
   
@@ -8339,7 +8339,7 @@
           <li class="md-nav__item">
   <a href="#932" class="md-nav__link">
     <span class="md-ellipsis">
-      9.3.2 加载方式的差异更值得说
+      9.3.2 另一个经常被忽略的差异：加载方式
     </span>
   </a>
   
@@ -8530,7 +8530,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>MCP 是给 Agent 配电脑，Skill 是给 Agent 发操作手册。一个是能力，一个是方法，层次完全不同。</strong></p>
+<p><strong>可以这样记：MCP 是给 Agent 配电脑，Skill 是给 Agent 发操作手册。一个解决能力接入，一个解决能力使用。</strong></p>
 </blockquote>
 <h2 id="92">9.2 从一个具体任务看两者的分工<a class="headerlink" href="#92" title="Permanent link">&para;</a></h2>
 <p>任务：<strong>审查这个 PR</strong>。</p>
@@ -8602,7 +8602,7 @@
 <p><strong>MCP Server 是活的</strong>——它是一个进程，要启动、要维护连接、要处理认证、可能会挂。接一个 MCP Server 意味着引入一个新的运行时依赖。</p>
 <p><strong>Skill 是死的</strong>——它就是几个文件。没有进程，不会挂，不需要认证，复制到另一个项目里直接就能用。</p>
 <p>这个差异决定了两者的分发方式：MCP Server 通过包管理器安装并配置启动命令，Skill 直接拷贝目录或用 git 管理。</p>
-<h3 id="932">9.3.2 加载方式的差异更值得说<a class="headerlink" href="#932" title="Permanent link">&para;</a></h3>
+<h3 id="932">9.3.2 另一个经常被忽略的差异：加载方式<a class="headerlink" href="#932" title="Permanent link">&para;</a></h3>
 <p>MCP 的工具定义是<strong>全量加载</strong>的：连上 Server 就把所有工具的 Schema 拉进上下文，而且每轮都传。接五个 Server 可能就是上万 token 的固定开销。</p>
 <p>Skill 是<strong>渐进式加载</strong>的：启动时只有几十 token 的元数据，匹配上才加载正文。</p>
 <pre class="mermaid"><code>flowchart LR
@@ -8623,7 +8623,7 @@
 <p>这不是说 MCP 设计得差——工具必须让模型随时可见才能被选中，这是它的功能要求。但它确实意味着<strong>MCP 的上下文成本随接入数量线性增长，而 Skill 基本不增长</strong>。</p>
 <p>实践推论：接很多 MCP Server 时要做 <a href="../../01-function-calling/03-tool-schema-design/">动态工具筛选</a>；而 Skill 可以放心地准备几十个。</p>
 <h2 id="94">9.4 什么时候用哪个<a class="headerlink" href="#94" title="Permanent link">&para;</a></h2>
-<p>判断标准其实很简单：</p>
+<p>可以按这个标准判断：</p>
 <pre class="mermaid"><code>flowchart TB
     Q{"你要给 Agent 加的&lt;br/&gt;是什么?"}
     Q --&gt;|"访问外部系统的能力&lt;br/&gt;（数据库、API、文件）"| MCP["实现 / 接入 MCP Server"]
@@ -8688,7 +8688,7 @@
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>使用知识库 MCP 的 <span class="sb">`search_past_incidents`</span> 检索这几个文件
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>过去半年是否引发过线上问题。
 </span></code></pre></div>
-<p>注意第一步末尾那句「如果超过 2000 行……」——这正是 Skill 的价值所在。MCP 只提供「能拿到 diff」这个能力，<strong>遇到大 diff 该怎么办属于流程知识</strong>，写在 Skill 里。</p>
+<p>像第一步末尾那句「如果超过 2000 行……」，就该写在 Skill 里。MCP 只提供「能拿到 diff」这个能力，<strong>遇到大 diff 该怎么办属于流程知识</strong>。</p>
 <h3 id="951">9.5.1 一个边界问题：逻辑该写在哪<a class="headerlink" href="#951" title="Permanent link">&para;</a></h3>
 <p>有些能力两边都能实现，比如「过滤大 diff」。写在 MCP Server 里还是 Skill 里？</p>
 <p>判断依据是<strong>这个逻辑是不是通用的</strong>：</p>
@@ -8721,7 +8721,7 @@
 <li><strong>逻辑归属看通用性</strong>：所有人都需要的行为进 Server，团队特有规则进 Skill。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：MCP 让 Agent 有手，Skill 让 Agent 知道这双手该按什么顺序做什么，前者是能力边界，后者是方法沉淀。</strong></p>
+<p><strong>可以把它理解成：MCP 让 Agent 有能力伸手拿工具，Skill 决定这双手该按什么顺序做事。</strong></p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

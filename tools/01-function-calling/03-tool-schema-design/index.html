@@ -8805,7 +8805,7 @@
 </tr>
 </tbody>
 </table>
-<p>一个实用的模板：</p>
+<p>描述通常可以按这个顺序写：</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&lt;这个工具做什么&gt;。&lt;返回什么内容&gt;。&lt;明确不支持什么&gt;。&lt;什么情况下应该改用其他工具&gt;。
 </span></code></pre></div>
 <p>最后一句尤其有用。当工具库里有多个相近工具时，在描述里直接写「如果需要模糊搜索，请改用 <code>search_orders</code>」，比指望模型自己悟出区别可靠得多。</p>
@@ -8828,7 +8828,7 @@
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s2">"SELECT COUNT(*) FROM orders WHERE created_at &gt;= CURRENT_DATE - 1"</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">)</span>
 </span></code></pre></div>
-<p>这本质上是把 few-shot 塞进了工具定义里。代价是 token，收益是参数准确率，值不值得取决于这个工具被调用的频率和出错的成本。</p>
+<p>它相当于把 few-shot 示例塞进了工具定义里。代价是 token，收益是参数准确率，值不值得取决于这个工具被调用的频率和出错的成本。</p>
 <h2 id="33">3.3 参数设计<a class="headerlink" href="#33" title="Permanent link">&para;</a></h2>
 <h3 id="331">3.3.1 扁平优于嵌套<a class="headerlink" href="#331" title="Permanent link">&para;</a></h3>
 <p>模型填深层嵌套结构的错误率明显更高，而且错误往往是「结构对了但层级放错了」这种难排查的类型：</p>
@@ -8891,7 +8891,7 @@
 <p>不过要设<strong>重试上限</strong>。模型有时会陷入「同样的错误参数反复重试」的循环，宿主侧应该记录同一工具的连续失败次数，超过两三次就中断并向上抛。</p>
 <h2 id="35">3.5 工具数量与上下文成本<a class="headerlink" href="#35" title="Permanent link">&para;</a></h2>
 <h3 id="351">3.5.1 工具定义每次请求都要全量传<a class="headerlink" href="#351" title="Permanent link">&para;</a></h3>
-<p>这是最容易被低估的成本。工具 Schema 不会被「记住」，每一轮请求都要完整传一遍：</p>
+<p>这里经常被低估的，是工具 Schema 的固定开销。工具 Schema 不会被「记住」，每一轮请求都要完整传一遍：</p>
 <table>
 <thead>
 <tr>
@@ -9012,7 +9012,7 @@
 </span></code></pre></div>
 <h2 id="38">3.8 工具定义要做回归测试<a class="headerlink" href="#38" title="Permanent link">&para;</a></h2>
 <p>工具描述改一个字，模型行为就可能变。这意味着它需要和代码一样被测试。</p>
-<p>最小可用的做法是维护一个用例集：</p>
+<p>最简单的落地方式，是维护一套用例集：</p>
 <table>
 <thead>
 <tr>
@@ -9067,9 +9067,6 @@
 <li><strong>工具粒度按「是否总是一起用」判断</strong>，不要照搬内部微服务边界；</li>
 <li><strong>工具定义需要回归测试</strong>，用例集里必须包含「不该调工具」的场景。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：工具 Schema 不是给机器看的接口定义，而是给模型看的说明书，它的措辞质量直接决定了 Agent 的行为质量。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Anthropic: Writing Effective Tools for Agents</a></li>

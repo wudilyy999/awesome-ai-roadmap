@@ -9640,11 +9640,11 @@
 <li>模型更难找到当前目标；</li>
 <li>旧错误和无关信息持续影响后续决策。</li>
 </ul>
-<p>记忆压缩的目标不是简单地“让文本变短”，而是：</p>
+<p>记忆压缩不是单纯把文本变短，更重要的是：</p>
 <blockquote>
 <p><strong>在有限 Token Budget 内，尽可能保留完成当前任务所需的信息。</strong></p>
 </blockquote>
-<p>可以将其抽象为：</p>
+<p>写成一个简单目标函数，就是：</p>
 <div class="arithmatex">\[
 J(C)=U(C)-\lambda L(C)
 \]</div>
@@ -10016,7 +10016,7 @@ U_i=
 </ul>
 <p>因此，应保留来源引用，并允许在需要时返回原文。</p>
 <h2 id="107">10.7 四种方法如何组合<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
-<p>推荐顺序不是简单四选一：</p>
+<p>工程上通常把这几种方法串起来用：</p>
 <pre class="mermaid"><code>flowchart TB
     H[Full History] --&gt; PIN[Pin Hard Constraints]
     PIN --&gt; EXT[Externalize Large Artifacts]
@@ -10191,7 +10191,7 @@ B_{output}
 </ul>
 <h2 id="1014-prompt-caching">10.14 Prompt Caching 是什么<a class="headerlink" href="#1014-prompt-caching" title="Permanent link">&para;</a></h2>
 <blockquote>
-<p>本节说明跨请求的计算复用；RAG 上下文增强中如何使用它控制索引成本，见<a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/">RAG：语义被切断怎么办</a>。</p>
+<p>Prompt Caching 处理的是跨请求的前缀计算复用；RAG 上下文增强中如何用它控制索引成本，见<a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/">RAG：语义被切断怎么办</a>。</p>
 </blockquote>
 <p>Prompt Caching 缓存重复 Prompt 前缀的中间计算结果，使后续请求可以复用。</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -10259,7 +10259,7 @@ B_{output}
 </tr>
 </tbody>
 </table>
-<p>最关键的一点是：</p>
+<p>这里最容易被误解的是：</p>
 <blockquote>
 <p><strong>Prompt Caching 通常不会让 Context Window 变大，缓存 Token 仍属于模型输入上下文。</strong></p>
 </blockquote>
@@ -10270,7 +10270,7 @@ B_{output}
     COMP --&gt; KEEP[Selected Context]
     KEEP --&gt; CACHE[Prompt Caching]
     CACHE --&gt; MODEL[Model]</code></pre>
-<p>推荐顺序：</p>
+<p>实践里通常先做两步：</p>
 <ol>
 <li>先决定哪些信息真正需要进入 Context；</li>
 <li>再对其中稳定、重复的前缀使用 Prompt Caching。</li>
@@ -10440,7 +10440,7 @@ CR=1-\frac{L_{after}}{L_{before}}
 
     MODEL --&gt; OBS[New Observation]
     OBS --&gt; INPUT</code></pre>
-<p>推荐默认策略：</p>
+<p>默认配置通常会从这套压缩组合起步：</p>
 <ol>
 <li>永久 Pin 系统、安全、目标和成功标准；</li>
 <li>将任务状态抽取为结构化数据；</li>
@@ -10522,7 +10522,7 @@ CR=1-\frac{L_{after}}{L_{before}}
 <p><strong>记忆压缩决定带什么信息，Prompt Caching 决定重复信息如何减少计算。</strong></p>
 </blockquote>
 <p>两者互补，但 Prompt Caching 不会释放 Context Window，也不能替代摘要、过滤和结构化抽取。</p>
-<p>最终原则是：</p>
+<p>落到实现上，通常会这样组合：</p>
 <blockquote>
 <p><strong>关键约束结构化并固定保留，大型信息外部化，旧历史分层摘要，近期细节使用窗口，长期知识按需检索，稳定前缀再使用缓存。</strong></p>
 </blockquote>

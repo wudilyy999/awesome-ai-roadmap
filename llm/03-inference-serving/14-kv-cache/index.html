@@ -8847,7 +8847,7 @@
 
 <h1 id="kv-cache-prompt-caching">第十四章：KV Cache 与 Prompt Caching<a class="headerlink" href="#kv-cache-prompt-caching" title="Permanent link">&para;</a></h1>
 <h2 id="141">14.1 先抓住核心关系<a class="headerlink" href="#141" title="Permanent link">&para;</a></h2>
-<p>这两个不是不相关的优化，<strong>是同一个底层机制在两个时间尺度上的应用</strong>：</p>
+<p>这两个优化其实是一套机制的两种用法：<strong>同一个底层机制在两个时间尺度上的应用</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -9106,7 +9106,7 @@ M_{\mathrm{KV}} = 2 \times B \times N \times L \times H \times d_k \times 2\ \ma
 <p>PagedAttention 还使前缀块可被安全引用和回收。vLLM 的 <strong>Automatic Prefix Caching（APC）</strong> 会按已计算 token 前缀自动复用 KV block；它不是只属于 SGLang/RadixAttention 的能力。是否命中取决于 token 前缀、缓存容量、淘汰和当前版本配置，应以目标版本文档与压测为准。</p>
 <h2 id="1410">14.10 常见错误<a class="headerlink" href="#1410" title="Permanent link">&para;</a></h2>
 <h3 id="14101">14.10.1 把两者当成不相关的优化<a class="headerlink" href="#14101" title="Permanent link">&para;</a></h3>
-<p>它们是<strong>同一机制在两个时间尺度上的应用</strong>。这一句能讲清楚就已经比绝大多数人深刻。</p>
+<p>它们是<strong>同一机制在两个时间尺度上的应用</strong>。这是区分两者的关键。</p>
 <h3 id="14102-on3">14.10.2 说不出朴素实现为什么是 <span class="arithmatex">\(O(N^3)\)</span><a class="headerlink" href="#14102-on3" title="Permanent link">&para;</a></h3>
 <p>每步 <span class="arithmatex">\(O(i^2)\)</span> 求和得 <span class="arithmatex">\(O(N^3)\)</span>，加了 KV Cache 后每步 <span class="arithmatex">\(O(i)\)</span>，总量降到 <span class="arithmatex">\(O(N^2)\)</span>。</p>
 <h3 id="14103-kv-q">14.10.3 说不清为什么 K/V 能缓存而 Q 不能<a class="headerlink" href="#14103-kv-q" title="Permanent link">&para;</a></h3>
@@ -9135,9 +9135,6 @@ M_{\mathrm{KV}} = 2 \times B \times N \times L \times H \times d_k \times 2\ \ma
 <li><strong>低流量场景可能反而更贵</strong>，因为缓存只有约 5 分钟时效；</li>
 <li><strong>两个进阶方向</strong>：KV Cache 量化（对误差比权重更敏感）与 PagedAttention/APC（降低块管理和重复前缀的开销）。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：KV Cache 和 Prompt Caching 干的是同一件事——把已经算过的 K/V 留着别扔，区别只在于「留到这次生成结束」还是「留到下一个用户来」。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2309.06180">Efficient Memory Management for Large Language Model Serving with PagedAttention（vLLM）</a></li>

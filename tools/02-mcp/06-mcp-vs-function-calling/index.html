@@ -2633,7 +2633,7 @@
         <li class="md-nav__item">
   <a href="#61" class="md-nav__link">
     <span class="md-ellipsis">
-      6.1 先纠正一个提法
+      6.1 这个问题容易问偏
     </span>
   </a>
   
@@ -8338,7 +8338,7 @@
         <li class="md-nav__item">
   <a href="#61" class="md-nav__link">
     <span class="md-ellipsis">
-      6.1 先纠正一个提法
+      6.1 这个问题容易问偏
     </span>
   </a>
   
@@ -8567,7 +8567,7 @@
 
 
 <h1 id="mcp-function-calling">第六章：MCP 与 Function Calling 的区别与选型<a class="headerlink" href="#mcp-function-calling" title="Permanent link">&para;</a></h1>
-<h2 id="61">6.1 先纠正一个提法<a class="headerlink" href="#61" title="Permanent link">&para;</a></h2>
+<h2 id="61">6.1 这个问题容易问偏<a class="headerlink" href="#61" title="Permanent link">&para;</a></h2>
 <p>「MCP 和 Function Calling 有什么区别」这个问题本身有点误导性，因为它暗示两者是并列的竞品。实际上：</p>
 <blockquote>
 <p><strong>MCP 和 Function Calling 解决不同接口边界，常被同一个 Host 组合使用；MCP 并不规定或要求模型必须支持 Function Calling。</strong></p>
@@ -8620,7 +8620,7 @@
     style R3 fill:#fce8e6</code></pre>
 <p>核心问题不是「写起来麻烦」，而是<strong>同一个工具，换个应用就要重新对接一遍，每次都是一次性的手工活</strong>。工具的管理、复用和跨平台兼容，Function Calling 一个都没解决——因为它压根不负责这些。</p>
 <h2 id="63-host-function-calling-mcp-tool">6.3 常见集成：Host 用 Function Calling 路由 MCP Tool<a class="headerlink" href="#63-host-function-calling-mcp-tool" title="Permanent link">&para;</a></h2>
-<p>这是最关键、也最能体现理解深度的一点。</p>
+<p>项目里最常见的接法，就是 Host 用 Function Calling 路由 MCP Tool。</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant M as 模型
     participant H as 宿主程序（MCP Client）
@@ -8640,7 +8640,7 @@
     H-&gt;&gt;M: role=tool 消息
     M--&gt;&gt;H: 最终答案</code></pre>
 <p>在这种集成中，模型的视角确实是普通 Function Calling，能力发现、schema 转换、调用路由和结果回传都在 Host 层完成。这种桥接很常见，但不是 MCP 的规范要求。</p>
-<p>这个事实有两个直接推论：</p>
+<p>沿着这条集成链路往下看，会得到两个结论：</p>
 <ol>
 <li><strong>模型不支持某厂商的 Function Calling 时，只有这条桥接路径不可用</strong>。Host 仍可通过结构化输出、确定性工作流或人工界面调用 MCP Tool；</li>
 <li><strong>若由模型选择 Tool，工具 schema 工程仍然适用</strong>。MCP 规定互操作格式，不保证模型会正确选择或填写参数。</li>
@@ -8808,9 +8808,6 @@
 <li><strong>判断顺序</strong>：先看社区有没有现成的 → 再看要不要复用 → 再看环境和维护成本；</li>
 <li><strong>混用是常态</strong>：通用能力走 MCP，业务专属能力走 FC。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Function Calling 让模型会调工具，MCP 让工具不用被重复接入，前者是模型的能力，后者是生态的基础设施。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://modelcontextprotocol.io/docs/getting-started/intro">Model Context Protocol 官方文档</a></li>

@@ -9000,7 +9000,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>这是本章最重要的认知：</strong></p>
+<p>关键在于：</p>
 <pre class="mermaid"><code>flowchart TB
     STRUCT["结构层优化&lt;br/&gt;GQA · 决定要存几套 K/V"]
     IMPL["实现层优化&lt;br/&gt;Flash Attention · 决定怎么算"]
@@ -9016,7 +9016,7 @@
 <p>面试官如果问「MQA、GQA、Flash Attention 只能选一个，选哪个」，正确回答是<strong>指出这是个伪命题</strong>——它们攻击的是不同维度的瓶颈，真实工程里一定组合用。能说出这句，说明你理解的是整套优化体系的层次结构，不是在背单点优化。</p>
 </blockquote>
 <h2 id="36">3.6 长上下文时代的其他方向<a class="headerlink" href="#36" title="Permanent link">&para;</a></h2>
-<p>作为补充了解：</p>
+<p>再补几条常见路线：</p>
 <table>
 <thead>
 <tr>
@@ -9076,9 +9076,6 @@
 <li><strong>理解 Flash Attention 的前提是知道 HBM 与 SRAM 的 13 倍带宽差距</strong>；</li>
 <li><strong>三类优化是叠加不是替代</strong>，GQA + Flash Attention 是主流组合，让 7B 模型能在消费级显卡上跑 32K。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：MQA 和 GQA 在问「K/V 到底要存几套」，Flash Attention 在问「同样的公式能不能少搬几次数据」——一个改结构一个改实现，所以它们从来不是二选一。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></li>

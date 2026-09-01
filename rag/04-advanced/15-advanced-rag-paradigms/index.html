@@ -8475,7 +8475,7 @@
 
 <h1 id="rag">第十五章：高级 RAG 范式<a class="headerlink" href="#rag" title="Permanent link">&para;</a></h1>
 <h2 id="151-rag">15.1 三代 RAG 的演进逻辑<a class="headerlink" href="#151-rag" title="Permanent link">&para;</a></h2>
-<p><strong>回答这道题的关键，是说清每一代解决了上一代的什么问题</strong>，而不是罗列范式名字。</p>
+<p>理解这些范式时，关键是看每一代解决了上一代的什么问题，而不是只列名字。</p>
 <pre class="mermaid"><code>flowchart LR
     N[Naive RAG&lt;br/&gt;检索一次 直接生成] --&gt; A[Advanced RAG&lt;br/&gt;检索前后加优化环节]
     A --&gt; M[Modular RAG&lt;br/&gt;组件化 可编排 可循环]</code></pre>
@@ -8514,7 +8514,7 @@
 </blockquote>
 <p>而当这个「改变走向」的决策权交给 LLM 自己时，就演变成了 Agentic RAG（15.6）。</p>
 <h2 id="152-self-rag">15.2 Self-RAG：让模型自己决定要不要检索、检索得对不对<a class="headerlink" href="#152-self-rag" title="Permanent link">&para;</a></h2>
-<p><strong>核心思路</strong>：训练模型在生成过程中输出特殊的<strong>反思标记</strong>，用来自我判断：</p>
+<p>Self-RAG 的做法是训练模型在生成过程中输出特殊的<strong>反思标记</strong>，用来自我判断：</p>
 <table>
 <thead>
 <tr>
@@ -8542,13 +8542,13 @@
 </tbody>
 </table>
 <p><strong>它解决的问题</strong>：Naive RAG 是「无条件检索、无条件使用」，既浪费（不需要检索时也检索），又危险（检索到不相关内容也硬用）。</p>
-<p><strong>局限</strong>：这些反思能力是<strong>训练出来的</strong>，需要专门的训练数据和微调流程。<strong>很多工程实现只是借用了它的思路（用提示让模型做类似判断），而不是复现原论文的训练方法</strong>——面试时要说清这个区别。</p>
+<p>这些反思能力是<strong>训练出来的</strong>，需要专门的训练数据和微调流程。<strong>很多工程实现只是借用了它的思路（用提示让模型做类似判断），而不是复现原论文的训练方法</strong>，两者不能混为一谈。</p>
 <h2 id="153-crag">15.3 CRAG：检索质量不行时怎么补救<a class="headerlink" href="#153-crag" title="Permanent link">&para;</a></h2>
-<p><strong>首先必须澄清一个命名歧义</strong>：</p>
+<p>这里有一个常见的命名歧义：</p>
 <blockquote>
 <p><strong>Corrective RAG（一种方法）和 CRAG Benchmark（一个评测基准）是完全不同的两个东西，不要混淆。</strong></p>
 </blockquote>
-<p><strong>Corrective RAG 的核心思路</strong>：用一个轻量的评估器给检索结果打分，按分数分三档处理：</p>
+<p>Corrective RAG 的做法是用一个轻量的评估器给检索结果打分，再按分数分三档处理：</p>
 <pre class="mermaid"><code>flowchart TB
     R[检索结果] --&gt; E[轻量评估器打分]
     E --&gt;|正确| C[精炼: 去掉无关部分 保留核心]
@@ -8561,7 +8561,7 @@
 <p><strong>工程上的简化实现</strong>：不一定要训练专门的评估器，用 Rerank 分数做阈值判断 + 触发降级路径（换检索策略、扩大范围、或直接拒答），就能拿到大部分收益。</p>
 <h2 id="154-raptor">15.4 RAPTOR：把知识组织成树<a class="headerlink" href="#154-raptor" title="Permanent link">&para;</a></h2>
 <p><strong>要解决的问题</strong>：普通 RAG 检索的是<strong>平铺的片段</strong>，无法回答需要综合整篇甚至整个语料的问题（「这份报告的核心结论是什么」）。</p>
-<p><strong>核心思路</strong>：</p>
+<p>RAPTOR 的流程如下：</p>
 <ol>
 <li>把所有 chunk 向量化后<strong>聚类</strong>；</li>
 <li>对每个簇用 LLM 生成<strong>摘要</strong>；</li>
@@ -8632,8 +8632,8 @@
 </tbody>
 </table>
 <h2 id="156-agentic-rag-agent">15.6 Agentic RAG：把检索变成 Agent 的工具<a class="headerlink" href="#156-agentic-rag-agent" title="Permanent link">&para;</a></h2>
-<p><strong>这是 2025–2026 年最重要的方向。</strong></p>
-<p><strong>核心转变</strong>：</p>
+<p>这是 2025–2026 年关注度很高的方向之一。</p>
+<p>Agentic RAG 的关键转变是：</p>
 <blockquote>
 <p><strong>从「固定流程中的一个步骤」，变成「Agent 可以自主决定何时调用、调用几次、怎么用结果的一个工具」。</strong></p>
 </blockquote>
@@ -8644,7 +8644,7 @@
     T --&gt; OB[观察结果]
     OB --&gt; AG
     D --&gt;|否| ANS[生成答案]</code></pre>
-<p><strong>它带来的能力：</strong></p>
+<p>它带来的能力包括：</p>
 <table>
 <thead>
 <tr>
@@ -8675,16 +8675,16 @@
 </tr>
 </tbody>
 </table>
-<p><strong>代价必须说清楚：</strong></p>
+<p>相应的代价也很明确：</p>
 <ul>
 <li><strong>延迟不可预测</strong>：可能一轮结束，也可能十轮；</li>
 <li><strong>成本不可预测</strong>：每轮都是完整的 LLM 调用；</li>
 <li><strong>可能陷入循环</strong>：反复检索却不收敛，<strong>必须设最大轮次上限</strong>；</li>
 <li><strong>调试困难</strong>：执行路径每次都不同。</li>
 </ul>
-<p><strong>工程上的关键约束</strong>：<strong>必须设置硬性的最大迭代次数、总 Token 预算和超时时间</strong>。这与 Agent 系统的通用要求一致（参见 Agent 部分的相关章节）。</p>
+<p>工程上通常会设置硬性的最大迭代次数、总 Token 预算和超时时间。这与 Agent 系统的通用要求一致（参见 Agent 部分的相关章节）。</p>
 <h2 id="157">15.7 什么时候该上高级范式<a class="headerlink" href="#157" title="Permanent link">&para;</a></h2>
-<p><strong>先说结论：多数情况下不该。</strong></p>
+<p>多数情况下，不需要一开始就引入这些高级范式。</p>
 <p>第十四章已经说过——<strong>先把基础五层做对，通常比盲目叠加高级范式更有效</strong>。高级范式应该在满足以下条件时才考虑：</p>
 <pre class="mermaid"><code>flowchart TB
     S{基础五层&lt;br/&gt;都做扎实了吗?} --&gt;|没有| BASE[回去做基础&lt;br/&gt;第十四章]
@@ -8702,7 +8702,7 @@
 <p><strong>反之，如果失败原因是「chunk 切得不好」「没有 BM25 那一路」，那再高级的范式也救不了。</strong></p>
 <h2 id="158">15.8 常见错误<a class="headerlink" href="#158" title="Permanent link">&para;</a></h2>
 <h3 id="1581">15.8.1 罗列范式名字不讲解决什么痛点<a class="headerlink" href="#1581" title="Permanent link">&para;</a></h3>
-<p>这道题考的是「为什么会有这些范式」，不是「有哪些范式」。</p>
+<p>如果只列出范式名而不说明它们分别在解决什么问题，通常很难支撑选型判断。</p>
 <h3 id="1582-corrective-rag-crag-benchmark">15.8.2 混淆 Corrective RAG 和 CRAG Benchmark<a class="headerlink" href="#1582-corrective-rag-crag-benchmark" title="Permanent link">&para;</a></h3>
 <p>一个是方法，一个是评测基准，名字撞车但毫不相干。</p>
 <h3 id="1583-self-rag">15.8.3 说 Self-RAG 只是加个提示词<a class="headerlink" href="#1583-self-rag" title="Permanent link">&para;</a></h3>
@@ -8714,7 +8714,7 @@
 <h3 id="1586">15.8.6 基础没做好就上高级范式<a class="headerlink" href="#1586" title="Permanent link">&para;</a></h3>
 <p>这是最常见的错误。基础缺陷不会被高级范式弥补，只会被掩盖并放大成本。</p>
 <h3 id="1587">15.8.7 不区分学术方案和生产方案<a class="headerlink" href="#1587" title="Permanent link">&para;</a></h3>
-<p>多数高级范式还在学术阶段。诚实说明成熟度是加分项，说成"已广泛应用"是减分项。</p>
+<p>多数高级范式还在学术阶段。讨论它们时应明确成熟度，不宜直接写成“已广泛应用”。</p>
 <h2 id="159">15.9 本章总结<a class="headerlink" href="#159" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>三代演进</strong>：Naive（固定直线）→ Advanced（前后加优化）→ Modular（可路由可循环）；本质变化是<strong>流程能否根据中间结果改变走向</strong>；</li>
@@ -8725,10 +8725,6 @@
 <li><strong>上高级范式的前提</strong>：基础五层已做扎实 + 有评测集 + 失败原因是<strong>结构性缺陷</strong>而非调参问题；</li>
 <li><strong>要诚实说明各范式的成熟度</strong>，多数仍在学术阶段。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>高级 RAG 范式的价值不在于"更先进"，而在于它们各自突破了基础 RAG 的一条结构性边界——如果你的问题不在那条边界上，它们只会增加成本。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2310.11511">Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection</a></li>

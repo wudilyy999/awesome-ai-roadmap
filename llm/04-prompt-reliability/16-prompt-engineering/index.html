@@ -8907,14 +8907,14 @@
 </span></code></pre></div>
 <p>五要素补全后，<strong>交给不同模型、在不同时间执行，输出格式和质量都会高度稳定</strong>。</p>
 <blockquote>
-<p><strong>这就是好 Prompt 的核心价值：可预期、可复用、可迭代。</strong></p>
+<p>五要素补全后，同一类任务换模型、换时间再跑，输出也更容易保持在可用范围，后续迭代时还能明确知道该改哪一项约束。</p>
 </blockquote>
 <h2 id="164">16.4 三个进阶技巧<a class="headerlink" href="#164" title="Permanent link">&para;</a></h2>
 <h3 id="1641-cot">16.4.1 CoT 触发词<a class="headerlink" href="#1641-cot" title="Permanent link">&para;</a></h3>
 <p>在 Prompt 末尾加「请先分步分析，再给出结论」，往往能提升逻辑推理和计算类任务的准确率（详见 <a href="../17-cot/">第十七章</a>）。</p>
 <blockquote>
 <p><strong>但不建议默认把完整推理链原样展示给最终用户</strong>：一方面多花 token，另一方面完整思考链里可能有不稳定或不该暴露的内容。</p>
-<p><strong>更稳的做法</strong>：让模型内部先分析，最终只输出简洁依据、关键步骤或可核查的结论。</p>
+<p>更常见的做法是让模型内部先分析，最终只输出简洁依据、关键步骤或可核查的结论。</p>
 </blockquote>
 <h3 id="1642-xml">16.4.2 XML 标签包裹内容<a class="headerlink" href="#1642-xml" title="Permanent link">&para;</a></h3>
 <p>当 Prompt 包含多个部分时，用 XML 标签明确区分，模型理解更准确。<strong>这是 Anthropic 特别推荐的做法</strong>：</p>
@@ -8929,7 +8929,7 @@
 <h3 id="1643">16.4.3 「先思考后回答」的结构<a class="headerlink" href="#1643" title="Permanent link">&para;</a></h3>
 <p>对需要多步推理的任务效果很好。<strong>内部链路里让模型先分析、再把最终答案单独放出来</strong>；对外展示时给「简要理由」或「检查清单」，而不是完整的隐式推理过程。</p>
 <h2 id="165-prompt">16.5 迭代方法论：Prompt 是工程问题<a class="headerlink" href="#165-prompt" title="Permanent link">&para;</a></h2>
-<p><strong>Prompt 工程本质是「提出假设 → 测试 → 优化」的循环，不是一次写完就完事的。</strong></p>
+<p><strong>Prompt 工程更像「提出假设 → 测试 → 优化」的循环，不是一次写完就完事。</strong></p>
 <pre class="mermaid"><code>flowchart LR
     A["整理 30-50 条测试用例&lt;br/&gt;覆盖正常 + 边缘情况"] --&gt; B["修改 Prompt&lt;br/&gt;每次只改一处"]
     B --&gt; C["在整个测试集上跑一遍"]
@@ -9022,7 +9022,7 @@
 <li><strong>压缩有损</strong>，要在自己的测试集上找平衡点。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：写 Prompt 的核心不是把话说得漂亮，是把模型的「自由发挥空间」一层层收窄到你真正想要的那个范围里，然后用测试集把这个过程工程化。</strong></p>
+<p>写 Prompt 不是堆辞藻，而是把角色、上下文、格式和示例交代清楚，再用测试集验证这些约束能不能稳定产出想要的结果。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

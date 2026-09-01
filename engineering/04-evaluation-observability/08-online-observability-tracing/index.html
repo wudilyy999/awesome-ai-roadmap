@@ -8520,7 +8520,7 @@
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"tenant_hash"</span><span class="p">:</span> <span class="n">tenant_hash</span><span class="p">,</span> <span class="s2">"prompt_version"</span><span class="p">:</span> <span class="n">prompt_version</span><span class="p">}</span>
 </span></code></pre></div>
 <blockquote>
-<p>这套脱敏原则和 <a href="../../../frameworks/01-langchain/05-production/13-langsmith-production-loop/">LangSmith 生产质量闭环</a>里讲的做法完全一致——本章讲的是厂商中立的可观测性数据模型,LangSmith 是这套模型在 LangChain 生态里的一种具体实现,选用其他 Tracing 方案时同样适用这些边界原则。</p>
+<p>这套脱敏原则和 <a href="../../../frameworks/01-langchain/05-production/13-langsmith-production-loop/">LangSmith 生产质量闭环</a>里讲的做法完全一致——这里用的是厂商中立的可观测性数据模型,LangSmith 是这套模型在 LangChain 生态里的一种具体实现,选用其他 Tracing 方案时同样适用这些边界原则。</p>
 </blockquote>
 <h2 id="85">8.5 采样策略:不是所有流量都值得全量记录<a class="headerlink" href="#85" title="Permanent link">&para;</a></h2>
 <p>全量记录所有 Trace 在高流量场景下成本很高,需要按风险分层采样:</p>
@@ -8578,9 +8578,6 @@
 <li><strong>采样策略按风险分层</strong>,安全类和失败请求优先全量记录;</li>
 <li><strong>Trace 数据要聚合成可告警的指标</strong>,是 SLO 体系(第 12 章)的直接输入。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括:可观测性的价值不在于记录得多细,而在于用脱敏、分层采样过的证据,把"生产里到底发生了什么"变成可以下钻排查、也可以聚合告警的结构化数据。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://opentelemetry.io/docs/specs/semconv/gen-ai/">OpenTelemetry: Semantic conventions for generative AI systems</a></li>

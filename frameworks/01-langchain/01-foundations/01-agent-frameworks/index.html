@@ -5312,7 +5312,7 @@
         <li class="md-nav__item">
   <a href="#11-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      1.1 Agent 框架到底解决了什么
+      1.1 Agent 框架解决什么问题
     </span>
   </a>
   
@@ -5331,7 +5331,7 @@
           <li class="md-nav__item">
   <a href="#121" class="md-nav__link">
     <span class="md-ellipsis">
-      1.2.1 最大的价值：集成范围广、开发速度快
+      1.2.1 主要价值：集成范围广、开发速度快
     </span>
   </a>
   
@@ -5373,7 +5373,7 @@
           <li class="md-nav__item">
   <a href="#132" class="md-nav__link">
     <span class="md-ellipsis">
-      1.3.2 正确的表述方式
+      1.3.2 更准确的关系
     </span>
   </a>
   
@@ -5395,9 +5395,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#141-agent" class="md-nav__link">
+  <a href="#141" class="md-nav__link">
     <span class="md-ellipsis">
-      1.4.1 为什么「让 Agent 查企业知识库」的难点不在工具调用
+      1.4.1 企业知识库场景的难点不只在工具调用
     </span>
   </a>
   
@@ -5406,7 +5406,7 @@
           <li class="md-nav__item">
   <a href="#142-rag" class="md-nav__link">
     <span class="md-ellipsis">
-      1.4.2 但它也不只是 RAG 工具
+      1.4.2 它也不只用于 RAG
     </span>
   </a>
   
@@ -5438,11 +5438,11 @@
         <li class="md-nav__item">
   <a href="#17" class="md-nav__link">
     <span class="md-ellipsis">
-      1.7 到底该怎么选：从外到内收窄
+      1.7 选型顺序：从外到内收窄
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1.7 到底该怎么选：从外到内收窄">
+    <nav class="md-nav" aria-label="1.7 选型顺序：从外到内收窄">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8391,7 +8391,7 @@
         <li class="md-nav__item">
   <a href="#11-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      1.1 Agent 框架到底解决了什么
+      1.1 Agent 框架解决什么问题
     </span>
   </a>
   
@@ -8410,7 +8410,7 @@
           <li class="md-nav__item">
   <a href="#121" class="md-nav__link">
     <span class="md-ellipsis">
-      1.2.1 最大的价值：集成范围广、开发速度快
+      1.2.1 主要价值：集成范围广、开发速度快
     </span>
   </a>
   
@@ -8452,7 +8452,7 @@
           <li class="md-nav__item">
   <a href="#132" class="md-nav__link">
     <span class="md-ellipsis">
-      1.3.2 正确的表述方式
+      1.3.2 更准确的关系
     </span>
   </a>
   
@@ -8474,9 +8474,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#141-agent" class="md-nav__link">
+  <a href="#141" class="md-nav__link">
     <span class="md-ellipsis">
-      1.4.1 为什么「让 Agent 查企业知识库」的难点不在工具调用
+      1.4.1 企业知识库场景的难点不只在工具调用
     </span>
   </a>
   
@@ -8485,7 +8485,7 @@
           <li class="md-nav__item">
   <a href="#142-rag" class="md-nav__link">
     <span class="md-ellipsis">
-      1.4.2 但它也不只是 RAG 工具
+      1.4.2 它也不只用于 RAG
     </span>
   </a>
   
@@ -8517,11 +8517,11 @@
         <li class="md-nav__item">
   <a href="#17" class="md-nav__link">
     <span class="md-ellipsis">
-      1.7 到底该怎么选：从外到内收窄
+      1.7 选型顺序：从外到内收窄
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1.7 到底该怎么选：从外到内收窄">
+    <nav class="md-nav" aria-label="1.7 选型顺序：从外到内收窄">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8668,13 +8668,13 @@
 
 
 <h1 id="ai-agent">第一章：主流 AI Agent 开发框架概览<a class="headerlink" href="#ai-agent" title="Permanent link">&para;</a></h1>
-<h2 id="11-agent">1.1 Agent 框架到底解决了什么<a class="headerlink" href="#11-agent" title="Permanent link">&para;</a></h2>
-<p>假设不用任何框架，自己实现一个能查资料、调接口、记上下文的 Agent，需要做多少事？</p>
-<p><strong>基础部分</strong>：接入模型、定义工具协议、实现 Agent 循环、把工具结果重新交回模型。</p>
-<p><strong>工程部分</strong>：状态管理、重试、超时、流式输出、人工确认、运行追踪。</p>
-<blockquote>
-<p><strong>完成一次演示并不难，真正困难的是：系统执行十几步之后能否恢复，以及出错时能否快速定位问题。</strong></p>
-</blockquote>
+<h2 id="11-agent">1.1 Agent 框架解决什么问题<a class="headerlink" href="#11-agent" title="Permanent link">&para;</a></h2>
+<p>不依赖任何框架时，要实现一个能查资料、调接口、记上下文的 Agent，通常至少要处理两类事情：</p>
+<ul>
+<li>基础接入：接入模型、定义工具协议、实现 Agent 循环、把工具结果重新交回模型；</li>
+<li>工程能力：状态管理、重试、超时、流式输出、人工确认、运行追踪。</li>
+</ul>
+<p>一次演示能跑通并不难，难点在于系统执行十几步后还能恢复，并且出错时能快速定位。</p>
 <p>Agent 框架就是把这些重复工程抽象成可复用组件。<strong>但不同框架选择的重点并不相同</strong>：</p>
 <table>
 <thead>
@@ -8698,12 +8698,10 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>所以回答这类问题时不要只比较谁更强，而要说清楚：在什么业务约束下，哪个框架更合适。</strong></p>
-</blockquote>
+<p>比较框架时，更有用的问题是：在当前业务约束下，哪个框架更贴近项目的主要难点。</p>
 <h2 id="12-langchain">1.2 LangChain 的定位<a class="headerlink" href="#12-langchain" title="Permanent link">&para;</a></h2>
 <p>LangChain 已经不只是早期那个「把多个 Prompt 串成 Chain」的库。它提供<strong>模型、消息、Prompt、工具、结构化输出、中间件和 Agent</strong> 等通用抽象，并集成了大量模型供应商、向量数据库和外部工具。</p>
-<h3 id="121">1.2.1 最大的价值：集成范围广、开发速度快<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
+<h3 id="121">1.2.1 主要价值：集成范围广、开发速度快<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
 <p>需要切换不同模型，接入搜索、数据库或 MCP 工具，快速实现 RAG Agent、SQL Agent 或客服助手时，<strong>LangChain 能省掉大量协议适配和样板代码</strong>。</p>
 <h3 id="122">1.2.2 边界<a class="headerlink" href="#122" title="Permanent link">&para;</a></h3>
 <p><strong>高层抽象更适合常见 Agent 模式。</strong> 当业务出现<strong>复杂循环、精细分支、长时间暂停和断点恢复</strong>时，就需要下沉到 LangGraph 控制执行流程。</p>
@@ -8731,7 +8729,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>它重点解决</strong>：循环、条件分支、并行执行、持久化、暂停恢复、人工介入。</p>
+<p>LangGraph 主要处理循环、条件分支、并行执行、持久化、暂停恢复和人工介入。</p>
 <h3 id="131">1.3.1 一个具体例子<a class="headerlink" href="#131" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
     A["读取单据"] --&gt; B["合规检查"]
@@ -8743,20 +8741,14 @@
     C --&gt;|否| F
 
     style D fill:#fff3cd</code></pre>
-<blockquote>
-<p><strong>这类流程用图结构表达，会比把所有逻辑塞进一个 Agent 循环更加清晰。</strong></p>
-</blockquote>
-<h3 id="132">1.3.2 正确的表述方式<a class="headerlink" href="#132" title="Permanent link">&para;</a></h3>
+<p>这类流程通常更适合用图结构表达，而不是继续塞进单一 Agent 循环。</p>
+<h3 id="132">1.3.2 更准确的关系<a class="headerlink" href="#132" title="Permanent link">&para;</a></h3>
 <p><strong>LangChain 的 Agent 高层接口现在运行在 LangGraph 之上。</strong></p>
-<blockquote>
-<p><strong>可以把 LangChain 理解为常用组件和预制路线，把 LangGraph 理解为支撑这些路线的道路系统。</strong></p>
-<p>简单 Agent 优先用 LangChain；需要精细控制时，再下沉到 LangGraph。</p>
-</blockquote>
+<p>LangChain 提供常用组件和高层入口，LangGraph 提供底层执行、状态管理和恢复能力。简单 Agent 通常直接从 LangChain 入手；需要精细控制时，再下沉到 LangGraph。</p>
 <p><strong>不要把两者说成互相替代的框架</strong>——它们既有职责差异，也经常组合使用。</p>
 <h2 id="14-llamaindex">1.4 LlamaIndex 强在哪里<a class="headerlink" href="#14-llamaindex" title="Permanent link">&para;</a></h2>
-<p>很多人把它简单理解成「另一个 LangChain」，<strong>这会忽略它最有辨识度的能力</strong>。</p>
-<p><strong>LlamaIndex 更强调在私有数据之上构建 AI 应用</strong>：数据连接、文档解析、切分、索引、检索、重排、Query Engine、结构化数据访问，也可以把 RAG Pipeline 封装成 Agent 使用的工具。</p>
-<h3 id="141-agent">1.4.1 为什么「让 Agent 查企业知识库」的难点不在工具调用<a class="headerlink" href="#141-agent" title="Permanent link">&para;</a></h3>
+<p>如果把 LlamaIndex 当成「另一个 LangChain」，很容易忽略它在私有数据链路上的侧重。<strong>LlamaIndex 更强调在私有数据之上构建 AI 应用</strong>：数据连接、文档解析、切分、索引、检索、重排、Query Engine、结构化数据访问，也可以把 RAG Pipeline 封装成 Agent 使用的工具。</p>
+<h3 id="141">1.4.1 企业知识库场景的难点不只在工具调用<a class="headerlink" href="#141" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart LR
     subgraph IN["资料进入系统时"]
         I1["PDF 表格要正确解析"]
@@ -8770,11 +8762,9 @@
     IN --&gt; Q
 
     style IN fill:#e8f0fe</code></pre>
-<blockquote>
-<p><strong>问题是沿着整条数据链路逐步出现的，不是多注册一个搜索工具就能解决的。</strong></p>
-</blockquote>
+<p>企业知识库的问题会沿整条数据链路出现，不是多注册一个搜索工具就能解决。</p>
 <p><strong>这些正是 LlamaIndex 更擅长的方向</strong>——企业知识库、文档 Agent、研究助手、复杂 RAG 系统。</p>
-<h3 id="142-rag">1.4.2 但它也不只是 RAG 工具<a class="headerlink" href="#142-rag" title="Permanent link">&para;</a></h3>
+<h3 id="142-rag">1.4.2 它也不只用于 RAG<a class="headerlink" href="#142-rag" title="Permanent link">&para;</a></h3>
 <p>LlamaIndex 同样提供 Agent、Memory、多 Agent Pattern 和 Workflow。</p>
 <p><strong>从选型角度看</strong>：LangChain 的入口更偏<strong>通用 Agent 组装</strong>，LlamaIndex 的优势更集中在<strong>数据密集型应用</strong>。</p>
 <h2 id="15">1.5 三个框架怎么配合<a class="headerlink" href="#15" title="Permanent link">&para;</a></h2>
@@ -8823,7 +8813,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="17">1.7 到底该怎么选：从外到内收窄<a class="headerlink" href="#17" title="Permanent link">&para;</a></h2>
+<h2 id="17">1.7 选型顺序：从外到内收窄<a class="headerlink" href="#17" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     Q1{"① 这个任务&lt;br/&gt;真的需要 Agent 吗?"}
     Q1 --&gt;|步骤固定、规则明确| N["用普通函数或工作流&lt;br/&gt;更便宜、更稳定&lt;br/&gt;本来能写成 if/else 的流程&lt;br/&gt;交给模型只会增加不确定性"]
@@ -8839,7 +8829,7 @@
     style N fill:#fdecea
     style Q3 fill:#fff3cd</code></pre>
 <h3 id="171-demo">1.7.1 第三步：Demo 能跑和系统能上线是两回事<a class="headerlink" href="#171-demo" title="Permanent link">&para;</a></h3>
-<p><strong>流程越长，越要继续追问</strong>：</p>
+<p>流程越长，越需要补齐这些生产约束：</p>
 <ul>
 <li>中断后能否恢复？</li>
 <li>敏感动作是否需要审批？</li>
@@ -8847,9 +8837,7 @@
 <li>不同用户的数据能否隔离？</li>
 <li>出错后是否留有完整轨迹？</li>
 </ul>
-<blockquote>
-<p><strong>真正决定框架是否合适的，往往正是这些原型阶段看不见的生产约束。</strong></p>
-</blockquote>
+<p>很多决定因素都在这些生产约束里，原型阶段往往还看不出来。</p>
 <h3 id="172">1.7.2 掌握程度建议<a class="headerlink" href="#172" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8895,7 +8883,7 @@
 </table>
 <h2 id="18">1.8 常见错误<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
 <h3 id="181">1.8.1 一口气罗列十几个框架<a class="headerlink" href="#181" title="Permanent link">&para;</a></h3>
-<p><strong>说得越多，越容易被追问到自己只是听过名字的那个。</strong> 围绕三个主力框架展开更稳。</p>
+<p>如果一口气罗列十几个框架，后续讨论很容易退回到「只听过名字」的层面。围绕三个主力框架展开更稳。</p>
 <h3 id="182-langchain-langgraph">1.8.2 把 LangChain 和 LangGraph 说成互相替代<a class="headerlink" href="#182-langchain-langgraph" title="Permanent link">&para;</a></h3>
 <p><strong>LangChain 的 Agent 高层接口就跑在 LangGraph 之上</strong>，两者是分层关系。</p>
 <h3 id="183-llamaindex-langchain">1.8.3 把 LlamaIndex 当成「另一个 LangChain」<a class="headerlink" href="#183-llamaindex-langchain" title="Permanent link">&para;</a></h3>
@@ -8903,7 +8891,7 @@
 <h3 id="184-agent">1.8.4 跳过「这个任务真的需要 Agent 吗」这一步<a class="headerlink" href="#184-agent" title="Permanent link">&para;</a></h3>
 <p><strong>步骤固定、规则明确的流程用普通函数更便宜更稳定。</strong></p>
 <h3 id="185">1.8.5 只比功能数量不看业务约束<a class="headerlink" href="#185" title="Permanent link">&para;</a></h3>
-<p>要问的是「项目真正困难的是哪一层」。</p>
+<p>更关键的问题是「项目真正困难的是哪一层」。</p>
 <h3 id="186-demo">1.8.6 只看 Demo 能不能跑<a class="headerlink" href="#186-demo" title="Permanent link">&para;</a></h3>
 <p>中断恢复、审批、幂等、数据隔离、可追溯这些生产约束才是决定项。</p>
 <h3 id="187-dify-python-agent">1.8.7 把 Dify 和 Python Agent 框架平级比较<a class="headerlink" href="#187-dify-python-agent" title="Permanent link">&para;</a></h3>
@@ -8915,15 +8903,13 @@
 <li><strong>三个主力框架各有侧重</strong>：LangChain 偏通用组件与集成，LangGraph 偏有状态流程编排，LlamaIndex 偏数据与检索；</li>
 <li><strong>LangChain 的价值是集成广、开发快</strong>，边界是复杂循环、精细分支、暂停恢复；</li>
 <li><strong>LangGraph 用 State + Node + Edge 表达工作流</strong>，解决循环、分支、并行、持久化、人工介入；</li>
-<li><strong>两者是分层关系不是替代关系</strong>——LangChain 是预制路线，LangGraph 是道路系统；</li>
+<li><strong>两者是分层关系不是替代关系</strong>——LangChain 提供高层组件与入口，LangGraph 提供底层执行与状态能力；</li>
 <li><strong>LlamaIndex 的辨识度在整条数据链路</strong>，而不是工具调用循环；</li>
 <li><strong>三者可以组合</strong>：LlamaIndex 供检索能力 → 包装成 Tool → LangChain Agent 决定调用 → LangGraph 编排外围流程；</li>
 <li><strong>但不要为了技术栈完整而堆框架</strong>；</li>
 <li><strong>选型顺序是从外到内</strong>：先问是否真的需要 Agent，再找项目最难的那一层，最后用生产约束做最终判断。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：选框架的核心问题从来不是「谁功能多」，而是「我这个项目最难的那一层是模型接入、数据链路，还是流程控制」——答案决定了从哪个框架切入。</strong></p>
-</blockquote>
+<p>选框架时，更关键的是先判断项目最难的是模型接入、数据链路还是流程控制，再据此决定从哪个框架切入。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain 官方文档</a></li>

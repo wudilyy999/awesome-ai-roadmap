@@ -8385,7 +8385,7 @@
 
 <h1 id="semantic-kernel-kernelplugin-planner">第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner<a class="headerlink" href="#semantic-kernel-kernelplugin-planner" title="Permanent link">&para;</a></h1>
 <h2 id="181">18.1 定位：企业中间件，而不是研究框架<a class="headerlink" href="#181" title="Permanent link">&para;</a></h2>
-<p>前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（"Kernel"）到设计目标都更接近<strong>企业中间件</strong>：它把「怎么把 AI 模型接入已有的 C#/Java/Python 代码库、已有的权限体系、已有的可观测性基础设施」当作核心问题，而不是「怎么最快搭出一个原型」。</p>
+<p>前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（"Kernel"）到设计目标都更接近<strong>企业中间件</strong>：它优先解决的是「怎么把 AI 模型接入已有的 C#/Java/Python 代码库、权限体系和可观测性基础设施」，而不是「怎么最快搭出一个原型」。</p>
 <blockquote>
 <p><strong>微软官方把它定义为「轻量级、开源的开发套件，帮助你把最新的 AI 模型集成进 C#、Python 或 Java 代码库，充当高效的中间件」</strong>——「中间件」这个词准确概括了它和 LangChain 的定位差异：LangChain 更像一套完整的应用开发框架，Semantic Kernel 更像一层接入已有企业系统的适配层。</p>
 </blockquote>
@@ -8396,7 +8396,7 @@
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">builder</span><span class="p">.</span><span class="n">Plugins</span><span class="p">.</span><span class="n">AddFromType</span><span class="o">&lt;</span><span class="n">OrderPlugin</span><span class="o">&gt;</span><span class="p">();</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">Kernel</span><span class="w"> </span><span class="n">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
 </span></code></pre></div>
-<p><strong>这种「容器 + 注册」的模式是 .NET 企业开发里的标准范式</strong>（类似 ASP.NET Core 的依赖注入），对已经在用 .NET 技术栈的团队来说几乎零学习成本；对习惯了 LangChain 那种「直接实例化对象、函数式组合」风格的团队,则需要适应一层额外的容器抽象。</p>
+<p><strong>这种「容器 + 注册」的模式是 .NET 企业开发里的标准范式</strong>（类似 ASP.NET Core 的依赖注入），对已经在用 .NET 技术栈的团队来说几乎零学习成本；对习惯了 LangChain 那种「直接实例化对象、函数式组合」风格的团队，则需要适应一层额外的容器抽象。</p>
 <h2 id="183-pluginsemantic-function-native-function">18.3 Plugin：Semantic Function 与 Native Function 的统一契约<a class="headerlink" href="#183-pluginsemantic-function-native-function" title="Permanent link">&para;</a></h2>
 <p>Semantic Kernel 用 <strong>Plugin</strong> 统一了「用自然语言描述的函数」和「用代码写的函数」：</p>
 <ul>
@@ -8415,9 +8415,7 @@
     G["业务目标"] --&gt; D{"流程复杂度"}
     D --&gt;|"简单、一两步"| M["直接用模型的 Function Calling 自动选择 Plugin"]
     D --&gt;|"复杂、需要人工审核关键步骤"| PF["显式编写 Process Framework 流程（见第十九章）"]</code></pre>
-<blockquote>
-<p><strong>这条分岔路径和 <a href="../../01-langchain/04-langgraph/09-langchain-vs-langgraph/">LangChain 生态 · 第九章</a> 讨论的「什么时候从 <code>create_agent</code> 下沉到 LangGraph」是同一类工程判断</strong>：简单场景交给模型自动规划，复杂到需要精细控制分支、审批和恢复时，才显式建模流程——只是 Semantic Kernel 把这条「显式流程」路径独立命名为 Process Framework（见第十九章）。</p>
-</blockquote>
+<p>这条分岔路径和 <a href="../../01-langchain/04-langgraph/09-langchain-vs-langgraph/">LangChain 生态 · 第九章</a> 讨论的「什么时候从 <code>create_agent</code> 下沉到 LangGraph」属于同一类工程判断：简单场景交给模型自动规划；复杂到需要精细控制分支、审批和恢复时，再显式建模流程。Semantic Kernel 只是把这条「显式流程」路径独立命名为 Process Framework（见第十九章）。</p>
 <h2 id="185-filter-hook">18.5 企业治理层：Filter 与 Hook<a class="headerlink" href="#185-filter-hook" title="Permanent link">&para;</a></h2>
 <p>Semantic Kernel 把「内容安全、审计日志、成本控制」这类横切关注点抽象成 <strong>Filter</strong>（也称 Hook），可以在函数调用前后、Prompt 渲染前后插入统一的检查逻辑：</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">AuditFilter</span><span class="p">(</span><span class="n">FunctionInvocationFilter</span><span class="p">):</span>
@@ -8444,9 +8442,7 @@
 <li><strong>Planner 的角色正在从「唯一编排方式」演变为「简单场景的自动规划选项」</strong>，复杂流程应该显式建模（见第十九章 Process Framework）；</li>
 <li><strong>Filter/Hook 把内容安全、审计、成本控制这些企业级横切关注点变成一等公民</strong>，是它区别于其他框架 Middleware 概念的重点。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Semantic Kernel 不是在和 LangChain 比谁的 Agent 能力更强，而是在解决「AI 能力怎么在企业已有的多语言代码库、依赖注入体系和合规审计要求下被安全接入」这个更朴素但同样关键的问题。</strong></p>
-</blockquote>
+<p>可以把 Semantic Kernel 看作一层企业接入中间件：它不把重点放在 Agent 玩法的丰富度上，而是放在 AI 能力如何进入既有代码库、依赖注入体系和合规审计流程。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/overview/">Semantic Kernel 官方文档：Introduction</a></li>

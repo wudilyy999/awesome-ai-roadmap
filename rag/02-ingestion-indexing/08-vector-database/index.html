@@ -4565,7 +4565,7 @@
           <li class="md-nav__item">
   <a href="#841" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4.1 问题的本质
+      8.4.1 问题出在哪里
     </span>
   </a>
   
@@ -8435,7 +8435,7 @@
           <li class="md-nav__item">
   <a href="#841" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4.1 问题的本质
+      8.4.1 问题出在哪里
     </span>
   </a>
   
@@ -8607,7 +8607,7 @@
 <blockquote>
 <p><strong>用可控的精度损失，换取数量级的速度提升。</strong></p>
 </blockquote>
-<p>理解这个权衡是本章的核心。<strong>向量数据库的所有配置项，本质上都是在调这个权衡的位置。</strong></p>
+<p>理解这个权衡就够了。<strong>向量数据库的大部分配置项，都是在调这个权衡的位置。</strong></p>
 <h2 id="82-ann">8.2 主流 ANN 索引<a class="headerlink" href="#82-ann" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     ANN[ANN 索引] --&gt; HNSW[HNSW&lt;br/&gt;图索引]
@@ -8771,7 +8771,7 @@
 
     POST --&gt; POST1[先取 Top-K 再过滤]
     POST1 --&gt; POST2[高选择性时&lt;br/&gt;过滤后所剩无几甚至为空]</code></pre>
-<h3 id="841">8.4.1 问题的本质<a class="headerlink" href="#841" title="Permanent link">&para;</a></h3>
+<h3 id="841">8.4.1 问题出在哪里<a class="headerlink" href="#841" title="Permanent link">&para;</a></h3>
 <p>假设过滤条件只有 0.1% 的文档满足。</p>
 <ul>
 <li><strong>后过滤</strong>：ANN 先返回 Top-100，过滤后可能一条都不剩；</li>
@@ -8812,7 +8812,7 @@
 </table>
 <p><strong>在多租户场景下，「按租户分区建索引」通常是最稳妥的做法</strong>——它把过滤从查询时的约束变成了索引选择，彻底绕开了这个问题。</p>
 <h2 id="85">8.5 选型：怎么挑向量数据库<a class="headerlink" href="#85" title="Permanent link">&para;</a></h2>
-<p><strong>不要背产品名单，要说清楚判断维度。</strong></p>
+<p>选型时比产品名单更重要的是判断维度。</p>
 <pre class="mermaid"><code>flowchart TB
     SEL[选型] --&gt; D1[数据规模]
     SEL --&gt; D2[部署形态]
@@ -8863,7 +8863,7 @@
 </ul>
 <p><strong>它的上限在千万级以内</strong>，超过后专用向量库的优势才真正体现出来。</p>
 <blockquote>
-<p><strong>选型的常见错误是「按未来三年的规模选今天的方案」。</strong> 先按当前规模选最简单的，把接口抽象好，规模真的上来了再迁移——迁移成本通常低于长期背负一个过重系统的成本。</p>
+<p><strong>常见问题是「按未来三年的假想规模选今天的方案」。</strong> 先按当前规模选最简单的，把接口抽象好，规模真的上来了再迁移——迁移成本通常低于长期背负一个过重系统的成本。</p>
 </blockquote>
 <h2 id="86">8.6 常见错误<a class="headerlink" href="#86" title="Permanent link">&para;</a></h2>
 <h3 id="861">8.6.1 只会说索引名字<a class="headerlink" href="#861" title="Permanent link">&para;</a></h3>
@@ -8892,10 +8892,6 @@
 <li><strong>选型看四个维度</strong>：数据规模、部署形态、功能需求、运维能力；已有 PostgreSQL 时 pgvector 常是最优解；</li>
 <li><strong>按当前规模选型，把接口抽象好</strong>，不要为想象中的规模过度设计。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>向量数据库的所有技术选择，都是在召回率、延迟、内存和更新灵活性这四个量之间做分配——没有免费的午餐。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1603.09320">Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs</a></li>

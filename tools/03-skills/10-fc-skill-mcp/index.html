@@ -8450,7 +8450,7 @@
 <h2 id="101">10.1 为什么会有三个概念<a class="headerlink" href="#101" title="Permanent link">&para;</a></h2>
 <p>最典型的误解是把这三个当成「不同厂商在不同时期推出的竞争方案，选一个用就行」。</p>
 <p>实际上它们是<strong>从底到顶的三层</strong>，每一层建立在下一层之上。</p>
-<p>一个最快的区分方法是看<strong>每句话的主语是谁</strong>：</p>
+<p>可以先看<strong>每句话的主语是谁</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -8588,7 +8588,7 @@
 </tr>
 </tbody>
 </table>
-<p>这个类比的好处是它同时解释了<strong>为什么不能互相替代</strong>：手不能变成厨房，厨房也不能代替菜谱。</p>
+<p>这个类比也说明了<strong>为什么它们不能互相替代</strong>：手不能变成厨房，厨房也不能代替菜谱。</p>
 <h2 id="105">10.5 一个完整场景串起三层<a class="headerlink" href="#105" title="Permanent link">&para;</a></h2>
 <p>用户说：<strong>「帮我分析最近三个月的销售数据，找出下滑的产品线，给改进建议。」</strong></p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -8625,7 +8625,7 @@
     Note over A,SK: 第三步：按 Skill 模板成文
     M--&gt;&gt;A: 结构化分析报告
     A--&gt;&gt;U: 返回报告</code></pre>
-<p>三层的分工在这个流程里一目了然：</p>
+<p>放到这个流程里看，三层分工分别是：</p>
 <ul>
 <li><strong>Skill 做流程编排</strong>——决定「先取数、再分析、最后按模板成文」，以及每步的标准（比如「下滑幅度超过 15% 才算显著」）；</li>
 <li><strong>MCP 做工具管理</strong>——Client 已经连着数据库 Server 和 Python 执行器 Server，工具列表自动可见，不需要在应用里写死；</li>
@@ -8633,7 +8633,7 @@
 </ul>
 <h2 id="106">10.6 常见错误<a class="headerlink" href="#106" title="Permanent link">&para;</a></h2>
 <h3 id="1061">10.6.1 当成三个竞争方案<a class="headerlink" href="#1061" title="Permanent link">&para;</a></h3>
-<p>这是本章最核心的误区。它们是三层架构，同一个系统里通常三者同时存在。</p>
+<p>这是最常见的误解。它们是三层架构，同一个系统里通常三者同时存在。</p>
 <h3 id="1062">10.6.2 说不清依赖方向<a class="headerlink" href="#1062" title="Permanent link">&para;</a></h3>
 <p>更准确的关系是：Skill 编排能力；MCP 标准化一部分能力接入；Function Calling 是模型选择工具时常见的表达层。三者可组合，不构成强制的单向依赖。</p>
 <h3 id="1063">10.6.3 认为三者缺一不可<a class="headerlink" href="#1063" title="Permanent link">&para;</a></h3>
@@ -8643,7 +8643,7 @@
 <h3 id="1065-mcp-anthropic-function-calling">10.6.5 把 MCP 说成「Anthropic 版的 Function Calling」<a class="headerlink" href="#1065-mcp-anthropic-function-calling" title="Permanent link">&para;</a></h3>
 <p>MCP 不是 FC 的替代实现，也不建立在 FC 之上。同一个 MCP Server 可以服务不同 Host；当 Host 使用模型工具接口时，可将工具定义翻译成各家的 FC schema，也可采用其他调用路径。</p>
 <h3 id="1066">10.6.6 只背概念不讲协作<a class="headerlink" href="#1066" title="Permanent link">&para;</a></h3>
-<p>这道题最好的答法是用一个具体场景把三层串起来，让人看出你理解的是系统协作，而不是三段定义。</p>
+<p>如果要向别人解释这三者，拿一个具体场景把三层串起来，通常比分别背三段定义更能说明问题。</p>
 <h2 id="107">10.7 本章总结<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>三者是从底到顶的三层，不是竞争方案</strong>；</li>
@@ -8655,7 +8655,7 @@
 <li><strong>答题要用完整场景串三层</strong>，比分别给三段定义有说服力得多。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：Function Calling 是语言，MCP 是工具箱，Skill 是操作手册——语言让你能开口，工具箱让你有东西可用，操作手册让你知道该按什么顺序用。</strong></p>
+<p><strong>可以把它们记成三层：Function Calling 是语言，MCP 是工具箱，Skill 是操作手册；能不能调用、能调用什么、该怎么调用，分别落在这三层。</strong></p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

@@ -8759,10 +8759,10 @@
 
 <h1 id="deep-research">第十二章：Deep Research 的实现逻辑<a class="headerlink" href="#deep-research" title="Permanent link">&para;</a></h1>
 <h2 id="121-deep-research">12.1 Deep Research 是什么<a class="headerlink" href="#121-deep-research" title="Permanent link">&para;</a></h2>
-<p><strong>普通问答通常可以通过一次检索得到答案，而研究任务往往一开始就没有固定路径。</strong></p>
-<p><strong>例如比较三家云厂商的 Agent 托管能力</strong>：需要分别查产品定位、价格、限制和区域差异，还要处理<strong>产品改名、资料过期和来源矛盾</strong>。</p>
+<p>普通问答通常一次检索就能得到答案；研究任务往往一开始就没有固定路径。</p>
+<p>例如比较三家云厂商的 Agent 托管能力，需要分别查产品定位、价格、限制和区域差异，还要处理<strong>产品改名、资料过期和来源矛盾</strong>。</p>
 <blockquote>
-<p><strong>Deep Research 的关键不是「搜索很多次」</strong>，而是让系统围绕研究目标<strong>动态决定</strong>：下一步搜索什么、哪些问题可以并行、证据是否充分，以及<strong>何时停止</strong>。</p>
+<p>Deep Research 关注的是一套研究流程：系统要围绕研究目标决定下一步搜什么、哪些问题可以并行、证据是否充分，以及何时停止。</p>
 </blockquote>
 <h3 id="1211">12.1.1 生态里几个名字的区别<a class="headerlink" href="#1211" title="Permanent link">&para;</a></h3>
 <table>
@@ -8792,7 +8792,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>当前边界要说清</strong>：Deep Agents 是单独安装的 <code>deepagents</code> SDK/harness，不是 LangChain 核心包的开关，也不替你提供模型、身份系统、业务授权、数据治理或安全隔离。<code>task</code> 子 Agent 默认是一次性、隔离上下文后只回传最终报告；任务清单从 v0.7 起是 opt-in，不应假设每个 Deep Agent 都会规划或长期记忆。</p>
+<p>边界需要明确：Deep Agents 是单独安装的 <code>deepagents</code> SDK/harness，不是 LangChain 核心包的开关，也不替你提供模型、身份系统、业务授权、数据治理或安全隔离。<code>task</code> 子 Agent 默认是一次性、隔离上下文后只回传最终报告；任务清单从 v0.7 起是 opt-in，不应假设每个 Deep Agent 都会规划或长期记忆。</p>
 </blockquote>
 <h2 id="122">12.2 核心流程<a class="headerlink" href="#122" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
@@ -8860,7 +8860,7 @@
 </blockquote>
 <h2 id="124">12.4 如何保证研究质量<a class="headerlink" href="#124" title="Permanent link">&para;</a></h2>
 <p><strong>研究报告很长、链接很多，并不代表质量高。</strong></p>
-<p><strong>判断质量时沿着「来源 → 证据 → 结论」反向追查</strong>：</p>
+<p>判断质量时，可以沿着「来源 → 证据 → 结论」反向追查：</p>
 <pre class="mermaid"><code>flowchart TB
     A["① 来源是否值得信&lt;br/&gt;官方文档、论文、监管文件、一手资料更接近原始事实&lt;br/&gt;多篇转载可能都来自同一篇文章&lt;br/&gt;不能因为链接数量多就当成交叉验证"]
     A --&gt; B["② 来源是否真的支持当前结论&lt;br/&gt;报告应把事实、推断和不确定性分开&lt;br/&gt;遇到冲突时追查发布时间、统计口径和原始出处&lt;br/&gt;而不是挑一个最符合预期的答案"]
@@ -8927,7 +8927,7 @@
 </table>
 <p><strong>单个分支有上限还不够</strong>——整项任务还要设置<strong>总 Token、搜索费用和超时预算</strong>，再补上失败重试、缓存、限流和取消策略。</p>
 <blockquote>
-<p><strong>系统才知道什么时候继续、什么时候降级、什么时候停止。</strong></p>
+<p>这样才能明确继续、降级或停止的条件。</p>
 </blockquote>
 <h3 id="1252">12.5.2 网页和外部文档都是不可信输入<a class="headerlink" href="#1252" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -9000,7 +9000,7 @@
 </blockquote>
 <p><strong>推荐组合</strong>：临时中间产物放 thread-scoped State backend；经审核、需要跨会话保留的资料放带租户 namespace 的 Store backend；代码执行放一次性 sandbox。需要同时使用时用 Composite backend 按路径路由，而不是把所有数据和权限放进一个可写本地目录。</p>
 <h2 id="126">12.6 哪些场景适合<a class="headerlink" href="#126" title="Permanent link">&para;</a></h2>
-<p><strong>三项都成立时才值得使用</strong>：</p>
+<p>同时满足下列三项时，Deep Research 才值得引入：</p>
 <pre class="mermaid"><code>flowchart TB
     Q1{"问题是否开放到&lt;br/&gt;需要多轮搜索和动态调整方向?"}
     Q1 --&gt;|一次权威检索就能回答| N1["不用&lt;br/&gt;复杂研究流程只会增加成本"]
@@ -9037,7 +9037,7 @@
 </table>
 <h2 id="127">12.7 常见错误<a class="headerlink" href="#127" title="Permanent link">&para;</a></h2>
 <h3 id="1271-deep-research">12.7.1 把 Deep Research 理解成「搜索很多次」<a class="headerlink" href="#1271-deep-research" title="Permanent link">&para;</a></h3>
-<p><strong>核心是动态决定搜什么、能否并行、证据够不够、何时停止。</strong></p>
+<p>重点在于动态决定搜什么、能否并行、证据够不够、何时停止。</p>
 <h3 id="1272-langchain">12.7.2 把它当成 LangChain 核心包里的一个开关<a class="headerlink" href="#1272-langchain" title="Permanent link">&para;</a></h3>
 <p><strong>它是一类研究型 Agent 架构</strong>，参考实现和通用框架定位不同。</p>
 <h3 id="1273">12.7.3 跳过范围澄清直接开搜<a class="headerlink" href="#1273" title="Permanent link">&para;</a></h3>
@@ -9079,7 +9079,7 @@
 <li><strong>Deep Agents 是 SDK/harness 而非安全或正确性承诺</strong>：文件、持久化和 shell 权限取决于 backend；不可信代码要在受限 sandbox 中执行。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：Deep Research 的本质是把一个没有固定路径的研究任务，拆成「Supervisor 规划补缺 + Researcher 隔离上下文并行搜证 + 统一写作阶段综合报告」的有状态流程，而它能不能上线，取决于你有没有同时控住宽度、深度、预算、来源可信度和提示词注入风险。</strong></p>
+<p>可以把它理解为：把一个没有固定路径的研究任务，拆成「Supervisor 规划补缺 + Researcher 隔离上下文并行搜证 + 统一写作」的有状态流程；能否上线，还取决于宽度、深度、预算、来源可信度和提示词注入风险是否被一起控制。</p>
 </blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>

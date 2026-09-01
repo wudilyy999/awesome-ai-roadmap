@@ -8852,7 +8852,7 @@
 <p><strong>vLLM = PagedAttention（显存高效）+ Continuous Batching（吞吐高效）</strong>，是当前生产环境部署 LLM API 的常见默认选择。</p>
 </blockquote>
 <h2 id="203-sglangradixattention">20.3 SGLang：RadixAttention 攻共享前缀<a class="headerlink" href="#203-sglangradixattention" title="Permanent link">&para;</a></h2>
-<p>SGLang 不是要替代 vLLM，而是针对 <strong>vLLM 没解决好的特定场景：多请求共享前缀</strong>。</p>
+<p>SGLang 更适合前缀复用率高的场景，尤其是<strong>多请求共享前缀</strong>。</p>
 <h3 id="2031">20.3.1 哪些场景前缀重复率高<a class="headerlink" href="#2031" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>System Prompt 共享</strong>：所有用户调同一个 API，System Prompt 完全一样；</li>
@@ -8860,7 +8860,7 @@
 <li><strong>多轮对话历史</strong>：每轮都包含前 N 轮的完整历史；</li>
 <li><strong>Agent 工作流</strong>：Agent 多次调用 LLM，每次上下文都从同一个 System Prompt 开始。</li>
 </ul>
-<p><strong>需要更新的说法</strong>：vLLM 不只有 PagedAttention，也提供 <strong>Automatic Prefix Caching（APC）</strong>，可复用相同 token 前缀的 KV block。是否开启、命中和收益依版本、配置及缓存压力而定；不能把「跨请求前缀复用」说成 SGLang 独有。</p>
+<p>vLLM 不只有 PagedAttention，也提供 <strong>Automatic Prefix Caching（APC）</strong>，可复用相同 token 前缀的 KV block。是否开启、命中和收益依版本、配置及缓存压力而定；不能把「跨请求前缀复用」说成 SGLang 独有。</p>
 <h3 id="2032-radixattention-kv-cache">20.3.2 RadixAttention：用基数树组织 KV Cache<a class="headerlink" href="#2032-radixattention-kv-cache" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
     ROOT["根节点（空）"] --&gt; SP["共享的 System Prompt&lt;br/&gt;1000 token —— 只存一份"]
@@ -8981,7 +8981,7 @@
 </thead>
 <tbody>
 <tr>
-<td>对每个具体 GPU 型号做硬件级 fine-tuning</td>
+<td>对每个具体 GPU 型号做硬件级调优</td>
 <td><strong>工程门槛高</strong>，需要先编译 engine</td>
 </tr>
 <tr>
@@ -9126,9 +9126,6 @@
 <li><strong>TensorRT-LLM 针对 NVIDIA 硬件深度优化</strong>，代价是 engine 构建与平台绑定；是否领先取决于模型、硬件、精度与请求负载；</li>
 <li><strong>三大隐藏陷阱</strong>：长上下文仍有碎片与调度开销、KV Cache 量化支持差异大、MoE 部署复杂度通常高于 Dense。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：部署框架的选型本质是问三个问题——你的显存浪费在哪里、你的 GPU 在等什么、你的请求之间有多少内容是重复的，答案不同就该选不同的框架。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2309.06180">Efficient Memory Management for Large Language Model Serving with PagedAttention（vLLM）</a></li>

@@ -9953,7 +9953,7 @@
 <p><strong>角色名不是专业能力，专用上下文、工具、数据和评估才是。</strong></p>
 </blockquote>
 <h2 id="95-multi-agent">9.5 为什么使用 Multi-Agent<a class="headerlink" href="#95-multi-agent" title="Permanent link">&para;</a></h2>
-<p>Multi-Agent 的主要价值可以归纳为五类。</p>
+<p>Multi-Agent 的收益通常落在五个方面。</p>
 <h3 id="951">9.5.1 上下文隔离<a class="headerlink" href="#951" title="Permanent link">&para;</a></h3>
 <p>不同 Agent 只加载自己需要的信息，减少无关内容干扰。</p>
 <p>例如：</p>
@@ -10045,7 +10045,7 @@
 </tr>
 </tbody>
 </table>
-<p>可以归纳为一条可操作的判据：</p>
+<p>工程上更实用的判断标准是：</p>
 <blockquote>
 <p><strong>Multi-Agent 的收益来自「上下文按职责隔离」，而不是来自「Agent 数量变多」。如果拆分之后各 Agent 仍然需要共享大量彼此的中间决策，说明这条边界划错了。</strong></p>
 </blockquote>
@@ -10894,32 +10894,14 @@ R_{coord}=\frac{C_{coord}}{C_{total}}
 <li>是否能够重放完整执行轨迹？</li>
 </ul>
 <h2 id="933">9.33 本章总结<a class="headerlink" href="#933" title="Permanent link">&para;</a></h2>
-<p>Single-Agent 与 Multi-Agent 的区别不只是数量：</p>
-<ul>
-<li>Single-Agent 由一个主要决策主体管理目标和状态；</li>
-<li>Multi-Agent 由多个具有独立职责和局部决策权的 Agent 协作。</li>
-</ul>
-<p>Multi-Agent 的真实价值来自：</p>
-<ol>
-<li>上下文隔离；</li>
-<li>能力和权限专业化；</li>
-<li>并行执行；</li>
-<li>故障隔离；</li>
-<li>多视角制衡。</li>
-</ol>
-<p>但它不会：</p>
-<ul>
-<li>扩大底层模型的 Context Window；</li>
-<li>因为角色名不同就自动提升专业能力；</li>
-<li>自动解决任务分解和验证；</li>
-<li>免费获得并行加速；</li>
-<li>消除模型错误。</li>
-</ul>
-<p>生产系统通常优先选择：</p>
+<p>Single-Agent 与 Multi-Agent 的差别不只在数量，更在于谁持有目标、状态和下一步决策权。Single-Agent 由一个主体统筹全局；Multi-Agent 则把局部决策拆给多个角色。</p>
+<p>Multi-Agent 真正值得引入的场景，通常同时具备几件事：上下文可以按职责切开、能力或权限确实异构、子任务有并行收益，而且协调成本还在可控范围内。</p>
+<p>它也解决不了一些常被高估的问题：底层模型的 Context Window 不会因此变大，角色名不同也不会自动带来专业能力，并行化更不等于天然更快或更稳。</p>
+<p>生产系统更常见的升级路径是：</p>
 <blockquote>
 <p><strong>Single-Agent → Agentic Workflow → Orchestrator-Workers → Hierarchical / Hybrid Multi-Agent</strong></p>
 </blockquote>
-<p>只有在任务可分解、能力真实异构、并行收益明确且协调成本可接受时，Multi-Agent 才是合理升级。</p>
+<p>只有在任务可分解、能力真实异构、并行收益明确且协调成本可接受时，Multi-Agent 才值得往前走这一步。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic: Building Effective Agents</a></li>

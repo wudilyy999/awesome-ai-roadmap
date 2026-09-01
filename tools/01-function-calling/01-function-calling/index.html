@@ -8930,7 +8930,7 @@
 </tr>
 </tbody>
 </table>
-<p>最后一种用法值得单独说：把 <code>tool_choice</code> 锁定到某个工具，本质上是在用 Function Calling 做<strong>结构化输出</strong>。这是 Structured Output / JSON Mode 出现之前的通行做法，现在仍然被大量代码沿用。</p>
+<p>把 <code>tool_choice</code> 锁定到某个工具时，Function Calling 实际上就在充当<strong>结构化输出</strong>接口。这是 Structured Output / JSON Mode 出现之前的通行做法，现在仍然被大量代码沿用。</p>
 <h2 id="16">1.6 并行工具调用<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
 <p><code>tool_calls</code> 是数组而不是单个对象，这是一个刻意的设计。</p>
 <p>用户问「帮我查北京、上海、广州的天气」，模型可以在<strong>一次响应</strong>里返回三个调用请求：</p>
@@ -9018,9 +9018,6 @@
 <li><strong>并行调用把 N 轮压缩成 2 轮</strong>，前提是工具之间无依赖，且要正确处理部分失败；</li>
 <li><strong>它只解决了表达问题</strong>，工具发现、跨进程、生态标准化由 MCP 等上层协议补齐。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：Function Calling 让模型学会用结构化 JSON 说「我要调这个工具」，而执行这件事，从头到尾都是你的代码在做。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://platform.openai.com/docs/guides/function-calling">OpenAI: Function Calling 指南</a></li>

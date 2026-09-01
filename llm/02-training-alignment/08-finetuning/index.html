@@ -8753,7 +8753,7 @@
     D1 -.-&gt;|任意组合| D2</code></pre>
 <p><strong>这两个维度是正交的，可以任意组合</strong>：全量微调 + SFT、LoRA + SFT、QLoRA + SFT、LoRA + DPO、QLoRA + DPO……每种组合都是合法的微调方案。</p>
 <blockquote>
-<p>理解这两个维度的正交关系，是回答这道题的钥匙。</p>
+<p>把「改哪些参数」和「学什么目标」分开看，LoRA、QLoRA、SFT、DPO 才不会混成一团。</p>
 </blockquote>
 <h2 id="83">8.3 维度一：改哪些参数<a class="headerlink" href="#83" title="Permanent link">&para;</a></h2>
 <h3 id="831">8.3.1 全量微调：所有参数都改<a class="headerlink" href="#831" title="Permanent link">&para;</a></h3>
@@ -8953,7 +8953,7 @@ W' = W + BA, \quad A \in \mathbb{R}^{r \times d},\ B \in \mathbb{R}^{d \times r}
 <h3 id="866-qlora">8.6.6 认为 QLoRA 精度损失很大<a class="headerlink" href="#866-qlora" title="Permanent link">&para;</a></h3>
 <p>实测和全精度 LoRA 几乎没差别。NF4 是专为权重分布设计的量化格式。</p>
 <h3 id="867">8.6.7 认为方案越重效果越好<a class="headerlink" href="#867" title="Permanent link">&para;</a></h3>
-<p>成本、调参难度、维护成本都会指数级上升。克制是工程美德。</p>
+<p>成本、调参难度、维护成本都会指数级上升。大多数团队最后输的，都是收益撑不起额外复杂度。</p>
 <h2 id="87">8.7 本章总结<a class="headerlink" href="#87" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>微调是最后手段</strong>：先试 Prompt + Few-shot、System Prompt、RAG；</li>
@@ -8968,7 +8968,7 @@ W' = W + BA, \quad A \in \mathbb{R}^{r \times d},\ B \in \mathbb{R}^{d \times r}
 <li><strong>实战首选 QLoRA + SFT</strong>，能轻则轻，方案越重成本、调参和维护都指数级上升。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：微调这道题的关键不是背方案名字，而是先答出「该不该微调」，再把「改哪些参数」和「学什么目标」这两个正交维度拆开——大多数项目的正确答案其实就是最轻的那个组合。</strong></p>
+<p>先判断需求到底该不该微调，再区分参数方案和训练目标；多数项目从 QLoRA + SFT 起步就够了。</p>
 </blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>

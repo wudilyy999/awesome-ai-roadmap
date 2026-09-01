@@ -8670,7 +8670,7 @@
 
 <h1 id="llm">第二章：LLM 如何学会调用工具<a class="headerlink" href="#llm" title="Permanent link">&para;</a></h1>
 <h2 id="21">2.1 一个反直觉的前提：工具调用不是涌现出来的<a class="headerlink" href="#21" title="Permanent link">&para;</a></h2>
-<p>先破一个常见误解：<strong>参数量变大不会自动带来工具调用能力</strong>。</p>
+<p><strong>参数量变大不会自动带来工具调用能力</strong>。</p>
 <p>涌现（Emergence）说的是模型规模跨过某个阈值后，突然具备了小模型没有的推理与理解能力。但工具调用要的是另一件事——在恰当的时机输出一段<strong>可被机器解析的结构化 JSON</strong>，并且格式严格到能直接进 <code>json.loads</code>。</p>
 <p>这个模式在预训练语料里基本不存在。互联网上有大量 API 文档、有大量代码，但几乎没有「对话进行到一半，助手突然吐出一段 <code>tool_calls</code> JSON，然后等待外部结果，再接着往下说」这种数据分布。</p>
 <p>所以一个纯预训练模型面对「北京今天天气怎么样」，最好的表现也只是说：</p>
@@ -8789,7 +8789,7 @@
 </tr>
 </tbody>
 </table>
-<p>第三种值得单独说。ToolLLM 提出的做法是拿真实的 RapidAPI 接口去跑，用<strong>实际执行成功与否</strong>作为样本正确性的判据，而不是靠另一个模型说了算。这绕开了纯蒸馏最大的隐患——<strong>幻觉传递</strong>：上游模型生成了一个参数写错的调用样本，下游模型会把这个错误当作正确答案学进去，而且没有任何信号能发现。</p>
+<p>真实 API 执行反馈这一类数据尤其值得投入。ToolLLM 提出的做法是拿真实的 RapidAPI 接口去跑，用<strong>实际执行成功与否</strong>作为样本正确性的判据，而不是靠另一个模型说了算。这绕开了纯蒸馏最大的隐患——<strong>幻觉传递</strong>：上游模型生成了一个参数写错的调用样本，下游模型会把这个错误当作正确答案学进去，而且没有任何信号能发现。</p>
 <p>只要工具是可执行的，就应该用执行结果做校验。这条原则在整个工具调用训练里都成立。</p>
 <h2 id="23-sft">2.3 第二阶段：为什么 SFT 不够<a class="headerlink" href="#23-sft" title="Permanent link">&para;</a></h2>
 <p>SFT 之后的模型有个很典型的毛病：<strong>过度调用</strong>。</p>
@@ -8831,7 +8831,7 @@
 <p>代价是<strong>偏见传递</strong>：如果 AI 评委自己认为「所有数学题都该调计算器」，被它训练出来的模型也会继承这个倾向。</p>
 <p>现在业界的主流是混用——关键数据和评测集用人工保质量，大规模训练数据用 AI 提效率。</p>
 <h2 id="25-2025">2.5 2025 年之后的新范式：可验证奖励<a class="headerlink" href="#25-2025" title="Permanent link">&para;</a></h2>
-<p>前面三个阶段是 2023–2024 年的经典配方。工具调用领域最近两年最重要的变化，是从「靠偏好打分」转向了<strong>靠执行结果打分</strong>。</p>
+<p>前面三个阶段是 2023–2024 年的经典配方。到了 2025 年之后，工具调用训练开始从「靠偏好打分」转向<strong>靠执行结果打分</strong>。</p>
 <h3 id="251">2.5.1 为什么可以这么做<a class="headerlink" href="#251" title="Permanent link">&para;</a></h3>
 <p>工具调用有一个别的对齐任务没有的优势：<strong>它的正确与否在很多时候是可以客观判定的</strong>。</p>
 <ul>
@@ -8953,9 +8953,6 @@
 <li><strong>2025 年后转向可验证奖励</strong>，用真实执行结果代替偏好打分，规避 reward hacking；</li>
 <li><strong>训练期决定运行期上限</strong>，Prompt 补不回训练数据的缺口。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：SFT 教会模型怎么调工具，强化学习教会它什么时候不该调，而 2025 年之后，「调对了没有」这件事越来越多地交给真实执行结果来判定。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2302.04761">Toolformer: Language Models Can Teach Themselves to Use Tools</a></li>

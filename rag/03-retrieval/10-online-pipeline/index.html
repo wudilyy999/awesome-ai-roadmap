@@ -8707,7 +8707,7 @@
     S7 --&gt; S8[8. 生成]
     S8 --&gt; S9[9. 引用标注与校验]
     S9 --&gt; OUT[返回答案]</code></pre>
-<p><strong>注意第 0 步和第 9 步</strong>——这两步在基础版 RAG 里通常没有，但在生产系统里往往是必需的。</p>
+<p>第 0 步和第 9 步在基础版 RAG 的示意图里常被省略，但在生产系统里往往必需。</p>
 <h2 id="103">10.3 逐步拆解<a class="headerlink" href="#103" title="Permanent link">&para;</a></h2>
 <h3 id="1031-0">10.3.1 第 0 步：判断要不要检索<a class="headerlink" href="#1031-0" title="Permanent link">&para;</a></h3>
 <p><strong>不是所有问题都需要检索。</strong></p>
@@ -8715,7 +8715,7 @@
 <li>「你好」「帮我把上一段翻译成英文」——不需要检索，检索反而会引入噪音；</li>
 <li>「今年的报销标准是多少」——需要检索。</li>
 </ul>
-<p>无脑对所有输入都检索有两个代价：<strong>每次都多花几百毫秒和一次向量化成本</strong>，以及<strong>给闲聊类问题塞进无关文档，反而让答案变差</strong>（第二章 2.4.2 节）。</p>
+<p>对所有输入都检索有两个代价：<strong>每次都多花几百毫秒和一次向量化成本</strong>，以及<strong>给闲聊类问题塞进无关文档，反而让答案变差</strong>（第二章 2.4.2 节）。</p>
 <p>判断方式可以是轻量分类模型、规则，或者让 LLM 自己决定（把检索做成一个工具）。<strong>后者是 Agentic RAG 的雏形</strong>（第十五章）。</p>
 <h3 id="1032-1-query">10.3.2 第 1 步：Query 理解与改写<a class="headerlink" href="#1032-1-query" title="Permanent link">&para;</a></h3>
 <p>原始的用户输入常常不适合直接检索：口语化、有指代、太笼统、或者一个问题里包含多个子问题。</p>
@@ -8726,8 +8726,8 @@
 <li><strong>分解</strong>：一个复合问题拆成多个子问题；</li>
 <li><strong>扩展</strong>：生成多个不同表述的 Query 并行检索。</li>
 </ul>
-<p><strong>关键工程注意事项</strong>：<strong>改写会引入延迟（一次 LLM 调用）和风险（改错了方向就全错了）。</strong> 常见的稳妥做法是<strong>同时保留原始 Query 和改写后的 Query 一起检索</strong>，这样即使改写失败，原始 Query 仍能兜底。</p>
-<p><strong>多轮对话场景下，指代消解几乎是必需的。</strong> 直接拿「它多少钱」去检索，必然什么都搜不到。</p>
+<p>改写会引入一次额外的 LLM 调用，也会带来方向跑偏的风险。工程上通常同时保留原始 Query 和改写后的 Query 一起检索，这样即使改写失败，原始 Query 仍能兜底。</p>
+<p>多轮对话场景里通常要先做指代消解；直接拿「它多少钱」去检索，往往什么都搜不到。</p>
 <h3 id="1033-2-query">10.3.3 第 2 步：Query 向量化<a class="headerlink" href="#1033-2-query" title="Permanent link">&para;</a></h3>
 <p>技术上最简单，但有<strong>整条链路最重要的一条硬性约束</strong>：</p>
 <blockquote>
@@ -8752,10 +8752,7 @@
 <li><strong>要采用经业务评测集校准的置信度/拒答策略</strong>。不同 Query 的裸分不可直接比较；低置信度时直接拒答、澄清或降级，而不是硬凑够 K 个候选（详见<a href="../13-hybrid-retrieval-rerank/">第十三章</a>）。</li>
 </ul>
 <h3 id="1037-6">10.3.7 第 6 步：上下文裁剪与组装<a class="headerlink" href="#1037-6" title="Permanent link">&para;</a></h3>
-<p>拿到精排结果后，还有三件事要做：</p>
-<p><strong>（1）控制总量。</strong> 按第二章 2.6 节的结论，<strong>不要把所有候选都塞进去</strong>。设定一个 Token 预算，超出就截断。</p>
-<p><strong>（2）安排顺序。</strong> 考虑到「lost in the middle」现象（第二章 2.4.2），<strong>把最相关的内容放在开头和结尾</strong>，次要的放中间，是一个成本为零的优化。</p>
-<p><strong>（3）附加元数据。</strong> 每个片段前标注来源、章节、日期。这有两个作用：让模型知道信息的<strong>时效和权威性</strong>，以及<strong>为引用标注提供依据</strong>。</p>
+<p>拿到精排结果后，还要处理三件事。先控制总量：按第二章 2.6 节的结论，<strong>不要把所有候选都塞进去</strong>，应设定 Token 预算，超出就截断。再安排顺序：考虑到「lost in the middle」现象（第二章 2.4.2），<strong>把最相关的内容放在开头和结尾</strong>，次要的放中间。最后附加元数据，在每个片段前标注来源、章节、日期，让模型感知信息的<strong>时效和权威性</strong>，也为引用标注提供依据。</p>
 <h3 id="1038-7-prompt">10.3.8 第 7 步：Prompt 拼装<a class="headerlink" href="#1038-7-prompt" title="Permanent link">&para;</a></h3>
 <p>Prompt 需要明确约束模型的行为（第十七章详细展开）：</p>
 <ul>
@@ -8764,7 +8761,7 @@
 <li><strong>每个结论标注来源编号</strong>；</li>
 <li><strong>材料之间冲突时说明冲突，不要擅自选一个</strong>。</li>
 </ul>
-<p><strong>最后一条经常被漏掉</strong>，但知识库里存在新旧版本冲突是很常见的。</p>
+<p>知识库里经常同时存在新旧版本的冲突材料，因此最后一条通常不能省略。</p>
 <h3 id="1039-8">10.3.9 第 8 步：生成<a class="headerlink" href="#1039-8" title="Permanent link">&para;</a></h3>
 <p><strong>默认使用流式输出。</strong> 端到端 P95 可能有 2–3 秒，但首 Token 在几百毫秒内返回，用户的体感差异巨大。</p>
 <h3 id="10310-9">10.3.10 第 9 步：引用标注与校验<a class="headerlink" href="#10310-9" title="Permanent link">&para;</a></h3>
@@ -8774,7 +8771,7 @@
 <li><strong>可选的忠实度校验</strong>：用一次额外的模型调用检查答案是否被材料支撑；</li>
 <li><strong>拒答兜底</strong>：检索为空或分数过低时，直接返回「未找到相关信息」，<strong>不进入生成环节</strong>。</li>
 </ul>
-<p><strong>最后一条是最便宜也最有效的防幻觉手段</strong>——根本不给模型编的机会。</p>
+<p>最后一条成本很低，但通常很有效，因为在证据不足时会直接终止生成。</p>
 <h2 id="104">10.4 延迟预算表<a class="headerlink" href="#104" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -8827,7 +8824,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>优化的正确顺序是从耗时最大的开始</strong>：LLM 生成 → Rerank → Query 改写。<strong>在向量检索上抠几毫秒是无效优化。</strong></p>
+<p>优化通常应从耗时最大的环节开始：LLM 生成 → Rerank → Query 改写。相比之下，在向量检索上再抠几毫秒，整体收益往往有限。</p>
 <h2 id="105">10.5 每一步的降级路径<a class="headerlink" href="#105" title="Permanent link">&para;</a></h2>
 <p>生产系统必须为每一步准备失败后的行为：</p>
 <table>
@@ -8865,7 +8862,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>原则：宁可返回一个诚实的「暂时无法回答」，也不要返回一个编造的答案。</strong> 前者是可接受的体验，后者会摧毁用户对系统的信任。</p>
+<p><strong>原则：宁可返回一个诚实的「暂时无法回答」，也不要返回一个编造的答案。</strong> 前者还能继续引导用户，后者会直接破坏结果的可信度。</p>
 </blockquote>
 <h2 id="106">10.6 缓存能加在哪<a class="headerlink" href="#106" title="Permanent link">&para;</a></h2>
 <table>
@@ -8935,10 +8932,6 @@
 <li><strong>每一步都要有降级路径</strong>，宁可诚实拒答也不要编造；</li>
 <li><strong>优化从耗时最大的环节开始</strong>：生成 → Rerank → 改写。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>在线链路的设计目标不是"每一步都最优"，而是"任何一步失败时，系统仍然给出一个诚实的结果"。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2312.10997">Retrieval-Augmented Generation for Large Language Models: A Survey</a></li>

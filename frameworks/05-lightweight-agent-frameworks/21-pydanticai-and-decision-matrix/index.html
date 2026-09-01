@@ -6354,7 +6354,7 @@
         <li class="md-nav__item">
   <a href="#211" class="md-nav__link">
     <span class="md-ellipsis">
-      21.1 第三种回答:把「协作」问题换成「正确性」问题
+      21.1 第三种路线：把「协作」问题换成「正确性」问题
     </span>
   </a>
   
@@ -6363,7 +6363,7 @@
         <li class="md-nav__item">
   <a href="#212-agentoutput_type" class="md-nav__link">
     <span class="md-ellipsis">
-      21.2 核心设计:Agent、output_type 与依赖注入
+      21.2 核心设计：Agent、output_type 与依赖注入
     </span>
   </a>
   
@@ -8239,7 +8239,7 @@
         <li class="md-nav__item">
   <a href="#211" class="md-nav__link">
     <span class="md-ellipsis">
-      21.1 第三种回答:把「协作」问题换成「正确性」问题
+      21.1 第三种路线：把「协作」问题换成「正确性」问题
     </span>
   </a>
   
@@ -8248,7 +8248,7 @@
         <li class="md-nav__item">
   <a href="#212-agentoutput_type" class="md-nav__link">
     <span class="md-ellipsis">
-      21.2 核心设计:Agent、output_type 与依赖注入
+      21.2 核心设计：Agent、output_type 与依赖注入
     </span>
   </a>
   
@@ -8366,13 +8366,13 @@
 
 
 <h1 id="pydanticai">第二十一章：PydanticAI 的类型安全范式与三者适用边界<a class="headerlink" href="#pydanticai" title="Permanent link">&para;</a></h1>
-<h2 id="211">21.1 第三种回答:把「协作」问题换成「正确性」问题<a class="headerlink" href="#211" title="Permanent link">&para;</a></h2>
-<p>第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关心的是另一个经常被忽视的问题：<strong>单个 Agent 的输入输出,能不能像调用一个普通函数一样被类型系统和运行时校验覆盖</strong>。它的立足点是 Pydantic——Python 生态里最常用的数据校验库——把同一套「用类型注解声明数据形状,运行时自动校验」的思路,搬到了 Agent 开发上。</p>
+<h2 id="211">21.1 第三种路线：把「协作」问题换成「正确性」问题<a class="headerlink" href="#211" title="Permanent link">&para;</a></h2>
+<p>第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关注的是另一类问题：<strong>单个 Agent 的输入输出，能不能像普通函数调用一样接受类型系统和运行时校验</strong>。它建立在 Pydantic——Python 生态里最常用的数据校验库——之上，把同一套「用类型注解声明数据形状、运行时自动校验」的做法带到了 Agent 开发里。</p>
 <blockquote>
-<p><strong>PydanticAI 官方把自己定位为「Python 的 AI SDK：一个类型化、可扩展的 Agent 循环」</strong>——通篇文档都在强调「typed end to end」(端到端类型化),这是它和本主题里其他框架相比最鲜明的差异化定位。</p>
+<p>PydanticAI 官方将其定位为「Python 的 AI SDK：一个类型化、可扩展的 Agent 循环」，文档反复强调「typed end to end」（端到端类型化），这也是它和本主题其他框架最明显的差异。</p>
 </blockquote>
-<h2 id="212-agentoutput_type">21.2 核心设计:<code>Agent</code>、<code>output_type</code> 与依赖注入<a class="headerlink" href="#212-agentoutput_type" title="Permanent link">&para;</a></h2>
-<p>PydanticAI 的 <code>Agent</code> 对象接受一个 <code>output_type</code>(通常是 Pydantic <code>BaseModel</code>),运行结果会被自动校验并转换成对应的类型,而不是一段需要自己解析的原始字符串:</p>
+<h2 id="212-agentoutput_type">21.2 核心设计：<code>Agent</code>、<code>output_type</code> 与依赖注入<a class="headerlink" href="#212-agentoutput_type" title="Permanent link">&para;</a></h2>
+<p>PydanticAI 的 <code>Agent</code> 对象接受一个 <code>output_type</code>（通常是 Pydantic <code>BaseModel</code>），运行结果会被自动校验并转换成对应类型，而不是返回一段需要自己解析的原始字符串：</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">RunContext</span>
@@ -8391,7 +8391,7 @@
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="s2">"最近大家对这款产品的评价怎么样？"</span><span class="p">)</span>
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
 </span></code></pre></div>
-<p><strong>两个细节值得展开</strong>：</p>
+<p>这里有两个工程上直接相关的点：</p>
 <ol>
 <li><strong><code>@agent.tool</code> 装饰的函数签名和 docstring 直接生成工具 Schema</strong>——这和 <a href="../../../tools/">Tools 主题</a> 中 Function Calling 的 Schema 设计原则完全一致，PydanticAI 没有发明新协议，只是让 Schema 生成过程和 Python 类型注解无缝衔接；</li>
 <li><strong><code>RunContext</code> 是依赖注入的入口</strong>——工具函数通过 <code>ctx.deps</code> 访问运行时注入的依赖（数据库连接、当前用户身份等），这些依赖在测试时可以被替换成 mock 对象，不需要真的连接外部系统就能验证 Agent 的调用逻辑。</li>
@@ -8403,7 +8403,7 @@
     B --&gt;|"不通过"| D["自动重试&lt;br/&gt;把校验错误反馈给模型"]</code></pre>
 <p>当模型的输出不满足 <code>output_type</code> 声明的约束（比如 <code>score</code> 超出了 <code>[-1, 1]</code> 范围），PydanticAI 会把校验错误反馈给模型并触发重试，<strong>这个反馈闭环本身发生在框架内部，不需要开发者手写「解析失败就重新提示模型」的样板代码</strong>。这与 <a href="../../01-langchain/02-agent-building/04-build-agent/">LangChain 生态 · 第四章</a> 中结构化输出的处理方式目标一致，区别在于 PydanticAI 把这层校验做得更贴近 Python 静态类型工具链（配合 <code>mypy</code>/<code>pyright</code> 可以在编写阶段就发现类型不匹配问题）。</p>
 <h2 id="214-autogencrewaipydanticai">21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界<a class="headerlink" href="#214-autogencrewaipydanticai" title="Permanent link">&para;</a></h2>
-<p>把本模块两章和前几个模块放在一起,可以按六个工程维度画出一张对照表(更完整的跨全部框架对照见 <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/">框架选型与可移植架构 · 第二十二章</a>):</p>
+<p>把本模块两章和前几个模块放在一起，可以按六个工程维度画出一张对照表（更完整的跨全部框架对照见 <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/">框架选型与可移植架构 · 第二十二章</a>）：</p>
 <table>
 <thead>
 <tr>
@@ -8466,9 +8466,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>这张表最重要的结论不是「哪个更好」，而是「没有一个框架同时在六个维度都最优」</strong>——需要长期持久化和恢复能力,LangGraph 或 Semantic Kernel Process Framework 更合适;需要严格的类型安全和最小的框架绑定,PydanticAI 更合适;需要快速验证角色化协作,CrewAI 更合适;需要真正的分布式部署,AutoGen 更合适。选型应该先明确项目最看重哪两三个维度,而不是找一个「全能」框架。</p>
-</blockquote>
+<p>这张表反映的是取舍，而不是单一排名。需要长期持久化和恢复能力时，LangGraph 或 Semantic Kernel Process Framework 更合适；需要严格类型安全和更低框架绑定时，PydanticAI 更合适；需要快速验证角色化协作时，CrewAI 更合适；需要真正的分布式部署时，AutoGen 更合适。选型时更有效的做法，是先明确项目最看重的两三个维度，再对照矩阵筛选。</p>
 <h2 id="215">21.5 常见错误<a class="headerlink" href="#215" title="Permanent link">&para;</a></h2>
 <h3 id="2151">21.5.1 认为类型校验能替代模型能力评测<a class="headerlink" href="#2151" title="Permanent link">&para;</a></h3>
 <p><code>output_type</code> 校验能保证「格式正确」，不能保证「内容正确」——一个格式完全合法但语义错误的 <code>Sentiment</code> 对象照样能通过校验，仍然需要独立的评测流程判断内容质量。</p>
@@ -8477,18 +8475,16 @@
 <h3 id="2153">21.5.3 只看决策矩阵的单一维度就下结论<a class="headerlink" href="#2153" title="Permanent link">&para;</a></h3>
 <p>比如只看到「Lock-in 风险较低」就认定 PydanticAI 全面适合所有场景，忽视了它在长期持久化和多智能体协作上需要额外自建方案的事实。</p>
 <h3 id="2154">21.5.4 把角色化框架的「团队隐喻」当作技术架构本身<a class="headerlink" href="#2154" title="Permanent link">&para;</a></h3>
-<p>CrewAI 的 <code>role</code>/<code>goal</code>/<code>backstory</code> 是 Prompt 工程的组织方式,不代表底层有类似人类团队的组织架构或权限体系,不能替代真实的权限与审批设计。</p>
+<p>CrewAI 的 <code>role</code>/<code>goal</code>/<code>backstory</code> 是 Prompt 工程的组织方式，不代表底层有类似人类团队的组织架构或权限体系，不能替代真实的权限与审批设计。</p>
 <h2 id="216">21.6 本章总结<a class="headerlink" href="#216" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>PydanticAI 把「Agent 开发」重新定义为「类型安全的函数调用」</strong>：<code>output_type</code> 保证输出可被自动校验并重试,<code>RunContext</code> 提供可测试的依赖注入入口；</li>
+<li><strong>PydanticAI 把「Agent 开发」重新定义为「类型安全的函数调用」</strong>：<code>output_type</code> 保证输出可被自动校验并重试，<code>RunContext</code> 提供可测试的依赖注入入口；</li>
 <li><strong>它的工具 Schema 生成方式与 Function Calling 协议完全兼容</strong>，没有发明新协议，只是让类型注解和 Schema 生成无缝衔接；</li>
 <li><strong>类型校验解决的是「格式正确性」，不是「内容正确性」</strong>，仍然需要独立的评测体系判断语义质量；</li>
 <li><strong>AutoGen、CrewAI、PydanticAI 在状态模型、持久化、工具契约、可观测性和 lock-in 风险上呈现出明显不同的取舍</strong>，没有一个框架在全部维度上都最优；</li>
-<li><strong>框架选型应该先明确项目最看重的两三个维度</strong>，再对照决策矩阵找最匹配的框架,而不是寻找一个「全能」选项。</li>
+<li><strong>框架选型应该先明确项目最看重的两三个维度</strong>，再对照决策矩阵找最匹配的框架，而不是寻找一个「全能」选项。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：如果说 AutoGen 和 CrewAI 是在回答「多个 Agent 怎么协作」，PydanticAI 回答的是一个更基础但同样重要的问题——「一个 Agent 的输入输出，能不能享受到和普通 Python 函数一样的类型安全保障」，三者代表了多智能体框架设计空间里三个不同的优化方向，而不是同一赛道上的竞争者。</strong></p>
-</blockquote>
+<p>如果说 AutoGen 和 CrewAI 主要回答「多个 Agent 怎么协作」，那么 PydanticAI 处理的是另一层问题：单个 Agent 的输入输出能否获得和普通 Python 函数类似的类型安全保障。三者对应的是不同优化方向，而不是同一赛道上的直接替代关系。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://ai.pydantic.dev/">PydanticAI 官方文档</a></li>

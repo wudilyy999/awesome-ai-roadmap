@@ -8486,7 +8486,7 @@ z=E(x),\qquad \hat z=\sum_{l=1}^{L}q_l(r_{l-1}),\quad r_0=z,\ r_l=r_{l-1}-q_l(r_
 <li>TTS 音色克隆能力应配合授权与滥用防护，不能默认无限制开放。</li>
 </ol>
 <blockquote>
-<p><strong>一句话概括：语音/音频领域正在从"专用架构 + 专用指标"收敛到"离散音频 token + 语言模型"的统一范式，但 ASR、TTS 与音频理解各自的评测维度（准确率、自然度、副语言理解）依然需要分开衡量，不能相互替代。</strong></p>
+<p>把音频离散成 token 之后，ASR、TTS 和音频理解能共享一套语言建模思路，但评测仍要分开看准确率、自然度和副语言理解。</p>
 </blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>

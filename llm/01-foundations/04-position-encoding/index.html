@@ -920,9 +920,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#443" class="md-nav__link">
+  <a href="#443-rope" class="md-nav__link">
     <span class="md-ellipsis">
-      4.4.3 四个优点叠加才让它成为标配
+      4.4.3 RoPE 成为常用基线，主要靠这四点
     </span>
   </a>
   
@@ -8574,9 +8574,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#443" class="md-nav__link">
+  <a href="#443-rope" class="md-nav__link">
     <span class="md-ellipsis">
-      4.4.3 四个优点叠加才让它成为标配
+      4.4.3 RoPE 成为常用基线，主要靠这四点
     </span>
   </a>
   
@@ -8800,7 +8800,7 @@
 <li><strong>能区分不同位置</strong>，每个位置有独特的「指纹」；</li>
 <li><strong>能泛化到长序列</strong>，最好支持外推到训练时没见过的长度。</li>
 </ol>
-<p>带着这三个要求看三种方案就很清楚了。</p>
+<p>后面比较三种方案时，就看它们能否同时满足这三条。</p>
 <h2 id="42-sincos">4.2 sin/cos 绝对位置编码<a class="headerlink" href="#42-sincos" title="Permanent link">&para;</a></h2>
 <p>2017 年原始 Transformer 用的方案，简称 Sinusoidal PE。</p>
 <h3 id="421">4.2.1 思路：不同频率的振子叠加<a class="headerlink" href="#421" title="Permanent link">&para;</a></h3>
@@ -8869,7 +8869,7 @@ PE_{(pos, 2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d}}\right)
 \]</div>
 <p>位置 <span class="arithmatex">\(m\)</span> 的 Q 和位置 <span class="arithmatex">\(n\)</span> 的 K 做点积，结果<strong>只跟 <span class="arithmatex">\((m-n)\)</span> 这个相对距离有关</strong>，跟 <span class="arithmatex">\(m\)</span>、<span class="arithmatex">\(n\)</span> 各自的绝对值无关。</p>
 <p>这就把相对位置信息<strong>天然编进了 Attention 计算里</strong>，模型不用自己学。</p>
-<h3 id="443">4.4.3 四个优点叠加才让它成为标配<a class="headerlink" href="#443" title="Permanent link">&para;</a></h3>
+<h3 id="443-rope">4.4.3 RoPE 成为常用基线，主要靠这四点<a class="headerlink" href="#443-rope" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -9047,9 +9047,6 @@ PE_{(pos, 2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d}}\right)
 <li><strong>ALiBi 更简单、外推也好，但靠强制局部偏置换来</strong>，表达力弱，未成主流；</li>
 <li><strong>RoPE 赢在三个维度均衡</strong>：外推能力、表达力、生态兼容性。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：位置编码解决的是「Attention 看得见谁但看不见顺序」，而 RoPE 之所以胜出，是因为它用一次旋转就让点积自动携带相对距离——既不加参数，也不跟任何推理优化打架。</strong></p>
-</blockquote>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></li>

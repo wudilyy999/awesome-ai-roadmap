@@ -5551,7 +5551,7 @@
           <li class="md-nav__item">
   <a href="#631" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.1 关键是不能只按条数处理
+      6.3.1 不能只按条数处理
     </span>
   </a>
   
@@ -8470,7 +8470,7 @@
           <li class="md-nav__item">
   <a href="#631" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.1 关键是不能只按条数处理
+      6.3.1 不能只按条数处理
     </span>
   </a>
   
@@ -8781,9 +8781,7 @@
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
 </span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="p">)</span>
 </span></code></pre></div>
-<blockquote>
-<p><strong><code>InMemorySaver</code> 只适合本地演示。</strong> 生产环境要换成持久化实现，否则进程退出后状态会丢失。</p>
-</blockquote>
+<p><code>InMemorySaver</code> 只适合本地演示。生产环境要换成持久化实现，否则进程退出后状态会丢失。</p>
 <h3 id="622-checkpoint">6.2.2 Checkpoint 保存的不只是聊天记录<a class="headerlink" href="#622-checkpoint" title="Permanent link">&para;</a></h3>
 <p><strong>它保存的是图执行过程中的 State 快照</strong>，因此还能支撑：</p>
 <ul>
@@ -8792,9 +8790,7 @@
 <li>故障恢复</li>
 </ul>
 <h2 id="63">6.3 消息太多怎么办<a class="headerlink" href="#63" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p><strong>Checkpointer 能保存历史，不代表每次都应该把全部历史交给模型。</strong> 消息越多，Token、延迟和干扰越大。</p>
-</blockquote>
+<p>Checkpointer 能保存历史，但每次是否把全部历史交给模型，要另外控制。消息越多，Token、延迟和干扰越大。</p>
 <table>
 <thead>
 <tr>
@@ -8821,14 +8817,12 @@
 </tr>
 </tbody>
 </table>
-<h3 id="631">6.3.1 关键是不能只按条数处理<a class="headerlink" href="#631" title="Permanent link">&para;</a></h3>
+<h3 id="631">6.3.1 不能只按条数处理<a class="headerlink" href="#631" title="Permanent link">&para;</a></h3>
 <ul>
 <li>客服 Agent 可能需要保护<strong>当前工单和用户承诺</strong>；</li>
 <li>代码 Agent 可能需要保护<strong>最新报错和修改记录</strong>。</li>
 </ul>
-<blockquote>
-<p><strong>应该结合 Token 预算、消息角色和业务重要性制定策略</strong>（记忆压缩的通用方法见 <a href="../../../../agent/">Agent 主题</a>）。</p>
-</blockquote>
+<p>策略应同时考虑 Token 预算、消息角色和业务重要性（记忆压缩的通用方法见 <a href="../../../../agent/">Agent 主题</a>）。</p>
 <h2 id="64">6.4 长期记忆如何实现<a class="headerlink" href="#64" title="Permanent link">&para;</a></h2>
 <p><strong>新 <code>thread_id</code> 默认不会继承旧线程的 State——这是正确的线程隔离。</strong> 如果某条信息需要跨线程使用，就应提炼后写入 Store。</p>
 <h3 id="641-store">6.4.1 Store 的定位结构<a class="headerlink" href="#641-store" title="Permanent link">&para;</a></h3>
@@ -8854,9 +8848,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>向量检索只是召回方式，不代表所有聊天记录都应该成为长期记忆。</strong></p>
-</blockquote>
+<p>向量检索只是召回方式，不代表所有聊天记录都应该成为长期记忆。</p>
 <h3 id="642">6.4.2 长期记忆常见内容<a class="headerlink" href="#642" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8880,11 +8872,9 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>这些分类用于帮助设计数据结构，不是要求把每段原始对话都永久保存。</strong> 写入前仍要做<strong>去重、脱敏、冲突处理和质量判断</strong>。</p>
-</blockquote>
+<p>这些分类有助于设计数据结构，但不意味着要把每段原始对话都永久保存。写入前仍要做<strong>去重、脱敏、冲突处理和质量判断</strong>。</p>
 <h2 id="65">6.5 如何跨线程读取<a class="headerlink" href="#65" title="Permanent link">&para;</a></h2>
-<p><strong>工具可以通过 ToolRuntime 访问这些信息，但不能把三个入口混成一个数据袋</strong>（见 <a href="../05-tool-registration/">第五章</a>）：</p>
+<p><strong>工具可以通过 ToolRuntime 访问这些信息，但 <code>state</code>、<code>context</code> 和 <code>store</code> 仍要按作用域区分</strong>（见 <a href="../05-tool-registration/">第五章</a>）：</p>
 <table>
 <thead>
 <tr>
@@ -8928,14 +8918,10 @@
 </span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="n">runtime</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="s2">"main"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="n">preference</span><span class="p">})</span>
 </span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="k">return</span> <span class="s2">"偏好已保存"</span>
 </span></code></pre></div>
-<blockquote>
-<p><strong>模型只负责生成 <code>preference</code>，<code>user_id</code> 由已认证的应用通过 Context 注入。</strong> 这样可以防止模型填错身份，或<strong>被提示注入诱导访问其他用户的数据</strong>。</p>
-</blockquote>
+<p>模型只负责生成 <code>preference</code>，<code>user_id</code> 由已认证的应用通过 Context 注入。这样可以防止模型填错身份，或<strong>被提示注入诱导访问其他用户的数据</strong>。</p>
 <p><strong>两个不同 <code>thread_id</code> 的会话，只要可信 <code>user_id</code> 相同，就可以访问同一个长期记忆 namespace</strong>；另一位用户则应被 namespace 和服务端权限隔离。</p>
 <h2 id="66">6.6 什么时候写入长期记忆<a class="headerlink" href="#66" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p><strong>长期记忆不是越多越好。把每句闲聊都存进去，会产生噪声、冲突和隐私风险。</strong></p>
-</blockquote>
+<p>长期记忆会带来收益，也会引入噪声、冲突和隐私风险；把每句闲聊都存进去通常得不偿失。</p>
 <table>
 <thead>
 <tr>
@@ -8955,15 +8941,13 @@
 </tbody>
 </table>
 <p><strong>无论实时还是后台写入，都应保存来源、时间和置信度</strong>，并支持更新、纠错和删除。</p>
-<blockquote>
-<p><strong>订单金额、账户余额和库存等实时事实仍应查询权威业务系统，不能使用长期记忆代替真实数据库。</strong></p>
-</blockquote>
+<p>订单金额、账户余额和库存等实时事实仍应查询权威业务系统，不能用长期记忆代替真实数据库。</p>
 <h2 id="67">6.7 生产环境要注意什么<a class="headerlink" href="#67" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     P1["① 数据能否可靠保存&lt;br/&gt;内存实现随进程退出而丢失&lt;br/&gt;线上要数据库型 Checkpointer 和 Store&lt;br/&gt;表结构与迁移纳入部署流程"]
     P2["② 这是谁的记忆&lt;br/&gt;thread_id / tenant_id / user_id 必须来自可信身份体系&lt;br/&gt;不信任模型生成的身份&lt;br/&gt;不允许客户端随意指定别人的 namespace"]
     P3["③ 记忆会过时、冲突、被纠正&lt;br/&gt;去重、更新、过期淘汰&lt;br/&gt;支持用户查看/更正/导出/删除&lt;br/&gt;敏感信息默认不记，需保存的加密并限权&lt;br/&gt;日志与 Trace 不能成为另一个泄漏口"]
-    P4["④ 这套记忆到底有没有用&lt;br/&gt;不能只看写入了多少条"]
+    P4["④ 记忆是否真的改善结果&lt;br/&gt;不能只看写入了多少条"]
     P1 --&gt; P2 --&gt; P3 --&gt; P4
 
     style P2 fill:#fff3cd</code></pre>
@@ -8990,9 +8974,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>只有写入、召回和使用三步都有效，记忆才不是一个不断膨胀的数据库。</strong></p>
-</blockquote>
+<p>只有写入、召回和使用三步都有效，记忆才不是一个不断膨胀的数据库。</p>
 <h2 id="68-memory">6.8 旧 Memory 还能用吗<a class="headerlink" href="#68-memory" title="Permanent link">&para;</a></h2>
 <p>旧教程常见的 <code>ConversationBufferMemory</code>、<code>ConversationSummaryMemory</code> 属于 <strong>Chain 时代的抽象</strong>，目前主要位于 <code>langchain-classic</code>，适合维护存量项目。</p>
 <p><strong>v1 新项目更推荐</strong>：</p>
@@ -9018,9 +9000,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>这套方式把状态作用域、持久化和记忆治理拆得更清楚</strong>，也更适合有工具调用、暂停恢复和多用户隔离要求的 Agent。</p>
-</blockquote>
+<p>这套方式把状态作用域、持久化和记忆治理拆得更清楚，也更适合有工具调用、暂停恢复和多用户隔离要求的 Agent。</p>
 <h2 id="69">6.9 常见错误<a class="headerlink" href="#69" title="Permanent link">&para;</a></h2>
 <h3 id="691">6.9.1 先选数据库再想作用域<a class="headerlink" href="#691" title="Permanent link">&para;</a></h3>
 <p><strong>第一步是判断这条信息是线程内的还是跨线程的。</strong></p>
@@ -9059,9 +9039,7 @@
 <li><strong>生产四关</strong>：可靠持久化 → 可信身份隔离 → 记忆治理与隐私 → 沿写入/召回/使用三步评测；</li>
 <li><strong>旧 Memory 类属 Chain 时代</strong>，已入 <code>langchain-classic</code>。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：LangChain 的记忆不是一个「存聊天记录的地方」，而是按作用域拆开的两套机制——线程内靠 State 和 Checkpointer 保证不失忆和可恢复，线程外靠 Store 加可信 namespace 保证能积累且不串户，中间再用裁剪、摘要和治理策略控制它不会无限膨胀。</strong></p>
-</blockquote>
+<p>可以把 LangChain 的记忆看成按作用域拆开的两套机制：线程内靠 State 和 Checkpointer 保证不失忆和可恢复，线程外靠 Store 加可信 namespace 保证能积累且不串户，中间再用裁剪、摘要和治理策略控制它不会无限膨胀。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">LangChain: Short-term Memory</a></li>

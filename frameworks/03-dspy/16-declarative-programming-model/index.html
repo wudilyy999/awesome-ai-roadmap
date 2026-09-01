@@ -8367,7 +8367,7 @@
 
 <h1 id="dspy-signaturemodule-program">第十六章：DSPy 的声明式编程模型：Signature、Module 与 Program<a class="headerlink" href="#dspy-signaturemodule-program" title="Permanent link">&para;</a></h1>
 <h2 id="161-prompt">16.1 命令式 Prompt 工程的天花板<a class="headerlink" href="#161-prompt" title="Permanent link">&para;</a></h2>
-<p><a href="../../01-langchain/">LangChain 生态</a> 和 <a href="../../02-llamaindex/">LlamaIndex 生态</a> 的 Prompt 本质上都是<strong>字符串常量</strong>：你写一段模板，塞进变量，调用模型，看输出好不好，再手工改字符串。这个循环有一个结构性问题——<strong>Prompt 的「意图」和「具体措辞」被捆在一起</strong>，换一个模型、换一个任务分布，之前调好的措辞可能立刻失效，而你没有系统化的方法知道该往哪个方向改。</p>
+<p><a href="../../01-langchain/">LangChain 生态</a> 和 <a href="../../02-llamaindex/">LlamaIndex 生态</a> 在常见用法里，Prompt 往往还是<strong>字符串常量</strong>：写一段模板，塞进变量，调用模型，看输出是否符合预期，再手工改字符串。这个循环有一个结构性问题：<strong>Prompt 的「意图」和「具体措辞」被绑在一起</strong>，换一个模型、换一个任务分布，之前调好的措辞可能立刻失效，而工程上也缺少系统化的方法判断该往哪个方向调整。</p>
 <p>DSPy（Declarative Self-improving Python）的出发点是把这两件事拆开：<strong>先声明「输入是什么、输出是什么、任务目标是什么」，再让编译器决定「具体用什么措辞、要不要加示例、要不要拆成多步」</strong>。</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph Old["命令式 Prompt 工程"]
@@ -8388,7 +8388,7 @@
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">event_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">()</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">"ISO 8601 格式"</span><span class="p">)</span>
 </span></code></pre></div>
-<p><strong>这段代码里没有出现任何一句「你是一个擅长信息抽取的助手」之类的措辞</strong>——<code>docstring</code> 只是任务的自然语言描述，真正发给模型的 Prompt 是由后面 16.3 节的 <code>Module</code> 在运行时动态生成的，具体格式会随编译结果变化。</p>
+<p>这段代码没有手写提示词模板；<code>docstring</code> 只是任务的自然语言描述，真正发给模型的 Prompt 由后面 16.3 节的 <code>Module</code> 在运行时动态生成，具体格式会随编译结果变化。</p>
 <blockquote>
 <p><strong>对照 LangChain 的结构化输出</strong>：<code>create_agent</code> 也支持用 Pydantic 模型声明输出 Schema，但那只约束「输出长什么样」；DSPy 的 Signature 同时约束输入契约和输出契约，并且这份契约会被优化器当作搜索空间的一部分，而不只是一次性的解析校验。</p>
 </blockquote>
@@ -8460,9 +8460,7 @@
 <li><strong><code>Program</code> 用普通 Python 类和函数组合 <code>Module</code></strong>，控制流写法贴近原生代码，换来了和 Python 生态的无缝集成，代价是手写控制流本身不在编译器的优化范围内；</li>
 <li><strong>这种关注点分离是第十七章「编译与优化」得以自动化的前提</strong>——只有契约和策略解耦，优化器才能在不改变任务语义的前提下搜索更优的具体实现。</li>
 </ol>
-<blockquote>
-<p><strong>一句话概括：DSPy 的声明式编程不是「换一种写 Prompt 的语法糖」，而是把 Prompt 工程从「手工试错的字符串编辑」重新定义成「契约声明 + 策略选择 + 自动编译」的软件工程问题。</strong></p>
-</blockquote>
+<p>因此，DSPy 不是换一种 Prompt 写法，而是把 Prompt 工程从手工改字符串，转成「契约声明 + 策略选择 + 自动编译」的程序优化问题。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://dspy.ai/">DSPy 官方文档</a></li>

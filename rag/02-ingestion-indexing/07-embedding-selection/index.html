@@ -4678,9 +4678,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#778" class="md-nav__link">
+  <a href="#778-embedding" class="md-nav__link">
     <span class="md-ellipsis">
-      7.7.8 一上来就想微调
+      7.7.8 把微调 Embedding 当成首选优化项
     </span>
   </a>
   
@@ -8598,9 +8598,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#778" class="md-nav__link">
+  <a href="#778-embedding" class="md-nav__link">
     <span class="md-ellipsis">
-      7.7.8 一上来就想微调
+      7.7.8 把微调 Embedding 当成首选优化项
     </span>
   </a>
   
@@ -8655,13 +8655,13 @@
 
 <h1 id="embedding">第七章：Embedding 模型选型与评估<a class="headerlink" href="#embedding" title="Permanent link">&para;</a></h1>
 <h2 id="71">7.1 选型的第一原则<a class="headerlink" href="#71" title="Permanent link">&para;</a></h2>
-<p>先把结论放在最前面，因为这是这道题唯一的核心：</p>
+<p>结论很直接：</p>
 <blockquote>
-<p><strong>不要照着公开榜单排名选模型，要在你自己的业务数据上实测。</strong></p>
+<p><strong>不要照着公开榜单排名直接选模型，要在你自己的业务数据上实测。</strong></p>
 </blockquote>
-<p>只回答「用某某模型，因为它榜单排名高」是明确的减分答法。原因下一节展开。</p>
+<p>榜单适合缩小候选范围，不适合直接替代选型。原因下一节展开。</p>
 <h2 id="72">7.2 为什么不能只看榜单<a class="headerlink" href="#72" title="Permanent link">&para;</a></h2>
-<p>MTEB 是当前最常用的文本嵌入评测基准，覆盖分类、聚类、检索、重排等多类任务。它很有价值，但<strong>存在四个必须知道的局限</strong>：</p>
+<p>MTEB 是当前最常用的文本嵌入评测基准，覆盖分类、聚类、检索、重排等多类任务。它很有价值，但<strong>有四个常见局限</strong>：</p>
 <pre class="mermaid"><code>flowchart TB
     M[只看 MTEB 排名] --&gt; P1[榜单过拟合]
     M --&gt; P2[检索分数不预测端到端质量]
@@ -8821,7 +8821,7 @@
 <p>超长部分被静默截断。</p>
 <h3 id="777-api">7.7.7 不锁定 API 模型版本<a class="headerlink" href="#777-api" title="Permanent link">&para;</a></h3>
 <p>静默升级会导致向量空间漂移，是最难排查的故障之一。</p>
-<h3 id="778">7.7.8 一上来就想微调<a class="headerlink" href="#778" title="Permanent link">&para;</a></h3>
+<h3 id="778-embedding">7.7.8 把微调 Embedding 当成首选优化项<a class="headerlink" href="#778-embedding" title="Permanent link">&para;</a></h3>
 <p>优先级排在切分、混合检索、Rerank 之后，且带来永久的重建负担。</p>
 <h2 id="78">7.8 本章总结<a class="headerlink" href="#78" title="Permanent link">&para;</a></h2>
 <ol>
@@ -8835,10 +8835,6 @@
 <li><strong>Query/Document 必须是兼容模型对并处于同一可比较向量空间</strong>；API 模型还要锁版本，发生漂移必须重建；</li>
 <li><strong>微调 Embedding 优先级不高</strong>，且带来永久的索引重建负担。</li>
 </ol>
-<p>一句话概括：</p>
-<blockquote>
-<p><strong>Embedding 选型不是选一个"最强的模型"，而是在你自己的数据上找到效果、成本和部署约束的平衡点。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2210.07316">MTEB: Massive Text Embedding Benchmark</a></li>

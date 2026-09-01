@@ -419,6 +419,28 @@
   
 
       
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="fde/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  FDE
+
+        </a>
+      </li>
+    
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -7934,6 +7956,164 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="fde/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    FDE
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            FDE
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="fde/01-foundations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    基础与交付方法
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10_2" id="__nav_10_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_2">
+            <span class="md-nav__icon md-icon"></span>
+            基础与交付方法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="fde/01-foundations/01-forward-deployed-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    从业务问题到可复用生产系统
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -8021,7 +8201,7 @@
 
 
 <h1 id="_1">文档主题索引<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>本仓库按「抽象层次」而非「产品清单」组织知识。八个主题覆盖模型原理、多模态能力、协议接口、应用架构、框架实现、生产工程与安全治理。</p>
+<p>本仓库按「抽象层次」而非「产品清单」组织知识。九个主题覆盖模型原理、多模态能力、协议接口、应用架构、框架实现、生产工程、安全治理与现场交付。</p>
 <p>目录采用三级结构：<strong>主题 → 子模块 → 章节</strong>。主题 README 负责展示模块关系，子模块 README 负责维护具体章节顺序，章节之间通过相对链接形成跨主题知识图谱。</p>
 <h2 id="_2">总体分层<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
@@ -8048,6 +8228,10 @@
         SAFE["AI 安全与治理&lt;br/&gt;威胁 / 隔离 / 红队 / 审计"]
     end
 
+    subgraph L6["第六层 · 现场交付"]
+        FDE["FDE&lt;br/&gt;发现 / 验收 / 集成 / 交付 / 复用"]
+    end
+
     LLM --&gt; MM
     LLM --&gt; TOOLS
     TOOLS --&gt; AGENT
@@ -8058,6 +8242,9 @@
     RAG --&gt; FW
     FW --&gt; ENG
     ENG --&gt; SAFE
+    ENG --&gt; FDE
+    SAFE --&gt; FDE
+    FDE -.现场反馈.-&gt; FW
     AGENT -.风险输入.-&gt; SAFE
     RAG -.风险输入.-&gt; SAFE
     RAG -.知识增强.-&gt; AGENT</code></pre>
@@ -8128,6 +8315,13 @@
 <td>威胁建模、Prompt 攻击、供应链、隐私、执行隔离、红队、治理与审计</td>
 <td>10</td>
 <td><a href="safety/">进入 AI 安全与治理</a></td>
+</tr>
+<tr>
+<td>现场交付</td>
+<td>FDE</td>
+<td>岗位边界、需求发现、Eval 验收、方案选型、系统集成、生产交付与产品化复用</td>
+<td>1</td>
+<td><a href="fde/">进入 FDE</a></td>
 </tr>
 </tbody>
 </table>
@@ -8203,6 +8397,12 @@
 <td>LLM、Tools、Agent、RAG</td>
 <td>各层讲局部控制，治理主题统一威胁模型、红队和审计</td>
 </tr>
+<tr>
+<td>客户现场交付</td>
+<td>FDE</td>
+<td>全部技术主题</td>
+<td>技术主题讲能力，FDE 讲如何组合能力并交付可衡量结果</td>
+</tr>
 </tbody>
 </table>
 <h2 id="_5">阅读建议<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
@@ -8213,6 +8413,7 @@
 <li><strong>多模态应用</strong>：多模态 AI → Agent 第 16–23 章或 RAG 第 21 章 → AI Engineering；</li>
 <li><strong>生产平台与 SRE</strong>：AI Engineering → LLM 推理部署 → Tools 网关 → AI 安全与治理；</li>
 <li><strong>安全与治理</strong>：AI 安全与治理 → Agent、Tools、RAG 各自的安全章节。</li>
+<li><strong>客户交付与解决方案</strong>：FDE → AI Engineering → 按项目需要回查 Agent、RAG、Harness 与安全治理。</li>
 </ul>
 
 

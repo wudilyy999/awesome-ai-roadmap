@@ -2,23 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
+    </url>
+    <url>
+         <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/about/</loc>
+         <lastmod>2026-09-02</lastmod>
+    </url>
+    <url>
+         <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/editorial-policy/</loc>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/01-agent-foundations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/02-agent-architecture/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/</loc>
@@ -26,11 +34,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/04-agent-design-patterns/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/</loc>
@@ -50,23 +58,23 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/16-harness-definition-and-boundaries/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/17-agent-loop-and-runtime-state-machine/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/19-tool-registry-and-execution-pipeline/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/20-permissions-sandbox-isolation/</loc>
@@ -74,7 +82,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/22-human-in-the-loop-and-interruption/</loc>
@@ -82,15 +90,15 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/23-tracing-evaluation-cost-and-coding-agent-case-study/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/07-agent-memory/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/08-agent-memory-implementation/</loc>
@@ -102,35 +110,35 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/09-single-vs-multi-agent/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/05-production/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/05-production/14-agent-evaluation/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/05-production/15-agent-security/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/01-llmops-vs-mlops-devops/</loc>
@@ -142,7 +150,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/03-model-gateway-routing-fallback/</loc>
@@ -154,7 +162,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/</loc>
@@ -166,7 +174,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/</loc>
@@ -178,7 +186,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/</loc>
@@ -190,7 +198,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/06-performance-operations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/06-performance-operations/11-caching-batching-throughput-cost/</loc>
@@ -242,7 +250,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/04-build-agent/</loc>
@@ -258,7 +266,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/03-ecosystem/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/03-ecosystem/07-langchain-vs-llamaindex/</loc>
@@ -274,7 +282,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/</loc>
@@ -286,7 +294,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/</loc>
@@ -358,19 +366,19 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/01-foundations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/01-foundations/01-what-is-llm/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/01-foundations/02-transformer-architecture/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/01-foundations/03-attention-variants/</loc>
@@ -382,11 +390,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/01-foundations/05-tokenizer/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/</loc>
@@ -398,11 +406,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/09-lora/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/10-post-training/</loc>
@@ -414,7 +422,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/03-inference-serving/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/03-inference-serving/12-decoding-strategies/</loc>
@@ -430,11 +438,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/03-inference-serving/15-quantization/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/03-inference-serving/19-moe/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/03-inference-serving/20-deployment-frameworks/</loc>
@@ -442,11 +450,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/04-prompt-reliability/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/04-prompt-reliability/16-prompt-engineering/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/04-prompt-reliability/17-cot/</loc>
@@ -454,15 +462,15 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/04-prompt-reliability/18-hallucination/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/05-evaluation-selection/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/05-evaluation-selection/21-evaluation-metrics/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/05-evaluation-selection/22-model-selection/</loc>
@@ -470,7 +478,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/06-multimodal/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/06-multimodal/23-multimodal-models/</loc>
@@ -478,11 +486,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/01-foundations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/01-foundations/01-multimodal-fusion-architecture/</loc>
@@ -490,7 +498,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/02-vision-document/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/02-vision-document/02-vlm-grounding/</loc>
@@ -506,7 +514,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/03-speech-audio/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/03-speech-audio/05-asr-tts-audio-lm/</loc>
@@ -518,7 +526,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/04-generation/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/04-generation/07-diffusion-flow-matching-image/</loc>
@@ -530,7 +538,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/05-data-training-evaluation/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/05-data-training-evaluation/09-multimodal-data-alignment/</loc>
@@ -542,23 +550,23 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/01-what-is-rag/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/02-rag-finetune-longcontext/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/03-document-parsing/</loc>
@@ -566,7 +574,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/04-chunking-strategy/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/05-semantic-truncation/</loc>
@@ -590,7 +598,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/10-online-pipeline/</loc>
@@ -614,7 +622,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/15-advanced-rag-paradigms/</loc>
@@ -626,11 +634,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/17-generation-hallucination/</loc>
@@ -642,7 +650,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/</loc>
@@ -654,11 +662,11 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/</loc>
@@ -666,7 +674,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/02-prompt-injection-jailbreak-system-prompt-leakage/</loc>
@@ -678,7 +686,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/</loc>
@@ -694,7 +702,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/</loc>
@@ -706,7 +714,7 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/</loc>
@@ -718,15 +726,15 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/01-function-calling/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/02-tool-learning/</loc>
@@ -742,19 +750,19 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/04-what-is-mcp/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/06-mcp-vs-function-calling/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/12-mcp-transport/</loc>
@@ -762,15 +770,15 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/15-tool-protocol-security/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/08-what-is-skill/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/09-skill-vs-mcp/</loc>
@@ -778,19 +786,19 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/10-fc-skill-mcp/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/11-a2a-protocol/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-09-02</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/</loc>
-         <lastmod>2026-09-01</lastmod>
+         <lastmod>2026-08-31</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/13-sse-websocket-webrtc/</loc>

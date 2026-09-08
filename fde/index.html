@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="面向 FDE 面试准备，讨论客户需求拆解、评测验收、系统交付与复用，并用明确标注的虚构订单异常项目练习工程取舍。">
+        <meta name="description" content="从客户现场理解 FDE 的工作：怎样找出值得做的需求、接入旧系统、验证效果，再通过订单异常助手案例说明交付中的取舍。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="FDE 相关知识点">
-    <meta property="og:description" content="面向 FDE 面试准备，讨论客户需求拆解、评测验收、系统交付与复用，并用明确标注的虚构订单异常项目练习工程取舍。">
+    <meta property="og:description" content="从客户现场理解 FDE 的工作：怎样找出值得做的需求、接入旧系统、验证效果，再通过订单异常助手案例说明交付中的取舍。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="FDE 相关知识点">
-    <meta name="twitter:description" content="面向 FDE 面试准备，讨论客户需求拆解、评测验收、系统交付与复用，并用明确标注的虚构订单异常项目练习工程取舍。">
+    <meta name="twitter:description" content="从客户现场理解 FDE 的工作：怎样找出值得做的需求、接入旧系统、验证效果，再通过订单异常助手案例说明交付中的取舍。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"FDE 相关知识点","description":"面向 FDE 面试准备，讨论客户需求拆解、评测验收、系统交付与复用，并用明确标注的虚构订单异常项目练习工程取舍。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"FDE 相关知识点","description":"从客户现场理解 FDE 的工作：怎样找出值得做的需求、接入旧系统、验证效果，再通过订单异常助手案例说明交付中的取舍。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"主题导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/"}]}</script>
     
@@ -8272,9 +8272,9 @@
 
 
 <h1 id="fde">FDE 相关知识点<a class="headerlink" href="#fde" title="Permanent link">&para;</a></h1>
-<p>本主题讨论 <strong>Forward Deployed Engineering（前线部署工程）</strong>：工程师如何进入真实业务现场，把模型能力、客户数据和既有系统组合成可验收、可运营、可复用的生产系统。</p>
-<p>FDE 不是某套框架，也不只是一个岗位名称。Palantir、OpenAI 等公司的具体组织方式各不相同，本主题关注其中可迁移的工程方法：问题建模、Eval 验收、方案选型、系统集成、生产交付与现场反馈产品化。</p>
-<p>准备面试时，重点不是背出交付阶段，而是讲清楚：客户原来怎么做，为什么选这个任务，什么证据会让你停止上线，以及做完后哪些东西能留给下一位客户。基础章的 1.10 节区分公开案例与厂商自报，1.11 节提供工业备件订单异常助手的<strong>虚构项目推演</strong>，1.12 节用于练习追问。虚构案例不是 Polo Li 的项目经历，也不能当作自己的客户履历。</p>
+<p><strong>Forward Deployed Engineering（前线部署工程）</strong>关心的是：客户有一个问题，工程师怎样把它弄清楚，再交付一个有人愿意用、出了问题也能维护的系统。</p>
+<p>Palantir、OpenAI、Baseten 对这个岗位的安排不完全一样。这里先讲共同的工作：看业务流程、接客户系统、和用户一起验收，以及把一个项目里做好的东西用到下一个项目。</p>
+<p>可以先看基础章 1.10 节的一线分享，再读 1.11 节的订单异常助手：客服为什么不敢用第一版草稿，团队怎样修正交期错误，为什么最后没有做多 Agent。1.12 节接着讨论客户要求自动发信、模型升级和推广使用时会遇到的问题。</p>
 <h2 id="_1">子模块<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="01-foundations/">FDE 基础与交付方法（第 1 章）</a></li>
@@ -8353,7 +8353,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 10:55:31 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 13:45:57 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Demo 阶段的知识库往往一次性建好，但生产系统里的文档会持续变化">
+        <meta name="description" content="按派生依赖设计 RAG 增量更新与一致发布，处理事件幂等、版本快照、删除回收、权限变更和缓存失效。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十九章：知识库的动态更新与增量索引">
-    <meta property="og:description" content="Demo 阶段的知识库往往一次性建好，但生产系统里的文档会持续变化">
+    <meta property="og:description" content="按派生依赖设计 RAG 增量更新与一致发布，处理事件幂等、版本快照、删除回收、权限变更和缓存失效。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十九章：知识库的动态更新与增量索引">
-    <meta name="twitter:description" content="Demo 阶段的知识库往往一次性建好，但生产系统里的文档会持续变化">
+    <meta name="twitter:description" content="按派生依赖设计 RAG 增量更新与一致发布，处理事件幂等、版本快照、删除回收、权限变更和缓存失效。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十九章：知识库的动态更新与增量索引","description":"Demo 阶段的知识库往往一次性建好，但生产系统里的文档会持续变化","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十九章：知识库的动态更新与增量索引","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十九章：知识库的动态更新与增量索引","description":"按派生依赖设计 RAG 增量更新与一致发布，处理事件幂等、版本快照、删除回收、权限变更和缓存失效。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十九章：知识库的动态更新与增量索引","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"动态更新与增量索引","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/06-operations-security/19-dynamic-update/"}]}</script>
     
@@ -5210,7 +5210,7 @@
         <li class="md-nav__item">
   <a href="#191" class="md-nav__link">
     <span class="md-ellipsis">
-      19.1 为什么动态更新不能按记录增量处理
+      19.1 动态更新的单位由依赖关系决定
     </span>
   </a>
   
@@ -5269,9 +5269,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1951-hnsw" class="md-nav__link">
+  <a href="#1951" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.1 HNSW 没有真正的删除
+      19.5.1 查询删除、索引回收与物理擦除不同
     </span>
   </a>
   
@@ -5364,7 +5364,7 @@
           <li class="md-nav__item">
   <a href="#19101" class="md-nav__link">
     <span class="md-ellipsis">
-      19.10.1 在活动索引中局部更新或先删后增
+      19.10.1 没有一致性协议就逐条覆盖或先删后增
     </span>
   </a>
   
@@ -5382,7 +5382,7 @@
           <li class="md-nav__item">
   <a href="#19103" class="md-nav__link">
     <span class="md-ellipsis">
-      19.10.3 用修改时间而非内容哈希检测变更
+      19.10.3 只用一种信号检测所有变更
     </span>
   </a>
   
@@ -8549,7 +8549,7 @@
         <li class="md-nav__item">
   <a href="#191" class="md-nav__link">
     <span class="md-ellipsis">
-      19.1 为什么动态更新不能按记录增量处理
+      19.1 动态更新的单位由依赖关系决定
     </span>
   </a>
   
@@ -8608,9 +8608,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1951-hnsw" class="md-nav__link">
+  <a href="#1951" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.1 HNSW 没有真正的删除
+      19.5.1 查询删除、索引回收与物理擦除不同
     </span>
   </a>
   
@@ -8703,7 +8703,7 @@
           <li class="md-nav__item">
   <a href="#19101" class="md-nav__link">
     <span class="md-ellipsis">
-      19.10.1 在活动索引中局部更新或先删后增
+      19.10.1 没有一致性协议就逐条覆盖或先删后增
     </span>
   </a>
   
@@ -8721,7 +8721,7 @@
           <li class="md-nav__item">
   <a href="#19103" class="md-nav__link">
     <span class="md-ellipsis">
-      19.10.3 用修改时间而非内容哈希检测变更
+      19.10.3 只用一种信号检测所有变更
     </span>
   </a>
   
@@ -8838,10 +8838,10 @@
 
 
 <h1 id="_1">第十九章：知识库的动态更新与增量索引<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="191">19.1 为什么动态更新不能按记录增量处理<a class="headerlink" href="#191" title="Permanent link">&para;</a></h2>
+<h2 id="191">19.1 动态更新的单位由依赖关系决定<a class="headerlink" href="#191" title="Permanent link">&para;</a></h2>
 <p>Demo 阶段的知识库往往一次性建好，但生产系统里的文档会持续变化。</p>
 <p>RAG 更新和普通数据库更新的差异在于：<strong>文档哪怕只改一个字，也可能让 chunk 边界整体偏移，后续 chunk 的内容随之改变。</strong></p>
-<p>这意味着<strong>很多场景都不能按数据库记录那样"局部改一条"</strong>，而要按文档或版本重建。</p>
+<p>这意味着不能盲目只改一个旧 chunk，但不代表不能增量更新。稳定章节边界加内容哈希可以复用未变片段；Late Chunking、全文上下文说明或图摘要则可能扩大依赖范围。应先识别受影响产物，再选择局部更新、文档级重建或全库迁移。</p>
 <h2 id="192">19.2 完整的更新链路<a class="headerlink" href="#192" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     S[数据源变化] --&gt; D[1. 变更检测]
@@ -8886,11 +8886,12 @@
 </tr>
 </tbody>
 </table>
-<p><strong>为什么用内容哈希而不是修改时间</strong>：很多系统的"修改时间"会因为元数据变动、重新保存、格式转换而更新，<strong>内容其实没变</strong>。用内容哈希能避免大量无谓的重建。</p>
-<p><strong>混合方案的必要性</strong>：事件驱动会丢消息（服务重启、网络故障、数据源没发出事件）。<strong>定期全量对账是唯一能发现"漏了什么"的手段</strong>——建议至少每天跑一次哈希对账。</p>
+<p>内容哈希可减少仅因重新保存而触发的重嵌入，但不能单独检测 ACL、删除、生效期或解析器配置变化。内容、权限、元数据和处理版本应分别跟踪；仅内容相同不代表发布状态可以复用。</p>
+<p>事件可能遗漏、重复或积压，重放日志、序列号检查与定期对账可以互补。对账频率按允许的滞后和数据规模设置，并同时覆盖内容、删除与权限状态，不固定为所有系统每天一次。</p>
 <h2 id="194-copy-on-write-alias">19.4 第二步：版本化 Copy-on-Write + 原子 Alias<a class="headerlink" href="#194-copy-on-write-alias" title="Permanent link">&para;</a></h2>
 <p>发布流程的关键约束在这里。文档开头插入一段话后，后续 chunk 的边界可能整体偏移，因而不应尝试在正在服务的索引中逐条“修补”。但“先删后增”会制造读空窗口：写入失败或索引尚未就绪时，用户既看不到旧版，也看不到新版。</p>
-<p>正确做法是把一次文档变更作为不可变版本进行 <strong>copy-on-write</strong>：在候选版本中完整解析、切分、向量化和建索引；校验通过后，才把查询使用的 <code>active</code> alias（或路由指针）<strong>原子地</strong>切到新版本。旧版本保留到回滚窗口结束，再异步回收。</p>
+<p>一种稳妥做法是不可变版本 <strong>copy-on-write</strong>：构建受影响产物并校验，再切换活动版本。稳定块的事务增量更新也可满足要求，关键是请求不能读到半新半旧状态，不是所有数据库都必须整库复制。</p>
+<p>数据库 alias 通常指向 collection/index，并不自动提供每个文档的版本事务。文档级发布可用事务表或 manifest 维护活动版本；跨向量、BM25、原文存储时，将它们的版本组合发布为同一快照，查询绑定这个快照。单独切一个向量库 alias 并不能保证其他系统原子同步。</p>
 <pre class="mermaid"><code>flowchart TB
     A[doc_id: v17 active] --&gt; B[构建隔离的 v18&lt;br/&gt;解析、切分、向量化、索引]
     B --&gt; C[校验内容、ACL、召回与索引就绪]
@@ -8941,20 +8942,21 @@
 </tbody>
 </table>
 <p><strong><code>doc_id</code>、<code>version_id</code> 和 alias 解析路径都必须有索引或常数时间查找</strong>，否则回收、核验或切换会退化成全表扫描。</p>
-<p><strong>这个设计必须在建库时就做好</strong>——第三章 3.6.1 强调的「元数据事后补等于全量重建」，在这里体现得最直接。</p>
+<p>这些映射应提前设计。已有数据也可回填 metadata 和过滤索引，不必一概重嵌入；回填期间应默认拒绝缺少版本或授权信息的记录。</p>
+<p>事件可能重复或乱序：以 <code>doc_id + source_version</code> 做幂等键，旧事件不能覆盖已发布新版本；失败进入可重试队列并保留检查点。内容哈希可复用计算产物，但跨租户复用不得造成权限串用。删除或撤权要先阻断可见性，再异步回收，且不能因回滚旧快照恢复访问。</p>
 <h2 id="195">19.5 第三步：删除的两个技术陷阱<a class="headerlink" href="#195" title="Permanent link">&para;</a></h2>
-<h3 id="1951-hnsw">19.5.1 HNSW 没有真正的删除<a class="headerlink" href="#1951-hnsw" title="Permanent link">&para;</a></h3>
-<p>如第八章 8.2.1 所述，HNSW 图结构被破坏后难以修复，工程上普遍采用<strong>软删除 + 定期重建</strong>。</p>
+<h3 id="1951">19.5.1 查询删除、索引回收与物理擦除不同<a class="headerlink" href="#1951" title="Permanent link">&para;</a></h3>
+<p>如第八章所述，删除语义取决于实现。HNSW 本身不能推出“永远没有真删除”；例如 pgvector 支持 DELETE 与 VACUUM，其他实现可能采用 tombstone 或 segment compaction。</p>
 <p>这会带来两个直接后果：</p>
 <p><strong>（1）软删除会累积。</strong> 被标记删除的向量仍占内存、仍参与图遍历、仍消耗 <code>ef</code> 预算，但会在结果中被过滤掉。<strong>累积到一定比例后，实际召回率会显著下降</strong>（第九章 9.6.4 的排查项之一）。</p>
-<p><strong>应对</strong>：<strong>监控软删除比例</strong>，超过阈值（比如 20%）触发重建。</p>
+<p>应监控软删除比例、召回、扫描预算与回收进度，在实际退化曲线上设阈值；20% 不能作为所有引擎的固定重建阈值。</p>
 <p><strong>（2）重建期间的可用性。</strong> 全量重建可能耗时数小时。始终采用<strong>构建新版本 → 校验 → 原子切换 alias</strong>，并保留旧版本供在途查询和回滚；代价是切换期间需要双份内存（第九章 9.3.3）。</p>
 <h3 id="1952">19.5.2 合规删除的特殊要求<a class="headerlink" href="#1952" title="Permanent link">&para;</a></h3>
 <p>用户要求删除个人数据、或文档因合规原因必须移除时，<strong>软删除不够——数据仍然物理存在</strong>。</p>
 <p>需要额外的流程：</p>
 <ul>
-<li>记录删除请求，<strong>确保在下次重建后数据真正消失</strong>；</li>
-<li>或使用支持真删除的索引结构（如 DiskANN 系）；</li>
+<li>记录删除请求，立即停止查询与缓存复用，再按约定时限完成底层回收并保留审计证据；</li>
+<li>核实数据库、对象存储与备份的保留/擦除机制；“支持 DELETE”或“使用 DiskANN”都不能替代物理擦除证明；</li>
 <li><strong>检查关联位置</strong>：原文存储、缓存、日志、备份里的副本。只删向量而保留这些副本，合规审计仍然不通过。</li>
 </ul>
 <h2 id="196">19.6 第四步：一致性校验<a class="headerlink" href="#196" title="Permanent link">&para;</a></h2>
@@ -8984,12 +8986,12 @@
 <td>抽样查询候选版本能否命中新内容</td>
 </tr>
 <tr>
-<td>索引是否已就绪</td>
-<td>候选版本进入 ANN 索引后才允许切换 alias</td>
+<td>查询是否已就绪</td>
+<td>验证目标一致性、完整候选可见和延迟达标；允许符合 SLO 的 flat 缓冲路径</td>
 </tr>
 </tbody>
 </table>
-<p>很多向量库的新写入数据会先进入一个未建索引的缓冲区，<strong>要等到达到阈值或手动触发才合并进主索引</strong>。这段时间内，新数据可能检索不到，或者走的是低效路径。</p>
+<p>有些向量库对未建 ANN 索引的数据提供精确扫描，所以“尚未建索引”不等于“不可查询”。应分别检查写入确认、可见性、是否只搜已索引数据的配置和性能；这些语义依产品版本而异。</p>
 <p><strong>这是第九章 9.6.4「召回率突然下降」排查清单里的第 2 条。</strong></p>
 <h2 id="197">19.7 第五步：灰度与回滚<a class="headerlink" href="#197" title="Permanent link">&para;</a></h2>
 <p>大批量更新（换 Embedding 模型、改切分策略、导入新语料）<strong>必须灰度</strong>。</p>
@@ -9049,12 +9051,12 @@
 <li><strong>定期清理过期内容</strong>——这属于知识库治理，是幻觉治理的最上游（第十七章 17.8）。</li>
 </ul>
 <h2 id="1910">19.10 常见错误<a class="headerlink" href="#1910" title="Permanent link">&para;</a></h2>
-<h3 id="19101">19.10.1 在活动索引中局部更新或先删后增<a class="headerlink" href="#19101" title="Permanent link">&para;</a></h3>
-<p>chunk 边界会偏移，逐条修补会残留旧内容；先删后增又会产生读空窗口。<strong>应构建不可变新版本、验证后原子切换 alias。</strong></p>
+<h3 id="19101">19.10.1 没有一致性协议就逐条覆盖或先删后增<a class="headerlink" href="#19101" title="Permanent link">&para;</a></h3>
+<p>应验证受影响块的边界与依赖。采用事务增量或版本化发布，保证无残留、无读空、跨检索路版本一致；不把 alias 当作跨系统事务。</p>
 <h3 id="19102-doc_id-doc_id">19.10.2 没有 doc_id 或 doc_id 未建索引<a class="headerlink" href="#19102-doc_id-doc_id" title="Permanent link">&para;</a></h3>
 <p>无法批量删除，或删除操作退化成全表扫描。</p>
-<h3 id="19103">19.10.3 用修改时间而非内容哈希检测变更<a class="headerlink" href="#19103" title="Permanent link">&para;</a></h3>
-<p>会触发大量无谓的重建。</p>
+<h3 id="19103">19.10.3 只用一种信号检测所有变更<a class="headerlink" href="#19103" title="Permanent link">&para;</a></h3>
+<p>修改时间可触发无谓重建，只看内容哈希又会漏掉权限和生效期变更，应分别跟踪并对账。</p>
 <h3 id="19104">19.10.4 只用事件驱动不做对账<a class="headerlink" href="#19104" title="Permanent link">&para;</a></h3>
 <p>事件会丢，必须有定期全量哈希对账兜底。</p>
 <h3 id="19105">19.10.5 忽略软删除的累积<a class="headerlink" href="#19105" title="Permanent link">&para;</a></h3>
@@ -9071,10 +9073,10 @@
 <p>权限变更需要更新大量 chunk，无法即时生效。</p>
 <h2 id="1911">19.11 本章总结<a class="headerlink" href="#1911" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>RAG 更新的特殊约束</strong>：文档改动会导致 chunk 边界整体偏移，<strong>无法局部更新</strong>；</li>
+<li><strong>更新范围由依赖决定</strong>：稳定块可增量复用，边界偏移或全文派生表示可能扩大重算范围；</li>
 <li><strong>完整链路</strong>：变更检测 → 分类处理 → 一致性校验 → 灰度生效 → 效果监控；</li>
-<li><strong>变更检测用内容哈希而非修改时间</strong>；事件驱动为主 + <strong>定期全量对账兜底</strong>；</li>
-<li><strong>修改采用版本化 copy-on-write</strong>：先构建并验证完整新版本，再原子切换 alias；旧版本保留用于在途请求和回滚，随后回收；</li>
+<li><strong>内容哈希、元数据版本与权限事件分别检测</strong>；幂等消费、乱序保护和定期对账共同兜底；</li>
+<li><strong>一致发布可用事务增量或版本化 copy-on-write</strong>：先验证受影响产物，再发布跨检索路一致的快照；alias 不等于跨系统事务，旧快照保留也不能复活已撤销的访问权限；</li>
 <li><strong>ID 与元数据设计要在建库时做好</strong>：<code>doc_id</code>、<code>version_id</code>、<code>chunk_id</code>、<code>content_hash</code>、<code>active_alias</code>、<code>acl_tags</code>；</li>
 <li><strong>删除语义取决于向量库实现</strong>：常见实现用 tombstone、segment compaction 或后台物理回收；需监控软删比例、验证召回，并确认合规删除最终覆盖索引、缓存与备份；</li>
 <li><strong>必须检查索引是否已生效</strong>，新数据可能还在未建索引的缓冲区；</li>
@@ -9084,6 +9086,7 @@
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2105.09613">FreshDiskANN: A Fast and Accurate Graph-Based ANN Index for Streaming Similarity Search</a></li>
+<li><a href="https://github.com/pgvector/pgvector">pgvector 官方 README：更新、删除与 VACUUM</a></li>
 <li><a href="https://arxiv.org/abs/1603.09320">Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs</a></li>
 <li><a href="https://arxiv.org/abs/2403.04871">ACORN: Performant and Predicate-Agnostic Search Over Vector Embeddings and Structured Data</a></li>
 <li><a href="https://arxiv.org/abs/2410.05779">LightRAG: Simple and Fast Retrieval-Augmented Generation</a></li>
@@ -9111,7 +9114,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

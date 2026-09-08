@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="前面章节多次提到&quot;某类攻击在标准评测中不可见&quot;&quot;对齐是概率性缓解&quot;——这意味着 AI 系统的安全水位不是一次测试能确定的常量，而是随模型版本、Prompt 变化、新工具接入、新越狱手法公开而持续波动的变量。Agent 安全 15.13 和 RAG 安全 20.4 已经给出了单个应用场景下&quot;ASR（攻击成功率）与…">
+        <meta name="description" content="为授权红队定义范围、成功判据和攻击预算，成对报告 ASR 与效用，并用独立留出和持续回归管理剩余风险。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第九章：安全评测、红队与持续保障">
-    <meta property="og:description" content="前面章节多次提到&quot;某类攻击在标准评测中不可见&quot;&quot;对齐是概率性缓解&quot;——这意味着 AI 系统的安全水位不是一次测试能确定的常量，而是随模型版本、Prompt 变化、新工具接入、新越狱手法公开而持续波动的变量。Agent 安全 15.13 和 RAG 安全 20.4 已经给出了单个应用场景下&quot;ASR（攻击成功率）与…">
+    <meta property="og:description" content="为授权红队定义范围、成功判据和攻击预算，成对报告 ASR 与效用，并用独立留出和持续回归管理剩余风险。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第九章：安全评测、红队与持续保障">
-    <meta name="twitter:description" content="前面章节多次提到&quot;某类攻击在标准评测中不可见&quot;&quot;对齐是概率性缓解&quot;——这意味着 AI 系统的安全水位不是一次测试能确定的常量，而是随模型版本、Prompt 变化、新工具接入、新越狱手法公开而持续波动的变量。Agent 安全 15.13 和 RAG 安全 20.4 已经给出了单个应用场景下&quot;ASR（攻击成功率）与…">
+    <meta name="twitter:description" content="为授权红队定义范围、成功判据和攻击预算，成对报告 ASR 与效用，并用独立留出和持续回归管理剩余风险。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：安全评测、红队与持续保障","description":"前面章节多次提到\"某类攻击在标准评测中不可见\"\"对齐是概率性缓解\"——这意味着 AI 系统的安全水位不是一次测试能确定的常量，而是随模型版本、Prompt 变化、新工具接入、新越狱手法公开而持续波动的变量。Agent 安全 15.13 和 RAG 安全 20.4 已经给出了单个应用场景下\"ASR（攻击成功率）与…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：安全评测、红队与持续保障","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：安全评测、红队与持续保障","description":"为授权红队定义范围、成功判据和攻击预算，成对报告 ASR 与效用，并用独立留出和持续回归管理剩余风险。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：安全评测、红队与持续保障","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"安全评测、红队与持续保障","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/"}]}</script>
     
@@ -8620,12 +8620,12 @@
 </tr>
 <tr>
 <td>自动化红队</td>
-<td>可大规模、可重复运行已知攻击模式库；适合做持续回归</td>
-<td>难以发现全新的攻击手法，容易被过拟合到已知模式</td>
+<td>可重复运行模式库，也可搜索新变体和多轮策略</td>
+<td>覆盖受搜索空间、预算和评分器限制，容易围绕已有基准过拟合</td>
 </tr>
 </tbody>
 </table>
-<p>生产级流程通常是"人工红队发现新模式 → 沉淀为自动化用例 → 自动化持续回归 → 人工红队专注于探索自动化覆盖不到的新场景"的闭环，而不是二选一。</p>
+<p>人工与自动化都可能发现新变体，区别在于成本、覆盖与搜索策略，不是「机器只能找已知、人才能找未知」。人工发现的有效路径应转成可重复用例，自动化搜索发现也需复核；不要把工具扫描结果直接当作实际业务损害。</p>
 <h3 id="922">9.2.2 红队覆盖的层面<a class="headerlink" href="#922" title="Permanent link">&para;</a></h3>
 <p>红队不应该只测"模型会不会说脏话"，而应对照第一章的攻击面图谱，覆盖：</p>
 <ul>
@@ -8636,6 +8636,7 @@
 <li><strong>执行环境层</strong>：沙箱逃逸尝试、网络出口绕过（第八章）；</li>
 <li><strong>端到端场景</strong>：模拟真实攻击者从初始接触到达成目标的完整路径，而不是孤立测试单点。</li>
 </ul>
+<p>测试前先取得授权并约定范围、时间、速率、停止条件和事故联系人。用合成身份、测试资金与隔离租户，工具外传使用受控接收端；禁止把真实个人数据或生产密钥作为测试载荷。发现意外影响时立即停止相关测试、保留最小证据并按响应流程处理。</p>
 <h3 id="923">9.2.3 红队的角色与独立性<a class="headerlink" href="#923" title="Permanent link">&para;</a></h3>
 <p>红队应保持相对于研发团队的独立性——由同一批人既写防御又测防御，容易产生盲区。较成熟的组织会引入外部红队或独立安全团队定期评估，并明确红队发现问题后的分级响应流程和修复时限（SLA），而不是把红队报告当作可选参考。</p>
 <h2 id="93">9.3 自动化评测工具与基准<a class="headerlink" href="#93" title="Permanent link">&para;</a></h2>
@@ -8669,7 +8670,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>使用建议</strong>：自动化工具的结果应作为"下限保证"（至少不应该在这些已知模式上失守），而不是安全水位的全部证明——真正的红队价值往往在工具覆盖不到的新场景。</p>
+<p>固定工具、探针、模型和评分器版本，记录运行配置。通过一轮扫描只说明在这些输入、预算和判据下未观察到失败，不提供「安全下限保证」。框架支持某个探针，也不等于它能检测应用的全部授权与执行路径。</p>
 <h2 id="94">9.4 持续保障：把安全评测嵌进研发流程<a class="headerlink" href="#94" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     C1[代码/Prompt/工具变更] --&gt; G1{CI 安全门禁}
@@ -8688,7 +8689,10 @@
 <li><strong>版本变更的特别关注</strong>：模型供应商发布新版本时，历史上被验证有效的防御可能失效（对齐行为改变）或护栏出现新的误报模式，模型切换必须重新跑一遍完整安全回归，不能假设"新版本只会更安全"。</li>
 </ul>
 <h2 id="95">9.5 指标体系<a class="headerlink" href="#95" title="Permanent link">&para;</a></h2>
-<p>除了 <a href="../../../agent/05-production/15-agent-security/">Agent 安全 15.13.1</a> 已经强调的 ASR 与 Utility 成对报告原则外，组织级的持续保障还需要跟踪：</p>
+<p>先写明「成功」的对象：生成不当文字、产生危险工具调用、被执行服务接受、实际改变资源，是不同指标。被授权层拦下的调用不能计为已造成业务损害，但仍可作为模型层失败记录。</p>
+<p><strong>ASR 的分母和攻击预算必须公开</strong>。单次尝试成功率与每个目标在最多 k 次尝试内至少成功一次的比例不可直接比较；超时、无效载荷与不可执行用例要单独列出。重复改写同一个目标不是独立目标，应按目标或会话估计不确定性。自适应红队用于发现失败，不能把其挑选后的 ASR 当成真实用户分布的发生概率。</p>
+<p>同时报告正常任务完成率、误拒、时延和费用；总是拒绝能压低 ASR，却没有业务效用。防御调参集与攻击留出集分开，新增失败用例加入回归后不再冒充独立留出。对「模型裁判认定成功」的样本抽查实际执行和审计证据，避免被回答中的虚构成功描述误导。</p>
+<p>组织级保障还应跟踪：</p>
 <table>
 <thead>
 <tr>
@@ -8698,8 +8702,12 @@
 </thead>
 <tbody>
 <tr>
-<td>平均检测到修复时长（MTTD/MTTR）</td>
-<td>从新攻击模式被发现到防御上线生效的时间</td>
+<td>MTTD</td>
+<td>从可观察事件开始到被检测的平均时长，起点不可知时要说明估计方法</td>
+</tr>
+<tr>
+<td>MTTR / 修复周期</td>
+<td>MTTR 需明确是恢复还是修复；发现到补丁生效的周期另行记录，不能与 MTTD 混称</td>
 </tr>
 <tr>
 <td>护栏误报率</td>
@@ -8719,7 +8727,7 @@
 <h3 id="961">9.6.1 只做一次上线前红队测试<a class="headerlink" href="#961" title="Permanent link">&para;</a></h3>
 <p>模型、Prompt、工具集持续变化，安全水位必须持续评测，一次性测试只能反映测试当时的状态。</p>
 <h3 id="962">9.6.2 只依赖自动化工具，不做人工红队<a class="headerlink" href="#962" title="Permanent link">&para;</a></h3>
-<p>自动化工具擅长回归已知模式，难以发现全新的攻击路径，两者需要形成闭环而非互相替代。</p>
+<p>自动化覆盖受探针、搜索预算和评分器限制，人工覆盖也有限。两者应共享失败证据与回归用例，不能把任一方测试通过当作完整保证。</p>
 <h3 id="963">9.6.3 模型版本升级时跳过安全回归<a class="headerlink" href="#963" title="Permanent link">&para;</a></h3>
 <p>新版本可能改变对齐行为或护栏的误报/漏报模式，"应该只会更好"是没有依据的假设。</p>
 <h3 id="964">9.6.4 只统计回归用例数量，不衡量攻击面覆盖广度<a class="headerlink" href="#964" title="Permanent link">&para;</a></h3>
@@ -8763,7 +8771,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

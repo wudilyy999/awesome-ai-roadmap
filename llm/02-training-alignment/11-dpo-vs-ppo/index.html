@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="PPO（Proximal Policy Optimization）本身是强化学习的经典算法，最早不是为大模型设计的，OpenAI 在 InstructGPT 里把它用进了 RLHF 流程">
+        <meta name="description" content="从 KL 正则化目标推导 DPO 偏好损失，对比 PPO 的在线采样、优势估计和 clipping，并澄清参考策略、资源与泛化差异。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十一章：DPO vs PPO 深度对比">
-    <meta property="og:description" content="PPO（Proximal Policy Optimization）本身是强化学习的经典算法，最早不是为大模型设计的，OpenAI 在 InstructGPT 里把它用进了 RLHF 流程">
+    <meta property="og:description" content="从 KL 正则化目标推导 DPO 偏好损失，对比 PPO 的在线采样、优势估计和 clipping，并澄清参考策略、资源与泛化差异。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/11-dpo-vs-ppo/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十一章：DPO vs PPO 深度对比">
-    <meta name="twitter:description" content="PPO（Proximal Policy Optimization）本身是强化学习的经典算法，最早不是为大模型设计的，OpenAI 在 InstructGPT 里把它用进了 RLHF 流程">
+    <meta name="twitter:description" content="从 KL 正则化目标推导 DPO 偏好损失，对比 PPO 的在线采样、优势估计和 clipping，并澄清参考策略、资源与泛化差异。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十一章：DPO vs PPO 深度对比","description":"PPO（Proximal Policy Optimization）本身是强化学习的经典算法，最早不是为大模型设计的，OpenAI 在 InstructGPT 里把它用进了 RLHF 流程","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/11-dpo-vs-ppo/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十一章：DPO vs PPO 深度对比","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/11-dpo-vs-ppo/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十一章：DPO vs PPO 深度对比","description":"从 KL 正则化目标推导 DPO 偏好损失，对比 PPO 的在线采样、优势估计和 clipping，并澄清参考策略、资源与泛化差异。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/11-dpo-vs-ppo/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十一章：DPO vs PPO 深度对比","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/11-dpo-vs-ppo/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"DPO vs PPO","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/11-dpo-vs-ppo/"}]}</script>
     
@@ -1176,7 +1176,7 @@
         <li class="md-nav__item">
   <a href="#111" class="md-nav__link">
     <span class="md-ellipsis">
-      11.1 一句话抓住区别
+      11.1 先限定比较对象
     </span>
   </a>
   
@@ -1185,44 +1185,44 @@
         <li class="md-nav__item">
   <a href="#112-ppo" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2 PPO：先培养裁判，再训练选手
+      11.2 PPO：奖励建模与在线策略更新
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="11.2 PPO：先培养裁判，再训练选手">
+    <nav class="md-nav" aria-label="11.2 PPO：奖励建模与在线策略更新">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#1121" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.1 第一步：训练奖励模型
+      11.2.1 偏好如何训练奖励模型
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1122-ppo" class="md-nav__link">
+  <a href="#1122-kl" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.2 第二步：用 PPO 优化主模型
+      11.2.2 KL 正则化目标
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1123-kl" class="md-nav__link">
+  <a href="#1123-ppo-clipping" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.3 KL 约束这根绳子
+      11.2.3 PPO clipping 到底截断什么
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1124" class="md-nav__link">
+  <a href="#1124-value-critic" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.4 四个模型分别干什么
+      11.2.4 Value / Critic 做什么
     </span>
   </a>
   
@@ -1236,17 +1236,17 @@
         <li class="md-nav__item">
   <a href="#113-dpo" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3 DPO：绕过裁判，直接看回放
+      11.3 DPO：从最优策略关系得到偏好损失
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="11.3 DPO：绕过裁判，直接看回放">
+    <nav class="md-nav" aria-label="11.3 DPO：从最优策略关系得到偏好损失">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#1131" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3.1 核心是一个数学等价转化
+      11.3.1 推导中的等价性
     </span>
   </a>
   
@@ -1255,16 +1255,25 @@
           <li class="md-nav__item">
   <a href="#1132" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3.2 损失函数在做什么
+      11.3.2 完整损失
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1133" class="md-nav__link">
+  <a href="#1133-masking" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3.3 只需两个模型
+      11.3.3 实现中的数值与 masking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1134-chosen" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.3.4 为什么 chosen 概率也可能下降
     </span>
   </a>
   
@@ -1278,17 +1287,26 @@
         <li class="md-nav__item">
   <a href="#114" class="md-nav__link">
     <span class="md-ellipsis">
-      11.4 完整对比
+      11.4 真正的取舍：反馈覆盖与系统成本
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="11.4 完整对比">
+    <nav class="md-nav" aria-label="11.4 真正的取舍：反馈覆盖与系统成本">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#1141" class="md-nav__link">
     <span class="md-ellipsis">
-      11.4.1 那个最关键的权衡
+      11.4.1 离线不等于不能泛化
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1142" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.4.2 如何公平比较
     </span>
   </a>
   
@@ -1302,7 +1320,7 @@
         <li class="md-nav__item">
   <a href="#115-grpo" class="md-nav__link">
     <span class="md-ellipsis">
-      11.5 GRPO：站在两者中间的方案
+      11.5 GRPO 与这个比较的关系
     </span>
   </a>
   
@@ -1311,102 +1329,18 @@
         <li class="md-nav__item">
   <a href="#116" class="md-nav__link">
     <span class="md-ellipsis">
-      11.6 各自适合什么场景
+      11.6 按条件选择，而不是按效果排队
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="11.6 各自适合什么场景">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1161" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.6.1 一条简单的判断原则
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#117" class="md-nav__link">
     <span class="md-ellipsis">
-      11.7 常见错误
+      11.7 常见追问
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="11.7 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1171" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.1 说不清两者都在解决什么问题
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1172-ppo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.2 讲不出 PPO 的四个模型各自的职责
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1173-kl-reward-hacking" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.3 忘记提 KL 约束和 reward hacking
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1174-dpo-ppo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.4 认为 DPO 全面碾压 PPO
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1175-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.5 说不出 DPO 的等价转换是什么
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1176-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.6 忽略 DPO 对数据质量更敏感
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1177-grpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.7 不提 GRPO
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -8537,7 +8471,7 @@
         <li class="md-nav__item">
   <a href="#111" class="md-nav__link">
     <span class="md-ellipsis">
-      11.1 一句话抓住区别
+      11.1 先限定比较对象
     </span>
   </a>
   
@@ -8546,44 +8480,44 @@
         <li class="md-nav__item">
   <a href="#112-ppo" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2 PPO：先培养裁判，再训练选手
+      11.2 PPO：奖励建模与在线策略更新
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="11.2 PPO：先培养裁判，再训练选手">
+    <nav class="md-nav" aria-label="11.2 PPO：奖励建模与在线策略更新">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#1121" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.1 第一步：训练奖励模型
+      11.2.1 偏好如何训练奖励模型
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1122-ppo" class="md-nav__link">
+  <a href="#1122-kl" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.2 第二步：用 PPO 优化主模型
+      11.2.2 KL 正则化目标
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1123-kl" class="md-nav__link">
+  <a href="#1123-ppo-clipping" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.3 KL 约束这根绳子
+      11.2.3 PPO clipping 到底截断什么
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1124" class="md-nav__link">
+  <a href="#1124-value-critic" class="md-nav__link">
     <span class="md-ellipsis">
-      11.2.4 四个模型分别干什么
+      11.2.4 Value / Critic 做什么
     </span>
   </a>
   
@@ -8597,17 +8531,17 @@
         <li class="md-nav__item">
   <a href="#113-dpo" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3 DPO：绕过裁判，直接看回放
+      11.3 DPO：从最优策略关系得到偏好损失
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="11.3 DPO：绕过裁判，直接看回放">
+    <nav class="md-nav" aria-label="11.3 DPO：从最优策略关系得到偏好损失">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#1131" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3.1 核心是一个数学等价转化
+      11.3.1 推导中的等价性
     </span>
   </a>
   
@@ -8616,16 +8550,25 @@
           <li class="md-nav__item">
   <a href="#1132" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3.2 损失函数在做什么
+      11.3.2 完整损失
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1133" class="md-nav__link">
+  <a href="#1133-masking" class="md-nav__link">
     <span class="md-ellipsis">
-      11.3.3 只需两个模型
+      11.3.3 实现中的数值与 masking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1134-chosen" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.3.4 为什么 chosen 概率也可能下降
     </span>
   </a>
   
@@ -8639,17 +8582,26 @@
         <li class="md-nav__item">
   <a href="#114" class="md-nav__link">
     <span class="md-ellipsis">
-      11.4 完整对比
+      11.4 真正的取舍：反馈覆盖与系统成本
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="11.4 完整对比">
+    <nav class="md-nav" aria-label="11.4 真正的取舍：反馈覆盖与系统成本">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#1141" class="md-nav__link">
     <span class="md-ellipsis">
-      11.4.1 那个最关键的权衡
+      11.4.1 离线不等于不能泛化
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1142" class="md-nav__link">
+    <span class="md-ellipsis">
+      11.4.2 如何公平比较
     </span>
   </a>
   
@@ -8663,7 +8615,7 @@
         <li class="md-nav__item">
   <a href="#115-grpo" class="md-nav__link">
     <span class="md-ellipsis">
-      11.5 GRPO：站在两者中间的方案
+      11.5 GRPO 与这个比较的关系
     </span>
   </a>
   
@@ -8672,102 +8624,18 @@
         <li class="md-nav__item">
   <a href="#116" class="md-nav__link">
     <span class="md-ellipsis">
-      11.6 各自适合什么场景
+      11.6 按条件选择，而不是按效果排队
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="11.6 各自适合什么场景">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1161" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.6.1 一条简单的判断原则
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#117" class="md-nav__link">
     <span class="md-ellipsis">
-      11.7 常见错误
+      11.7 常见追问
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="11.7 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1171" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.1 说不清两者都在解决什么问题
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1172-ppo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.2 讲不出 PPO 的四个模型各自的职责
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1173-kl-reward-hacking" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.3 忘记提 KL 约束和 reward hacking
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1174-dpo-ppo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.4 认为 DPO 全面碾压 PPO
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1175-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.5 说不出 DPO 的等价转换是什么
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1176-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.6 忽略 DPO 对数据质量更敏感
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1177-grpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      11.7.7 不提 GRPO
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -8814,226 +8682,274 @@
 
 
 <h1 id="dpo-vs-ppo">第十一章：DPO vs PPO 深度对比<a class="headerlink" href="#dpo-vs-ppo" title="Permanent link">&para;</a></h1>
-<blockquote>
-<p>PPO 和 DPO 经常被放在一起比较，因为它们解决的是同一件事：让模型在 SFT 之后学会区分「能答」与「答得更好」。</p>
-</blockquote>
-<h2 id="111">11.1 一句话抓住区别<a class="headerlink" href="#111" title="Permanent link">&para;</a></h2>
+<h2 id="111">11.1 先限定比较对象<a class="headerlink" href="#111" title="Permanent link">&para;</a></h2>
+<p><strong>PPO 是通用的强化学习优化算法</strong>，可以使用环境奖励、规则奖励或奖励模型；并非天生需要先训练“裁判”。<strong>DPO 是从偏好数据直接优化策略的方法</strong>，标准离线形式不需要独立奖励模型与在线 rollout。</p>
+<p>本章重点比较“带学习奖励模型的 PPO-RLHF”和“标准离线 DPO”，而不是把所有 PPO 应用都算成四模型 RLHF。</p>
 <table>
 <thead>
 <tr>
 <th></th>
-<th>类比</th>
+<th>PPO-RLHF</th>
+<th>标准离线 DPO</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>PPO</strong></td>
-<td><strong>先培养裁判，再训练选手</strong>。裁判（奖励模型）学会打分，选手不断上场比赛拿分，教练根据分数调整训练</td>
+<td>数据流</td>
+<td>学 RM，再采样、评分、更新策略</td>
+<td>在固定 chosen / rejected 上计算偏好损失</td>
 </tr>
 <tr>
-<td><strong>DPO</strong></td>
-<td><strong>直接拿比赛录像告诉选手哪个动作对</strong>。跳过裁判，直接对照「好动作 / 坏动作」学</td>
+<td>新反馈</td>
+<td>来自训练中策略生成的回答</td>
+<td>优化阶段不主动生成新数据</td>
+</tr>
+<tr>
+<td>两者共享的难点</td>
+<td>反馈偏差、分布外泛化、过优化与独立评估</td>
+<td>同左</td>
 </tr>
 </tbody>
 </table>
-<p>这个类比能快速抓住两者的结构差异，比直接堆术语更清楚。</p>
-<h2 id="112-ppo">11.2 PPO：先培养裁判，再训练选手<a class="headerlink" href="#112-ppo" title="Permanent link">&para;</a></h2>
-<p>PPO（Proximal Policy Optimization）本身是强化学习的经典算法，最早不是为大模型设计的，OpenAI 在 InstructGPT 里把它用进了 RLHF 流程。</p>
-<h3 id="1121">11.2.1 第一步：训练奖励模型<a class="headerlink" href="#1121" title="Permanent link">&para;</a></h3>
-<p>标注员拿到「同一问题的多个回答」按质量排名——比如问「解释什么是递归」，得到 A 优于 B、B 优于 C。</p>
-<p>用这些排名训练一个专门的奖励模型，让它学会给回答打质量分。<strong>这个奖励模型就是裁判，它代替人类完成后续的自动评分。</strong></p>
-<h3 id="1122-ppo">11.2.2 第二步：用 PPO 优化主模型<a class="headerlink" href="#1122-ppo" title="Permanent link">&para;</a></h3>
+<p>SFT 也能学到质量与安全行为；进一步偏好优化是针对剩余问题，而非跨越一道“只能合格、不能优质”的硬边界。</p>
+<h2 id="112-ppo">11.2 PPO：奖励建模与在线策略更新<a class="headerlink" href="#112-ppo" title="Permanent link">&para;</a></h2>
+<h3 id="1121">11.2.1 偏好如何训练奖励模型<a class="headerlink" href="#1121" title="Permanent link">&para;</a></h3>
+<p>设同一 prompt <code>x</code> 下，人类更偏好 <code>yw</code> 而不是 <code>yl</code>。Bradley–Terry 模型写成：</p>
+<div class="arithmatex">\[
+P(y_w\succ y_l\mid x)
+=\sigma\bigl(r_\phi(x,y_w)-r_\phi(x,y_l)\bigr)
+\]</div>
+<p>最小化偏好标签的负对数似然得到奖励模型。这里 <code>σ</code> 是 sigmoid，<code>rφ</code> 是可学习标量分数。相对比较只能识别奖励差：给同一问题的所有答案加一个相同常数，不改变比较概率。</p>
+<p>奖励是标注偏好的代理，不是真实质量的无误测量。学习奖励模型也不会自动消除标注噪声，它可能学习长度、措辞等捷径，并在策略探索到分布外回答时失准。</p>
+<h3 id="1122-kl">11.2.2 KL 正则化目标<a class="headerlink" href="#1122-kl" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[
+J(\theta)=
+\mathbb{E}_{x\sim\mathcal D}
+\left[
+\mathbb{E}_{y\sim\pi_\theta(\cdot\mid x)}r_\phi(x,y)
+-\beta D_{\mathrm{KL}}
+\bigl(\pi_\theta(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)\bigr)
+\right]
+\]</div>
+<p>其中 <code>β</code> 为正，参考策略通常是冻结的 SFT checkpoint。KL 惩罚偏离参考分布，限制奖励过优化；它不是硬性的安全边界，也不保证 reward hacking 不发生。</p>
+<p>常见实现把 log-ratio 的 KL 估计放入 token 奖励，再在终止位置加入 RM 分数。奖励缩放与 KL 系数共同决定优化强度，因此只报告 <code>β</code> 而不报告奖励尺度，比较意义有限。</p>
+<h3 id="1123-ppo-clipping">11.2.3 PPO clipping 到底截断什么<a class="headerlink" href="#1123-ppo-clipping" title="Permanent link">&para;</a></h3>
+<p>对采样旧策略产生的状态 <code>st</code>（文本前缀）和动作 <code>at</code>（下一个 token），定义：</p>
+<div class="arithmatex">\[
+\rho_t(\theta)=
+\frac{\pi_\theta(a_t\mid s_t)}
+{\pi_{\mathrm{old}}(a_t\mid s_t)}
+\]</div>
+<p>PPO 的 clipped surrogate 要最大化：</p>
+<div class="arithmatex">\[
+J_{\mathrm{clip}}(\theta)=
+\mathbb{E}_t\left[
+\min\left(
+\rho_t\hat A_t,\,
+\mathrm{clip}(\rho_t,1-\epsilon,1+\epsilon)\hat A_t
+\right)
+\right]
+\]</div>
+<p><code>Ât</code> 是估计优势。正优势动作不应因一次更新就获得无限增大的相对概率；负优势动作的更新也在相应方向受到截断。<strong>Clipping 限制的是目标中的激励，不是保证实际概率比永不越界的硬投影。</strong></p>
+<p>两个容易混淆的基准：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>用途</th>
+<th>更新频率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>πold</code></td>
+<td>PPO 重要性概率比的分母，匹配本批 rollout 来源</td>
+<td>随采样迭代变化</td>
+</tr>
+<tr>
+<td><code>πref</code></td>
+<td>相对原始行为分布的 KL 正则基准</td>
+<td>通常整个阶段固定</td>
+</tr>
+</tbody>
+</table>
+<p>PPO clipping 与 reference KL 解决不同问题，不能说“有 clipping 就不用参考约束”。</p>
+<h3 id="1124-value-critic">11.2.4 Value / Critic 做什么<a class="headerlink" href="#1124-value-critic" title="Permanent link">&para;</a></h3>
+<p>Critic 估计某前缀之后的预期回报。token 级 PPO 常用时序差分残差及 GAE：</p>
+<div class="arithmatex">\[
+\delta_t=r_t+\gamma V(s_{t+1})-V(s_t),
+\qquad
+\hat A_t=\sum_{l=0}^{T-t-1}(\gamma\lambda)^l\delta_{t+l}
+\]</div>
+<p>这里按 <code>t = 0,…,T−1</code> 编号，终止状态通常取 <code>V(sT) = 0</code>。<code>γ</code> 为折扣系数，<code>λ</code> 控制优势估计的偏差—方差取舍；截断但未终止的样本如何 bootstrap 需要按实现处理。</p>
+<p>所以“优势永远等于最终奖励减 V”只是一步任务的简化直觉，不能代替一般 token 级公式。</p>
 <pre class="mermaid"><code>flowchart LR
-    P["主模型&lt;br/&gt;生成回答"] --&gt; RM["奖励模型&lt;br/&gt;打分"]
-    RM --&gt; PPO["PPO 调参&lt;br/&gt;往高分方向走"]
+    P["采样旧策略"] --&gt; DATA["回答与旧 log probabilities"]
+    DATA --&gt; R["RM 与 KL 奖励"]
+    R --&gt; V["价值估计与优势"]
+    V --&gt; PPO["clipped 策略更新"]
     PPO --&gt; P
-    REF["参考模型（冻结）"] -.-&gt;|KL 散度约束&lt;br/&gt;不许走太远| PPO
-
-    style REF fill:#fff4e5</code></pre>
-<h3 id="1123-kl">11.2.3 KL 约束这根绳子<a class="headerlink" href="#1123-kl" title="Permanent link">&para;</a></h3>
-<p><strong>危险在于</strong>：如果只追求高分，模型可能学会钻空子——生成奖励模型给高分但实际没用的内容，这就是 <strong>reward hacking</strong>。</p>
-<p>典型表现包括疯狂堆字数、无脑加免责声明、反复复述问题，因为这些模式在偏好数据里恰好与「好回答」相关。</p>
-<p><strong>防御手段</strong>：维护一个参考模型（SFT 模型的冻结副本），用 KL 散度约束主模型不要偏离太远。</p>
+    REF["冻结参考策略"] -.-&gt; R</code></pre>
+<p>策略和价值网络通常训练，参考和奖励网络通常冻结。共享价值头、参考计算缓存、模型大小、rollout 引擎和分片都会改变资源占用，不能用“4 个模型所以显存固定是 4 倍”估计。</p>
+<h2 id="113-dpo">11.3 DPO：从最优策略关系得到偏好损失<a class="headerlink" href="#113-dpo" title="Permanent link">&para;</a></h2>
+<h3 id="1131">11.3.1 推导中的等价性<a class="headerlink" href="#1131" title="Permanent link">&para;</a></h3>
+<p>对固定奖励 <code>r</code>、固定参考策略以及正的 <code>β</code>，在合适支持集上优化前述 KL 正则化目标，理想最优策略为：</p>
 <div class="arithmatex">\[
-\mathrm{objective} = \mathbb{E}\big[r(x,y)\big] - \beta \cdot D_{KL}\big(\pi_\theta \,\|\, \pi_{\mathrm{ref}}\big)
+\pi^*(y\mid x)=
+\frac{1}{Z(x)}\pi_{\mathrm{ref}}(y\mid x)
+\exp\left(\frac{r(x,y)}{\beta}\right)
 \]</div>
-<blockquote>
-<p><strong>KL 散度就像一根绳子</strong>：主模型可以向高分方向移动，但不能走太远。</p>
-</blockquote>
-<h3 id="1124">11.2.4 四个模型分别干什么<a class="headerlink" href="#1124" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># PPO 训练时需要同时维护的四个模型</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">policy_model</span>    <span class="o">=</span> <span class="n">load_sft_model</span><span class="p">()</span>     <span class="c1"># 主模型（正在被优化）</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">reference_model</span> <span class="o">=</span> <span class="n">load_sft_model</span><span class="p">()</span>     <span class="c1"># 参考模型（冻结副本，用于 KL 约束）</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">reward_model</span>    <span class="o">=</span> <span class="n">load_reward_model</span><span class="p">()</span>  <span class="c1"># 奖励模型（裁判，给回答打分）</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">value_model</span>     <span class="o">=</span> <span class="n">load_value_model</span><span class="p">()</span>   <span class="c1"># 价值模型（估算未来奖励期望，做优势基线）</span>
-</span></code></pre></div>
-<p><strong>这四个角色分不清，就很难解释 PPO 为什么重、GRPO 又到底省掉了什么</strong>——尤其 value model，不知道它干什么就理解不了 GRPO 的创新点。</p>
-<p>4 个模型同时加载进显存，每个都和主模型差不多大，<strong>光显存占用就是 SFT 训练的好几倍</strong>。加上 RL 本身的不稳定性（超参敏感、易 reward hacking、训练曲线震荡），能驾驭 PPO 的团队在业界凤毛麟角。</p>
-<h2 id="113-dpo">11.3 DPO：绕过裁判，直接看回放<a class="headerlink" href="#113-dpo" title="Permanent link">&para;</a></h2>
-<h3 id="1131">11.3.1 核心是一个数学等价转化<a class="headerlink" href="#1131" title="Permanent link">&para;</a></h3>
-<p>研究者发现：<strong>带 KL 约束的 RLHF 优化目标，可以推导改写成一个纯监督学习的损失函数</strong>，不需要显式训练和调用奖励模型。</p>
-<p>直觉上，奖励模型的功能被「<strong>主模型相对于参考模型的概率比值</strong>」完全替代了：</p>
+<p>其中：</p>
 <div class="arithmatex">\[
-r(x, y) \;\propto\; \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\mathrm{ref}}(y \mid x)}
+Z(x)=\sum_y\pi_{\mathrm{ref}}(y\mid x)
+\exp\left(\frac{r(x,y)}{\beta}\right)
 \]</div>
-<p><strong>如果主模型在某个回答上比参考模型提升了更多概率，那这个回答就被认为更受偏好。</strong></p>
-<h3 id="1132">11.3.2 损失函数在做什么<a class="headerlink" href="#1132" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># DPO 损失函数直觉（简化版，不是完整公式）</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">sigmoid</span><span class="p">(</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">beta</span> <span class="o">*</span> <span class="p">(</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="n">log</span><span class="p">(</span><span class="n">policy</span><span class="p">(</span><span class="n">chosen</span><span class="p">)</span>   <span class="o">/</span> <span class="n">ref</span><span class="p">(</span><span class="n">chosen</span><span class="p">))</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>      <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">policy</span><span class="p">(</span><span class="n">rejected</span><span class="p">)</span> <span class="o">/</span> <span class="n">ref</span><span class="p">(</span><span class="n">rejected</span><span class="p">))</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="p">)</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">))</span>
+<p>重排得到：</p>
+<div class="arithmatex">\[
+r(x,y)=
+\beta\log\frac{\pi^*(y\mid x)}{\pi_{\mathrm{ref}}(y\mid x)}
++\beta\log Z(x)
+\]</div>
+<p><strong>这是相差一个只依赖 x 的加性项，不是简单的“奖励正比于 log-ratio”。</strong> 同一个 prompt 的两答案做差时，<code>β log Z(x)</code> 抵消，因此无需计算昂贵的配分函数。</p>
+<p>这个推导要求参考策略在有关回答上有非零概率、归一化可定义，并采用特定偏好概率模型。它描述奖励与最优策略的关系，不能推出有限数据、有限模型和有限训练下 DPO 与 PPO 完全等效。</p>
+<h3 id="1132">11.3.2 完整损失<a class="headerlink" href="#1132" title="Permanent link">&para;</a></h3>
+<p>用 <code>πθ</code> 参数化策略，把上述奖励差代入 Bradley–Terry 偏好似然：</p>
+<div class="arithmatex">\[
+\mathcal{L}_{\mathrm{DPO}}(\theta)=
+-\mathbb{E}_{(x,y_w,y_l)\sim\mathcal D}
+\log\sigma\left[
+\beta\left(
+\log\frac{\pi_\theta(y_w\mid x)}{\pi_{\mathrm{ref}}(y_w\mid x)}
+-
+\log\frac{\pi_\theta(y_l\mid x)}{\pi_{\mathrm{ref}}(y_l\mid x)}
+\right)
+\right]
+\]</div>
+<p>这是直接对偏好标签的分类损失，不需要先得到一个显式 RM 再用 PPO 优化它。</p>
+<p>序列 log probability 应通过回答 token 求和：</p>
+<div class="arithmatex">\[
+\log\pi_\theta(y\mid x)=
+\sum_{t=1}^{|y|}
+\log\pi_\theta(y_t\mid x,y_1,\ldots,y_{t-1})
+\]</div>
+<p>标准形式不能随意改成平均 token log probability 而仍声称目标未变。长度归一化属于改变目标或变体，需要说明理由与评测。</p>
+<h3 id="1133-masking">11.3.3 实现中的数值与 masking<a class="headerlink" href="#1133-masking" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># 输入是已按回答 token 掩码求和后的序列 log probabilities</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">policy_margin</span> <span class="o">=</span> <span class="n">policy_chosen_logps</span> <span class="o">-</span> <span class="n">policy_rejected_logps</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">reference_margin</span> <span class="o">=</span> <span class="n">ref_chosen_logps</span> <span class="o">-</span> <span class="n">ref_rejected_logps</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">F</span><span class="o">.</span><span class="n">logsigmoid</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">policy_margin</span> <span class="o">-</span> <span class="n">reference_margin</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </span></code></pre></div>
-<p>同时发生两件事：</p>
-<ol>
-<li>模型对<strong>好回答</strong>的概率，相对参考模型<strong>升高</strong>；</li>
-<li>模型对<strong>差回答</strong>的概率，相对参考模型<strong>降低</strong>。</li>
-</ol>
-<h3 id="1133">11.3.3 只需两个模型<a class="headerlink" href="#1133" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">policy_model</span>    <span class="o">=</span> <span class="n">load_sft_model</span><span class="p">()</span>   <span class="c1"># 主模型（正在被优化）</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">reference_model</span> <span class="o">=</span> <span class="n">load_sft_model</span><span class="p">()</span>   <span class="c1"># 参考模型（冻结，用于计算概率比）</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># 相比 PPO 少了 reward_model 和 value_model，资源需求减半</span>
-</span></code></pre></div>
-<p>DPO 把对齐训练变成了普通的监督学习问题，<strong>用现成的深度学习框架就能实现</strong>，训练稳定、超参好调。这就是开源社区大量采用它的原因——<strong>不需要复杂的 RL 基础设施</strong>。</p>
-<h2 id="114">11.4 完整对比<a class="headerlink" href="#114" title="Permanent link">&para;</a></h2>
+<p>直接计算 token 概率的连乘容易下溢，应使用 log-softmax 后 gather 与求和。Prompt、padding 不计入回答得分，EOS 与截断规则必须保持策略和参考一致。</p>
+<p>若预计算参考 log probabilities，必须固定参考权重、tokenizer、模板和截断方式，并保证无随机 dropout；改变这些配置后缓存应失效。</p>
+<h3 id="1134-chosen">11.3.4 为什么 chosen 概率也可能下降<a class="headerlink" href="#1134-chosen" title="Permanent link">&para;</a></h3>
+<p>DPO 优化的是两答案相对参考策略的 log-ratio <strong>差值</strong>。两者都下降但 rejected 降得更多，也可能让偏好损失改善。因此不仅要看偏好分类准确率，还应观察 chosen 的似然、回答长度、独立任务分数与生成退化。</p>
+<p>在理想 KL 奖励目标中，较大的 <code>β</code> 表示更强的参考约束；但在实际 DPO 损失中，它也缩放 margin 与梯度，并影响 sigmoid 饱和。不能简单解释成“β 越大每一步更新必然越小”，需要与学习率、数据和训练步数联合验证。</p>
+<h2 id="114">11.4 真正的取舍：反馈覆盖与系统成本<a class="headerlink" href="#114" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>维度</th>
-<th>PPO</th>
-<th>DPO</th>
+<th>PPO-RLHF</th>
+<th>标准离线 DPO</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>是否需要奖励模型</strong></td>
-<td>需要（要单独训练）</td>
-<td><strong>不需要</strong></td>
+<td>在线生成</td>
+<td>通常需要</td>
+<td>优化阶段不需要</td>
 </tr>
 <tr>
-<td><strong>同时维护的模型数</strong></td>
-<td>4 个</td>
-<td><strong>2 个</strong></td>
+<td>奖励来源</td>
+<td>此处用学习 RM；PPO 本身也可用规则</td>
+<td>成对偏好标签，隐式奖励参数化</td>
 </tr>
 <tr>
-<td><strong>训练稳定性</strong></td>
-<td>较差（RL 本身不稳定）</td>
-<td><strong>好（等价于监督学习）</strong></td>
+<td>价值估计</td>
+<td>常用 Critic / GAE</td>
+<td>不需要</td>
 </tr>
 <tr>
-<td><strong>实现难度</strong></td>
-<td>高（需要 RL 基础设施）</td>
-<td>低（标准训练框架即可）</td>
+<td>主要工程复杂度</td>
+<td>采样与训练协调、奖励、优势与策略版本</td>
+<td>成对数据、log probability、参考一致性</td>
 </tr>
 <tr>
-<td><strong>表达能力</strong></td>
-<td><strong>强（可探索训练数据之外的空间）</strong></td>
-<td>稍弱（受偏好数据分布限制）</td>
+<td>分布风险</td>
+<td>RM 对新策略输出的外推误差</td>
+<td>离线数据覆盖不足</td>
 </tr>
 <tr>
-<td><strong>对数据质量的敏感度</strong></td>
-<td>中（RM 可平滑部分噪声）</td>
-<td><strong>高（偏好对有噪声直接学歪）</strong></td>
+<td>稳定性</td>
+<td>依赖奖励、优势和更新设置</td>
+<td>流程较简单，但仍可能过拟合、退化</td>
 </tr>
 <tr>
-<td><strong>代表模型</strong></td>
-<td>InstructGPT、ChatGPT 早期、Llama 2-Chat</td>
-<td>Zephyr、部分 Mistral / Qwen 派生 Instruct 模型</td>
+<td>质量上限</td>
+<td>无统一保证</td>
+<td>无统一保证</td>
 </tr>
 </tbody>
 </table>
-<h3 id="1141">11.4.1 那个最关键的权衡<a class="headerlink" href="#1141" title="Permanent link">&para;</a></h3>
-<p><strong>DPO 的优化目标是「往偏好数据分布靠拢」</strong>，它永远只能在你给的 chosen/rejected 之间做取舍。</p>
-<p><strong>PPO 是在线采样的</strong>：主模型自己生成回答、拿到分数、再调整。它<strong>能发现偏好数据里根本不存在的更好回答方式</strong>。</p>
-<p>这就是「表达能力」那一行的实质含义——不是 DPO 学得不好，而是<strong>它天然被数据分布圈住了</strong>。</p>
-<h2 id="115-grpo">11.5 GRPO：站在两者中间的方案<a class="headerlink" href="#115-grpo" title="Permanent link">&para;</a></h2>
-<p>GRPO 是 DeepSeek 在 DeepSeekMath 里提出的 PPO 改进版，<strong>核心创新是砍掉 Value Model</strong>。</p>
-<p>在 PPO 里，Value Model 估计「当前状态的预期奖励」作为基线，用来算优势函数。它是独立神经网络、规模和主模型差不多、要单独训练和占显存。</p>
-<p>GRPO 的做法是：对一个问题采样 <span class="arithmatex">\(G\)</span> 个回答（典型 <span class="arithmatex">\(G=8\)</span>），用组内归一化算相对优势：</p>
+<h3 id="1141">11.4.1 离线不等于不能泛化<a class="headerlink" href="#1141" title="Permanent link">&para;</a></h3>
+<p>DPO 模型仍通过共享参数学习，能生成训练对之外的回答。缺少的是<strong>标准训练循环中的主动采样与新反馈</strong>，不是把输出限制成已知 chosen / rejected 的查表。</p>
+<p>反过来，PPO 能探索也不意味着探索一定有效：如果奖励判断错了，探索越多可能越善于钻漏洞。用 AI 或人类重新标注当前策略输出，再继续 DPO，也能形成在线收集、离线更新的迭代系统。</p>
+<h3 id="1142">11.4.2 如何公平比较<a class="headerlink" href="#1142" title="Permanent link">&para;</a></h3>
+<p>至少控制基座、目标任务分布、评测集与解码预算，并分别报告：</p>
+<ul>
+<li>偏好标注、RM 训练与在线采样成本；</li>
+<li>策略训练 token 数及总硬件时间；</li>
+<li>RM 分数与独立人类/可验证指标是否一致；</li>
+<li>长度、事实性、安全和通用能力退化。</li>
+</ul>
+<p>不存在“PPO 的 RM 总能平滑噪声，所以比 DPO 更不怕脏数据”的保证。两者都可能放大监督信号里的系统偏差。</p>
+<h2 id="115-grpo">11.5 GRPO 与这个比较的关系<a class="headerlink" href="#115-grpo" title="Permanent link">&para;</a></h2>
+<p>GRPO 是 PPO 风格的在线优化路线，主要改变优势估计：同题采样多个回答，用组内奖励均值和标准差计算相对优势，不训练 Critic。</p>
 <div class="arithmatex">\[
-A_i = \frac{r_i - \mathrm{mean}(r_1 \dots r_G)}{\mathrm{std}(r_1 \dots r_G)}
+\hat A_i=
+\frac{r_i-\bar r}{s_r+\varepsilon},
+\qquad
+\bar r=\frac{1}{G}\sum_{j=1}^{G}r_j
 \]</div>
-<p><strong>组内平均分充当了 Value Model 的角色</strong>，这个基线天然就有，不用单独训练。</p>
-<pre class="mermaid"><code>flowchart LR
-    A["PPO&lt;br/&gt;4 模型&lt;br/&gt;探索能力强&lt;br/&gt;显存大 · 难训"]
-    B["GRPO&lt;br/&gt;3 模型&lt;br/&gt;保留探索能力&lt;br/&gt;显存接近 DPO"]
-    C["DPO&lt;br/&gt;2 模型&lt;br/&gt;无探索能力&lt;br/&gt;最省最稳"]
-    A --- B --- C
-
-    style B fill:#e6f4ea</code></pre>
-<p><strong>GRPO 的杀手级特性</strong>：对可验证任务特别友好。数学题、代码题这类「对就是对、错就是错」的场景，<span class="arithmatex">\(r_i\)</span> 直接用 0/1 判定，<strong>连 Reward Model 都能省</strong>——DeepSeek R1-Zero 就是纯靠这个训出推理能力的。</p>
-<p>实际讨论里，GRPO 的关键就落在这句「<strong>砍掉 Value Model，用组内归一化代替</strong>」。</p>
-<h2 id="116">11.6 各自适合什么场景<a class="headerlink" href="#116" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>方案</th>
-<th>适合谁</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>PPO</strong></td>
-<td>对齐效果要求极高、<strong>资源充足、有 RL 工程能力</strong>的团队。ChatGPT 早期的强大效果很大程度来自精心调优的 PPO 流程，但门槛极高</td>
-</tr>
-<tr>
-<td><strong>DPO</strong></td>
-<td><strong>快速迭代、GPU 有限、开源社区场景</strong>。不需要 RL 工程能力，偏好数据众包打排名就能收集，训练一次成功率高</td>
-</tr>
-<tr>
-<td><strong>GRPO</strong></td>
-<td><strong>可验证任务</strong>（数学、代码），想保留 RL 探索能力但显存吃紧</td>
-</tr>
-</tbody>
-</table>
-<h3 id="1161">11.6.1 一条简单的判断原则<a class="headerlink" href="#1161" title="Permanent link">&para;</a></h3>
-<blockquote>
-<p><strong>想在已有偏好数据的分布上把质量提升一步 → DPO 够用且高效。</strong>
-<strong>需要模型探索超出现有数据的能力边界，或对齐效果要求接近顶级水平 → 才值得投入 PPO 的工程成本。</strong></p>
-</blockquote>
-<h2 id="117">11.7 常见错误<a class="headerlink" href="#117" title="Permanent link">&para;</a></h2>
-<h3 id="1171">11.7.1 说不清两者都在解决什么问题<a class="headerlink" href="#1171" title="Permanent link">&para;</a></h3>
-<p>先铺垫「SFT 让模型学会按指令回答，但不知道哪种回答更受欢迎」，再讲两条路径。跳过这句就显得只在背算法。</p>
-<h3 id="1172-ppo">11.7.2 讲不出 PPO 的四个模型各自的职责<a class="headerlink" href="#1172-ppo" title="Permanent link">&para;</a></h3>
-<p>policy / reference / reward / value。尤其 value model 做优势基线这一点，是理解 GRPO 的前提。</p>
-<h3 id="1173-kl-reward-hacking">11.7.3 忘记提 KL 约束和 reward hacking<a class="headerlink" href="#1173-kl-reward-hacking" title="Permanent link">&para;</a></h3>
-<p>这是 PPO 最关键的工程细节。没有 KL 这根绳子，模型会去讨好奖励模型而不是真的变好。</p>
-<h3 id="1174-dpo-ppo">11.7.4 认为 DPO 全面碾压 PPO<a class="headerlink" href="#1174-dpo-ppo" title="Permanent link">&para;</a></h3>
-<p>DPO 省资源、更稳，但<strong>受偏好数据分布限制、没有在线探索能力</strong>。这是明确的权衡不是纯优势。</p>
-<h3 id="1175-dpo">11.7.5 说不出 DPO 的等价转换是什么<a class="headerlink" href="#1175-dpo" title="Permanent link">&para;</a></h3>
-<p>奖励模型的功能被「policy 相对 ref 的对数概率比」替代。这是 DPO 的全部精髓。</p>
-<h3 id="1176-dpo">11.7.6 忽略 DPO 对数据质量更敏感<a class="headerlink" href="#1176-dpo" title="Permanent link">&para;</a></h3>
-<p>PPO 里的 RM 能平滑一部分标注噪声，DPO 直接在偏好对上学，<strong>噪声会被原样学进去</strong>。</p>
-<h3 id="1177-grpo">11.7.7 不提 GRPO<a class="headerlink" href="#1177-grpo" title="Permanent link">&para;</a></h3>
-<p>它是现在这条线上最热的方案。能说出「砍掉 Value Model 用组内归一化代替」就是加分项。</p>
-<h2 id="118">11.8 本章总结<a class="headerlink" href="#118" title="Permanent link">&para;</a></h2>
+<p>这里的 <code>ε</code> 是数值保护。结果监督版本把同一优势赋给回答中的 token，再结合截断概率比与 KL。全组奖励相同则任务优势为零；组内归一化也可能引入难度加权和噪声敏感问题。</p>
+<pre class="mermaid"><code>flowchart TB
+    ONLINE["在线采样与奖励优化"] --&gt; PPO["PPO&lt;br/&gt;学习价值基线"]
+    ONLINE --&gt; GRPO["GRPO&lt;br/&gt;组内相对基线"]
+    OFFLINE["固定偏好对"] --&gt; DPO["离线 DPO&lt;br/&gt;直接偏好损失"]
+    DPO -.-&gt;|可外接采样与标注循环| OFFLINE</code></pre>
+<p>可验证任务可以用规则奖励，省掉学习 RM，但这一点<strong>不是 GRPO 独有</strong>。R1-Zero 的初版报告使用准确性与格式奖励，并复用了预训练基座，不能称为“只用 0/1 从零学会推理”。</p>
+<p>省掉 Critic 不意味着总显存接近 DPO：多回答 rollout、上下文长度、参考策略和训练调度都可能占很大比重。</p>
+<h2 id="116">11.6 按条件选择，而不是按效果排队<a class="headerlink" href="#116" title="Permanent link">&para;</a></h2>
+<ul>
+<li>已有可信偏好对、在线生成昂贵：DPO 是自然基线。</li>
+<li>可以稳定在线打分、需要持续覆盖当前策略的回答：比较 PPO 或 GRPO。</li>
+<li>组内奖励几乎总相同：先改善题目难度、采样覆盖或奖励，不要仅更换算法名字。</li>
+<li>奖励模型与独立评测不一致：先排查奖励漏洞和评测，而不是增加 RL 步数。</li>
+</ul>
+<p>公开报告支持的例子包括 InstructGPT、Llama 2-Chat 的 PPO-RLHF，以及 Llama 3 报告中的 DPO。不能据此断言未公开模型用哪种算法，也不能把同名后续版本的流程自动等同于初版。</p>
+<h2 id="117">11.7 常见追问<a class="headerlink" href="#117" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>两者目标一致</strong>：都在解决 SFT 之后「知道合格但不知道哪个更好」的问题；</li>
-<li><strong>PPO 是先培养裁判再训练选手</strong>：训 RM → 生成 → 打分 → 调参循环；</li>
-<li><strong>KL 散度是防 reward hacking 的绳子</strong>，允许移动但不许走太远；</li>
-<li><strong>PPO 要同时维护 4 个模型</strong>，显存是 SFT 的好几倍，训练不稳定、超参敏感；</li>
-<li><strong>DPO 的精髓是一个等价转换</strong>：奖励模型被「policy 相对 ref 的对数概率比」替代；</li>
-<li><strong>DPO 只需 2 个模型</strong>，变成普通监督学习，标准框架就能跑；</li>
-<li><strong>最关键的权衡是探索能力</strong>：PPO 在线采样能发现数据外的好回答，DPO 只能在给定偏好对之间取舍；</li>
-<li><strong>DPO 对偏好数据质量更敏感</strong>，因为没有 RM 帮忙平滑噪声；</li>
-<li><strong>GRPO 站在两者中间</strong>：砍掉 Value Model 用组内归一化替代，显存接近 DPO 但保留 RL 探索能力；</li>
-<li><strong>选型原则</strong>：在已有数据分布内提升选 DPO，要突破数据边界才值得投 PPO 的工程成本。</li>
+<li><strong>DPO 为什么不需要 Z(x)？</strong> 同一问题的奖励差抵消了加性归一化项。</li>
+<li><strong>两个 ratio 的分母是不是同一个模型？</strong> PPO clipping 比的是采样旧策略；DPO 隐式奖励和 RLHF KL 用的是参考策略。</li>
+<li><strong>参考策略可以删掉吗？</strong> 预计算可以省常驻显存；改成 reference-free 损失则是另一个目标，不能假装公式未变。</li>
+<li><strong>KL 可以防止所有奖励黑客吗？</strong> 不能，只能约束偏移，奖励错误仍需要修正。</li>
+<li><strong>训练 loss 更低就更对齐吗？</strong> 只说明拟合了训练目标；需要独立的生成评估。</li>
 </ol>
-<blockquote>
-<p>PPO 和 DPO 的分水岭不在口号式的「谁更强」，而在你是否需要在线探索能力，以及是否愿意为此承担奖励模型和 RL 基础设施的成本。</p>
-</blockquote>
+<h2 id="118">11.8 本章总结<a class="headerlink" href="#118" title="Permanent link">&para;</a></h2>
+<p>PPO-RLHF 用在线奖励、优势估计和截断策略更新；DPO 通过特定偏好模型下的奖励重参数化，直接训练偏好对。二者的关键区别是<strong>新反馈如何获得、参考约束如何进入目标，以及为此承担什么系统成本</strong>，而不是谁拥有固定更高的能力上限。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms（PPO）</a></li>
-<li><a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions with human feedback（InstructGPT）</a></li>
-<li><a href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization: Your Language Model is Secretly a Reward Model</a></li>
-<li><a href="https://arxiv.org/abs/2402.03300">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models（GRPO）</a></li>
-<li><a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a></li>
-<li><a href="https://arxiv.org/abs/2307.09288">Llama 2: Open Foundation and Fine-Tuned Chat Models</a></li>
-<li><a href="https://arxiv.org/abs/2310.16944">Zephyr: Direct Distillation of LM Alignment</a></li>
-<li><a href="https://github.com/huggingface/trl">Hugging Face TRL</a></li>
+<li><a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms</a></li>
+<li><a href="https://spinningup.openai.com/en/latest/algorithms/ppo.html">OpenAI Spinning Up：PPO-Clip 公式与约束边界</a></li>
+<li><a href="https://arxiv.org/abs/2203.02155">InstructGPT</a></li>
+<li><a href="https://arxiv.org/html/2305.18290v3">DPO：§4 与附录 A 推导</a></li>
+<li><a href="https://arxiv.org/html/2402.03300v2">DeepSeekMath：GRPO</a></li>
+<li><a href="https://arxiv.org/html/2501.12948v1">DeepSeek-R1，初版</a></li>
+<li><a href="https://arxiv.org/html/2307.09288v2">Llama 2</a></li>
+<li><a href="https://arxiv.org/html/2407.21783v3">The Llama 3 Herd of Models</a></li>
+<li><a href="https://arxiv.org/abs/1506.02438">High-Dimensional Continuous Control Using Generalized Advantage Estimation</a></li>
 </ul>
 
 
@@ -9057,7 +8973,7 @@ A_i = \frac{r_i - \mathrm{mean}(r_1 \dots r_G)}{\mathrm{std}(r_1 \dots r_G)}
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
   </span>
 
     

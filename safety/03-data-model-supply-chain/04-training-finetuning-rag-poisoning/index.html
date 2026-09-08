@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="数据投毒（Data Poisoning）指攻击者通过污染模型「学习」或「引用」的数据源，来操纵模型行为。它横跨模型生命周期的多个阶段，但攻击原理相通： 只要模型的行为部分依赖于某份数据，污染这份数据就能间接控制模型">
+        <meta name="description" content="区分训练与检索投毒的生效机制，限定少样本后门研究的结论，并建立数据来源、审计和恢复链路。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第四章：训练、微调与 RAG 数据投毒">
-    <meta property="og:description" content="数据投毒（Data Poisoning）指攻击者通过污染模型「学习」或「引用」的数据源，来操纵模型行为。它横跨模型生命周期的多个阶段，但攻击原理相通： 只要模型的行为部分依赖于某份数据，污染这份数据就能间接控制模型">
+    <meta property="og:description" content="区分训练与检索投毒的生效机制，限定少样本后门研究的结论，并建立数据来源、审计和恢复链路。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第四章：训练、微调与 RAG 数据投毒">
-    <meta name="twitter:description" content="数据投毒（Data Poisoning）指攻击者通过污染模型「学习」或「引用」的数据源，来操纵模型行为。它横跨模型生命周期的多个阶段，但攻击原理相通： 只要模型的行为部分依赖于某份数据，污染这份数据就能间接控制模型">
+    <meta name="twitter:description" content="区分训练与检索投毒的生效机制，限定少样本后门研究的结论，并建立数据来源、审计和恢复链路。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第四章：训练、微调与 RAG 数据投毒","description":"数据投毒（Data Poisoning）指攻击者通过污染模型「学习」或「引用」的数据源，来操纵模型行为。它横跨模型生命周期的多个阶段，但攻击原理相通： 只要模型的行为部分依赖于某份数据，污染这份数据就能间接控制模型","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第四章：训练、微调与 RAG 数据投毒","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第四章：训练、微调与 RAG 数据投毒","description":"区分训练与检索投毒的生效机制，限定少样本后门研究的结论，并建立数据来源、审计和恢复链路。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第四章：训练、微调与 RAG 数据投毒","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"训练、微调与 RAG 投毒","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/"}]}</script>
     
@@ -8578,20 +8578,20 @@
 
 <h1 id="rag">第四章：训练、微调与 RAG 数据投毒<a class="headerlink" href="#rag" title="Permanent link">&para;</a></h1>
 <h2 id="41">4.1 数据投毒的统一视角<a class="headerlink" href="#41" title="Permanent link">&para;</a></h2>
-<p>数据投毒（Data Poisoning）指攻击者通过污染模型「学习」或「引用」的数据源，来操纵模型行为。它横跨模型生命周期的多个阶段，但攻击原理相通：<strong>只要模型的行为部分依赖于某份数据，污染这份数据就能间接控制模型</strong>。</p>
+<p>数据投毒（Data Poisoning）通过污染训练材料或运行时引用的数据影响系统行为。污染不一定成功：训练中还取决于采样、去重、重复曝光和优化过程；RAG 中取决于文档是否入库、召回及被模型采信。要区分攻击者「能写入数据」与「能达成目标」。</p>
 <pre class="mermaid"><code>flowchart TB
     P[数据投毒] --&gt; P1[预训练语料投毒]
     P --&gt; P2[微调/RLHF 数据投毒]
     P --&gt; P3["RAG 语料投毒&lt;br/&gt;见 RAG 安全 20.3.1"]
-    P1 --&gt; E1[影响面广但门槛高&lt;br/&gt;需要污染大规模公开语料]
-    P2 --&gt; E2[门槛更低&lt;br/&gt;众包标注/开放数据集/第三方微调服务]
-    P3 --&gt; E3[门槛最低&lt;br/&gt;知识库可被用户上传或网页抓取]</code></pre>
-<p>三者的防御思路相通（来源分级、审核、异常检测、可追溯），但风险特征不同：预训练语料规模巨大，单点污染的边际影响很小，但攻击一旦成功影响面广且难以定位；微调和 RAG 语料规模小得多，少量精心构造的样本就能达成目标，而且更换成本低、容易被内部或外部投毒者接触到。<strong>RAG 语料投毒的攻击方式、效率和防御要点已在 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全 20.3.1</a> 讲清楚，下面直接看训练与微调阶段特有的投毒形式——尤其是后门攻击。</strong></p>
+    P1 --&gt; E1[改变权重&lt;br/&gt;依赖训练采样与曝光]
+    P2 --&gt; E2[改变权重或偏好&lt;br/&gt;依赖标注与训练入口]
+    P3 --&gt; E3[改变检索上下文&lt;br/&gt;依赖写入和召回权限]</code></pre>
+<p>三者都需要来源、审核和血缘，但不存在固定的难度排序：开放网页抓取与只读审批知识库的 RAG 风险不同；小量训练污染也可能对窄目标有效。训练投毒影响权重，删除原始文档不能直接消除影响；RAG 通常不改权重，但删除还需传播到索引、缓存和派生记忆。检索侧细节见 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全</a>。</p>
 <h2 id="42">4.2 训练与微调阶段的投毒形式<a class="headerlink" href="#42" title="Permanent link">&para;</a></h2>
 <h3 id="421">4.2.1 无目标投毒：整体拉低质量或引入偏见<a class="headerlink" href="#421" title="Permanent link">&para;</a></h3>
 <p>攻击者不追求控制特定输出，而是通过混入低质量、错误或带偏见的样本，整体拉低模型能力或注入系统性偏见。这类攻击门槛低，但也最容易被数据质量检查发现——异常的标签分布、重复模式、与已知可信来源冲突的内容都是信号。</p>
 <h3 id="422-backdoor-attack">4.2.2 目标型投毒与后门攻击（Backdoor Attack）<a class="headerlink" href="#422-backdoor-attack" title="Permanent link">&para;</a></h3>
-<p>这是最需要警惕的形式：攻击者在训练/微调数据中植入带有特定「触发器」（trigger）的样本，使模型学会「看到触发器就执行攻击者指定的行为」，而在没有触发器的正常输入上表现完全正常。</p>
+<p>后门攻击试图让模型在特定「触发器」（trigger）出现时偏向攻击者指定行为，同时尽量保持无触发器时的正常表现。是否成功、对其他任务的损害多大，都需要分别测量，不能假定所有后门都完全隐形。</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant A as 攻击者
     participant D as 训练/微调数据集
@@ -8606,8 +8606,8 @@
 <p><strong>触发器可以是</strong>：一个不常见的词组、特定的格式指令、特定语言、特定的 Unicode 字符组合，甚至是看似无害的上下文模式。触发器设计得越隐蔽、越不可能在正常评测中被撞到，攻击就越难被发现。</p>
 <p><strong>后门攻击的独特危险性</strong>：</p>
 <ul>
-<li>在标准能力评测和常规安全测试中完全不可见——因为评测本身不包含触发器；</li>
-<li>一旦被触发，行为可以是任意的：越狱、输出恶意代码、泄露敏感信息、在特定业务场景下给出错误但看似合理的建议；</li>
+<li>常规评测未包含触发条件时可能漏检；「未测出异常」不证明没有后门；</li>
+<li>触发行为受训练目标、模型能力和运行环境限制，不能让模型凭空获得未接触的数据或执行权限；</li>
 <li>微调数据集规模小、迭代快，第三方微调服务、开放数据集、众包标注都是投毒入口，比污染预训练语料容易得多。</li>
 </ul>
 <h3 id="423-rlhf">4.2.3 RLHF/偏好数据投毒<a class="headerlink" href="#423-rlhf" title="Permanent link">&para;</a></h3>
@@ -8625,22 +8625,22 @@
 <tbody>
 <tr>
 <td>预训练语料</td>
-<td>万亿 Token 级</td>
-<td>极高，但研究表明只需<strong>绝对数量</strong>（而非比例）的污染样本即可影响特定窄领域知识</td>
+<td>可达大规模语料</td>
+<td>依赖真实进入训练的数据量、曝光次数与目标，不能只按比例判断</td>
 </tr>
 <tr>
 <td>微调/RLHF 数据</td>
-<td>万到百万条样本级</td>
-<td>中等，少量样本即可植入后门</td>
+<td>因任务与训练方法而异</td>
+<td>部分研究在小样本污染下有效，不构成通用成功阈值</td>
 </tr>
 <tr>
 <td>RAG 知识库</td>
-<td>通常可被用户/爬虫持续写入</td>
-<td>低，见 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全 20.3.1</a></td>
+<td>从小型私有库到持续抓取库</td>
+<td>依赖写入权限、召回排序和上下文信任处理</td>
 </tr>
 </tbody>
 </table>
-<p>一个反直觉但重要的研究发现是：<strong>大规模预训练语料的投毒效果可能更多取决于恶意样本的绝对数量，而非其在整体语料中的占比</strong>——这意味着「语料足够大就足够安全」的直觉并不完全成立，尤其是针对具体、窄域的知识点进行投毒时。</p>
+<p>Anthropic、英国 AI Security Institute 与 Alan Turing Institute 的<a href="https://www.anthropic.com/research/small-samples-poison">联合研究</a>在 600M–13B 参数模型和特定训练设置下，发现约 250 份恶意文档可形成输出乱码的窄后门，效果更接近依赖绝对数量而非污染比例。这不是「任意规模模型只要 250 份文档就能操控」：更大模型、有害目标、真实抓取与清洗管道能否复现，原文明确保留不确定性。</p>
 <h2 id="44">4.4 防御框架<a class="headerlink" href="#44" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
     S[来源治理] --&gt; C[入库前审核]
@@ -8684,24 +8684,25 @@
 <p><strong>对众包标注和第三方微调服务的额外要求</strong>：标注平台需要多人独立标注 + 交叉验证异常样本；采购的微调服务应在合同中约定数据来源可审计、模型可复现训练轨迹，而不是只交付一个黑盒权重文件。</p>
 <h2 id="45">4.5 常见错误<a class="headerlink" href="#45" title="Permanent link">&para;</a></h2>
 <h3 id="451">4.5.1 认为语料规模大就天然安全<a class="headerlink" href="#451" title="Permanent link">&para;</a></h3>
-<p>预训练语料的投毒效果更多取决于恶意样本的绝对数量而非占比，规模大不代表窄域知识点不会被针对性污染。</p>
+<p>部分受控实验发现窄后门与污染样本绝对数量相关，不能外推到所有任务；同样也不能仅凭语料大断言安全。</p>
 <h3 id="452">4.5.2 只用标准能力评测验证微调后的模型<a class="headerlink" href="#452" title="Permanent link">&para;</a></h3>
-<p>后门攻击设计目标就是在标准评测中不可见，必须结合触发器模式的主动探测（红队）才能发现。</p>
+<p>后门可能逃过常规评测，主动探测能补充证据，但未知触发器空间无法穷举；低频 token 检测和 loss 异常也只是线索，不是后门不存在的证明。</p>
 <h3 id="453-rag">4.5.3 把 RAG 语料投毒和训练数据投毒混为一谈<a class="headerlink" href="#453-rag" title="Permanent link">&para;</a></h3>
-<p>二者的攻击门槛、生效机制和防御手段都不同：RAG 投毒操纵的是检索排序，训练投毒改变的是模型权重本身，后者更持久也更难清除（无法靠删除文档撤销）。</p>
+<p>RAG 投毒可以改变检索内容、排序或向模型提供间接指令；训练投毒改变权重。处置时先隔离来源和受影响版本，再重建索引或从可信数据重新训练，并验证派生缓存、摘要和适配器是否仍有污染。</p>
 <h3 id="454">4.5.4 忽视第三方微调服务和众包标注的供应链风险<a class="headerlink" href="#454" title="Permanent link">&para;</a></h3>
 <p>外包环节往往缺乏来源审计，是投毒最容易发生的地方。</p>
 <h2 id="46">4.6 本章总结<a class="headerlink" href="#46" title="Permanent link">&para;</a></h2>
 <ol>
 <li>数据投毒横跨预训练、微调/RLHF、RAG 三个阶段，原理相通但风险特征不同；RAG 语料投毒的具体攻防已在 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全 20.3.1</a> 讲清楚，本章聚焦训练与微调阶段；</li>
-<li>后门攻击（植入触发器）是最需警惕的目标型投毒形式，在标准评测中不可见，需要主动的触发器模式探测才能发现；</li>
+<li>后门可能未在常规测试中触发，主动探测有价值，但不能保证发现全部未知后门；</li>
 <li>RLHF/偏好数据投毒比直接污染生成数据更隐蔽，影响的是模型「认为什么更好」这一底层判断标准；</li>
-<li>大规模语料的投毒效果可能更多取决于恶意样本的绝对数量而非占比，「语料够大就安全」是错误直觉；</li>
+<li>少样本投毒结论必须连同模型规模、目标和训练设置引用，不能把研究结果写成通用阈值；</li>
 <li>防御需要覆盖来源治理、入库审核、训练中监控、训练后审计和运行时异常检测的完整链路，并对第三方微调服务和众包标注设置来源可审计的合同要求。</li>
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2302.10149">Poisoning Web-Scale Training Datasets is Practical</a></li>
+<li><a href="https://www.anthropic.com/research/small-samples-poison">Anthropic / UK AISI / Alan Turing Institute: Small samples can poison language models</a></li>
 <li><a href="https://arxiv.org/abs/1708.06733">BadNets: Identifying Vulnerabilities in the Machine Learning Model Supply Chain</a></li>
 <li><a href="https://arxiv.org/abs/1905.12457">A Backdoor Attack Against LSTM-based Text Classification Systems</a></li>
 <li><a href="https://arxiv.org/abs/2306.17194">On the Exploitability of Instruction Tuning</a></li>
@@ -8730,7 +8731,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

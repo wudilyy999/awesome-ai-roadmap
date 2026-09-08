@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="LangChain 的做法是在这些差异之上定义稳定接口：厂商集成负责适配，应用只依赖公共协议，从而让模型、工具和运行时能够相对独立地演进">
+        <meta name="description" content="沿消息、工具调用和状态流理解 LangChain v1 的协议、provider、中间件与 LangGraph 运行时职责。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第三章：LangChain v1 的底层架构">
-    <meta property="og:description" content="LangChain 的做法是在这些差异之上定义稳定接口：厂商集成负责适配，应用只依赖公共协议，从而让模型、工具和运行时能够相对独立地演进">
+    <meta property="og:description" content="沿消息、工具调用和状态流理解 LangChain v1 的协议、provider、中间件与 LangGraph 运行时职责。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/03-langchain-architecture/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第三章：LangChain v1 的底层架构">
-    <meta name="twitter:description" content="LangChain 的做法是在这些差异之上定义稳定接口：厂商集成负责适配，应用只依赖公共协议，从而让模型、工具和运行时能够相对独立地演进">
+    <meta name="twitter:description" content="沿消息、工具调用和状态流理解 LangChain v1 的协议、provider、中间件与 LangGraph 运行时职责。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：LangChain v1 的底层架构","description":"LangChain 的做法是在这些差异之上定义稳定接口：厂商集成负责适配，应用只依赖公共协议，从而让模型、工具和运行时能够相对独立地演进","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/03-langchain-architecture/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：LangChain v1 的底层架构","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/03-langchain-architecture/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：LangChain v1 的底层架构","description":"沿消息、工具调用和状态流理解 LangChain v1 的协议、provider、中间件与 LangGraph 运行时职责。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/03-langchain-architecture/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：LangChain v1 的底层架构","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/03-langchain-architecture/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"LangChain v1 架构","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/03-langchain-architecture/"}]}</script>
     
@@ -8914,7 +8914,7 @@
 <h3 id="342-create_agent">3.4.2 <code>create_agent</code> 返回的是什么<a class="headerlink" href="#342-create_agent" title="Permanent link">&para;</a></h3>
 <p><code>create_agent</code> 根据模型、工具、系统提示词和中间件创建这套循环。</p>
 <blockquote>
-<p><strong>它返回的不是普通函数，而是编译后的 LangGraph 图</strong>——因此能够在每一步保存状态、输出进度并决定下一条执行边。</p>
+<p><strong>它返回的不是普通函数，而是编译后的 LangGraph 图</strong>，可以输出进度并决定下一条执行边。跨调用保存和恢复状态还必须配置 checkpointer，并传入 <code>thread_id</code>；编译图本身不等于已经启用持久化。</p>
 </blockquote>
 <h2 id="35">3.5 数据应该放在哪里<a class="headerlink" href="#35" title="Permanent link">&para;</a></h2>
 <p><strong>Agent 中的数据不应该全部塞进消息或 Prompt。</strong> 运行时会区分三类：</p>
@@ -8945,6 +8945,7 @@
 </tbody>
 </table>
 <p>这样划分后，可信用户身份不需要让模型生成，数据库连接也不会被写入对话上下文。工具可以通过 Runtime 读取这些数据，<strong>同时只把真正需要模型填写的参数暴露在工具 Schema 中</strong>。</p>
+<p>Context 的可信性来自应用的认证边界，不来自 dataclass 或类型注解；State 中的工具结果可能仍是不可信外部内容。长暂停后恢复时，应重新检查当下权限，不能因为旧 checkpoint 记录过一个身份就跳过授权。Store 的 namespace 是定位机制，也不替代服务端访问控制。</p>
 <h2 id="36-middleware">3.6 Middleware 做什么<a class="headerlink" href="#36-middleware" title="Permanent link">&para;</a></h2>
 <p>真实应用通常需要处理<strong>动态提示词、模型切换、工具筛选、重试、对话摘要、敏感信息和人工审批</strong>。</p>
 <p><strong>如果把这些逻辑全部塞进 Prompt 或 Tool，代码会很快纠缠在一起。</strong></p>
@@ -8985,7 +8986,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>检查点可以保存每一步状态</strong>，因此能支持中断恢复、人工介入、故障恢复和长时间运行。</p>
+<p><strong>检查点在 super-step 边界保存状态快照</strong>，同一步成功节点的 pending writes 可辅助故障恢复；不是每一行代码都被持久化。由此能支持中断恢复、人工介入和长时间运行，但外部写入与 checkpoint 不自动处于同一事务。</p>
 <h3 id="371">3.7.1 两者不是二选一<a class="headerlink" href="#371" title="Permanent link">&para;</a></h3>
 <p>LangChain 提供高层组件和标准 Agent 架构，LangGraph 提供底层执行能力。简单 Agent 直接用 <code>create_agent</code>；只有流程需要复杂分支、并行、审批或精细状态控制时，才需要直接编写 LangGraph。</p>
 <h2 id="38-chain">3.8 旧版 Chain 还能用吗<a class="headerlink" href="#38-chain" title="Permanent link">&para;</a></h2>
@@ -9058,6 +9059,7 @@
 <li><a href="https://docs.langchain.com/oss/python/langchain/middleware">LangChain: Middleware 概念文档</a></li>
 <li><a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">LangChain v1 迁移指南</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph 官方文档</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/checkpointers">LangGraph Checkpointers：super-step 与 pending writes</a></li>
 </ul>
 
 
@@ -9081,7 +9083,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

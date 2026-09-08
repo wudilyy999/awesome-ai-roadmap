@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="LangChain 生态 的主要抽象是 Model / Message / Tool 的统一接口，重点放在模型如何稳定地调用工具。LlamaIndex 把问题放在更上游：模型默认并不了解私有数据，而这些数据也不是天然可检索的，因此更关注如何把 PDF、数据库、工单系统里的内容加工成模型可用的高质量上下文">
+        <meta name="description" content="解释 LlamaIndex 的 Document、Node、摄取缓存和索引存储边界，讨论增量更新、权限过滤与向量库迁移成本。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十四章：LlamaIndex 的数据与索引抽象">
-    <meta property="og:description" content="LangChain 生态 的主要抽象是 Model / Message / Tool 的统一接口，重点放在模型如何稳定地调用工具。LlamaIndex 把问题放在更上游：模型默认并不了解私有数据，而这些数据也不是天然可检索的，因此更关注如何把 PDF、数据库、工单系统里的内容加工成模型可用的高质量上下文">
+    <meta property="og:description" content="解释 LlamaIndex 的 Document、Node、摄取缓存和索引存储边界，讨论增量更新、权限过滤与向量库迁移成本。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/14-data-index-abstractions/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十四章：LlamaIndex 的数据与索引抽象">
-    <meta name="twitter:description" content="LangChain 生态 的主要抽象是 Model / Message / Tool 的统一接口，重点放在模型如何稳定地调用工具。LlamaIndex 把问题放在更上游：模型默认并不了解私有数据，而这些数据也不是天然可检索的，因此更关注如何把 PDF、数据库、工单系统里的内容加工成模型可用的高质量上下文">
+    <meta name="twitter:description" content="解释 LlamaIndex 的 Document、Node、摄取缓存和索引存储边界，讨论增量更新、权限过滤与向量库迁移成本。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十四章：LlamaIndex 的数据与索引抽象","description":"LangChain 生态 的主要抽象是 Model / Message / Tool 的统一接口，重点放在模型如何稳定地调用工具。LlamaIndex 把问题放在更上游：模型默认并不了解私有数据，而这些数据也不是天然可检索的，因此更关注如何把 PDF、数据库、工单系统里的内容加工成模型可用的高质量上下文","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/14-data-index-abstractions/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十四章：LlamaIndex 的数据与索引抽象","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/14-data-index-abstractions/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十四章：LlamaIndex 的数据与索引抽象","description":"解释 LlamaIndex 的 Document、Node、摄取缓存和索引存储边界，讨论增量更新、权限过滤与向量库迁移成本。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/14-data-index-abstractions/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十四章：LlamaIndex 的数据与索引抽象","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/14-data-index-abstractions/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"数据与索引抽象","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/14-data-index-abstractions/"}]}</script>
     
@@ -6218,7 +6218,16 @@
         <li class="md-nav__item">
   <a href="#146" class="md-nav__link">
     <span class="md-ellipsis">
-      14.6 本章总结
+      14.6 从「能检索」追问到「能持续更新」
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#147" class="md-nav__link">
+    <span class="md-ellipsis">
+      14.7 本章总结
     </span>
   </a>
   
@@ -8492,7 +8501,16 @@
         <li class="md-nav__item">
   <a href="#146" class="md-nav__link">
     <span class="md-ellipsis">
-      14.6 本章总结
+      14.6 从「能检索」追问到「能持续更新」
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#147" class="md-nav__link">
+    <span class="md-ellipsis">
+      14.7 本章总结
     </span>
   </a>
   
@@ -8534,9 +8552,7 @@
 <h1 id="llamaindex">第十四章：LlamaIndex 的数据与索引抽象<a class="headerlink" href="#llamaindex" title="Permanent link">&para;</a></h1>
 <h2 id="141">14.1 先看问题定义：不是「工具怎么调度」，而是「数据怎么变上下文」<a class="headerlink" href="#141" title="Permanent link">&para;</a></h2>
 <p><a href="../../01-langchain/">LangChain 生态</a> 的主要抽象是 Model / Message / Tool 的统一接口，重点放在模型如何稳定地调用工具。LlamaIndex 把问题放在更上游：模型默认并不了解私有数据，而这些数据也不是天然可检索的，因此更关注如何把 PDF、数据库、工单系统里的内容加工成模型可用的高质量上下文。</p>
-<blockquote>
-<p>LlamaIndex 和 LangChain 更像分工互补：前者把「数据 → 索引 → 检索」这条链路拆得更细，后者把「模型 → 工具 → Agent」这条链路拆得更细。这也是为什么 LangChain 模块第 7 章会专门比较两者的分工。</p>
-</blockquote>
+<p>两者有大量能力重叠，也可以分工互补；这里比较的是常用抽象的侧重点，不是「LlamaIndex 只能做 RAG」或「LangChain 不擅长数据处理」的产品边界。</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph LC["LangChain 的第一性问题"]
         L1["模型和工具太多&lt;br/&gt;怎么统一接口、可靠调度"]
@@ -8546,11 +8562,11 @@
     end
     L1 -.互补.-&gt; I1</code></pre>
 <h2 id="142-documentnode-ingestionpipeline">14.2 数据接入层：<code>Document</code>、<code>Node</code> 与 <code>IngestionPipeline</code><a class="headerlink" href="#142-documentnode-ingestionpipeline" title="Permanent link">&para;</a></h2>
-<p>LlamaIndex 把「原始数据」和「可检索单元」严格分成两层：</p>
+<p>LlamaIndex 在概念上区分「原始数据」和「可检索单元」，但它们不是互不相容的类型体系：</p>
 <ul>
 <li><strong><code>Document</code></strong>：一份原始数据的容器，通常对应一个文件、一条数据库记录或一次 API 响应，携带 <code>text</code> 与任意 <code>metadata</code>；</li>
-<li><strong><code>Node</code></strong>：<code>Document</code> 被切分（chunking）后的最小可检索单元，除了文本本身，还持有指回 <code>Document</code>、指向相邻 <code>Node</code> 的关系（<code>relationships</code>），用于后续做上下文回填；</li>
-<li><strong><code>IngestionPipeline</code></strong>：把「加载 → 切分 → 抽取元数据 → 生成 Embedding」串成一条可缓存、可增量执行的流水线，<code>transformations</code> 列表里的每个组件都遵循同一个 <code>Node → Node</code> 契约。</li>
+<li><strong><code>Node</code></strong>：索引和检索处理的单元，常见的是文本块，也可以是其他模态或直接构造的节点；<code>relationships</code> 可保存来源、前后或父子关系，但是否生成这些关系取决于解析器和配置；</li>
+<li><strong><code>IngestionPipeline</code></strong>：对加载好的文档或节点应用切分、元数据抽取、Embedding 等转换；转换契约是节点序列到节点序列，不是单节点的一对一映射。缓存用于复用转换结果，文档去重和更新管理还需要 <code>docstore</code>、稳定文档 ID 及合适的更新策略。</li>
 </ul>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">llama_index.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Document</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">llama_index.core.ingestion</span><span class="w"> </span><span class="kn">import</span> <span class="n">IngestionPipeline</span>
@@ -8565,8 +8581,9 @@
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">nodes</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="n">Document</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">raw_text</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">"source"</span><span class="p">:</span> <span class="s2">"handbook.pdf"</span><span class="p">})])</span>
 </span></code></pre></div>
+<p>这是摄取片段，<code>raw_text</code> 需来自实际读取结果，OpenAI Embedding 集成包与凭据需预先配置；生产增量更新还应给 Document 设置稳定 ID。</p>
 <p><code>IngestionPipeline</code> 的作用不只是切分文本，更重要的是把切分策略、元数据抽取和 Embedding 生成固化成可复用、可缓存的组件序列。同一份原始数据如果要更换切分策略，通常只需要替换 <code>transformations</code> 里的一步，不必重写整个摄取脚本。</p>
-<p>对照 <a href="../../01-langchain/">LangChain 生态</a> 的对应抽象：LangChain 的 <code>Document Loader</code> 也产出 <code>Document</code> 对象，但通常直接喂给 <code>RecursiveCharacterTextSplitter</code> 后就交给向量库，不强制维护 Node 之间的关系图；LlamaIndex 会显式保留「相邻块」「父子块」这些结构关系，这也是后面 14.3 节多种索引类型能够存在的基础。</p>
+<p>对照 <a href="../../01-langchain/">LangChain 生态</a> 的常见流水线，LlamaIndex 的 Node 关系提供了更直接的上下文扩展入口。不过，使用 <code>SentenceSplitter</code> 不代表自动获得层级父子关系；层级检索需要相应解析器、关系数据和 Retriever 配合。</p>
 <h2 id="143">14.3 索引抽象：从向量索引到属性图索引<a class="headerlink" href="#143" title="Permanent link">&para;</a></h2>
 <p><code>Node</code> 生成之后，LlamaIndex 用不同的 <strong>Index</strong> 类型组织它们，每种 Index 对应一种检索假设：</p>
 <table>
@@ -8585,8 +8602,8 @@
 </tr>
 <tr>
 <td><code>SummaryIndex</code></td>
-<td>保留 Node 的顺序列表，不做向量检索</td>
-<td>需要遍历全部内容才能回答的问题（如「总结全文」）</td>
+<td>保留 Node 顺序列表，默认把全部节点交给合成器，也可配置其他检索模式</td>
+<td>需要全量覆盖的问题（如「总结全文」），需确认未启用 top-k/过滤</td>
 </tr>
 <tr>
 <td><code>TreeIndex</code></td>
@@ -8595,8 +8612,8 @@
 </tr>
 <tr>
 <td><code>KeywordTableIndex</code></td>
-<td>关键词到 Node 的倒排表</td>
-<td>关键词精确匹配、无 Embedding 场景</td>
+<td>从节点和查询抽取关键词，再做关键词到 Node 的匹配</td>
+<td>依赖词项的查询；抽取可能调用 LLM，不等于数据库精确条件检索</td>
 </tr>
 <tr>
 <td><code>PropertyGraphIndex</code></td>
@@ -8607,7 +8624,7 @@
 </table>
 <pre class="mermaid"><code>flowchart TB
     N["Node 集合"] --&gt; V["VectorStoreIndex&lt;br/&gt;语义检索"]
-    N --&gt; S["SummaryIndex&lt;br/&gt;全量遍历"]
+    N --&gt; S["SummaryIndex&lt;br/&gt;默认全量遍历"]
     N --&gt; T["TreeIndex&lt;br/&gt;层级摘要"]
     N --&gt; P["PropertyGraphIndex&lt;br/&gt;实体关系图"]
     V --&gt; Q["统一的 Query Engine 接口"]
@@ -8616,37 +8633,49 @@
     P --&gt; Q</code></pre>
 <p>索引类型对应的是不同的检索假设，而不只是更换数据库后端。把「总结全文」这类问题交给 <code>VectorStoreIndex</code>，通常只会召回少量语义相似片段，无法得到覆盖全局的摘要；这正是 14.5 节的常见错误之一。</p>
 <h2 id="144-storagecontext">14.4 索引背后的存储解耦：<code>StorageContext</code> 与向量库无关性<a class="headerlink" href="#144-storagecontext" title="Permanent link">&para;</a></h2>
-<p>LlamaIndex 用 <code>StorageContext</code> 把「索引结构」和「底层存储」解耦成三个可独立替换的组件：</p>
+<p>LlamaIndex 用 <code>StorageContext</code> 组织存储依赖。文本向量场景常见以下三个组件，此外还有图存储、属性图存储及命名向量存储等字段：</p>
 <ul>
 <li><strong><code>docstore</code></strong>：存 <code>Node</code> 的原始内容；</li>
 <li><strong><code>index_store</code></strong>：存索引的元结构（比如 <code>TreeIndex</code> 的树形关系）；</li>
-<li><strong><code>vector_store</code></strong>：存 Embedding 向量，可以换成 Pinecone、Weaviate、pgvector 等任意后端（见 <code>docs/rag</code> 向量数据库章节的选型标准）。</li>
+<li><strong><code>vector_store</code></strong>：存 Embedding 向量，部分实现也存文本和元数据；可选 Pinecone、Weaviate、pgvector 等已有适配器的后端，并非任意数据库都能直接替换。</li>
 </ul>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">llama_index.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageContext</span><span class="p">,</span> <span class="n">VectorStoreIndex</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">llama_index.vector_stores.postgres</span><span class="w"> </span><span class="kn">import</span> <span class="n">PGVectorStore</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">vector_store</span> <span class="o">=</span> <span class="n">PGVectorStore</span><span class="o">.</span><span class="n">from_params</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="s2">"ragdb"</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"handbook"</span><span class="p">)</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">storage_context</span> <span class="o">=</span> <span class="n">StorageContext</span><span class="o">.</span><span class="n">from_defaults</span><span class="p">(</span><span class="n">vector_store</span><span class="o">=</span><span class="n">vector_store</span><span class="p">)</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">index</span> <span class="o">=</span> <span class="n">VectorStoreIndex</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">storage_context</span><span class="o">=</span><span class="n">storage_context</span><span class="p">)</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">vector_store</span> <span class="o">=</span> <span class="n">PGVectorStore</span><span class="o">.</span><span class="n">from_params</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">database</span><span class="o">=</span><span class="s2">"ragdb"</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">table_name</span><span class="o">=</span><span class="s2">"handbook"</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">embed_dim</span><span class="o">=</span><span class="mi">1536</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">storage_context</span> <span class="o">=</span> <span class="n">StorageContext</span><span class="o">.</span><span class="n">from_defaults</span><span class="p">(</span><span class="n">vector_store</span><span class="o">=</span><span class="n">vector_store</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">index</span> <span class="o">=</span> <span class="n">VectorStoreIndex</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">storage_context</span><span class="o">=</span><span class="n">storage_context</span><span class="p">)</span>
 </span></code></pre></div>
-<p>这层解耦意味着 LlamaIndex 不会把上层代码直接绑定在某个向量库上。更换后端时，通常只需要替换 <code>vector_store</code> 实现，<code>Node</code>、<code>IngestionPipeline</code> 和上层 Query Engine 代码都可以保持不变。这是 14.6 节讨论「数据层 lock-in」时的关键判断依据，也会在 <a href="../../06-selection-portability/">框架选型与可移植架构</a> 中作为可移植性的正面案例出现。</p>
+<p>上例是存储装配片段，需要预先配置数据库连接和扩展，且 <code>embed_dim</code> 必须与实际 Embedding 输出一致；1536 只是示例值。更换后端常能保留上层接口，但仍需迁移节点 ID、文本、元数据和向量，并验证过滤、混合检索、删除语义与得分尺度。<code>persist()</code> 也不是跨多个远程存储的原子备份：恢复时要保证 docstore、索引结构和向量集合版本一致。</p>
 <h2 id="145">14.5 常见错误<a class="headerlink" href="#145" title="Permanent link">&para;</a></h2>
 <h3 id="1451-summaryindex-vectorstoreindex">14.5.1 把 <code>SummaryIndex</code> 当成 <code>VectorStoreIndex</code> 的替代品<a class="headerlink" href="#1451-summaryindex-vectorstoreindex" title="Permanent link">&para;</a></h3>
-<p><code>SummaryIndex</code> 不做语义检索，查询时会遍历（或部分遍历）全部 Node——数据量大时成本很高，只适合「必须看到全貌」的问题。</p>
+<p><code>SummaryIndex</code> 默认把列表中全部节点送入答案合成；它也支持 Embedding 等检索模式，不能说它绝对不做语义检索。默认全量路径的数据量和合成成本可能很高，换用它之前应确认问题是否需要全貌。</p>
 <h3 id="1452">14.5.2 用向量检索回答「全局摘要」类问题<a class="headerlink" href="#1452" title="Permanent link">&para;</a></h3>
-<p>如果让系统「总结这份 200 页的报告」，得到的答案只覆盖了随机几段，通常是因为向量检索擅长「找相似」而不是「找全部」，<code>VectorStoreIndex</code> 无法保证覆盖率。此时应改用 <code>SummaryIndex</code>，或先做层级摘要（<code>TreeIndex</code>）。</p>
+<p>如果「总结 200 页报告」只覆盖少数相似片段，问题可能是 top-k 检索没有全局覆盖，而不是随机召回。可采用全量读取后分层合成或预先构建摘要。<code>SummaryIndex</code> 仍要选择覆盖全部节点的模式，<code>TreeIndex</code> 的分支检索也不自动保证覆盖全文。</p>
 <h3 id="1453-node">14.5.3 忽视 <code>Node</code> 之间的关系，只存文本<a class="headerlink" href="#1453-node" title="Permanent link">&para;</a></h3>
-<p>如果切分时不保留 <code>relationships</code>（前后节点、父子节点），后续想做「命中一个块后回填上下文窗口」就没有依据可用，只能重新解析原始文档。</p>
+<p>如果切分时不保留 <code>relationships</code>，上下文窗口扩展会更困难；若保留了稳定文档 ID、块序号或字符偏移，仍可重建关联，不一定要重新解析原文。应在摄取时决定保留哪些定位信息。</p>
 <h3 id="1454">14.5.4 认为索引选型是一次性决定<a class="headerlink" href="#1454" title="Permanent link">&para;</a></h3>
-<p>同一份数据经常需要<strong>同时</strong>建 <code>VectorStoreIndex</code>（做检索）和 <code>PropertyGraphIndex</code>（做多跳关系推理），二者可以共享同一个 <code>IngestionPipeline</code> 产出的 <code>Node</code> 集合，不必二选一。</p>
+<p>同一份数据可以同时建向量和属性图索引，并共享部分节点加工结果，但不要默认双建。属性图还需要实体关系抽取、消歧和图存储维护；只有关系问题的收益覆盖额外模型调用与更新复杂度时才值得引入。</p>
 <h3 id="1455-storagecontext">14.5.5 把 <code>StorageContext</code> 的向量库无关性当作理所当然<a class="headerlink" href="#1455-storagecontext" title="Permanent link">&para;</a></h3>
 <p>不同向量库对元数据过滤、混合检索的支持程度不同，切换后端仍然需要重新验证过滤语法和检索质量，不是纯粹的配置项替换。</p>
-<h2 id="146">14.6 本章总结<a class="headerlink" href="#146" title="Permanent link">&para;</a></h2>
+<h2 id="146">14.6 从「能检索」追问到「能持续更新」<a class="headerlink" href="#146" title="Permanent link">&para;</a></h2>
+<p>假设知识库每天更新工单，线上却仍引用旧政策，先区分三个问题：源文档是否被重新读取、转换是否命中缓存、旧节点是否被删除。稳定 <code>doc_id</code> 配合文档哈希能识别更新；每次随机生成 ID 会把更新变成追加。内容哈希未变但切分器或 Embedding 模型变了，也不能只看文档去重结果，通常需要显式重建或更新索引版本。</p>
+<p>进一步追问可以落在以下工程决策：</p>
+<ul>
+<li><strong>删除与权限撤销</strong>：不能只更新来源系统；向量库、docstore、缓存及摘要/图派生数据都要失效。检索扩窗和 rerank 后仍要保留租户与文档 ACL 边界。</li>
+<li><strong>定位失败层</strong>：分别测摄取覆盖率、召回率、重排质量和答案引用忠实度。换成属性图不一定能修复解析丢表格的问题。</li>
+<li><strong>重建成本</strong>：用数据量、切分后节点数、Embedding 费用和增量更新窗口估算；先写新集合并校验，再切换读指针，比原地覆盖更容易回滚。</li>
+</ul>
+<h2 id="147">14.7 本章总结<a class="headerlink" href="#147" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>LlamaIndex 先解决的是「数据怎么变成高质量上下文」</strong>，与 LangChain「模型和工具怎么统一调度」形成互补，而非替代；</li>
-<li><strong><code>Document</code> 是原始数据容器，<code>Node</code> 是可检索最小单元</strong>，<code>IngestionPipeline</code> 把加载、切分、抽取、Embedding 固化成可复用流水线；</li>
-<li><strong>不同 Index 类型对应不同的检索假设</strong>：<code>VectorStoreIndex</code> 做语义相似度，<code>SummaryIndex</code> 做全量遍历，<code>TreeIndex</code> 做层级摘要，<code>PropertyGraphIndex</code> 做关系推理，选错类型会直接导致答不对问题；</li>
-<li><strong><code>StorageContext</code> 把存储后端与索引结构解耦</strong>，是 LlamaIndex 数据层可移植性的关键设计，换向量库不需要重写摄取和查询代码；</li>
+<li><strong><code>Document</code> 是原始数据容器，<code>Node</code> 是检索处理单元</strong>，<code>IngestionPipeline</code> 把切分、抽取、Embedding 固化成可复用流水线，加载与增量同步仍需明确配置；</li>
+<li><strong>Index 与 Retriever 要一起选择</strong>：向量近邻、默认全量读取、摘要树和属性图对应不同的数据组织与检索假设，并不自动保证回答质量；</li>
+<li><strong><code>StorageContext</code> 把存储后端与索引结构解耦</strong>，能减少接口改动，但不能消除数据迁移与检索行为回归；</li>
 <li><strong>同一份数据可以并存多种索引</strong>，索引选型不是一次性、互斥的决定。</li>
 </ol>
 <p>可以把 LlamaIndex 理解为一组围绕数据接入和检索构建的抽象：<code>Document</code>、<code>Node</code>、<code>Index</code> 与 <code>StorageContext</code> 分别承担原始数据、可检索单元、检索组织方式和存储解耦职责，组合后形成可替换的数据加工流水线。</p>
@@ -8655,9 +8684,11 @@
 <li><a href="https://developers.llamaindex.ai/python/framework/">LlamaIndex 官方文档</a></li>
 <li><a href="https://developers.llamaindex.ai/python/framework/module_guides/loading/ingestion_pipeline/">LlamaIndex: Loading Data (Ingestion Pipeline)</a></li>
 <li><a href="https://developers.llamaindex.ai/python/framework/module_guides/indexing/">LlamaIndex: Indexing 概念</a></li>
+<li><a href="https://developers.llamaindex.ai/python/framework/module_guides/indexing/index_guide/">LlamaIndex: 各索引的默认与可选检索方式</a></li>
 <li><a href="https://developers.llamaindex.ai/python/framework/module_guides/indexing/lpg_index_guide/">LlamaIndex: Property Graph Index</a></li>
 <li><a href="https://developers.llamaindex.ai/python/framework/module_guides/storing/">LlamaIndex: Storage 概念</a></li>
 </ul>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8680,7 +8711,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

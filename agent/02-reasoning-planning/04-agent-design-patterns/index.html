@@ -77,7 +77,7 @@
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第四章：Agent 设计范式","description":"比较 ReAct、Plan-and-Execute、Router、Evaluator-Optimizer 等 Agent 设计范式，以及不同任务约束下的选型方法。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/04-agent-design-patterns/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第四章：Agent 设计范式","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/04-agent-design-patterns/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第四章：Agent 设计范式","description":"比较 ReAct、Plan-and-Execute、Router、Evaluator-Optimizer 等 Agent 设计范式，以及不同任务约束下的选型方法。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/04-agent-design-patterns/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第四章：Agent 设计范式","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/04-agent-design-patterns/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Agent 设计范式","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/04-agent-design-patterns/"}]}</script>
     
@@ -3932,11 +3932,11 @@
         <li class="md-nav__item">
   <a href="#44" class="md-nav__link">
     <span class="md-ellipsis">
-      4.4 更先进的规划执行变体
+      4.4 减少往返与支持并行的变体
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4.4 更先进的规划执行变体">
+    <nav class="md-nav" aria-label="4.4 减少往返与支持并行的变体">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8864,11 +8864,11 @@
         <li class="md-nav__item">
   <a href="#44" class="md-nav__link">
     <span class="md-ellipsis">
-      4.4 更先进的规划执行变体
+      4.4 减少往返与支持并行的变体
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4.4 更先进的规划执行变体">
+    <nav class="md-nav" aria-label="4.4 减少往返与支持并行的变体">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -9132,11 +9132,11 @@
 <p><strong>Agent 如何组织推理、规划、行动、观察、验证与重试。</strong></p>
 </blockquote>
 <p>它不是某个特定框架，也不只是一个 Prompt 模板，而是一种运行时控制策略。</p>
-<p>目前最常见的三类基础范式是：</p>
+<p>本章选取三类便于比较的基础范式，它们不是互斥或穷尽的分类：</p>
 <ol>
 <li><strong>ReAct</strong>：一边观察、一边决定下一步；</li>
 <li><strong>Plan-and-Execute</strong>：先建立全局计划，再执行和动态重规划；</li>
-<li><strong>Reflection / Reflexion</strong>：通过评估、反馈和经验总结改进下一次尝试。</li>
+<li><strong>Reflection / Reflexion</strong>：通过评估和反馈修订结果；其中 Reflexion 是带情景记忆的具体研究方法。</li>
 </ol>
 <p>这三类范式经常混用，实际系统里更常见的是分层组合：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -9154,6 +9154,7 @@
 <blockquote>
 <p><strong>Thought → Action → Observation → Thought</strong></p>
 </blockquote>
+<p>这是 <a href="https://arxiv.org/abs/2210.03629">ReAct 原论文</a>的示意，不要求每次行动前都输出一段 Thought：原文在决策任务中允许稀疏出现推理步骤，也用这些步骤生成、跟踪和更新计划。其主要实验通过上下文示例运行，不在每次工具调用后更新模型权重；论文另有微调实验，不能与提示式 ReAct 混为一谈。</p>
 <pre class="mermaid"><code>flowchart LR
     T[Thought / Decide] --&gt; A[Action]
     A --&gt; O[Observation]
@@ -9195,27 +9196,29 @@
 <div class="arithmatex">\[
 a_t \sim \pi_{\theta}(a\mid g,s_t,o_t,c_t)
 \]</div>
-<p>Runtime 执行动作后得到新的观察：</p>
+<p>Runtime 执行动作后得到新的观察。用 <code>eₜ</code> 表示环境真实状态，区别于 Agent 保存的状态 <code>sₜ</code>：</p>
 <div class="arithmatex">\[
-o_{t+1}=Env(a_t)
+(e_{t+1},o_{t+1})\sim Env(\cdot\mid e_t,a_t)
 \]</div>
 <p>Agent 随后更新状态：</p>
 <div class="arithmatex">\[
 s_{t+1}=Update(s_t,a_t,o_{t+1})
 \]</div>
+<p>观察可能不完整、过期或只表示请求已受理。更新的是 Agent 对环境的记录，不能据此假设它已经掌握全部真实状态。</p>
 <h3 id="424-react">4.2.4 ReAct 的优势<a class="headerlink" href="#424-react" title="Permanent link">&para;</a></h3>
 <ul>
 <li>实现简单；</li>
 <li>能及时利用最新环境反馈；</li>
 <li>适合无法预先获得完整信息的任务；</li>
 <li>工具失败后可以立即调整；</li>
-<li>对短任务和探索性任务非常有效。</li>
+<li>可用于短任务和探索性任务，收益取决于工具返回的信息是否有用。</li>
 </ul>
+<p>原论文覆盖 HotpotQA、FEVER、ALFWorld 和 WebShop。检索可补充事实，但错误查询或无关结果也会误导后续决策；这些结果不证明 ReAct 在所有任务上优于 CoT，更不保证工具调用次数越多越准确。</p>
 <h3 id="425-react">4.2.5 ReAct 的局限<a class="headerlink" href="#425-react" title="Permanent link">&para;</a></h3>
 <p>ReAct 常被概括为“走一步看一步”，其主要风险包括：</p>
 <ul>
-<li>缺少全局任务结构；</li>
-<li>每次 Tool Call 通常都需要再次调用模型；</li>
+<li>默认不强制维护可调度的全局任务结构，但可以在推理中制定计划；</li>
+<li>串行的“调用工具后再决策”需要模型往返，批量调用可减少部分开销；</li>
 <li>容易重复搜索或调用相同工具；</li>
 <li>长任务中目标和约束可能被上下文噪音稀释；</li>
 <li>局部合理的动作未必形成全局最优路径；</li>
@@ -9288,7 +9291,7 @@ s_{t+1}=Update(s_t,a_t,o_{t+1})
 </span></code></pre></div>
 <p>结构化计划比自由文本列表更容易调度、验证和恢复。</p>
 <h3 id="432">4.3.2 动态重规划<a class="headerlink" href="#432" title="Permanent link">&para;</a></h3>
-<p>如果计划只生成一次就不再调整，Plan-and-Execute 很快会失效。每个关键步骤完成后，Replanner 应判断：</p>
+<p>稳定、充分已知的任务可以执行一次性计划；环境或前提会变化时，需要重规划机制。每个关键步骤完成后，Replanner 应判断：</p>
 <ul>
 <li>执行结果是否达到验收条件；</li>
 <li>关键假设是否仍然成立；</li>
@@ -9334,14 +9337,14 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li>长计划可能在环境变化后迅速失效。</li>
 </ul>
 <p>因此，计划粒度应与任务稳定性匹配：环境变化越快，计划越应保持高层和短周期。</p>
-<h2 id="44">4.4 更先进的规划执行变体<a class="headerlink" href="#44" title="Permanent link">&para;</a></h2>
+<h2 id="44">4.4 减少往返与支持并行的变体<a class="headerlink" href="#44" title="Permanent link">&para;</a></h2>
 <h3 id="441-rewoo">4.4.1 ReWOO<a class="headerlink" href="#441-rewoo" title="Permanent link">&para;</a></h3>
-<p>ReWOO（Reasoning Without Observation）让 Planner 预先生成带变量引用的计划，执行器可以将前一步结果绑定到变量，并在后续步骤中复用。</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>E1 = Search["本年度决赛队伍"]
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>E2 = LLM["从 E1 中提取第一支队伍"]
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>E3 = Search["E2 的核心球员数据"]
+<p>ReWOO（Reasoning WithOut Observation）将 Planner、Worker 和 Solver 解耦：Planner 在获取工具观察前生成带变量引用的计划，Worker 执行并绑定结果，Solver 结合计划与证据生成答案。“Without Observation”限定规划阶段，不表示最终答案无需工具观察。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>#E1 = Search["指定赛事本年度决赛队伍"]
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>#E2 = LLM["从 #E1 中提取第一支队伍"]
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>#E3 = Search["#E2 的核心球员数据"]
 </span></code></pre></div>
-<p>它的目标之一是减少每个 Tool 执行之间都调用大型规划模型的需要。</p>
+<p>以上是教学伪代码，不是通用工具协议。Worker 必须把 <code>#E1</code>、<code>#E2</code> 替换为实际输出，检查引用与依赖，而不是把变量名原样送给搜索工具。它减少了规划模型的往返，但无法预知所有条件分支；依赖返回内容才能决定是否添加新步骤时，仍需重规划或退回交互式执行。</p>
 <h3 id="442-dag-planning">4.4.2 DAG Planning<a class="headerlink" href="#442-dag-planning" title="Permanent link">&para;</a></h3>
 <p>当计划包含明确依赖时，可以将其表示为有向无环图：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -9350,14 +9353,15 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
     C[收集行业趋势] --&gt; E[趋势影响分析]
     D --&gt; F[生成报告]
     E --&gt; F</code></pre>
-<p>没有依赖的步骤可以并行执行，从而降低总延迟。</p>
+<p>数据依赖已满足、没有共享写冲突且资源允许的步骤可以并行执行。DAG 只表达一版计划内的无环依赖；重试和重规划循环应由外层状态机管理。</p>
 <h3 id="443-llmcompiler">4.4.3 LLMCompiler<a class="headerlink" href="#443-llmcompiler" title="Permanent link">&para;</a></h3>
 <p>LLMCompiler 类架构通常包含：</p>
 <ul>
 <li>Planner：生成或流式输出任务 DAG；</li>
 <li>Task Fetching Unit：依赖满足后立即调度任务；</li>
-<li>Joiner：汇总结果，并决定结束还是重新规划。</li>
+<li>Executor：实际执行已就绪的工具任务。</li>
 </ul>
+<p>这是 <a href="https://arxiv.org/abs/2312.04511">LLMCompiler 论文</a>列出的三个组件；带重规划的实现还可以加入 Joiner，汇总结果并决定结束或继续。不要把 Joiner 当作执行工具的 Executor。</p>
 <p>这类设计关注的不只是规划质量，也关注执行并行度、模型调用次数和总体延迟。</p>
 <h2 id="45-reflection">4.5 Reflection：通过反馈改进结果<a class="headerlink" href="#45-reflection" title="Permanent link">&para;</a></h2>
 <p>Reflection 在生成或执行之后加入评估环节：</p>
@@ -9384,7 +9388,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li>独立模型或 LLM-as-a-Judge；</li>
 <li>同一模型的自我评价。</li>
 </ol>
-<p>越靠前的信号通常越接近可验证的客观反馈。</p>
+<p>这不是固定的可信度排名。编译通过不等于业务正确，测试可能漏测，API 成功可能只代表受理；应按每项验收条件选择证据。LLM Judge 不得以“总体质量不错”为由覆盖测试失败或权限拒绝。</p>
 <h3 id="452-reflection">4.5.2 Reflection 的适用场景<a class="headerlink" href="#452-reflection" title="Permanent link">&para;</a></h3>
 <ul>
 <li>代码生成与修复；</li>
@@ -9432,7 +9436,8 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 </ul>
 <p>这些经验作为额外上下文加入下一次尝试，因此类似“做错题、分析原因、带着经验重做”。</p>
 <h3 id="462-humaneval">4.6.2 HumanEval 结果应如何解读<a class="headerlink" href="#462-humaneval" title="Permanent link">&para;</a></h3>
-<p>Reflexion 论文报告：在其 2023 年的实验设置中，基于 GPT-4 的 Reflexion 在 HumanEval 上达到 <strong>91% pass@1</strong>，论文引用的 GPT-4 基线为 <strong>80%</strong>。</p>
+<p>Reflexion 论文报告：在其 2023 年的实验设置中，基于 GPT-4 的 Reflexion 在 HumanEval Python 上达到 <strong>91.0% pass@1</strong>，表 1 中 GPT-4 单次生成基线为 <strong>80.1%</strong>（摘要取整为 80%）。</p>
+<p>这里的 <code>pass@1</code> 指最终提交一个候选接受评测，不表示整个系统只生成一次或只调用一次模型。Reflexion 使用自生成测试、执行反馈和多次修订，再以保留的基准测试评价最终程序；反思循环不能访问用于最终计分的隐藏测试。单次生成基线与这个循环的计算预算不同，因此不能把差值全部归因于“反思提示词”。</p>
 <p>这个数字说明反思与执行反馈在特定实验中具有价值，但不能直接推导为：</p>
 <ul>
 <li>所有模型都能从 80% 提升到 91%；</li>
@@ -9440,7 +9445,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li>生产项目中的仓库级任务也有相同效果；</li>
 <li>增加反思轮次一定持续提高质量。</li>
 </ul>
-<p>模型版本、Prompt、测试生成方式、任务分布和基准污染都会影响结果。生产系统应以自己的评估集和成本指标为准。</p>
+<p>同一论文的 MBPP Python 结果反而从 80.1% 降到 77.1%，说明测试质量和任务分布会改变效果方向。模型版本、Prompt、测试生成方式和基准污染也会影响结果；实际评估应增加等预算重采样、仅测试修复等对照。</p>
 <h3 id="463">4.6.3 记忆污染问题<a class="headerlink" href="#463" title="Permanent link">&para;</a></h3>
 <p>模型生成的反思不一定正确。如果未经验证就写入长期记忆，错误经验可能影响未来任务。</p>
 <p>更安全的策略是：</p>
@@ -9476,8 +9481,10 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li><strong>Reflection</strong>：检查质量并产生改进反馈；</li>
 <li><strong>Workflow</strong>：限制整体路径、权限和预算。</li>
 </ul>
+<p>图中的完成出口还需要整体验收：确认当前计划的必要节点已完成、Artifact 版本一致，且跨步骤约束满足。单个子任务通过 Verifier，不代表整个目标完成。</p>
 <h2 id="48-agentic-workflow">4.8 Agentic Workflow：生产环境里的常见做法<a class="headerlink" href="#48-agentic-workflow" title="Permanent link">&para;</a></h2>
 <p>Agentic Workflow 用确定性流程包围概率性决策：</p>
+<p>按 Anthropic《Building Effective Agents》的术语，Router、固定并行分支和 Evaluator-Optimizer 都可以是 Workflow：分别负责分流、聚合独立工作、按反馈迭代。循环或多次 LLM 调用本身不构成自主 Agent；关键在于后续路径是预先编码，还是由模型在运行时动态选择。</p>
 <pre class="mermaid"><code>flowchart LR
     IN[输入] --&gt; V[校验]
     V --&gt; ROUTE[固定路由]
@@ -9492,7 +9499,7 @@ P_{t+1}=R(P_t,o_{t+1},g,s_t)
 <li>知识检索节点可以使用 ReAct 动态决定查询方式；</li>
 <li>复杂问题使用 Plan-and-Execute 拆分；</li>
 <li>最终答案使用引用检查或 Reflection；</li>
-<li>退款、改价等操作必须经过确定性规则和人工确认。</li>
+<li>退款、改价等写操作必须经过权限和业务规则检查；超出预授权范围时再转人工确认。</li>
 </ul>
 <p>这种方式将自主性限制在真正需要灵活性的局部范围内。</p>
 <h2 id="49">4.9 如何选择范式<a class="headerlink" href="#49" title="Permanent link">&para;</a></h2>
@@ -9628,14 +9635,14 @@ B=(N_{max},T_{max},C_{max},R_{max})
 <li><strong>Plan-and-Execute</strong>：如何维持复杂任务的全局结构；</li>
 <li><strong>Reflection / Reflexion</strong>：如何利用验证和失败经验提升质量。</li>
 </ol>
-<p>生产级 Agent 通常将它们组合在受控 Workflow 中：</p>
-<blockquote>
-<p><strong>Workflow 控制边界，Planner 保持方向，ReAct 处理局部未知，Verifier 提供客观反馈，Reflection 负责有限优化。</strong></p>
-</blockquote>
+<p>组合时应明确每个控制环修改什么状态、由谁验收，以及何时停止。短任务不必配置全部角色；增加 Planner 或 Critic 后，仍要检验其收益是否超过往返延迟、状态管理和误判成本。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a></li>
 <li><a href="https://arxiv.org/abs/2303.11366">Reflexion: Language Agents with Verbal Reinforcement Learning</a></li>
+<li><a href="https://arxiv.org/html/2303.11366v4">Reflexion 原文实验设置与表 1–2</a></li>
+<li><a href="https://arxiv.org/abs/2305.18323">ReWOO: Decoupling Reasoning from Observations for Efficient Augmented Language Models</a></li>
+<li><a href="https://arxiv.org/abs/2312.04511">An LLM Compiler for Parallel Function Calling</a></li>
 <li><a href="https://www.langchain.com/blog/planning-agents">LangChain: Planning Agents</a></li>
 <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic: Building Effective Agents</a></li>
 </ul>
@@ -9661,7 +9668,7 @@ B=(N_{max},T_{max},C_{max},R_{max})
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

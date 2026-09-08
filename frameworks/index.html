@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="本主题聚焦「框架实现层」：Agent 与 RAG 主题讨论原理与取舍，Tools 主题单独说明协议；这里关注这些原理和协议在不同框架中的落地方式，以及框架不再适合项目时的迁移成本和路径">
+        <meta name="description" content="比较 LangChain、LangGraph、LlamaIndex、DSPy 与微软等 Agent 框架的状态模型、工具契约、迁移边界和生产成本。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="AI 框架与编排">
-    <meta property="og:description" content="本主题聚焦「框架实现层」：Agent 与 RAG 主题讨论原理与取舍，Tools 主题单独说明协议；这里关注这些原理和协议在不同框架中的落地方式，以及框架不再适合项目时的迁移成本和路径">
+    <meta property="og:description" content="比较 LangChain、LangGraph、LlamaIndex、DSPy 与微软等 Agent 框架的状态模型、工具契约、迁移边界和生产成本。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="AI 框架与编排">
-    <meta name="twitter:description" content="本主题聚焦「框架实现层」：Agent 与 RAG 主题讨论原理与取舍，Tools 主题单独说明协议；这里关注这些原理和协议在不同框架中的落地方式，以及框架不再适合项目时的迁移成本和路径">
+    <meta name="twitter:description" content="比较 LangChain、LangGraph、LlamaIndex、DSPy 与微软等 Agent 框架的状态模型、工具契约、迁移边界和生产成本。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AI 框架与编排","description":"本主题聚焦「框架实现层」：Agent 与 RAG 主题讨论原理与取舍，Tools 主题单独说明协议；这里关注这些原理和协议在不同框架中的落地方式，以及框架不再适合项目时的迁移成本和路径","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AI 框架与编排","description":"比较 LangChain、LangGraph、LlamaIndex、DSPy 与微软等 Agent 框架的状态模型、工具契约、迁移边界和生产成本。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"主题导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/"}]}</script>
     
@@ -8298,6 +8298,7 @@
 <h1 id="ai">AI 框架与编排<a class="headerlink" href="#ai" title="Permanent link">&para;</a></h1>
 <p>本主题聚焦「框架实现层」：<a href="../agent/">Agent</a> 与 <a href="../rag/">RAG</a> 主题讨论原理与取舍，<a href="../tools/">Tools</a> 主题单独说明协议；这里关注这些原理和协议在不同框架中的落地方式，以及框架不再适合项目时的迁移成本和路径。</p>
 <p>当前内容按六个子模块组织。<a href="01-langchain/">LangChain 生态</a> 沿用原有 LangChain/LangGraph 路径，其余模块分别展开 LlamaIndex、DSPy、Semantic Kernel、轻量级 Agent 框架，以及跨框架的选型与可移植架构。</p>
+<p>目录中的「轻量级」是阅读分组，不表示 AutoGen、CrewAI 的运行时、依赖或运维成本一定更小。选型应比较同一任务的工具正确率、恢复语义、延迟与费用，而不是把框架名称当作能力保证。版本相关说明以各章链接的官方文档为依据，不以本页日期推断最新补丁号。</p>
 <h2 id="_1">子模块<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="01-langchain/">LangChain 生态（第 1–13 章）</a>——Chain/LCEL、Agent 构建、LangGraph 状态编排、LangSmith 生产闭环</li>
@@ -8318,7 +8319,7 @@
         LC["LangChain / LangGraph&lt;br/&gt;通用 Agent 编排"]
         LI["LlamaIndex&lt;br/&gt;数据与上下文"]
         DS["DSPy&lt;br/&gt;声明式优化"]
-        SK["Semantic Kernel&lt;br/&gt;企业级编排"]
+            SK["Semantic Kernel / Microsoft Agent Framework&lt;br/&gt;企业级编排与迁移"]
         LW["AutoGen / CrewAI / PydanticAI&lt;br/&gt;轻量级 Agent 框架"]
         SEL["选型与可移植架构&lt;br/&gt;跨框架统一解构"]
     end
@@ -8408,7 +8409,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关注的是另一类问题： 单个 Agent 的输入输出，能不能像普通函数调用一样接受类型系统和运行时校验 。它建立在 Pydantic——Python 生态里最常用的数据校验库——之上，把同一套「用类型注解声明…">
+        <meta name="description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第二十一章：PydanticAI 的类型安全范式与三者适用边界">
-    <meta property="og:description" content="第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关注的是另一类问题： 单个 Agent 的输入输出，能不能像普通函数调用一样接受类型系统和运行时校验 。它建立在 Pydantic——Python 生态里最常用的数据校验库——之上，把同一套「用类型注解声明…">
+    <meta property="og:description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第二十一章：PydanticAI 的类型安全范式与三者适用边界">
-    <meta name="twitter:description" content="第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关注的是另一类问题： 单个 Agent 的输入输出，能不能像普通函数调用一样接受类型系统和运行时校验 。它建立在 Pydantic——Python 生态里最常用的数据校验库——之上，把同一套「用类型注解声明…">
+    <meta name="twitter:description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","description":"第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关注的是另一类问题： 单个 Agent 的输入输出，能不能像普通函数调用一样接受类型系统和运行时校验 。它建立在 Pydantic——Python 生态里最常用的数据校验库——之上，把同一套「用类型注解声明…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","description":"介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"PydanticAI 与选型矩阵","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"}]}</script>
     
@@ -8515,30 +8515,43 @@
 
 <h1 id="pydanticai">第二十一章：PydanticAI 的类型安全范式与三者适用边界<a class="headerlink" href="#pydanticai" title="Permanent link">&para;</a></h1>
 <h2 id="211">21.1 第三种路线：把「协作」问题换成「正确性」问题<a class="headerlink" href="#211" title="Permanent link">&para;</a></h2>
-<p>第二十章的 AutoGen 和 CrewAI 都在回答「多个 Agent 怎么协作」。PydanticAI 关注的是另一类问题：<strong>单个 Agent 的输入输出，能不能像普通函数调用一样接受类型系统和运行时校验</strong>。它建立在 Pydantic——Python 生态里最常用的数据校验库——之上，把同一套「用类型注解声明数据形状、运行时自动校验」的做法带到了 Agent 开发里。</p>
-<blockquote>
-<p>PydanticAI 官方将其定位为「Python 的 AI SDK：一个类型化、可扩展的 Agent 循环」，文档反复强调「typed end to end」（端到端类型化），这也是它和本主题其他框架最明显的差异。</p>
-</blockquote>
+<p>PydanticAI 以 Python 类型、工具和依赖注入组织 Agent，但不只支持无状态的单 Agent 调用：它也支持会话历史、多 Agent 组合和持久执行集成。本章从单个 Agent 的可测试边界切入，再看这些能力如何扩展。</p>
+<p>这里的类型安全包括静态检查与运行时校验，不代表自然语言输入或模型推断自动获得事实正确性。</p>
 <h2 id="212-agentoutput_type">21.2 核心设计：<code>Agent</code>、<code>output_type</code> 与依赖注入<a class="headerlink" href="#212-agentoutput_type" title="Permanent link">&para;</a></h2>
 <p>PydanticAI 的 <code>Agent</code> 对象接受一个 <code>output_type</code>（通常是 Pydantic <code>BaseModel</code>），运行结果会被自动校验并转换成对应类型，而不是返回一段需要自己解析的原始字符串：</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">RunContext</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Sentiment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">label</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"positive"</span><span class="p">,</span> <span class="s2">"negative"</span><span class="p">,</span> <span class="s2">"neutral"</span><span class="p">]</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="s2">"openai:gpt-5.6-sol"</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="n">Sentiment</span><span class="p">)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">RunContext</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">Sentiment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">label</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"positive"</span><span class="p">,</span> <span class="s2">"negative"</span><span class="p">,</span> <span class="s2">"neutral"</span><span class="p">]</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nd">@agent</span><span class="o">.</span><span class="n">tool</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">recent_reviews</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">RunContext</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span> <span class="n">product</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="sd">"""获取某个产品的近期评论片段。"""</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="k">return</span> <span class="n">review_service</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="s2">"最近大家对这款产品的评价怎么样？"</span><span class="p">)</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nd">@dataclass</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">ReviewDeps</span><span class="p">:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">reviews</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYDANTIC_AI_MODEL"</span><span class="p">],</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">deps_type</span><span class="o">=</span><span class="n">ReviewDeps</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">output_type</span><span class="o">=</span><span class="n">Sentiment</span><span class="p">,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nd">@agent</span><span class="o">.</span><span class="n">tool</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="k">def</span><span class="w"> </span><span class="nf">recent_reviews</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">RunContext</span><span class="p">[</span><span class="n">ReviewDeps</span><span class="p">],</span> <span class="n">product</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="sd">"""获取某个产品的近期评论片段。"""</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">return</span> <span class="n">ctx</span><span class="o">.</span><span class="n">deps</span><span class="o">.</span><span class="n">reviews</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="p">[])</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="s2">"请根据近期评论评价产品 keyboard。"</span><span class="p">,</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">deps</span><span class="o">=</span><span class="n">ReviewDeps</span><span class="p">(</span><span class="n">reviews</span><span class="o">=</span><span class="p">{</span><span class="s2">"keyboard"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"按键手感很好"</span><span class="p">,</span> <span class="s2">"声音有点大"</span><span class="p">]}),</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="p">)</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
 </span></code></pre></div>
+<p>先设置 <code>PYDANTIC_AI_MODEL</code> 为官方支持且账户可用的 <code>provider:model</code> 标识，并配置凭据；不要把 CLI 模型别名当成供应商 API 模型名。这里用内存数据演示可替换依赖，生产可改成带请求身份的只读服务。已有异步事件循环中应 <code>await agent.run(...)</code>，不要调用 <code>run_sync()</code>。</p>
 <p>这里有两个工程上直接相关的点：</p>
 <ol>
 <li><strong><code>@agent.tool</code> 装饰的函数签名和 docstring 直接生成工具 Schema</strong>——这和 <a href="../../../tools/">Tools 主题</a> 中 Function Calling 的 Schema 设计原则完全一致，PydanticAI 没有发明新协议，只是让 Schema 生成过程和 Python 类型注解无缝衔接；</li>
@@ -8548,8 +8561,11 @@
 <pre class="mermaid"><code>flowchart LR
     A["模型输出的原始文本"] --&gt; B{"output_type 校验"}
     B --&gt;|"通过"| C["强类型对象&lt;br/&gt;可直接用于业务逻辑"]
-    B --&gt;|"不通过"| D["自动重试&lt;br/&gt;把校验错误反馈给模型"]</code></pre>
-<p>当模型的输出不满足 <code>output_type</code> 声明的约束（比如 <code>score</code> 超出了 <code>[-1, 1]</code> 范围），PydanticAI 会把校验错误反馈给模型并触发重试，<strong>这个反馈闭环本身发生在框架内部，不需要开发者手写「解析失败就重新提示模型」的样板代码</strong>。这与 <a href="../../01-langchain/02-agent-building/04-build-agent/">LangChain 生态 · 第四章</a> 中结构化输出的处理方式目标一致，区别在于 PydanticAI 把这层校验做得更贴近 Python 静态类型工具链（配合 <code>mypy</code>/<code>pyright</code> 可以在编写阶段就发现类型不匹配问题）。</p>
+    B --&gt;|"不通过且有预算"| D["反馈校验错误并重试"]
+    D --&gt; B
+    B --&gt;|"预算耗尽"| E["失败返回 / 应用回退"]</code></pre>
+<p>当输出不满足约束时，框架可以将校验错误反馈给模型并有限重试；预算耗尽仍会失败，需要应用处理。工具输出、供应商原生结构化输出、提示式输出有不同支持条件，不能假定所有模型都执行同一种严格 JSON Schema 约束。静态类型工具能检查调用代码，不会验证外部事实。</p>
+<p>可用 output validator 检查跨字段业务约束，并以 <code>ModelRetry</code> 请求修正；如果证据本身不足，则应拒答而非无限重试。重试同样增加 token、延迟，不能绕过单请求预算。</p>
 <h2 id="214-autogencrewaipydanticai">21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界<a class="headerlink" href="#214-autogencrewaipydanticai" title="Permanent link">&para;</a></h2>
 <p>把本模块两章和前几个模块放在一起，可以按六个工程维度画出一张对照表（更完整的跨全部框架对照见 <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/">框架选型与可移植架构 · 第二十二章</a>）：</p>
 <table>
@@ -8565,69 +8581,71 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>核心问题</strong></td>
-<td>分布式多智能体协作</td>
-<td>角色化团队协作 + 确定性 Flow</td>
-<td>单 Agent 的类型安全与工具契约</td>
-<td>企业级流程与多智能体编排</td>
-<td>通用状态图编排</td>
+<td><strong>核心抽象</strong></td>
+<td>Core 消息 / AgentChat Team</td>
+<td>Agent、Task、Crew、Flow</td>
+<td>类型化 Agent 与依赖</td>
+<td>Kernel、Plugin、Process / Agent</td>
+<td>状态图</td>
 </tr>
 <tr>
 <td><strong>状态模型</strong></td>
-<td>Actor 间异步消息</td>
-<td>Crew 内隐式、Flow 内显式状态</td>
-<td>单次 Run 的依赖注入上下文</td>
-<td>Process 的显式状态转移</td>
-<td>显式共享 <code>State</code></td>
+<td>Agent 内部状态及 Team 消息</td>
+<td>Task 输出、记忆与 Flow state</td>
+<td>Run、消息历史、依赖；三者职责不同</td>
+<td>按具体 Agent/Process 建模</td>
+<td>状态通道与 reducer</td>
 </tr>
 <tr>
-<td><strong>持久化</strong></td>
-<td>需要外部方案</td>
-<td>Flow 状态可持久化，Crew 内部有限</td>
-<td>需要外部方案（框架本身偏无状态单次调用）</td>
-<td>Process 原生支持持久化与恢复</td>
-<td>Checkpointer 原生支持</td>
+<td><strong>恢复入口</strong></td>
+<td><code>save_state</code> / <code>load_state</code>，应用管理存储</td>
+<td>Flow 持久化，不等于内部每次调用检查点</td>
+<td>官方 durable execution 集成，如 Temporal、DBOS、Prefect</td>
+<td>核对实验功能及运行时，不笼统承诺</td>
+<td>checkpointer，仍需持久后端</td>
 </tr>
 <tr>
 <td><strong>工具契约</strong></td>
-<td>消息驱动的函数调用</td>
-<td>标准 Function Calling</td>
-<td>类型注解直接生成 Schema，校验最严格</td>
-<td>Plugin 统一 Semantic/Native Function</td>
-<td>标准 Function Calling</td>
+<td>AgentChat 工具与 Core 消息分层</td>
+<td>Tool / 参数 Schema</td>
+<td>类型注解、Pydantic、业务 validator</td>
+<td>KernelFunction 与 Plugin</td>
+<td>Tool Schema 与工具执行</td>
 </tr>
 <tr>
-<td><strong>评测/可观测性</strong></td>
-<td>依赖外部 Tracing 集成</td>
-<td>内置 Trace，但生态工具相对年轻</td>
-<td>与 Pydantic Logfire 等工具集成较紧密</td>
-<td>与 Application Insights 等企业遥测集成</td>
-<td>LangSmith 原生集成最成熟</td>
+<td><strong>观测接入</strong></td>
+<td>Core 有遥测，需配置导出</td>
+<td>Flow/Crew 追踪与可观测性集成</td>
+<td>Logfire / OpenTelemetry</td>
+<td>OpenTelemetry / Application Insights</td>
+<td>LangSmith / 其他集成</td>
 </tr>
 <tr>
-<td><strong>Lock-in 风险</strong></td>
-<td>中等：Actor 消息格式有一定绑定</td>
-<td>中等：YAML 配置和角色隐喻绑定较深</td>
-<td>较低：核心是标准 Python 类型和函数</td>
-<td>较高：企业治理能力换来生态绑定</td>
-<td>中等：State/Checkpointer 格式有一定绑定</td>
+<td><strong>迁移负担</strong></td>
+<td>消息、Team 策略；维护模式需评估 MAF</td>
+<td>Task 上下文、Flow 状态和运行服务</td>
+<td>消息格式、重试/工具语义、持久执行后端</td>
+<td>Plugin、Filter、线程及 MAF 迁移</td>
+<td>reducer、检查点与中断语义</td>
 </tr>
 </tbody>
 </table>
-<p>这张表反映的是取舍，而不是单一排名。需要长期持久化和恢复能力时，LangGraph 或 Semantic Kernel Process Framework 更合适；需要严格类型安全和更低框架绑定时，PydanticAI 更合适；需要快速验证角色化协作时，CrewAI 更合适；需要真正的分布式部署时，AutoGen 更合适。选型时更有效的做法，是先明确项目最看重的两三个维度，再对照矩阵筛选。</p>
+<p>这是核对清单，不是「最严格/最成熟/最低锁定」排名。新 .NET/Python 项目应另外评估 <a href="../../04-semantic-kernel/19-process-and-agent-framework/">MAF</a>，不要默认选处于维护模式的 AutoGen 或 SK 实验 Process。PydanticAI 的持久执行也需要部署相应引擎，运维负担并未因为提供集成而消失。</p>
+<p>已有会话可通过 <code>message_history</code> 传给下一次 run；这与依赖注入不同，也不等于崩溃恢复。恢复长任务时要按 Temporal、DBOS 等后端的语义划定可重放步骤，避免把数据库连接或授权令牌作为历史数据持久保存。</p>
 <h2 id="215">21.5 常见错误<a class="headerlink" href="#215" title="Permanent link">&para;</a></h2>
 <h3 id="2151">21.5.1 认为类型校验能替代模型能力评测<a class="headerlink" href="#2151" title="Permanent link">&para;</a></h3>
 <p><code>output_type</code> 校验能保证「格式正确」，不能保证「内容正确」——一个格式完全合法但语义错误的 <code>Sentiment</code> 对象照样能通过校验，仍然需要独立的评测流程判断内容质量。</p>
 <h3 id="2152">21.5.2 把依赖注入当作可选的代码风格<a class="headerlink" href="#2152" title="Permanent link">&para;</a></h3>
-<p>不使用 <code>RunContext</code> 注入依赖，直接在工具函数里硬编码数据库连接或全局变量，会让单元测试必须依赖真实外部系统，失去类型安全设计本来要解决的可测试性收益。</p>
+<p><code>RunContext</code> 是一种方便的可测试边界，并非唯一方法；普通函数参数或服务适配器也能隔离依赖。关键是不要把用户身份与全局可变连接耦合，让测试可以替换外部服务。</p>
 <h3 id="2153">21.5.3 只看决策矩阵的单一维度就下结论<a class="headerlink" href="#2153" title="Permanent link">&para;</a></h3>
-<p>比如只看到「Lock-in 风险较低」就认定 PydanticAI 全面适合所有场景，忽视了它在长期持久化和多智能体协作上需要额外自建方案的事实。</p>
+<p>Python 类型容易复用，不代表会话格式、工具重试与持久运行时可以零成本迁移。应按具体集成评估，而不是把 PydanticAI 一概归为「无状态、恢复全自建」。</p>
 <h3 id="2154">21.5.4 把角色化框架的「团队隐喻」当作技术架构本身<a class="headerlink" href="#2154" title="Permanent link">&para;</a></h3>
 <p>CrewAI 的 <code>role</code>/<code>goal</code>/<code>backstory</code> 是 Prompt 工程的组织方式，不代表底层有类似人类团队的组织架构或权限体系，不能替代真实的权限与审批设计。</p>
+<p>类型系统相关的追问应落到失败样本：合法的 <code>score=0.9</code> 能否证明评论积极？能否通过 validator 检测相互矛盾字段？若校验期间查询订单状态发生变化，结果该按哪个版本提交？前两项由评测和业务校验覆盖，最后一项需要业务事务或版本检查，不能靠 Pydantic 类型解决。</p>
 <h2 id="216">21.6 本章总结<a class="headerlink" href="#216" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>PydanticAI 把「Agent 开发」重新定义为「类型安全的函数调用」</strong>：<code>output_type</code> 保证输出可被自动校验并重试，<code>RunContext</code> 提供可测试的依赖注入入口；</li>
-<li><strong>它的工具 Schema 生成方式与 Function Calling 协议完全兼容</strong>，没有发明新协议，只是让类型注解和 Schema 生成无缝衔接；</li>
+<li><strong>类型注解帮助生成工具 Schema</strong>，供应商支持的 Schema 子集、输出模式和校验语义仍需核对；</li>
 <li><strong>类型校验解决的是「格式正确性」，不是「内容正确性」</strong>，仍然需要独立的评测体系判断语义质量；</li>
 <li><strong>AutoGen、CrewAI、PydanticAI 在状态模型、持久化、工具契约、可观测性和 lock-in 风险上呈现出明显不同的取舍</strong>，没有一个框架在全部维度上都最优；</li>
 <li><strong>框架选型应该先明确项目最看重的两三个维度</strong>，再对照决策矩阵找最匹配的框架，而不是寻找一个「全能」选项。</li>
@@ -8636,12 +8654,16 @@
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://ai.pydantic.dev/">PydanticAI 官方文档</a></li>
-<li><a href="https://ai.pydantic.dev/agents/">PydanticAI: Agents 核心概念</a></li>
+<li><a href="https://pydantic.dev/docs/ai/core-concepts/agent/">PydanticAI: Agents 核心概念</a></li>
 <li><a href="https://ai.pydantic.dev/tools/">PydanticAI: Function Tools</a></li>
 <li><a href="https://ai.pydantic.dev/dependencies/">PydanticAI: Dependencies 依赖注入</a></li>
 <li><a href="https://microsoft.github.io/autogen/stable/">AutoGen 官方文档</a></li>
 <li><a href="https://docs.crewai.com/">CrewAI 官方文档</a></li>
+<li><a href="https://pydantic.dev/docs/ai/core-concepts/output/">PydanticAI: 输出模式与校验</a></li>
+<li><a href="https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/">PydanticAI: Durable Execution</a></li>
+<li><a href="https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html">AutoGen: State</a></li>
 </ul>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8664,7 +8686,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

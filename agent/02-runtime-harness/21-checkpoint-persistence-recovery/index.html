@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="第十七章把 Agent Loop 描述为一个状态机；只要进程不崩溃、网络不中断、任务不超过几分钟，这个状态机自己维护内存里的状态就够用。但真实的 Coding Agent 任务经常运行几十分钟到几小时，中间必然会遇到进程重启、网络抖动、模型 API 限流、工具执行超时。这时候&quot;重新跑一遍&quot;往往不可接受——不仅浪费…">
+        <meta name="description" content="说明 checkpoint 的恢复边界、Temporal 默认重试、分层超时及逻辑操作幂等键，处理工具成功但结果丢失的情况。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第二十一章：Checkpoint、持久化、重试、超时、幂等与恢复">
-    <meta property="og:description" content="第十七章把 Agent Loop 描述为一个状态机；只要进程不崩溃、网络不中断、任务不超过几分钟，这个状态机自己维护内存里的状态就够用。但真实的 Coding Agent 任务经常运行几十分钟到几小时，中间必然会遇到进程重启、网络抖动、模型 API 限流、工具执行超时。这时候&quot;重新跑一遍&quot;往往不可接受——不仅浪费…">
+    <meta property="og:description" content="说明 checkpoint 的恢复边界、Temporal 默认重试、分层超时及逻辑操作幂等键，处理工具成功但结果丢失的情况。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第二十一章：Checkpoint、持久化、重试、超时、幂等与恢复">
-    <meta name="twitter:description" content="第十七章把 Agent Loop 描述为一个状态机；只要进程不崩溃、网络不中断、任务不超过几分钟，这个状态机自己维护内存里的状态就够用。但真实的 Coding Agent 任务经常运行几十分钟到几小时，中间必然会遇到进程重启、网络抖动、模型 API 限流、工具执行超时。这时候&quot;重新跑一遍&quot;往往不可接受——不仅浪费…">
+    <meta name="twitter:description" content="说明 checkpoint 的恢复边界、Temporal 默认重试、分层超时及逻辑操作幂等键，处理工具成功但结果丢失的情况。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：Checkpoint、持久化、重试、超时、幂等与恢复","description":"第十七章把 Agent Loop 描述为一个状态机；只要进程不崩溃、网络不中断、任务不超过几分钟，这个状态机自己维护内存里的状态就够用。但真实的 Coding Agent 任务经常运行几十分钟到几小时，中间必然会遇到进程重启、网络抖动、模型 API 限流、工具执行超时。这时候\"重新跑一遍\"往往不可接受——不仅浪费…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：Checkpoint、持久化、重试、超时、幂等与恢复","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/"},"datePublished":"2026-08-31","dateModified":"2026-08-31"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：Checkpoint、持久化、重试、超时、幂等与恢复","description":"说明 checkpoint 的恢复边界、Temporal 默认重试、分层超时及逻辑操作幂等键，处理工具成功但结果丢失的情况。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：Checkpoint、持久化、重试、超时、幂等与恢复","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Checkpoint、持久化与恢复","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/21-checkpoint-persistence-recovery/"}]}</script>
     
@@ -8514,18 +8514,18 @@
 </tr>
 </tbody>
 </table>
-<p>多数生产系统需要同时使用两层：checkpoint 保证单次任务能在中断后恢复，store 保证下一次任务能利用上一次任务积累的知识。二者职责不同，不应该合并成一套存储实现——线程内状态变化频繁、体量大但生命周期短，跨线程存储变化少但需要长期保留和跨会话查询。</p>
+<p>两者应分清数据模型、访问权限与保留策略，但可以共用 PostgreSQL 等物理存储。这里的“线程”是框架的会话标识，不是操作系统线程；短期记忆也可以长期持久化，跨线程 store 也可能频繁更新。</p>
 <h2 id="214">21.4 重试：哪些失败可以重试，哪些不能<a class="headerlink" href="#214" title="Permanent link">&para;</a></h2>
 <p>不是所有失败都适合自动重试。区分标准是<strong>失败是否是暂时性的、重试是否会产生副作用叠加</strong>：</p>
 <ul>
-<li><strong>适合自动重试</strong>：网络超时、模型 API 限流（429）、工具执行遇到瞬时性基础设施故障——这些失败通常与请求内容无关，重试大概率成功。</li>
+<li><strong>可考虑自动重试</strong>：限流或瞬时基础设施故障，前提是操作可安全重发，遵循 <code>Retry-After</code>、退避、尝试次数和总时限。网络超时本身不能证明未执行，有副作用的调用需先查询状态或使用已持久化的幂等键。</li>
 <li><strong>不适合自动重试</strong>：工具调用的参数本身有误（重试只会得到同样的错误）、工具调用已经产生了真实副作用但响应因网络问题丢失（此时重试可能造成重复执行，见 21.6 节）、模型判断任务本身不可行——这些失败应该被回写给模型（第 19 章 19.6 节）或者上报人工介入（第 22 章），而不是无脑重试。</li>
 </ul>
-<p>Temporal 这类 durable execution 平台把这个判断标准做成了显式配置：Activity（对应工具执行）失败后是否重试、重试多少次、退避策略如何，都由开发者显式声明,而不是引擎默认全部重试或全部不重试(<a href="https://docs.temporal.io/evaluate/understanding-temporal">Temporal: Understanding Temporal</a>)。指数退避是最常见的重试间隔策略,第 <span class="arithmatex">\(n\)</span> 次重试的等待时间通常设计为：</p>
+<p><a href="https://docs.temporal.io/encyclopedia/retry-policies">Temporal 的默认行为</a>是 <strong>Activity 自动重试，Workflow Execution 默认不重试</strong>。业务需覆盖重试上限、不可重试错误与超时，不能假设未配置就不会重试；Workflow Task 的重试又是不同层次。自定义工具客户端常用带抖动的指数退避，第 <span class="arithmatex">\(n\)</span> 次等待可写为：</p>
 <div class="arithmatex">\[
-t_n = \min\left(t_{max},\ t_0 \cdot 2^{n-1}\right) + \delta_{jitter}
+t_n \sim \mathrm{Uniform}\left(0,\ \min\left(t_{max},\ t_0 \cdot 2^{n-1}\right)\right)
 \]</div>
-<p>其中 <span class="arithmatex">\(t_0\)</span> 是初始等待时间，<span class="arithmatex">\(t_{max}\)</span> 是退避上限，<span class="arithmatex">\(\delta_{jitter}\)</span> 是随机抖动，用于避免大量并发请求在同一时刻集中重试。</p>
+<p>其中 <span class="arithmatex">\(t_0\)</span> 是初始退避基数，<span class="arithmatex">\(t_{max}\)</span> 是等待上限。这是 full jitter 示例，不是 Temporal 默认策略；总等待还必须受剩余 deadline 约束。</p>
 <h2 id="215">21.5 超时：分层设置超时预算<a class="headerlink" href="#215" title="Permanent link">&para;</a></h2>
 <p>第 19 章 19.5 节已提到"每个工具调用应有独立的超时预算，且应嵌套在更大预算之内"。完整的分层超时至少有三级：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -8533,9 +8533,10 @@ t_n = \min\left(t_{max},\ t_0 \cdot 2^{n-1}\right) + \delta_{jitter}
     T["Turn 级超时&lt;br/&gt;单轮模型调用 + 工具执行的最长时间"]
     C["工具调用级超时&lt;br/&gt;单次工具执行的最长时间"]
     S --&gt; T --&gt; C</code></pre>
-<p>三级超时必须满足 <span class="arithmatex">\(t_{tool} &lt; t_{turn} &lt; t_{session}\)</span>（分别对应工具调用、Turn、会话三级），任意一级超时触发时，都应该产生一条明确的、可被上层处理的信号（错误消息、状态转移到 <code>Interrupted</code> 或直接触发 checkpoint 后终止），而不是让底层超时无声地传播导致整个状态机挂起。</p>
+<p>子调用应继承父级剩余 deadline，实际可用时长不超过自身上限与父级剩余预算的较小值；仅把三个静态超时配置成递增仍不够。超时后明确记录状态，并尝试取消远端工作；取消是协作请求，不保证远端副作用已撤销。</p>
 <h2 id="216">21.6 幂等：让重试变得安全<a class="headerlink" href="#216" title="Permanent link">&para;</a></h2>
-<p>幂等性解决的问题是：<strong>同一个操作被执行两次，效果和执行一次相同</strong>。这是安全重试的前提——没有幂等保证的重试，很可能把"发一封邮件"变成"发两封邮件"。工程上最常见的实现方式是幂等键：调用方为每次操作生成一个唯一键，服务端保存"这个键第一次被处理时的结果"，之后无论这个键被提交多少次，都直接返回保存的结果而不是重新执行。Stripe 的 API 设计是这一模式的经典参考实现："使用 idempotency key 可以安全地重试请求而不必担心意外执行同一个操作两次……幂等层会比较后续请求的参数与最初请求是否一致，如果不一致则报错"(<a href="https://docs.stripe.com/api/idempotent_requests">Stripe: Idempotent requests</a>)。把这个模式映射到 Agent Harness：每个工具调用的调用 ID（第 19 章 19.3 节）天然可以充当幂等键的角色——只要工具的执行端（无论是内部服务还是外部 API）支持基于这个 ID 去重，harness 在"不确定上次调用是否真的执行成功"时，就可以放心重发同一个调用 ID，而不用担心副作用被叠加执行。</p>
+<p>幂等性要求同一逻辑操作重放不增加额外效果。常见做法是<strong>执行前持久化操作键与参数摘要</strong>，服务端原子记录该键的状态和结果，重复请求返回同一结果，参数变化则拒绝。还要处理并发重复、记录有效期、处理中状态及业务写入与去重记录的原子性；<a href="https://docs.stripe.com/api/idempotent_requests">Stripe 的幂等请求文档</a>是具体 API 的参考，不是所有工具共有的保证。</p>
+<p><strong>模型工具调用 ID、JSON-RPC 请求 ID 与业务幂等键不同。</strong> 模型重新规划可能生成新调用 ID；MCP 多轮请求也可能要求新的 JSON-RPC ID。因此应另设稳定的逻辑操作键，并映射多次尝试。若服务不支持幂等或查询，结果未知时可能只能人工核对或执行补偿，不能宣称 checkpoint 带来了 exactly-once 副作用。</p>
 <h2 id="217-checkpoint">21.7 恢复：从 Checkpoint 继续，而不是从头重放<a class="headerlink" href="#217-checkpoint" title="Permanent link">&para;</a></h2>
 <p>恢复的正确语义是：加载最近一次 checkpoint，重建 17.2 节定义的状态，从中断点<strong>继续</strong>执行，而不是重新执行 checkpoint 之前的所有步骤。这里有两个容易出错的细节：</p>
 <ul>
@@ -8548,15 +8549,15 @@ t_n = \min\left(t_{max},\ t_0 \cdot 2^{n-1}\right) + \delta_{jitter}
 <li><strong>把"加了 Checkpointer"等同于"不会重复执行"。</strong> 这是<a href="../../../frameworks/01-langchain/04-langgraph/10-langgraph-advantages/">第十章（LangGraph 章）10.11.7 节</a>专门点出的常见误区，checkpoint 只保证状态能恢复，不自动保证恢复过程不产生重复副作用，幂等仍需要单独设计。</li>
 <li><strong>重试策略不区分失败类型，一律重试或一律不重试。</strong> 应按 21.4 节的标准显式分类。</li>
 <li><strong>超时只设一层。</strong> 会导致局部卡死拖垮全局，必须按 21.5 节分层设置。</li>
-<li><strong>幂等键的生成依赖调用方每次都不同（如时间戳），却期望它能去重。</strong> 幂等键必须在"同一个逻辑操作的多次尝试"之间保持不变，通常直接复用调用 ID。</li>
+<li><strong>每次尝试生成新幂等键。</strong> 同一逻辑操作必须复用已持久化的业务键；只有能证明调用 ID 在所有恢复路径中稳定且符合服务约定时，才可复用它。</li>
 </ul>
 <h2 id="219">21.9 本章总结<a class="headerlink" href="#219" title="Permanent link">&para;</a></h2>
-<p>Checkpoint 在状态转移边界保存 17.2 节定义的核心状态；持久化分线程内（checkpoint，支撑单次任务的恢复）和跨线程（store，支撑长期记忆）两层，二者存储特性不同不应合并。重试需要区分暂时性失败（可重试）与内容性失败（不可重试），并采用指数退避；超时需要按会话、Turn、工具调用三级分层设置；幂等键（通常复用调用 ID）是安全重试和安全恢复的共同前提；恢复的正确语义是重建显式状态后从中断点继续，而不是重放全部历史或恢复到任意程序位置。这四个机制共同构成"可恢复"而不只是"能重跑"的运行时能力。</p>
+<p>Checkpoint 保存执行状态，不自动保存外部世界，也不保证副作用只执行一次。恢复需要稳定的逻辑操作键、明确的未知状态和受 deadline 约束的重试。会话 checkpoint 与跨会话记忆要分清语义，但可共用底层数据库。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph: Persistence</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/fault-tolerance">LangGraph: Fault tolerance</a></li>
-<li><a href="https://docs.temporal.io/evaluate/understanding-temporal">Temporal: Understanding Temporal</a></li>
+<li><a href="https://docs.temporal.io/encyclopedia/retry-policies">Temporal: Retry Policies</a></li>
 <li><a href="https://docs.stripe.com/api/idempotent_requests">Stripe: Idempotent requests</a></li>
 <li><a href="../../../frameworks/01-langchain/04-langgraph/10-langgraph-advantages/">LangGraph 第十章：LangGraph 的核心优势</a></li>
 </ul>
@@ -8582,7 +8583,7 @@ t_n = \min\left(t_{max},\ t_0 \cdot 2^{n-1}\right) + \delta_{jitter}
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 17:30:27 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

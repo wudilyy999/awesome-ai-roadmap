@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="拆解 MCP 的 Host、Client、Server 三层角色，以及 Resources、Prompts、Tools 等原语在连接生命周期中的协作方式。">
+        <meta name="description" content="按角色、能力与传输拆解 MCP，解释 2026-07-28 的逐请求元数据、MRTR 输入及已弃用能力。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第五章：MCP 的三层组成">
-    <meta property="og:description" content="拆解 MCP 的 Host、Client、Server 三层角色，以及 Resources、Prompts、Tools 等原语在连接生命周期中的协作方式。">
+    <meta property="og:description" content="按角色、能力与传输拆解 MCP，解释 2026-07-28 的逐请求元数据、MRTR 输入及已弃用能力。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第五章：MCP 的三层组成">
-    <meta name="twitter:description" content="拆解 MCP 的 Host、Client、Server 三层角色，以及 Resources、Prompts、Tools 等原语在连接生命周期中的协作方式。">
+    <meta name="twitter:description" content="按角色、能力与传输拆解 MCP，解释 2026-07-28 的逐请求元数据、MRTR 输入及已弃用能力。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：MCP 的三层组成","description":"拆解 MCP 的 Host、Client、Server 三层角色，以及 Resources、Prompts、Tools 等原语在连接生命周期中的协作方式。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：MCP 的三层组成","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：MCP 的三层组成","description":"按角色、能力与传输拆解 MCP，解释 2026-07-28 的逐请求元数据、MRTR 输入及已弃用能力。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：MCP 的三层组成","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"MCP 三层组成","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/05-mcp-components/"}]}</script>
     
@@ -2793,9 +2793,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#523-host" class="md-nav__link">
+  <a href="#523-host-server" class="md-nav__link">
     <span class="md-ellipsis">
-      5.2.3 Host 是唯一的权限把关者
+      5.2.3 Host 与 Server 分别执行授权
     </span>
   </a>
   
@@ -8536,9 +8536,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#523-host" class="md-nav__link">
+  <a href="#523-host-server" class="md-nav__link">
     <span class="md-ellipsis">
-      5.2.3 Host 是唯一的权限把关者
+      5.2.3 Host 与 Server 分别执行授权
     </span>
   </a>
   
@@ -8747,7 +8747,7 @@
 <h1 id="mcp">第五章：MCP 的三层组成<a class="headerlink" href="#mcp" title="Permanent link">&para;</a></h1>
 <h2 id="51">5.1 用三层把概念理清<a class="headerlink" href="#51" title="Permanent link">&para;</a></h2>
 <p>第一次接触 MCP，最劝退的是名词密度：Host、Client、Server、Tools、Resources、Prompts、JSON-RPC、stdio、Streamable HTTP、sampling、elicitation、roots……</p>
-<p>把它拆成三层来看，会清楚很多，而且这三层在设计上本来就是解耦的：</p>
+<p>本章按角色、能力、传输三个视角组织概念；这是教学拆分，不是三个独立进程或强制依赖层级。</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph L1["第一层 · 角色架构：谁和谁在通信"]
         A["Host ── Client ── Server"]
@@ -8786,12 +8786,12 @@
 </tr>
 <tr>
 <td><strong>Server</strong></td>
-<td>工具提供方的独立进程</td>
-<td>暴露 Tools / Resources / Prompts，不关心上游是谁</td>
+<td>工具提供方的独立进程或服务</td>
+<td>暴露能力，并验证调用者及资源权限</td>
 </tr>
 </tbody>
 </table>
-<p>用一个公司的类比：Host 是公司，决定和哪些供应商合作；Client 是派驻到每个供应商的联络员，一人对接一家；Server 是供应商，只管按标准交付，不关心客户是谁。</p>
+<p>Host 选择接入方，Client 封装协议交互，Server 提供能力。服务端必须关心认证身份和租户，但不必知道调用方内部采用哪个模型或编排框架。</p>
 <h3 id="522">5.2.2 一对一连接便于隔离，但不是安全保证<a class="headerlink" href="#522" title="Permanent link">&para;</a></h3>
 <p>Host 常为每个 Server 建立独立 Client/连接，便于管理生命周期、认证与故障；规范不会因此自动隔离 Server 的文件、网络或进程权限。</p>
 <pre class="mermaid"><code>flowchart TB
@@ -8810,7 +8810,7 @@
     style GOOD fill:#e6f4ea
     style BOUNDARY fill:#fff3cd</code></pre>
 <p>面对第三方 Server，Host 还应使用最小权限、进程/容器隔离、网络出口控制和参数过滤。只有这些运行时策略才能限制一个 Server 能读取和执行的范围。</p>
-<h3 id="523-host">5.2.3 Host 是唯一的权限把关者<a class="headerlink" href="#523-host" title="Permanent link">&para;</a></h3>
+<h3 id="523-host-server">5.2.3 Host 与 Server 分别执行授权<a class="headerlink" href="#523-host-server" title="Permanent link">&para;</a></h3>
 <p>Host 和 Client 经常被混在一起。Client 负责通信和转发，授权与策略决定仍在 Host。</p>
 <p>具体来说，这些决策全在 Host：</p>
 <ul>
@@ -8819,7 +8819,7 @@
 <li>敏感操作是否需要二次确认；</li>
 <li>多个 Server 的上下文怎么聚合进 Prompt。</li>
 </ul>
-<p>Server 无权决定自己的工具会不会被调用，Client 也无权替用户同意。这条边界在讨论 MCP 安全时是核心。</p>
+<p>Host 的确认不能替代 Server 的权限检查。Server 应在每次操作上验证身份、scope、租户及对象归属；Client 也不能因 Server 声称某操作“只读”就跳过本地策略。</p>
 <h2 id="53">5.3 第二层：能力类型<a class="headerlink" href="#53" title="Permanent link">&para;</a></h2>
 <h3 id="531-server">5.3.1 Server 提供的三类能力<a class="headerlink" href="#531-server" title="Permanent link">&para;</a></h3>
 <p>区分它们的关键是<strong>默认控制路径</strong>，而不是「读还是写」或是否有副作用：</p>
@@ -8853,18 +8853,23 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Tools 是可执行能力，Resources 是可加载上下文，Prompts 是可取得的模板；每一项实际权限都由 Host 的策略决定。</strong></p>
-</blockquote>
+<p>Tools、Resources、Prompts 的分类不是安全等级。Host 控制暴露与共享，Server 控制实际资源访问。</p>
 <p>对应的 JSON-RPC 方法：</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tools/list"</span><span class="p">}</span><span class="w">          </span><span class="c1">// 发现有哪些工具</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tools/call"</span><span class="p">}</span><span class="w">          </span><span class="c1">// 调用某个工具</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">{</span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"resources/list"</span><span class="p">}</span><span class="w">      </span><span class="c1">// 列出可用资源</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"resources/read"</span><span class="p">}</span><span class="w">      </span><span class="c1">// 读取某个资源</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">{</span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prompts/list"</span><span class="p">}</span><span class="w">        </span><span class="c1">// 列出提示模板</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">{</span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prompts/get"</span><span class="p">}</span><span class="w">         </span><span class="c1">// 展开某个模板</span>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{"method": "tools/list"}          // 发现有哪些工具
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>{"method": "tools/call"}          // 调用某个工具
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>{"method": "resources/list"}      // 列出可用资源
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>{"method": "resources/read"}      // 读取某个资源
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>{"method": "prompts/list"}        // 列出提示模板
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>{"method": "prompts/get"}         // 展开某个模板
 </span></code></pre></div>
-<p><code>*/list</code> 这组方法就是「自动发现」的实现。应用不需要硬编码工具清单，连上就问一句。</p>
+<p>上例只列方法名，不是完整请求。<code>*/list</code> 可能分页；2026-07-28 的缓存结果带 <code>ttlMs</code> 和 <code>cacheScope</code>，列表变化可通过 <code>subscriptions/listen</code> 订阅。缓存必须按授权上下文隔离，不能把某租户的工具清单复用给另一租户。</p>
+<p><a href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools">Tools 规范</a>还区分了几个强度不同的要求：</p>
+<ul>
+<li>工具集合 <strong>MUST NOT</strong> 按连接状态或同连接其他请求的副作用变化；<strong>MAY</strong> 随时间、当前请求携带的授权变化。</li>
+<li>集合未变化时，Server <strong>SHOULD</strong> 保持确定性返回顺序，以利于列表缓存和模型前缀缓存；不是必须按字母排序。</li>
+<li><code>tools.listChanged</code> 能力仍存在。声明它的 Server <strong>SHOULD</strong> 向已通过 <code>subscriptions/listen</code> 请求 <code>notifications.toolsListChanged: true</code> 的 Client 发送 <code>notifications/tools/list_changed</code>，而不是向所有连接广播。</li>
+</ul>
+<p><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/subscriptions">订阅规范</a>要求先发送 <code>notifications/subscriptions/acknowledged</code>，其 filter 表示服务端实际接受的订阅子集；Client 应核对，不能把提交订阅当成功。流中的通知携带 <code>_meta.io.modelcontextprotocol/subscriptionId</code> 用于关联。变化通知不携带完整新清单，收到后重新 <code>tools/list</code>，并审查新增或改动定义。</p>
 <h3 id="532-server-client">5.3.2 容易被漏掉的第四类：Server 需要 Client 输入<a class="headerlink" href="#532-server-client" title="Permanent link">&para;</a></h3>
 <p>上面三类是 Server <strong>提供</strong>给 Client 的。执行过程中，Server 有时还需要模型推理或用户补充信息。2026-07-28 规范不再让 Server 反向发起 JSON-RPC request，而是在当前响应中返回 <code>InputRequiredResult</code>；Client 处理后带输入重发原请求。</p>
 <table>
@@ -8877,18 +8882,23 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Sampling</strong></td>
+<td><strong>Sampling（已弃用）</strong></td>
 <td>让 Host 一侧的模型完成受控推理</td>
-<td>Server 需要模型能力，但不应持有 Host 的模型密钥</td>
+<td>仅为兼容说明；新实现应考虑直接集成模型 API</td>
 </tr>
 <tr>
 <td><strong>Elicitation</strong></td>
 <td>向用户索取结构化补充信息</td>
 <td>参数不全时补充；不能替代高风险动作的独立审批</td>
 </tr>
+<tr>
+<td><strong>Roots（已弃用）</strong></td>
+<td>获取工作目录等上下文提示</td>
+<td>不是文件沙箱；迁移到参数、资源 URI 或服务端配置</td>
+</tr>
 </tbody>
 </table>
-<p>Sampling 让 Server 不必持有 Host 的模型 API Key。Host 仍要审查模型、预算、可见上下文与返回范围，防止远端 Server 滥用推理资源或诱导数据外带。</p>
+<p>这些状态依据 <a href="https://modelcontextprotocol.io/specification/2026-07-28/changelog">2026-07-28 changelog</a>：Sampling、Roots、Logging 已弃用但未移除。兼容 Sampling 时，Host 仍需限制模型、预算、可见上下文和返回范围。</p>
 <h3 id="533-inputrequiredresult">5.3.3 InputRequiredResult 的往返模式<a class="headerlink" href="#533-inputrequiredresult" title="Permanent link">&para;</a></h3>
 <p>当前消息方向仍是 Client request → Server response。需要 Client 输入时，Server 暂停当前处理并返回输入需求：</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -8896,14 +8906,15 @@
     participant S as Server
 
     rect rgb(230, 244, 234)
-    Note over C,S: Server 需要模型输入
+    Note over C,S: Server 需要用户补充信息
     C-&gt;&gt;S: tools/call
-    S--&gt;&gt;C: InputRequiredResult(sampling)
-    C-&gt;&gt;C: Host 审查并执行模型调用
-    C-&gt;&gt;S: 重发 tools/call + input
+    S--&gt;&gt;C: InputRequiredResult(elicitation/create)
+    C-&gt;&gt;C: Host 展示请求并取得用户输入
+    C-&gt;&gt;S: 新请求 ID，原参数 + inputResponses + requestState
     S--&gt;&gt;C: 工具结果
     end</code></pre>
 <p>并非每个 Server 都使用这些能力。Host 应逐请求声明允许的 Client capabilities，并把用户交互、模型访问、预算和数据边界纳入授权策略。</p>
+<p><code>InputRequiredResult.resultType</code> 为 <code>input_required</code>。客户端按 <code>inputRequests</code> 的键提供对应 <code>inputResponses</code>，原样携回 <code>requestState</code>；该状态不能当作可信授权。需绑定调用者、参数与有效期，并避免重放输入过程造成重复副作用。普通完成结果的 <code>resultType</code> 为 <code>complete</code>。</p>
 <h2 id="54">5.4 第三层：传输协议<a class="headerlink" href="#54" title="Permanent link">&para;</a></h2>
 <h3 id="541">5.4.1 消息格式与传输方式是解耦的<a class="headerlink" href="#541" title="Permanent link">&para;</a></h3>
 <p>这一层的设计点，就是把消息格式和传输方式分开：</p>
@@ -8912,7 +8923,7 @@
     MSG --&gt; T1["stdio&lt;br/&gt;本地子进程"]
     MSG --&gt; T2["Streamable HTTP&lt;br/&gt;远程服务"]
     MSG --&gt; T3["自定义传输&lt;br/&gt;规范允许扩展"]</code></pre>
-<p>同一套 JSON-RPC 消息可以跑在任意传输层上。<strong>切换传输方式不影响上层的工具调用逻辑</strong>——同一个 Server 实现，改几行配置就能从本地子进程变成远程 HTTP 服务。</p>
+<p>工具语义可在不同传输上复用，但改成远程服务还涉及认证、部署、取消、隔离和连接故障，不能保证只改配置。当前 HTTP 与 stdio 的取消机制也不同。</p>
 <h3 id="542">5.4.2 两种主要传输方式<a class="headerlink" href="#542" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8935,8 +8946,8 @@
 </tr>
 <tr>
 <td>延迟</td>
-<td>极低</td>
-<td>有网络开销</td>
+<td>无网络往返，但仍有序列化与调度</td>
+<td>取决于部署、网络及服务处理</td>
 </tr>
 <tr>
 <td>多 Client 共享</td>
@@ -8945,8 +8956,8 @@
 </tr>
 <tr>
 <td>认证</td>
-<td>靠进程隔离和环境变量</td>
-<td>需要完整的 OAuth 授权</td>
+<td>凭据一般由环境或受控配置提供；进程隔离另行落实</td>
+<td>协议授权为可选；受保护 HTTP 服务采用相应 OAuth 规范</td>
 </tr>
 <tr>
 <td>典型用途</td>
@@ -8975,7 +8986,7 @@
 
     Note over H,M: 运行阶段
     U-&gt;&gt;H: 帮我提个 bug issue
-    H-&gt;&gt;M: messages + 所有 Server 的工具 Schema
+    H-&gt;&gt;M: messages + 按授权和任务筛选的工具 Schema
     M--&gt;&gt;H: tool_calls: create_issue(...)
     H-&gt;&gt;U: 请确认：将创建 Issue
     U-&gt;&gt;H: 同意
@@ -8983,7 +8994,7 @@
     C-&gt;&gt;S: tools/call
     S--&gt;&gt;C: {"issue_url": "..."}
     C-&gt;&gt;H: 结果
-    H-&gt;&gt;M: role=tool 消息
+    H-&gt;&gt;M: 按模型 API 回填工具结果
     M--&gt;&gt;H: 已创建 Issue，链接是……
     H-&gt;&gt;U: 最终答案</code></pre>
 <p>这次完整调用里，有三点最值得注意：</p>
@@ -9011,9 +9022,9 @@
 <li><strong>三层尽量解耦</strong>，传输和能力可分别演进；</li>
 <li><strong>Host 是决策者，Client 是连接器，Server 是提供者</strong>；独立连接不替代运行时安全隔离；</li>
 <li><strong>三类正向能力按默认控制路径区分</strong>：Tools 可由模型/工作流选择，Resources 由 Client 加载，Prompts 由用户/Host 取得；</li>
-<li><strong>输入需求容易被漏</strong>：Sampling 让 Server 受控借用 Host 模型，Elicitation 补充用户信息；</li>
+<li><strong>输入需求通过 MRTR 往返</strong>：Elicitation 补充用户信息，Sampling/Roots 仅作弃用兼容；</li>
 <li><strong>当前规范用 <code>InputRequiredResult</code> 而非 Server 反向 request</strong>，Client capabilities 随每个请求声明并由 Host 策略控制；</li>
-<li><strong>消息格式与传输方式解耦</strong>，同一个 Server 换配置就能在本地和远程之间切换；</li>
+<li><strong>传输切换仍需工程适配</strong>，认证、取消和部署约束不会自动消失；</li>
 <li><strong>stdio 下 stdout 是协议专用通道</strong>，日志必须走 stderr。</li>
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -9021,7 +9032,8 @@
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/architecture">MCP 架构说明</a></li>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28">MCP 规范 2026-07-28</a></li>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools">MCP Server 能力：Tools</a></li>
-<li><a href="https://modelcontextprotocol.io/specification/2026-07-28/client">MCP Client 输入模式</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/mrtr">MCP Multi Round-Trip Requests</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2026-07-28/deprecated">MCP 弃用特性</a></li>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/transports">MCP 传输层规范</a></li>
 <li><a href="https://www.jsonrpc.org/specification">JSON-RPC 2.0 规范</a></li>
 </ul>
@@ -9047,7 +9059,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

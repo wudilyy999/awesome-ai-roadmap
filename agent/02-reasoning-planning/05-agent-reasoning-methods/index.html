@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="推理方法是 Agent 的“局部决策算法”，Agent 范式是“系统级控制循环”">
+        <meta name="description" content="比较 CoT、Self-Consistency、ToT、程序辅助推理与验证器搜索，区分参数训练和推理时计算，并说明收益的评估条件。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第五章：Agent 的模型推理与搜索方法">
-    <meta property="og:description" content="推理方法是 Agent 的“局部决策算法”，Agent 范式是“系统级控制循环”">
+    <meta property="og:description" content="比较 CoT、Self-Consistency、ToT、程序辅助推理与验证器搜索，区分参数训练和推理时计算，并说明收益的评估条件。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第五章：Agent 的模型推理与搜索方法">
-    <meta name="twitter:description" content="推理方法是 Agent 的“局部决策算法”，Agent 范式是“系统级控制循环”">
+    <meta name="twitter:description" content="比较 CoT、Self-Consistency、ToT、程序辅助推理与验证器搜索，区分参数训练和推理时计算，并说明收益的评估条件。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：Agent 的模型推理与搜索方法","description":"推理方法是 Agent 的“局部决策算法”，Agent 范式是“系统级控制循环”","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：Agent 的模型推理与搜索方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：Agent 的模型推理与搜索方法","description":"比较 CoT、Self-Consistency、ToT、程序辅助推理与验证器搜索，区分参数训练和推理时计算，并说明收益的评估条件。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：Agent 的模型推理与搜索方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模型推理与搜索方法","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/05-agent-reasoning-methods/"}]}</script>
     
@@ -9437,7 +9437,7 @@
 </ul>
 <p>推理方法是 Agent 的“局部决策算法”，Agent 范式是“系统级控制循环”。</p>
 <h2 id="52">5.2 什么是模型推理<a class="headerlink" href="#52" title="Permanent link">&para;</a></h2>
-<p>大语言模型以自回归方式逐 Token 生成输出。给定输入 <code>x</code>，输出 Token 序列 <code>y = (y₁, …, yₙ)</code> 的联合概率可以分解为：</p>
+<p>本章以常见的自回归语言模型为例。给定输入 <code>x</code>，输出 Token 序列 <code>y = (y₁, …, yₙ)</code> 的联合概率可以分解为：</p>
 <div class="arithmatex">\[
 P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
 \]</div>
@@ -9455,6 +9455,39 @@ P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
 <blockquote>
 <p><strong>生成候选 → 获取证据 → 验证候选 → 分配更多计算 → 选择结果</strong></p>
 </blockquote>
+<p>还要区分计算发生在哪个阶段：</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>改变什么</th>
+<th>应用这一步时是否更新参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT、RL、蒸馏</td>
+<td>模型的生成策略或验证器</td>
+<td>是</td>
+</tr>
+<tr>
+<td>CoT 提示、上下文示例</td>
+<td>当前条件输入和中间生成</td>
+<td>否</td>
+</tr>
+<tr>
+<td>Self-Consistency、ToT、Best-of-N</td>
+<td>候选数量、搜索状态和选择方式</td>
+<td>通常否</td>
+</tr>
+<tr>
+<td>工具反馈、Reflexion 记忆</td>
+<td>证据、上下文和下一次尝试</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>训练得到的推理模型也可以使用推理时搜索。测试反馈用于挑选或修订候选，与将测试分数作为 RL 奖励、经优化器更新参数，是两件不同的事。</p>
 <h2 id="53">5.3 推理方法的总体分类<a class="headerlink" href="#53" title="Permanent link">&para;</a></h2>
 <p>可以按照推理时探索的范围，将常见方法分成四层：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -9476,7 +9509,7 @@ P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
     S4 --&gt; GOT[Graph of Thoughts]
     S4 --&gt; MCTS[MCTS 类搜索]
     S4 --&gt; VG[Verifier-guided]</code></pre>
-<p>计算量通常从上到下逐步增加：</p>
+<p>在相同基础模型、相近单次生成长度下，可以粗略比较成本：</p>
 <table>
 <thead>
 <tr>
@@ -9526,8 +9559,10 @@ P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
 </tbody>
 </table>
 <p>更复杂的方法并不必然更好。只有当额外推理计算能够提升任务成功率时，增加复杂度才有价值。</p>
+<p>表中不是固定排序：一次长内部推理可能比多个短候选更贵；批处理能减少往返但不会消除生成 Token，缓存也不会让验证免费。</p>
 <h2 id="54-direct-answer">5.4 Direct Answer：建立最简单基线<a class="headerlink" href="#54-direct-answer" title="Permanent link">&para;</a></h2>
 <p>Direct Answer 让模型直接生成答案，不显式要求中间推理。</p>
+<p>这是输出与提示方式，不是“模型未推理”的证明。带隐藏推理预算的模型，即便只输出一句话，也可能消耗大量内部推理 Token。</p>
 <p>适合：</p>
 <ul>
 <li>简单事实提取；</li>
@@ -9549,17 +9584,18 @@ P(y \mid x)=\prod_{t=1}^{n}P(y_t \mid x,y_1,\ldots,y_{t-1})
     S1 --&gt; S2[中间步骤 2]
     S2 --&gt; S3[中间步骤 N]
     S3 --&gt; A[答案]</code></pre>
-<p>从概率角度，可以将中间推理表示为隐变量 <span class="arithmatex">\(z\)</span>：</p>
+<p>从概率角度，可以将中间推理序列表示为辅助变量 <span class="arithmatex">\(z\)</span>；当只关心最终答案时将其边缘化：</p>
 <div class="arithmatex">\[
 P(y\mid x)=\sum_z P(y,z\mid x)
 \]</div>
 <p>单路径 CoT 实际上只生成一个候选推理 <span class="arithmatex">\(z\)</span>，再根据它得到答案 <span class="arithmatex">\(y\)</span>。</p>
+<p>上式是联合分布的分解，不意味着一次 CoT 解码真的枚举了所有 <code>z</code>，也不意味着这些文本就是模型全部内部计算。原始 CoT prompting 通过带步骤的示例改变输入，不包含参数更新。</p>
 <h3 id="552-few-shot-cot-zero-shot-cot">5.5.2 Few-shot CoT 与 Zero-shot CoT<a class="headerlink" href="#552-few-shot-cot-zero-shot-cot" title="Permanent link">&para;</a></h3>
 <h4 id="few-shot-cot">Few-shot CoT<a class="headerlink" href="#few-shot-cot" title="Permanent link">&para;</a></h4>
 <p>在 Prompt 中提供带有中间步骤的示例，让模型模仿类似推理结构。</p>
 <h4 id="zero-shot-cot">Zero-shot CoT<a class="headerlink" href="#zero-shot-cot" title="Permanent link">&para;</a></h4>
 <p>不提供完整示例，只通过简短指令要求模型分步骤分析。历史上常见的提示是“Let's think step by step”。</p>
-<p>但对现代推理模型而言，反复要求“逐步思考”不一定继续带来收益，甚至可能干扰模型原生的推理策略。应以具体模型的官方建议和评估结果为准。</p>
+<p>对经过推理训练的模型，反复要求“逐步思考”不一定继续带来收益。<a href="https://developers.openai.com/api/docs/guides/reasoning-best-practices">OpenAI 的 reasoning 提示建议</a>明确建议对其推理模型使用直接、清晰的任务指令，不必额外要求展开 CoT；这不是所有厂商、模型版本的统一规定。</p>
 <h3 id="553">5.5.3 不要把完整思维链当作可靠解释<a class="headerlink" href="#553" title="Permanent link">&para;</a></h3>
 <p>模型生成的 CoT：</p>
 <ul>
@@ -9597,6 +9633,7 @@ P(y\mid x)=\sum_z P(y,z\mid x)
 <li>增加 Token、延迟和成本；</li>
 <li>缺少外部验证时容易自洽但错误。</li>
 </ul>
+<p><a href="https://arxiv.org/abs/2201.11903">原论文</a>的收益来自所测模型、规模和算术／常识／符号任务。不能由此推断任何模型加一句提示就具备可靠规划能力；解释忠实性研究也发现模型可能受提示中的偏置信息影响，却不在 CoT 中承认这些影响。</p>
 <h2 id="56">5.6 任务分解：先把问题变小<a class="headerlink" href="#56" title="Permanent link">&para;</a></h2>
 <p>任务分解的目标不是让推理变得更长，而是降低每个子问题的难度。</p>
 <h3 id="561-least-to-most">5.6.1 Least-to-Most<a class="headerlink" href="#561-least-to-most" title="Permanent link">&para;</a></h3>
@@ -9672,6 +9709,7 @@ P(y\mid x)=\sum_z P(y,z\mid x)
 \hat{y}=\arg\max_y \sum_{i=1}^{N} I(y_i=y)
 \]</div>
 <p>其中 <span class="arithmatex">\(I\)</span> 是指示函数。</p>
+<p>实际实现需先规范化答案：单位、等价分数、大小写和选项编号不能直接按原始字符串比较；并列票或无法解析时要有明确回退规则。票数比例不是经过校准的正确概率。即使随机采样相互独立，同一模型仍可能把大部分概率放在同一个错误答案上，投票无法消除这种系统性偏差。</p>
 <h3 id="571">5.7.1 为什么可能有效<a class="headerlink" href="#571" title="Permanent link">&para;</a></h3>
 <p>如果不同推理路径犯错的方式不完全相同，正确答案可能在多个样本中更稳定地出现。</p>
 <h3 id="572">5.7.2 适用条件<a class="headerlink" href="#572" title="Permanent link">&para;</a></h3>
@@ -9737,8 +9775,10 @@ y^*=\arg\max_{y_i} V(x,y_i)
 <li>LLM-as-a-Judge。</li>
 </ul>
 <p>应优先使用更接近真实成功标准的验证器。</p>
+<p>必须区分“候选中存在正确答案”和“系统选中了正确答案”。用隐藏答案挑选出的 oracle best-of-N 只能作为上界，不能充当可部署系统的结果；增加 <code>N</code> 还可能更容易找到骗过评分器的候选。最终验收数据应与搜索时可用的测试、评分器训练数据分开。</p>
 <h2 id="59-tree-of-thoughts">5.9 Tree of Thoughts：搜索推理树<a class="headerlink" href="#59-tree-of-thoughts" title="Permanent link">&para;</a></h2>
 <p>ToT（Tree of Thoughts）把中间推理状态视为搜索树节点，在每个节点扩展多个候选，并进行评分、选择或回溯。</p>
+<p>原方法由外部控制程序维护部分解、候选和搜索策略，模型负责生成与评价文本单元。仅在一个 Prompt 中写“请模拟三位专家并回溯”，不等于实现了原论文的 ToT 搜索。</p>
 <pre class="mermaid"><code>flowchart TB
     S0[初始状态] --&gt; A1[候选 A]
     S0 --&gt; B1[候选 B]
@@ -9808,6 +9848,7 @@ y^*=\arg\max_{y_i} V(x,y_i)
 <li>很多现实任务难以定义部分解评分。</li>
 </ul>
 <p>生产实现通常使用 Beam Width、最大深度和预算剪枝限制搜索规模。</p>
+<p>原论文主要实验是 24 点、创意写作和迷你填字，不是通用网页或仓库任务。其 24 点结果（GPT-4，CoT 4%、ToT 74%）对应特定题集、搜索宽度和评测设置，且预算不等同于单路径 CoT。部分解可评分是重要前提：若评分器把需要暂时绕路的正确分支过早剪掉，搜索反而找不到解。</p>
 <h2 id="510-graph-of-thoughts">5.10 Graph of Thoughts 与图搜索<a class="headerlink" href="#510-graph-of-thoughts" title="Permanent link">&para;</a></h2>
 <p>树结构假设每条路径独立向下展开，但现实推理可能需要合并、复用或循环改进中间结果。</p>
 <p>Graph of Thoughts 将推理状态组织成图：</p>
@@ -9836,6 +9877,7 @@ y^*=\arg\max_{y_i} V(x,y_i)
 <li>Evaluation：评估候选质量；</li>
 <li>Backpropagation：将评价反馈到祖先节点。</li>
 </ol>
+<p>Selection 通常依据访问次数与累计价值，在探索新分支和利用高分分支之间取舍；Evaluation 可以是 rollout 的环境回报，也可以是学习到的价值估计。这里的 Backpropagation 是向树节点回传统计量，不是神经网络反向传播，不自动更新 LLM 权重。</p>
 <pre class="mermaid"><code>flowchart LR
     S[Selection] --&gt; E[Expansion]
     E --&gt; V[Evaluation]
@@ -9849,6 +9891,7 @@ y^*=\arg\max_{y_i} V(x,y_i)
 <li>允许较高推理预算。</li>
 </ul>
 <p>对于开放式知识任务，如果评价函数本身不可靠，复杂搜索可能只是更昂贵地放大评分偏差。</p>
+<p>行动搜索还要求状态可复制、重置或模拟。回溯文本不会撤销已发送的邮件、支付或数据库写入；有副作用的真实工具不能直接当作任意分支的 rollout 环境。</p>
 <h2 id="512-program-aided-reasoning">5.12 Program-Aided Reasoning：把计算交给程序<a class="headerlink" href="#512-program-aided-reasoning" title="Permanent link">&para;</a></h2>
 <p>模型不擅长稳定执行长算术、精确状态更新和复杂符号操作。Program-Aided Language Models（PAL）或 Program of Thoughts（PoT）让模型生成程序，再由解释器执行。</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -9925,6 +9968,7 @@ y^*=\arg\max_{y_i} V(x,y_i)
 v_i=V(x,y_i,e_i)
 \]</div>
 <p>其中 <span class="arithmatex">\(e_i\)</span> 可以是测试结果、执行轨迹或外部证据。</p>
+<p>结果奖励模型（ORM）通常给完整候选评分；过程奖励模型（PRM）给中间步骤提供更细的信号，适合剪枝或分配搜索预算。<a href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a>研究了过程监督训练验证器。训练 PRM 会更新其参数，使用固定 PRM 排序候选则不会；PRM 分数也不是形式化证明，多个相关步骤的分数不能不加假设地乘成“答案正确概率”。</p>
 <p>系统可以：</p>
 <ul>
 <li>选择最高分候选；</li>
@@ -9940,7 +9984,7 @@ v_i=V(x,y_i,e_i)
     PASS --&gt;|否| FB[结构化反馈]
     FB --&gt; G</code></pre>
 <h3 id="5151">5.15.1 验证信号优先级<a class="headerlink" href="#5151" title="Permanent link">&para;</a></h3>
-<p>通常应优先使用：</p>
+<p>可以按任务成功条件考虑以下信号，而不是把它们当作固定可信度排名：</p>
 <ol>
 <li>真实环境结果；</li>
 <li>单元测试、编译器和约束求解器；</li>
@@ -9950,6 +9994,7 @@ v_i=V(x,y_i,e_i)
 <li>同一模型自我评分。</li>
 </ol>
 <p>验证器越接近真实任务成功标准，搜索越有意义。</p>
+<p>Schema 只能保证形状，编译器只能检查相应语言规则，测试通过只覆盖已测行为。安全策略或确定性验收失败应形成硬拒绝，不能被模型的综合高分抵消。</p>
 <h3 id="5152-verifier">5.15.2 Verifier 的风险<a class="headerlink" href="#5152-verifier" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Reward Hacking；</li>
@@ -9992,7 +10037,7 @@ v_i=V(x,y_i,e_i)
 </tbody>
 </table>
 <h2 id="517-reasoning-models">5.17 Reasoning Models 与推理时扩展<a class="headerlink" href="#517-reasoning-models" title="Permanent link">&para;</a></h2>
-<p>新一代 Reasoning Model 通常在训练或推理系统中强化了多步推理能力。使用这类模型时，应用不一定需要手工要求它输出冗长 CoT。</p>
+<p>Reasoning Model 通常经过强化多步推理的后训练，应用不一定需要手工要求其输出冗长 CoT。例如 <a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1 技术报告</a>讨论了 RL 激励推理行为和蒸馏。模型能生成检查、回退式文本，不代表服务内部必然运行 ToT 或 MCTS；未公开的架构细节不应从回答外观反推。</p>
 <p>推理时扩展（Inference-time Scaling）指为困难问题分配更多推理计算，例如：</p>
 <ul>
 <li>增加内部推理预算；</li>
@@ -10013,6 +10058,7 @@ B=(T,N,D,K)
 <li><span class="arithmatex">\(K\)</span>：验证或修订轮数。</li>
 </ul>
 <p>预算越高不意味着结果必然越好。系统需要根据任务难度动态分配计算，而不是对所有请求使用最大推理强度。</p>
+<p><a href="https://arxiv.org/abs/2408.03314">推理时计算分配研究</a>显示，顺序修订与并行搜索的相对收益随题目难度改变。这个结论支持测量后路由，而不是仅凭模型自报“有信心”缩减预算；更高风险时应先加强验收和审批，并非自动加大搜索树。</p>
 <h2 id="518-adaptive-reasoning">5.18 Adaptive Reasoning：按难度分配预算<a class="headerlink" href="#518-adaptive-reasoning" title="Permanent link">&para;</a></h2>
 <p>Adaptive Reasoning 先估计任务难度或置信度，再选择推理策略：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -10272,7 +10318,7 @@ B=(T,N,D,K)
 <li>高风险结论是否需要人工审核？</li>
 </ul>
 <h2 id="525">5.25 本章总结<a class="headerlink" href="#525" title="Permanent link">&para;</a></h2>
-<p>可以把这些方法看成一条从低成本到高计算量的梯度：</p>
+<p>可以按作用区分这些方法，而不是把它们看成固定的成本或能力排名：</p>
 <ol>
 <li><strong>Direct Answer</strong>：直接生成；</li>
 <li><strong>CoT</strong>：沿一条路径分步推理；</li>
@@ -10297,6 +10343,13 @@ B=(T,N,D,K)
 <li><a href="https://arxiv.org/abs/2308.09687">Graph of Thoughts: Solving Elaborate Problems with Large Language Models</a></li>
 <li><a href="https://arxiv.org/abs/2211.10435">PAL: Program-aided Language Models</a></li>
 <li><a href="https://arxiv.org/abs/2303.17651">Self-Refine: Iterative Refinement with Self-Feedback</a></li>
+<li><a href="https://arxiv.org/abs/2305.04091">Plan-and-Solve Prompting</a></li>
+<li><a href="https://arxiv.org/abs/2211.12588">Program of Thoughts Prompting</a></li>
+<li><a href="https://arxiv.org/abs/2305.04388">Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting</a></li>
+<li><a href="https://arxiv.org/abs/2305.20050">Let's Verify Step by Step</a></li>
+<li><a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1</a></li>
+<li><a href="https://arxiv.org/abs/2408.03314">Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/reasoning-best-practices">OpenAI: Reasoning best practices</a></li>
 </ul>
 
 
@@ -10320,7 +10373,7 @@ B=(T,N,D,K)
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="前两章关注「不可信内容怎么进入模型」，本章关注 模型的输出本身应被当作不可信内容 。这是 OWASP LLM05（Improper Output Handling）的核心命题：很多团队严格校验输入，却把模型输出直接拼进 SQL、Shell 命令、HTML、Markdown 渲染器或下游 API 调用参数，相当于把…">
+        <meta name="description" content="按 SQL、Shell、HTML、CSV 和工具参数的消费上下文处理模型输出，区分净化、授权与外带通道控制。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第三章：输出处理与 Secret Exfiltration">
-    <meta property="og:description" content="前两章关注「不可信内容怎么进入模型」，本章关注 模型的输出本身应被当作不可信内容 。这是 OWASP LLM05（Improper Output Handling）的核心命题：很多团队严格校验输入，却把模型输出直接拼进 SQL、Shell 命令、HTML、Markdown 渲染器或下游 API 调用参数，相当于把…">
+    <meta property="og:description" content="按 SQL、Shell、HTML、CSV 和工具参数的消费上下文处理模型输出，区分净化、授权与外带通道控制。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第三章：输出处理与 Secret Exfiltration">
-    <meta name="twitter:description" content="前两章关注「不可信内容怎么进入模型」，本章关注 模型的输出本身应被当作不可信内容 。这是 OWASP LLM05（Improper Output Handling）的核心命题：很多团队严格校验输入，却把模型输出直接拼进 SQL、Shell 命令、HTML、Markdown 渲染器或下游 API 调用参数，相当于把…">
+    <meta name="twitter:description" content="按 SQL、Shell、HTML、CSV 和工具参数的消费上下文处理模型输出，区分净化、授权与外带通道控制。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：输出处理与 Secret Exfiltration","description":"前两章关注「不可信内容怎么进入模型」，本章关注 模型的输出本身应被当作不可信内容 。这是 OWASP LLM05（Improper Output Handling）的核心命题：很多团队严格校验输入，却把模型输出直接拼进 SQL、Shell 命令、HTML、Markdown 渲染器或下游 API 调用参数，相当于把…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：输出处理与 Secret Exfiltration","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：输出处理与 Secret Exfiltration","description":"按 SQL、Shell、HTML、CSV 和工具参数的消费上下文处理模型输出，区分净化、授权与外带通道控制。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：输出处理与 Secret Exfiltration","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"输出处理与 Secret Exfiltration","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/"}]}</script>
     
@@ -8650,7 +8650,7 @@
 <tbody>
 <tr>
 <td>直接渲染 HTML/Markdown</td>
-<td>存储型 XSS：模型输出中的 <code>&lt;script&gt;</code> 或事件处理属性被浏览器执行</td>
+<td>未安全净化时可能发生 XSS；是否为存储型取决于输出是否保存后再展示</td>
 </tr>
 <tr>
 <td>渲染为可点击链接</td>
@@ -8666,7 +8666,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>防御</strong>：输出必须经过与用户生成内容（UGC）同等强度的净化——HTML 转义或使用白名单 Sanitizer、Markdown 渲染器禁用危险语法（如自动加载外部图片）、导出 CSV 前对公式前缀字符做转义或加前导单引号。</p>
+<p><strong>防御必须匹配消费上下文</strong>：SQL 用参数化查询，Shell 优先传固定命令与参数数组并校验选项，HTML 用上下文编码或维护中的白名单 Sanitizer；JSON Schema 不能替代它们。Markdown 还需控制 URL 协议和外部资源。CSV 的普通引号转义不防公式执行，前导单引号的效果也依赖表格软件；优先导出明确文本类型的单元格，并测试目标客户端的打开、保存、再打开行为。</p>
 <h3 id="323">3.2.3 工具调用参数：输出直接驱动动作<a class="headerlink" href="#323" title="Permanent link">&para;</a></h3>
 <p>Agent 场景下，模型输出不只是展示文本，还会直接成为工具调用的参数。若下游工具对参数「因为来自模型」而信任度过高，就会重现 <a href="../../../tools/02-mcp/15-tool-protocol-security/">Tool Protocol 安全 15.3.2</a> 描述的问题。这部分的权限与校验设计已在 <a href="../../../agent/05-production/15-agent-security/">Agent 安全</a> 和 <a href="../../../tools/02-mcp/15-tool-protocol-security/">Tool Protocol 安全</a> 讲清楚；这里直接盯住一个最容易失手的点：<strong>服务端重新校验参数，不能相信「这是模型自己算出来的」</strong>。</p>
 <h2 id="33-covert-exfiltration-channels">3.3 隐蔽外带通道（Covert Exfiltration Channels）<a class="headerlink" href="#33-covert-exfiltration-channels" title="Permanent link">&para;</a></h2>
@@ -8703,8 +8703,8 @@
 </table>
 <p><strong>防御</strong>：</p>
 <ul>
-<li>渲染层禁止未经审查的外部资源自动加载（图片、iframe、字体等），或强制经过代理并记录/限速；</li>
-<li>对输出中的 URL 做域名白名单校验，不允许指向不在允许列表内的主机；</li>
+<li>渲染层禁止未经审查的外部资源自动加载；仅加代理不够，代理若原样转发含秘密的 URL，仍然会外泄，并可能引入服务端 SSRF；</li>
+<li>对目标、路径与数据类别执行出口策略；域名白名单不能阻止向允许域名中的攻击者账号上传数据，重定向和最终连接地址也要重新校验；</li>
 <li>输出侧异常检测应关注「结构异常但语义正常」的模式，例如异常多的编码字符、异常规律的字符间隔；</li>
 <li>从根源上限制模型上下文中能接触到的敏感数据（最小化原则，见 <a href="../../../agent/05-production/15-agent-security/">Agent 安全 15.9</a>），因为<strong>外带通道几乎不可能穷举防御，能被外带的前提是数据先进入了上下文</strong>。</li>
 </ul>
@@ -8740,6 +8740,7 @@
 </tr>
 </tbody>
 </table>
+<p>模型请求本身不等于在线训练：凭据进入上下文主要带来本次复述、工具外传和日志留存风险，是否进入权重取决于后续数据使用流程。泄漏后应撤销或轮换凭据并审计使用记录，仅删除聊天记录不足以止损。</p>
 <p><strong>上线前应做的最小检查</strong>：</p>
 <ul>
 <li>传给模型上下文的任何字段，若不是完成当前任务所必需，就不应该出现在上下文里（凭据尤其如此）；</li>
@@ -8749,7 +8750,7 @@
 </ul>
 <h2 id="35">3.5 上线检查表<a class="headerlink" href="#35" title="Permanent link">&para;</a></h2>
 <ul>
-<li>[ ] 模型输出在拼接进 SQL/Shell/反序列化前，经过与用户输入同等强度的转义或参数化处理；</li>
+<li>[ ] SQL 使用参数化查询，Shell 避免字符串拼接，不反序列化不可信 Pickle；不存在一种「转义」能统一解决三类风险；</li>
 <li>[ ] 富文本/Markdown 渲染禁止自动加载未经域名白名单校验的外部资源；</li>
 <li>[ ] CSV/表格导出对公式前缀字符做转义；</li>
 <li>[ ] 输出中的链接经过域名白名单或安全网关跳转；</li>
@@ -8766,7 +8767,7 @@
 <h3 id="363">3.6.3 忽视图片、链接等隐蔽外带通道<a class="headerlink" href="#363" title="Permanent link">&para;</a></h3>
 <p>这是最容易被忽视但危害很大的一类问题，防御重点应放在限制上下文中的敏感数据和渲染层资源加载策略上。</p>
 <h3 id="364">3.6.4 把凭据透传给模型而不是在工具内部鉴权<a class="headerlink" href="#364" title="Permanent link">&para;</a></h3>
-<p>一旦凭据进入模型上下文，就有被外带、被记忆或被复述的风险，工具设计应让模型「看不到」凭据本身。</p>
+<p>一旦凭据进入模型上下文，就可能被复述、留存或外带；并不代表它会在此次推理中被写入模型权重。工具应在模型不可见的执行边界内使用凭据。</p>
 <h2 id="37">3.7 本章总结<a class="headerlink" href="#37" title="Permanent link">&para;</a></h2>
 <ol>
 <li>模型输出应被当作不可信内容处理，风险等级等同于任意用户输入，不能因为「是 AI 生成的」而放松校验；</li>
@@ -8781,7 +8782,7 @@
 <li><a href="https://genai.owasp.org/llmrisk/llm02-sensitive-information-disclosure/">OWASP LLM02:2025 Sensitive Information Disclosure</a></li>
 <li><a href="https://arxiv.org/abs/2410.14923">Imprompter: Tricking LLM Agents into Improper Tool Use</a></li>
 <li><a href="https://arxiv.org/abs/2302.12173">Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection</a></li>
-<li><a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10:2021 A03 Injection (CSV Injection background)</a></li>
+<li><a href="https://owasp.org/www-community/attacks/CSV_Injection">OWASP: CSV Injection</a></li>
 </ul>
 
 
@@ -8805,7 +8806,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

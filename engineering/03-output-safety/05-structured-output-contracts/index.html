@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="生产系统里的 LLM 输出很少是给人看的最终产物,更多情况下要被下一段程序解析——填进数据库字段、驱动一次 API 调用、拼进另一个 Prompt。自由文本生成天然带有格式不稳定的风险:同一个 Prompt 多次调用,模型可能这次输出 {&quot;amount&quot;: 100} ,下次输出 金额是100元 。 契约校验的作用…">
+        <meta name="description" content="区分工具调用、JSON 模式和严格结构化输出，处理拒绝、截断、类型校验与业务语义边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第五章：结构化输出与契约校验">
-    <meta property="og:description" content="生产系统里的 LLM 输出很少是给人看的最终产物,更多情况下要被下一段程序解析——填进数据库字段、驱动一次 API 调用、拼进另一个 Prompt。自由文本生成天然带有格式不稳定的风险:同一个 Prompt 多次调用,模型可能这次输出 {&quot;amount&quot;: 100} ,下次输出 金额是100元 。 契约校验的作用…">
+    <meta property="og:description" content="区分工具调用、JSON 模式和严格结构化输出，处理拒绝、截断、类型校验与业务语义边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第五章：结构化输出与契约校验">
-    <meta name="twitter:description" content="生产系统里的 LLM 输出很少是给人看的最终产物,更多情况下要被下一段程序解析——填进数据库字段、驱动一次 API 调用、拼进另一个 Prompt。自由文本生成天然带有格式不稳定的风险:同一个 Prompt 多次调用,模型可能这次输出 {&quot;amount&quot;: 100} ,下次输出 金额是100元 。 契约校验的作用…">
+    <meta name="twitter:description" content="区分工具调用、JSON 模式和严格结构化输出，处理拒绝、截断、类型校验与业务语义边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：结构化输出与契约校验","description":"生产系统里的 LLM 输出很少是给人看的最终产物,更多情况下要被下一段程序解析——填进数据库字段、驱动一次 API 调用、拼进另一个 Prompt。自由文本生成天然带有格式不稳定的风险:同一个 Prompt 多次调用,模型可能这次输出 {\"amount\": 100} ,下次输出 金额是100元 。 契约校验的作用…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：结构化输出与契约校验","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：结构化输出与契约校验","description":"区分工具调用、JSON 模式和严格结构化输出，处理拒绝、截断、类型校验与业务语义边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：结构化输出与契约校验","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"结构化输出与契约校验","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/03-output-safety/05-structured-output-contracts/"}]}</script>
     
@@ -7023,7 +7023,7 @@
         <li class="md-nav__item">
   <a href="#52" class="md-nav__link">
     <span class="md-ellipsis">
-      5.2 三层约束手段,强度依次递增
+      5.2 接口形式与约束强度要分开看
     </span>
   </a>
   
@@ -8414,7 +8414,7 @@
         <li class="md-nav__item">
   <a href="#52" class="md-nav__link">
     <span class="md-ellipsis">
-      5.2 三层约束手段,强度依次递增
+      5.2 接口形式与约束强度要分开看
     </span>
   </a>
   
@@ -8551,7 +8551,7 @@
 
 <h1 id="_1">第五章：结构化输出与契约校验<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="51">5.1 为什么下游系统不能直接消费自由文本<a class="headerlink" href="#51" title="Permanent link">&para;</a></h2>
-<p>生产系统里的 LLM 输出很少是给人看的最终产物,更多情况下要被下一段程序解析——填进数据库字段、驱动一次 API 调用、拼进另一个 Prompt。自由文本生成天然带有格式不稳定的风险:同一个 Prompt 多次调用,模型可能这次输出 <code>{"amount": 100}</code>,下次输出 <code>金额是100元</code>。<strong>契约校验的作用,是在模型输出和下游程序之间建立一层可验证的接口。</strong></p>
+<p>生产系统里的 LLM 输出既可能展示给人，也可能被程序解析——填进数据库字段、驱动一次 API 调用、拼进另一个 Prompt。自由文本生成天然带有格式不稳定的风险:同一个 Prompt 多次调用,模型可能这次输出 <code>{"amount": 100}</code>,下次输出 <code>金额是100元</code>。<strong>契约校验的作用,是在模型输出和下游程序之间建立一层可验证的接口。</strong></p>
 <pre class="mermaid"><code>flowchart LR
     P["Prompt"] --&gt; M["模型生成"]
     M --&gt; RAW["原始输出"]
@@ -8562,7 +8562,7 @@
     PARSE --&gt; DOWNSTREAM["下游程序消费"]
 
     style SCHEMA fill:#fff3cd</code></pre>
-<h2 id="52">5.2 三层约束手段,强度依次递增<a class="headerlink" href="#52" title="Permanent link">&para;</a></h2>
+<h2 id="52">5.2 接口形式与约束强度要分开看<a class="headerlink" href="#52" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -8578,35 +8578,43 @@
 <td>只是"建议",模型仍可能不遵守,尤其在长上下文或复杂任务里</td>
 </tr>
 <tr>
-<td><strong>Function Calling / Tool Use</strong></td>
-<td>中</td>
-<td>模型按声明的参数 Schema 生成调用参数,主流供应商原生支持,可靠性远高于纯文本描述</td>
+<td><strong>JSON mode</strong></td>
+<td>语法约束</td>
+<td>面向合法 JSON，不等于符合指定字段和类型的 Schema</td>
 </tr>
 <tr>
-<td><strong>约束解码(Structured Outputs)</strong></td>
-<td>强</td>
-<td>推理时直接约束 token 采样只能生成符合 JSON Schema 的序列,语法层面保证合法</td>
+<td><strong>Function Calling / Tool Use</strong></td>
+<td>取决于配置</td>
+<td>是生成工具参数的接口，不天然保证 Schema；严格工具调用也可以使用 Structured Outputs</td>
+</tr>
+<tr>
+<td><strong>严格结构化输出 / 约束解码</strong></td>
+<td>Schema 约束</td>
+<td>在模型、接口和 Schema 子集被支持且生成正常完成时约束输出结构</td>
 </tr>
 </tbody>
 </table>
-<p>OpenAI 的 <a href="https://platform.openai.com/docs/guides/structured-outputs">Structured Outputs</a> 和多数开源推理框架的 grammar-constrained decoding 都属于第三种——<strong>它保证输出一定是合法 JSON 且字段类型匹配 Schema,但不保证字段内容语义正确</strong>。这个区别很重要:约束解码解决的是"格式对不对",不解决"内容对不对",后者仍然要靠<a href="../../04-evaluation-observability/07-offline-eval-eval-driven-development/">第 7 章</a>的评测来兜底。</p>
+<p>OpenAI 的 <a href="https://platform.openai.com/docs/guides/structured-outputs">Structured Outputs</a> 可用于结构化回答，也可用于严格工具调用。<strong>先检查响应状态和拒绝信号，再解析完整对象</strong>：拒绝可能不符合业务 Schema，长度上限或中断可能留下不完整输出，未支持的 Schema 则可能在请求时被拒绝。约束解码不保证金额、币种或业务事实正确；可验证的语义应在运行时核对，离线评测衡量剩余错误率。</p>
 <h2 id="53-schema">5.3 用 Schema 做双重校验:生成时约束 + 接收后再验证<a class="headerlink" href="#53-schema" title="Permanent link">&para;</a></h2>
 <p>即使使用了约束解码,<strong>接收端仍然应该做一次独立的 Schema 校验</strong>,不能假设生成端一定生效:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">ValidationError</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">ValidationError</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">ExtractedOrder</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">amount_cents</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">"^[A-Z]</span><span class="si">{3}</span><span class="s2">$"</span><span class="p">)</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">parse_model_output</span><span class="p">(</span><span class="n">raw_json</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExtractedOrder</span><span class="p">:</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="k">return</span> <span class="n">ExtractedOrder</span><span class="o">.</span><span class="n">model_validate_json</span><span class="p">(</span><span class="n">raw_json</span><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="c1"># 记录校验失败详情,供修复策略和评测集回收使用</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="k">raise</span> <span class="n">ContractViolation</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">ContractViolation</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">pass</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">ExtractedOrder</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">"forbid"</span><span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">amount_cents</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">"^[A-Z]</span><span class="si">{3}</span><span class="s2">$"</span><span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">parse_model_output</span><span class="p">(</span><span class="n">raw_json</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExtractedOrder</span><span class="p">:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        <span class="k">return</span> <span class="n">ExtractedOrder</span><span class="o">.</span><span class="n">model_validate_json</span><span class="p">(</span><span class="n">raw_json</span><span class="p">)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="k">raise</span> <span class="n">ContractViolation</span><span class="p">(</span><span class="s2">"订单输出未通过契约校验"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span></code></pre></div>
-<p><strong>这不是重复劳动。</strong> 约束解码可能因为供应商版本差异、网关中间层的转换 bug、或流式响应被截断而失效,接收端校验是最后一道防线,也是<a href="../../04-evaluation-observability/08-online-observability-tracing/">第 8 章</a>统计"契约违反率"这个可观测性指标的数据来源。</p>
+<p>上例按 Pydantic v2 编写，禁止隐式类型转换和额外字段，但仍不保证币种真实存在、订单属于当前租户或金额等于账本。执行前还要查权威数据源并授权。异常链可能包含原始输入，日志不得自动全量序列化它。流式工具参数必须在完整接收并验证后才可执行。</p>
 <h2 id="54">5.4 契约要有版本号<a class="headerlink" href="#54" title="Permanent link">&para;</a></h2>
 <p>下游消费方和模型输出方对 Schema 的理解必须严格对齐,否则新增一个字段就可能让老版本的解析代码报错。契约应该像 API 一样版本化:</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
@@ -8617,7 +8625,7 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.94</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><code>schema_version</code> 让下游程序可以按版本分支处理,也是<a href="../../05-release-pipeline/09-prompt-model-data-versioning/">第 9 章</a> Prompt 版本管理里"改动 Prompt 输出格式必须同步升版本号"这条规则的落地方式——<strong>Prompt 和它期望的输出 Schema 应该被当作同一个可版本化的单元</strong>。</p>
+<p>请求配置决定预期的 <code>schema_version</code>，不能让模型声明任意版本后就选择更宽松的解析器。Prompt 与 Schema 分别编号、显式关联并一起发布。示例的 <code>confidence</code> 只是一个数值，不是经校准的正确概率，不能单独作为支付或自动审批依据。</p>
 <h2 id="55">5.5 修复策略:校验失败之后怎么办<a class="headerlink" href="#55" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -8635,8 +8643,8 @@
 </tr>
 <tr>
 <td><strong>把错误信息回填给模型再试一次</strong></td>
-<td>复杂 Schema、模型"几乎对了"</td>
-<td>需要额外一轮上下文,但成功率通常显著提升</td>
+<td>可定位的字段或类型错误</td>
+<td>增加调用、延迟与注入面，收益应在业务数据上测量</td>
 </tr>
 <tr>
 <td><strong>规则修复(如去除多余的 Markdown 代码块标记)</strong></td>
@@ -8662,12 +8670,15 @@
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>            <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">max_repairs</span><span class="p">:</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>                <span class="k">raise</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>            <span class="c1"># 把校验错误信息作为新一轮 Prompt 的一部分回填给模型</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>            <span class="n">raw_text</span> <span class="o">=</span> <span class="n">regenerate_with_error_context</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>            <span class="n">errors</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>                <span class="p">{</span><span class="s2">"loc"</span><span class="p">:</span> <span class="n">error</span><span class="p">[</span><span class="s2">"loc"</span><span class="p">],</span> <span class="s2">"type"</span><span class="p">:</span> <span class="n">error</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]}</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>                <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">errors</span><span class="p">(</span><span class="n">include_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_context</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>            <span class="p">]</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>            <span class="n">raw_text</span> <span class="o">=</span> <span class="n">regenerate_with_error_context</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="56">5.6 常见错误<a class="headerlink" href="#56" title="Permanent link">&para;</a></h2>
 <h3 id="561-prompt">5.6.1 只在 Prompt 里描述格式,不做任何程序化校验<a class="headerlink" href="#561-prompt" title="Permanent link">&para;</a></h3>
-<p>"请用 JSON 格式回答"这句话不是契约,只是建议。生产系统必须有 5.2 节里中等或更强约束的手段,并且接收端仍要校验。</p>
+<p>"请用 JSON 格式回答"不是可执行的契约。程序消费场景应按接口能力选择严格结构化输出，并保留接收端校验及拒绝、截断处理。</p>
 <h3 id="562-100">5.6.2 假设约束解码 100% 可靠,省略接收端校验<a class="headerlink" href="#562-100" title="Permanent link">&para;</a></h3>
 <p>约束解码可能因为网关转换、流式截断等原因失效,接收端校验是最后一道防线,不能省略。</p>
 <h3 id="563-schema">5.6.3 Schema 变更没有版本号<a class="headerlink" href="#563-schema" title="Permanent link">&para;</a></h3>
@@ -8675,11 +8686,11 @@
 <h3 id="564">5.6.4 校验失败后无脑原样重试<a class="headerlink" href="#564" title="Permanent link">&para;</a></h3>
 <p>同样的 Prompt 大概率产生同样的错误。更有效的做法是把错误信息回填给模型,或者切换到修复策略里更强的手段。</p>
 <h3 id="565">5.6.5 混淆"格式正确"和"内容正确"<a class="headerlink" href="#565" title="Permanent link">&para;</a></h3>
-<p>约束解码只保证 JSON 合法、字段类型匹配,不保证提取的金额、日期语义正确。内容正确性要靠评测(第 7 章),不能靠 Schema 校验代替。</p>
+<p>合法 JSON 不是授权证明。金额、日期、资源归属等可验证条件，应由服务端执行前核对；评测不能替代每一次交易的业务校验。规则修复只适合无歧义格式变化，不应猜测并更改金额等业务值。</p>
 <h2 id="57">5.7 本章总结<a class="headerlink" href="#57" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>自由文本不能被下游程序直接消费</strong>,契约校验是模型输出和下游系统之间的必要接口层;</li>
-<li><strong>三层约束手段强度递增</strong>:Prompt 描述(弱)→ Function Calling(中)→ 约束解码(强),生产系统应优先选择更强的手段;</li>
+<li><strong>工具调用是接口形式，不是固定的约束等级</strong>；JSON 语法约束与严格 Schema 约束要区分;</li>
 <li><strong>约束解码解决格式问题,不解决内容语义问题</strong>,两者需要不同的机制兜底;</li>
 <li><strong>接收端必须独立做 Schema 校验</strong>,不能假设生成端一定按约束生效;</li>
 <li><strong>契约需要版本号</strong>,Prompt 和它对应的输出 Schema 应作为同一个可版本化单元管理;</li>
@@ -8715,7 +8726,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

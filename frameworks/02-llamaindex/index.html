@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="相较于把重点放在模型与工具的统一调度，LlamaIndex 更关注私有数据如何整理成模型可用的高质量上下文。它把数据连接、切分、索引、查询引擎和事件驱动 Workflows 串成一条以数据为中心的编排链路">
+        <meta name="description" content="从数据摄取、索引与查询路由理解 LlamaIndex，再分析 Workflows 的共享状态、并发和可靠恢复边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="框架与编排 · LlamaIndex 生态">
-    <meta property="og:description" content="相较于把重点放在模型与工具的统一调度，LlamaIndex 更关注私有数据如何整理成模型可用的高质量上下文。它把数据连接、切分、索引、查询引擎和事件驱动 Workflows 串成一条以数据为中心的编排链路">
+    <meta property="og:description" content="从数据摄取、索引与查询路由理解 LlamaIndex，再分析 Workflows 的共享状态、并发和可靠恢复边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="框架与编排 · LlamaIndex 生态">
-    <meta name="twitter:description" content="相较于把重点放在模型与工具的统一调度，LlamaIndex 更关注私有数据如何整理成模型可用的高质量上下文。它把数据连接、切分、索引、查询引擎和事件驱动 Workflows 串成一条以数据为中心的编排链路">
+    <meta name="twitter:description" content="从数据摄取、索引与查询路由理解 LlamaIndex，再分析 Workflows 的共享状态、并发和可靠恢复边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · LlamaIndex 生态","description":"相较于把重点放在模型与工具的统一调度，LlamaIndex 更关注私有数据如何整理成模型可用的高质量上下文。它把数据连接、切分、索引、查询引擎和事件驱动 Workflows 串成一条以数据为中心的编排链路","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · LlamaIndex 生态","description":"从数据摄取、索引与查询路由理解 LlamaIndex，再分析 Workflows 的共享状态、并发和可靠恢复边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/02-llamaindex/"}]}</script>
     
@@ -8290,6 +8290,7 @@
 
 <h1 id="llamaindex">框架与编排 · LlamaIndex 生态<a class="headerlink" href="#llamaindex" title="Permanent link">&para;</a></h1>
 <p>相较于把重点放在模型与工具的统一调度，LlamaIndex 更关注私有数据如何整理成模型可用的高质量上下文。它把数据连接、切分、索引、查询引擎和事件驱动 Workflows 串成一条以数据为中心的编排链路。</p>
+<p>这不是与其他框架的排他分工。当前 <a href="https://developers.llamaindex.ai/python/llamaagents/workflows/">Workflows 官方文档</a> 使用独立 <code>workflows</code> 命名空间，支持共享 Context 和类型化状态；事件驱动不等于无状态，序列化也不等于默认自动恢复。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="14-data-index-abstractions/">第十四章：LlamaIndex 的数据与索引抽象</a></li>
@@ -8299,15 +8300,17 @@
 <pre class="mermaid"><code>flowchart LR
     A[数据接入&lt;br/&gt;Document / Node] --&gt; B[索引&lt;br/&gt;VectorStoreIndex 等]
     B --&gt; C[查询引擎&lt;br/&gt;Query Engine / Router]
-    C --&gt; D[Workflows&lt;br/&gt;事件驱动编排]
+    C --&gt; D[Workflows&lt;br/&gt;Event + Context 状态]
     D -.可被包装为 Tool.-&gt; E[LangChain / 其他框架的 Agent]</code></pre>
 <h2 id="_3">阅读建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li>建议先读第十四章，了解数据如何变成可检索结构；再读第十五章，看这些结构如何被用于回答问题和多步流程；</li>
 <li>如果想和 LangChain 对照，两章正文都标注了与 <code>docs/frameworks/01-langchain</code> 对应章节的抽象差异，适合交替阅读；</li>
 <li>如果主要关心状态机与事件驱动的区别，可直接看第十五章 15.3 节，再跳转 <a href="../06-selection-portability/">框架选型与可移植架构</a> 的统一对照表。</li>
+<li>准备技术讨论时，尝试解释文档更新后如何删除旧节点、为何换向量库仍需回归，以及检查点恢复后怎样防止工具重复提交。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8330,7 +8333,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

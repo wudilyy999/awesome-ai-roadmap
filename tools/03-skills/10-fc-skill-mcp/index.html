@@ -77,7 +77,7 @@
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：Function Calling、MCP、Skill 三者关系","description":"从模型输出、任务知识和外部能力连接三个层次比较 Function Calling、Skill 与 MCP，并说明三者如何组合。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/10-fc-skill-mcp/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：Function Calling、MCP、Skill 三者关系","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/10-fc-skill-mcp/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：Function Calling、MCP、Skill 三者关系","description":"从模型输出、任务知识和外部能力连接三个层次比较 Function Calling、Skill 与 MCP，并说明三者如何组合。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/10-fc-skill-mcp/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：Function Calling、MCP、Skill 三者关系","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/10-fc-skill-mcp/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Function Calling、MCP、Skill","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/03-skills/10-fc-skill-mcp/"}]}</script>
     
@@ -2981,7 +2981,7 @@
           <li class="md-nav__item">
   <a href="#1011" class="md-nav__link">
     <span class="md-ellipsis">
-      10.1.1 时间线解释了这个分层
+      10.1.1 代表性发布节点不等于依赖关系
     </span>
   </a>
   
@@ -3004,7 +3004,7 @@
         <li class="md-nav__item">
   <a href="#103" class="md-nav__link">
     <span class="md-ellipsis">
-      10.3 层级依赖是单向的
+      10.3 组合关系不是强制依赖
     </span>
   </a>
   
@@ -3013,7 +3013,7 @@
         <li class="md-nav__item">
   <a href="#104" class="md-nav__link">
     <span class="md-ellipsis">
-      10.4 做菜类比
+      10.4 三种边界，三种不同的失败
     </span>
   </a>
   
@@ -8436,7 +8436,7 @@
           <li class="md-nav__item">
   <a href="#1011" class="md-nav__link">
     <span class="md-ellipsis">
-      10.1.1 时间线解释了这个分层
+      10.1.1 代表性发布节点不等于依赖关系
     </span>
   </a>
   
@@ -8459,7 +8459,7 @@
         <li class="md-nav__item">
   <a href="#103" class="md-nav__link">
     <span class="md-ellipsis">
-      10.3 层级依赖是单向的
+      10.3 组合关系不是强制依赖
     </span>
   </a>
   
@@ -8468,7 +8468,7 @@
         <li class="md-nav__item">
   <a href="#104" class="md-nav__link">
     <span class="md-ellipsis">
-      10.4 做菜类比
+      10.4 三种边界，三种不同的失败
     </span>
   </a>
   
@@ -8597,7 +8597,7 @@
 <h1 id="function-callingmcpskill">第十章：Function Calling、MCP、Skill 三者关系<a class="headerlink" href="#function-callingmcpskill" title="Permanent link">&para;</a></h1>
 <h2 id="101">10.1 为什么会有三个概念<a class="headerlink" href="#101" title="Permanent link">&para;</a></h2>
 <p>最典型的误解是把这三个当成「不同厂商在不同时期推出的竞争方案，选一个用就行」。</p>
-<p>实际上它们是<strong>从底到顶的三层</strong>，每一层建立在下一层之上。</p>
+<p>它们是<strong>可组合的三种接口与内容机制</strong>，不是必须逐层依赖的技术栈。</p>
 <p>可以先看<strong>每句话的主语是谁</strong>：</p>
 <table>
 <thead>
@@ -8626,13 +8626,13 @@
 </tbody>
 </table>
 <p>主语不同、对话对象不同、粒度不同——这就是三者的本质差异。</p>
-<h3 id="1011">10.1.1 时间线解释了这个分层<a class="headerlink" href="#1011" title="Permanent link">&para;</a></h3>
+<h3 id="1011">10.1.1 代表性发布节点不等于依赖关系<a class="headerlink" href="#1011" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>timeline
-    title 三层能力的演进
+    title 三种机制的代表性发布时间
     2023 : Function Calling : 问题「模型只会生成文本&lt;br/&gt;怎么让它触发外部调用」
     2024 : MCP : 问题「每个应用都在重复&lt;br/&gt;写对接各种工具的代码」
     2025 : Agent Skill : 问题「工具有了&lt;br/&gt;但 Agent 不知道该按什么流程用」</code></pre>
-<p>每一层都是在<strong>上一层普及之后暴露出的新痛点</strong>上诞生的：</p>
+<p>这条时间线指 OpenAI Function Calling、MCP 和 Anthropic Agent Skills 的发布节点，不是工具调用、接口标准化或流程复用思想的起源。三者分别处理：</p>
 <ul>
 <li>Function Calling 解决<strong>调用协议</strong>问题：模型和程序之间需要一套结构化的表达方式；</li>
 <li>它普及后，重复对接的痛点浮现——每个应用都要给数据库写一套、文件系统写一套、API 再写一套。MCP 把工具接入<strong>标准化</strong>，一次实现到处复用；</li>
@@ -8655,8 +8655,8 @@
         MODEL[模型] &lt;--&gt;|"tool_calls JSON&lt;br/&gt;tool 消息回填"| HOST[宿主程序]
     end
 
-    L3 --&gt;|"流程中需要调工具"| L2
-    L2 --&gt;|"工具定义转成 FC 格式&lt;br/&gt;调用结果回传"| L1
+    L3 -.-&gt;|"可选：流程中使用 MCP"| L2
+    L2 -.-&gt;|"可选：Host 转成 FC 格式&lt;br/&gt;并回传结果"| L1
 
     style L3 fill:#e6f4ea
     style L2 fill:#e8f0fe
@@ -8692,51 +8692,53 @@
 </tbody>
 </table>
 <p>注意粒度的跨度：「查询订单表」是一个 <strong>MCP 工具</strong>，「代码审查」「数据分析报告」是一个 <strong>Skill</strong>——一个 Skill 内部可能有好几个步骤，每步可调用多个 MCP 工具；由 LLM 驱动时，常以 Function Calling 或结构化输出表达调用意图。</p>
-<h2 id="103">10.3 层级依赖是单向的<a class="headerlink" href="#103" title="Permanent link">&para;</a></h2>
-<p>三者不只是「分层」，而且有<strong>明确的依赖方向</strong>：</p>
+<h2 id="103">10.3 组合关系不是强制依赖<a class="headerlink" href="#103" title="Permanent link">&para;</a></h2>
+<p>可以用反例检查是否混淆了职责：</p>
 <pre class="mermaid"><code>flowchart TB
-    S["Skill&lt;br/&gt;定义流程"] --&gt;|依赖| M["MCP&lt;br/&gt;提供工具"]
-    M --&gt;|依赖| F["Function Calling&lt;br/&gt;触发调用"]
-    F --&gt;|依赖| LLM["模型的工具调用能力"]
+    S["Skill&lt;br/&gt;定义流程"] --&gt; H["Host / Agent&lt;br/&gt;选择与执行"]
+    H --&gt; M["MCP Client&lt;br/&gt;调用 Server"]
+    H --&gt; LOCAL["本地函数 / CLI / API"]
+    F["Function Calling&lt;br/&gt;模型提出调用"] --&gt; H
+    RULE["规则工作流 / 人工操作"] --&gt; H
 
     style S fill:#e6f4ea
     style M fill:#e8f0fe
     style F fill:#fef7e0</code></pre>
-<p>为什么是这个方向：</p>
+<p>这些路径都能成立：</p>
 <ul>
-<li><strong>Function Calling 在最底层</strong>，因为它是模型触发调用的「语言」。没有它，模型无法告诉外部「我要调什么、传什么参数」，上层一切能力都无从谈起；</li>
+<li><strong>没有原生 Function Calling</strong>，Host 仍可用结构化文本、规则或人工选择触发工具；区别在可靠性和适配成本；</li>
 <li><strong>MCP 可与 Function Calling 配合</strong>：许多 Host 会把 MCP Tool 转成模型 schema，但 MCP 不强制这条适配路径。<a href="../../02-mcp/06-mcp-vs-function-calling/">第六章</a> 详细拆过这条时序链；</li>
 <li><strong>Skill 依赖可执行能力而非特定协议</strong>：执行中可使用 MCP、内嵌函数或其他受控集成。</li>
 </ul>
-<p>反过来则不成立：<strong>只有 Function Calling 也能工作</strong>（把工具定义硬编码在应用里），<strong>只有 FC + MCP 也能工作</strong>（模型自己临场决定怎么用工具）。Skill 是最上层的增强，不是必需品。</p>
-<h2 id="104">10.4 做菜类比<a class="headerlink" href="#104" title="Permanent link">&para;</a></h2>
+<p>仅有 Function Calling 加执行器就能工作；确定性程序也能单独用 MCP；纯写作 Skill 可以不调任何外部工具。三者都不是另外两者成立的必要条件。</p>
+<h2 id="104">10.4 三种边界，三种不同的失败<a class="headerlink" href="#104" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th></th>
-<th>类比</th>
-<th>缺了它会怎样</th>
+<th>边界</th>
+<th>典型失败</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Function Calling</strong></td>
-<td>你的<strong>手</strong></td>
-<td>站在厨房里拿着菜谱，连刀都拿不起来</td>
+<td>模型提议 → 应用执行</td>
+<td>工具选错、参数语义错、未授权调用</td>
 </tr>
 <tr>
 <td><strong>MCP</strong></td>
-<td>你的<strong>厨房</strong></td>
-<td>有手有菜谱，但家里什么厨具食材都没有</td>
+<td>Client → Server</td>
+<td>版本不兼容、认证失败、超时后结果未知</td>
 </tr>
 <tr>
 <td><strong>Skill</strong></td>
-<td>那份<strong>菜谱</strong></td>
-<td>有手有厨具，但面对一桌食材不知道先切什么后炒什么</td>
+<td>可复用知识 → 当前任务上下文</td>
+<td>错误触发、过时指令、脚本依赖缺失</td>
 </tr>
 </tbody>
 </table>
-<p>这个类比也说明了<strong>为什么它们不能互相替代</strong>：手不能变成厨房，厨房也不能代替菜谱。</p>
+<p>“参数是合法 JSON”“Server 能连接”“Skill 已加载”分别只证明一个环节通过，不能证明整个任务完成。</p>
 <h2 id="105">10.5 一个完整场景串起三层<a class="headerlink" href="#105" title="Permanent link">&para;</a></h2>
 <p>用户说：<strong>「帮我分析最近三个月的销售数据，找出下滑的产品线，给改进建议。」</strong></p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -8775,36 +8777,34 @@
     A--&gt;&gt;U: 返回报告</code></pre>
 <p>放到这个流程里看，三层分工分别是：</p>
 <ul>
-<li><strong>Skill 做流程编排</strong>——决定「先取数、再分析、最后按模板成文」，以及每步的标准（比如「下滑幅度超过 15% 才算显著」）；</li>
+<li><strong>Skill 指导流程</strong>——说明先取数、再分析、最后按模板成文。业务告警阈值需声明由谁制定，不能把任意百分比叫作统计显著；</li>
 <li><strong>MCP 做工具管理</strong>——Client 已经连着数据库 Server 和 Python 执行器 Server，工具列表自动可见，不需要在应用里写死；</li>
 <li><strong>Function Calling 做模型与工具的通信</strong>——每一次 <code>tool_calls</code> 输出和 <code>tool</code> 消息回填。</li>
 </ul>
+<p>Host 还需验证用户可访问的销售范围、限制 SQL、隔离 Python 执行器，并保留数据时间与来源。MCP 2026-07-28、Agent Skills 文件格式和模型工具 API 的版本分别管理；任何一层升级都要回归这条完整链路。</p>
 <h2 id="106">10.6 常见错误<a class="headerlink" href="#106" title="Permanent link">&para;</a></h2>
 <h3 id="1061">10.6.1 当成三个竞争方案<a class="headerlink" href="#1061" title="Permanent link">&para;</a></h3>
-<p>这是最常见的误解。它们是三层架构，同一个系统里通常三者同时存在。</p>
+<p>它们可以共同出现，也可以单独使用；先明确要解决的是模型输出、能力接入还是流程复用。</p>
 <h3 id="1062">10.6.2 说不清依赖方向<a class="headerlink" href="#1062" title="Permanent link">&para;</a></h3>
 <p>更准确的关系是：Skill 编排能力；MCP 标准化一部分能力接入；Function Calling 是模型选择工具时常见的表达层。三者可组合，不构成强制的单向依赖。</p>
 <h3 id="1063">10.6.3 认为三者缺一不可<a class="headerlink" href="#1063" title="Permanent link">&para;</a></h3>
-<p>上一节的类比容易造成这个印象，但<strong>只有 Function Calling 完全可以工作</strong>——工具定义硬编码在应用里就行。MCP 解决的是复用成本，Skill 解决的是流程稳定性，都是随规模增长才出现的问题。小项目直接用 FC 是合理选择。</p>
+<p>任何一项缺失都可有其他实现路径。小项目也可能需要标准化或流程复用，不能只按项目大小决定。</p>
 <h3 id="1064">10.6.4 混淆粒度<a class="headerlink" href="#1064" title="Permanent link">&para;</a></h3>
-<p>一个 Skill ≠ 一个工具。Skill 的粒度是「一类完整任务」，内部会调用多个工具、经历多轮 Function Calling。</p>
+<p>一个 Skill 不等于一个工具。它可描述整类任务，也可只组织写作标准；是否调用工具、调用几次不是格式规定。</p>
 <h3 id="1065-mcp-anthropic-function-calling">10.6.5 把 MCP 说成「Anthropic 版的 Function Calling」<a class="headerlink" href="#1065-mcp-anthropic-function-calling" title="Permanent link">&para;</a></h3>
 <p>MCP 不是 FC 的替代实现，也不建立在 FC 之上。同一个 MCP Server 可以服务不同 Host；当 Host 使用模型工具接口时，可将工具定义翻译成各家的 FC schema，也可采用其他调用路径。</p>
 <h3 id="1066">10.6.6 只背概念不讲协作<a class="headerlink" href="#1066" title="Permanent link">&para;</a></h3>
 <p>如果要向别人解释这三者，拿一个具体场景把三层串起来，通常比分别背三段定义更能说明问题。</p>
 <h2 id="107">10.7 本章总结<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>三者是从底到顶的三层，不是竞争方案</strong>；</li>
+<li><strong>三者是可组合机制，不是强制依赖栈</strong>；</li>
 <li><strong>主语法可以快速区分</strong>：模型说「我要调」、服务说「我能提供」、手册说「按这个流程做」；</li>
-<li><strong>演进逻辑清晰</strong>：调用协议 → 接入标准化 → 流程复用，每层都是上一层普及后的新痛点；</li>
-<li><strong>可组合而非强制依赖</strong>：Skill 可编排 MCP 或其他能力；MCP Tool 可由 Function Calling、结构化输出或确定性流程触发；</li>
+<li><strong>发布时间不证明依赖</strong>，这几类问题和方法在具体产品发布前已经存在；</li>
+<li><strong>Host 可按 Skill 编排 MCP 或其他能力</strong>；MCP Tool 可由模型提议或确定性流程触发，执行前仍需校验；</li>
 <li><strong>粒度跨度大</strong>：一次调用 / 一个工具 / 一类完整任务；</li>
 <li><strong>不是缺一不可</strong>：只有 FC 也能工作，MCP 和 Skill 解决的是规模化之后的成本与稳定性问题；</li>
-<li><strong>答题要用完整场景串三层</strong>，比分别给三段定义有说服力得多。</li>
+<li><strong>完整调用链要包含授权、失败恢复与结果证据</strong>，不能只画成功路径。</li>
 </ol>
-<blockquote>
-<p><strong>可以把它们记成三层：Function Calling 是语言，MCP 是工具箱，Skill 是操作手册；能不能调用、能调用什么、该怎么调用，分别落在这三层。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://platform.openai.com/docs/guides/function-calling">OpenAI: Function Calling 指南</a></li>
@@ -8836,7 +8836,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

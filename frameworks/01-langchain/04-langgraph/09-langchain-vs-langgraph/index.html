@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="只按功能多少来比较这两个框架，很容易忽略它们是 上下层关系">
+        <meta name="description" content="区分 LangChain 高层 Agent 与 LangGraph 图编排的依赖和控制粒度，解释状态合并、持久化及渐进组合的边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第九章：LangChain 与 LangGraph 的层次关系">
-    <meta property="og:description" content="只按功能多少来比较这两个框架，很容易忽略它们是 上下层关系">
+    <meta property="og:description" content="区分 LangChain 高层 Agent 与 LangGraph 图编排的依赖和控制粒度，解释状态合并、持久化及渐进组合的边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第九章：LangChain 与 LangGraph 的层次关系">
-    <meta name="twitter:description" content="只按功能多少来比较这两个框架，很容易忽略它们是 上下层关系">
+    <meta name="twitter:description" content="区分 LangChain 高层 Agent 与 LangGraph 图编排的依赖和控制粒度，解释状态合并、持久化及渐进组合的边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：LangChain 与 LangGraph 的层次关系","description":"只按功能多少来比较这两个框架，很容易忽略它们是 上下层关系","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：LangChain 与 LangGraph 的层次关系","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：LangChain 与 LangGraph 的层次关系","description":"区分 LangChain 高层 Agent 与 LangGraph 图编排的依赖和控制粒度，解释状态合并、持久化及渐进组合的边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：LangChain 与 LangGraph 的层次关系","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"LangChain 与 LangGraph","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/"}]}</script>
     
@@ -9008,7 +9008,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>LangGraph 可以使用 LangChain 的模型和工具组件，但并不强制依赖 LangChain</strong>，也可以直接接其他模型 SDK 或普通 Python 函数。</p>
+<p><strong>LangGraph 不要求使用高层 <code>langchain</code> 包或它的模型包装器</strong>，可以直接接其他模型 SDK 或普通 Python 函数。但 Python <code>langgraph</code> 包依赖 <code>langchain-core</code> 等基础库；「可独立使用」不等于依赖树完全没有 LangChain 生态组件。</p>
 <h3 id="911">9.1.1 关键的层次关系<a class="headerlink" href="#911" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
     A["LangChain 高层 Agent API&lt;br/&gt;create_agent"] --&gt; B["编译后的 LangGraph"]
@@ -9202,6 +9202,7 @@
 <blockquote>
 <p><strong>这段代码不是在把 LangChain「迁移」成 LangGraph，而是在正确分工。</strong> 内部研究 Agent 继续享受高层抽象，外部业务流程则获得显式路由。</p>
 </blockquote>
+<p>这是需提供 <code>research_model</code> 和 <code>search_tool</code> 的组装片段；字符串匹配只演示路由，不是安全策略或提示注入防护。生产授权应基于可信身份、动作和资源执行。子图直接作为节点时，父子共享的消息字段沿 reducer 合并；状态结构不同则需要 wrapper 显式转换，不能假设任意两个图都可以直接拼接。</p>
 <h2 id="95-state">9.5 State：默认状态与自由建模<a class="headerlink" href="#95-state" title="Permanent link">&para;</a></h2>
 <p>Agent 需要状态，是因为模型调用、工具结果、人工意见和中间产物不能只靠函数局部变量一直传下去。</p>
 <table>
@@ -9224,7 +9225,7 @@
 </table>
 <h3 id="951-reducer">9.5.1 为什么需要 reducer<a class="headerlink" href="#951-reducer" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p><strong>假如多个研究节点同时写入 <code>evidence</code>，我们希望追加结果，而不是让后写入的结果覆盖前一份证据。</strong></p>
+<p><strong>假如多个研究节点同时写入 <code>evidence</code>，我们希望合并证据；默认单值通道收到同一 super-step 的多个更新会报错，并不是最后写入者获胜。</strong></p>
 <p><strong>合并语义必须在 State 中提前定义。</strong></p>
 </blockquote>
 <p><strong>这不是说 LangChain 没有 State</strong>——它的 Agent State 就运行在 LangGraph 上。区别在于：用 LangChain 时通常接受一套<strong>为标准 Agent loop 设计好的状态骨架</strong>；直接用 LangGraph 时，你要为整个业务工作流<strong>设计数据通道和更新规则</strong>，也因此拥有更大的自由度和责任。</p>
@@ -9359,7 +9360,7 @@
 <h3 id="9115-middleware">9.11.5 把 middleware 当成独立运行时<a class="headerlink" href="#9115-middleware" title="Permanent link">&para;</a></h3>
 <p><strong>它跑在编译图内部。</strong></p>
 <h3 id="9116-langgraph-reducer">9.11.6 用 LangGraph 却不定义 reducer<a class="headerlink" href="#9116-langgraph-reducer" title="Permanent link">&para;</a></h3>
-<p><strong>并行写入同一字段会互相覆盖</strong>，合并语义必须提前定义。</p>
+<p>默认单值通道会因同一步多个更新抛出 <code>InvalidUpdateError</code>。可为合并结果定义 reducer，或让分支写不同字段；<code>add_messages</code> 按消息 ID 更新/追加，也不等同于无条件列表拼接。</p>
 <h3 id="9117-durable-execution">9.11.7 以为 durable execution 就是把状态存进数据库<a class="headerlink" href="#9117-durable-execution" title="Permanent link">&para;</a></h3>
 <p><strong>恢复时重跑扣款和发邮件照样出事故</strong>，副作用必须放进任务边界并保证幂等。</p>
 <h3 id="9118-langsmith-langgraph">9.11.8 把 LangSmith 当成 LangGraph 专属<a class="headerlink" href="#9118-langsmith-langgraph" title="Permanent link">&para;</a></h3>
@@ -9383,9 +9384,7 @@
 <li><strong>LangSmith 不是 LangGraph 专属</strong>，部署选择与抽象选择要分开；</li>
 <li><strong>推荐路线是渐进式组合</strong>：先 LangChain 做出可用 Agent，业务拓扑变复杂时把它作为节点或子图嵌入 LangGraph。</li>
 </ol>
-<blockquote>
-<p>可以把两者的关系记成这样：LangChain 负责高层 Agent 入口和标准模型/工具循环，LangGraph 负责更细粒度的状态与流程控制。多数真实项目会先用 LangChain 构建 Agent，再按需要把它嵌进 LangGraph 的业务流程里。</p>
-</blockquote>
+<p>LangChain 负责高层 Agent 入口和标准模型/工具循环，LangGraph 负责更细粒度的状态与流程控制。可以先构建一个 Agent，再按需要组合进业务图；这是一条迁移路径，不是对所有项目架构的统计结论。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain 官方文档</a></li>
@@ -9397,6 +9396,8 @@
 <li><a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph 持久化文档</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/interrupts">LangGraph: Human-in-the-loop</a></li>
 <li><a href="https://docs.langchain.com/langsmith/observability">LangSmith 官方文档</a></li>
+<li><a href="https://github.com/langchain-ai/langgraph/blob/main/libs/langgraph/pyproject.toml">LangGraph Python 包依赖声明</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE">LangGraph 并行状态更新错误</a></li>
 </ul>
 
 
@@ -9420,7 +9421,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

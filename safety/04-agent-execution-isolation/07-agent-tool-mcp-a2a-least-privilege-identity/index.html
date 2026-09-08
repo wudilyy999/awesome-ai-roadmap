@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Tool Protocol 安全 已经讲清楚了 MCP/A2A 协议层面的具体控制——OAuth 2.1、PKCE、audience 校验、禁止 token passthrough。这些是 单次调用、单个协议 的正确姿势。但当一个组织同时运行几十上百个 Agent、数百个工具/MCP Server，并且这些 Ag…">
+        <meta name="description" content="区分 Agent 工作负载与用户委托身份，用受验证的令牌、动作绑定审批和逐跳授权限制权限放大。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第七章：Agent、Tool、MCP、A2A 最小权限与身份治理">
-    <meta property="og:description" content="Tool Protocol 安全 已经讲清楚了 MCP/A2A 协议层面的具体控制——OAuth 2.1、PKCE、audience 校验、禁止 token passthrough。这些是 单次调用、单个协议 的正确姿势。但当一个组织同时运行几十上百个 Agent、数百个工具/MCP Server，并且这些 Ag…">
+    <meta property="og:description" content="区分 Agent 工作负载与用户委托身份，用受验证的令牌、动作绑定审批和逐跳授权限制权限放大。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第七章：Agent、Tool、MCP、A2A 最小权限与身份治理">
-    <meta name="twitter:description" content="Tool Protocol 安全 已经讲清楚了 MCP/A2A 协议层面的具体控制——OAuth 2.1、PKCE、audience 校验、禁止 token passthrough。这些是 单次调用、单个协议 的正确姿势。但当一个组织同时运行几十上百个 Agent、数百个工具/MCP Server，并且这些 Ag…">
+    <meta name="twitter:description" content="区分 Agent 工作负载与用户委托身份，用受验证的令牌、动作绑定审批和逐跳授权限制权限放大。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第七章：Agent、Tool、MCP、A2A 最小权限与身份治理","description":"Tool Protocol 安全 已经讲清楚了 MCP/A2A 协议层面的具体控制——OAuth 2.1、PKCE、audience 校验、禁止 token passthrough。这些是 单次调用、单个协议 的正确姿势。但当一个组织同时运行几十上百个 Agent、数百个工具/MCP Server，并且这些 Ag…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第七章：Agent、Tool、MCP、A2A 最小权限与身份治理","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第七章：Agent、Tool、MCP、A2A 最小权限与身份治理","description":"区分 Agent 工作负载与用户委托身份，用受验证的令牌、动作绑定审批和逐跳授权限制权限放大。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第七章：Agent、Tool、MCP、A2A 最小权限与身份治理","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"最小权限与身份治理","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/"}]}</script>
     
@@ -8578,7 +8578,7 @@
 
 <h1 id="agenttoolmcpa2a">第七章：Agent、Tool、MCP、A2A 最小权限与身份治理<a class="headerlink" href="#agenttoolmcpa2a" title="Permanent link">&para;</a></h1>
 <h2 id="71">7.1 本章的定位：从单个协议到组织级身份治理<a class="headerlink" href="#71" title="Permanent link">&para;</a></h2>
-<p><a href="../../../tools/02-mcp/15-tool-protocol-security/">Tool Protocol 安全</a> 已经讲清楚了 MCP/A2A 协议层面的具体控制——OAuth 2.1、PKCE、audience 校验、禁止 token passthrough。这些是<strong>单次调用、单个协议</strong>的正确姿势。但当一个组织同时运行几十上百个 Agent、数百个工具/MCP Server，并且这些 Agent 彼此调用、共享凭据池时，会出现协议层控制无法单独解决的问题：<strong>谁能代表谁行动？权限是怎么在一条委托链上传递和衰减的？整个 Agent 舰队的工具权限该由谁审批、怎么审计？</strong> 规模一上来，问题就变成<strong>跨系统的身份联邦、通用化的 confused deputy 模式，以及舰队级的权限治理</strong>，而不是重复某一个协议的实现细节。</p>
+<p><a href="../../../tools/02-mcp/15-tool-protocol-security/">Tool Protocol 安全</a> 讨论认证、令牌受众和协议边界。本章关注跨系统的三个问题：谁能代表谁行动、权限如何在委托链上收紧、工具接入和撤权由谁负责。即使每个接口单独符合其协议，也不能证明整条委托链没有越权。</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph L1["协议层（见 Tool Protocol 安全）"]
         OAUTH[OAuth 2.1 / PKCE / audience]
@@ -8591,8 +8591,9 @@
         POL --&gt; AUDIT[舰队级审计]
     end
     L1 --&gt; L2 --&gt; L3</code></pre>
+<p>MCP 与 A2A 不共享一套完全相同的授权规范。本章引用的 MCP 2026-07-28 授权规范针对 HTTP 传输，引用 OAuth 2.1 草案；STDIO 的凭据处理不同。A2A 的具体认证方案需核对其规范和服务配置，不能把 MCP 的每条要求直接套过去。</p>
 <h2 id="72-agent">7.2 Agent 的身份模型：谁在代表谁<a class="headerlink" href="#72-agent" title="Permanent link">&para;</a></h2>
-<p>传统应用只有"用户身份"和"服务身份"两种。Agent 系统引入了第三种：<strong>Agent 自身的身份</strong>，它既不完全等同于触发它的用户，也不完全等同于运行它的服务账号。</p>
+<p>传统系统早已有用户、服务、设备与委托身份，Agent 不天然创造一种新的密码学身份。工程上应区分谁运行 Agent（工作负载）、谁发起任务（用户或自动任务主体）、谁授权动作，以及执行中的 Agent/任务 ID。后两者常是审计属性，不应直接替代可验证的主体凭据。</p>
 <table>
 <thead>
 <tr>
@@ -8636,10 +8637,11 @@
 </ul>
 <p><strong>通用防御原则</strong>：</p>
 <ol>
-<li><strong>权限不应该在委托链中被放大，只能收紧</strong>——下游收到的有效权限应该是"发起者权限"和"每一跳自身权限"的交集，而不是取任意一跳的最大值；</li>
-<li><strong>凭据应该携带"代表谁"的声明</strong>（如 OAuth 的 <code>act_as</code>/<code>on_behalf_of</code> 模式或等价的委托声明），资源服务器基于这个声明而不是"谁在直接调用我"做授权决策；</li>
-<li><strong>不做隐式信任传递</strong>：一个组件被认证过，不代表它请求的下一跳操作也应该被自动信任，每一跳都要重新校验。</li>
+<li><strong>委托不得隐式放大权限</strong>：有效权限受主体可委托范围、显式授权、接收方策略、资源归属和任务约束共同限制。「交集」是策略原则，不是把不同服务的 scope 字符串直接求交集；需由授权系统映射语义。</li>
+<li><strong>使用受验证的委托信息</strong>：RFC 8693 Token Exchange 定义 <code>subject_token</code>、<code>actor_token</code>，JWT <code>act</code> 可表达行动者；<code>act_as</code>、<code>on_behalf_of</code> 不是所有 OAuth 实现通用的标准声明。令牌交换不自动保证权限衰减，签发方仍须执行策略。</li>
+<li><strong>每跳重新授权</strong>：资源服务验证签名、issuer、audience、有效期和本地资源权限；仅在 Prompt、请求头或 JSON 中写「代表用户 A」不是授权证明。</li>
 </ol>
+<p>人工审批要绑定规范化的动作参数、资源、金额、目的地、有效期与一次性动作 ID。执行前参数变化应重新审批，不能复用一句笼统的「允许 Agent 操作」。用户撤销授权后还需阻断排队任务、清理凭据缓存；短期令牌在过期前仍可能有效，高风险系统要补撤销或实时策略检查。</p>
 <h2 id="74-agent">7.4 多 Agent 与跨组织场景下的信任边界<a class="headerlink" href="#74-agent" title="Permanent link">&para;</a></h2>
 <p>A2A 等跨 Agent 协议让不同团队、甚至不同组织运营的 Agent 可以互相调用。这时候身份治理还要额外考虑：</p>
 <table>
@@ -8688,7 +8690,7 @@
 <li>[ ] 每一次跨系统调用都能明确回答"以谁的身份、基于谁的授权"发生；</li>
 <li>[ ] Agent 的服务身份与用户委托身份分离管理，不用服务身份代替应有的用户委托流程；</li>
 <li>[ ] 长期静态凭据已替换为工作负载身份联邦 + 短期令牌；</li>
-<li>[ ] 委托链中的有效权限是各跳权限的交集而非最大值，凭据携带明确的委托声明；</li>
+<li>[ ] 委托权限经过授权系统衰减与资源侧复核，声明可验证，审批绑定实际动作；</li>
 <li>[ ] 跨团队、跨组织的 Agent 调用按最低信任度设计，不假设"内部就是可信的"；</li>
 <li>[ ] 所有工具/MCP Server 在统一注册中心登记，策略以代码形式管理并可版本化评审；</li>
 <li>[ ] 建立固定节奏的权限复核机制，撤回不再需要的授权。</li>
@@ -8714,6 +8716,7 @@
 <ul>
 <li><a href="https://cap-lore.com/CapTheory/ConfusedDeputy.html">Confused Deputy Problem (Norm Hardy, 1988)</a></li>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization">MCP 2026-07-28 Authorization: Confused Deputy Considerations</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc8693.html">RFC 8693: OAuth 2.0 Token Exchange，尤其 1.1、4.1 节</a></li>
 <li><a href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/">OWASP Agentic AI Threats and Mitigations: Identity and Authorization</a></li>
 <li><a href="https://csrc.nist.gov/pubs/sp/800/207/final">NIST SP 800-207: Zero Trust Architecture</a></li>
 <li><a href="https://spiffe.io/">SPIFFE/SPIRE: Workload Identity Framework</a></li>
@@ -8740,7 +8743,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

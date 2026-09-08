@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="这三种范式不是简单的新旧替代关系，更准确的说法是：它们分别擅长不同类型的匹配">
+        <meta name="description" content="比较 BM25、学习式稀疏、稠密双塔和后期交互的匹配机制、失败模式与成本，依据实测互补性选择检索组合。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十一章：检索范式：稀疏、稠密与后期交互">
-    <meta property="og:description" content="这三种范式不是简单的新旧替代关系，更准确的说法是：它们分别擅长不同类型的匹配">
+    <meta property="og:description" content="比较 BM25、学习式稀疏、稠密双塔和后期交互的匹配机制、失败模式与成本，依据实测互补性选择检索组合。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/11-retrieval-paradigms/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十一章：检索范式：稀疏、稠密与后期交互">
-    <meta name="twitter:description" content="这三种范式不是简单的新旧替代关系，更准确的说法是：它们分别擅长不同类型的匹配">
+    <meta name="twitter:description" content="比较 BM25、学习式稀疏、稠密双塔和后期交互的匹配机制、失败模式与成本，依据实测互补性选择检索组合。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十一章：检索范式：稀疏、稠密与后期交互","description":"这三种范式不是简单的新旧替代关系，更准确的说法是：它们分别擅长不同类型的匹配","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/11-retrieval-paradigms/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十一章：检索范式：稀疏、稠密与后期交互","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/11-retrieval-paradigms/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十一章：检索范式：稀疏、稠密与后期交互","description":"比较 BM25、学习式稀疏、稠密双塔和后期交互的匹配机制、失败模式与成本，依据实测互补性选择检索组合。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/11-retrieval-paradigms/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十一章：检索范式：稀疏、稠密与后期交互","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/11-retrieval-paradigms/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"检索范式","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/11-retrieval-paradigms/"}]}</script>
     
@@ -4910,9 +4910,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#1173-splade" class="md-nav__link">
+  <a href="#1173" class="md-nav__link">
     <span class="md-ellipsis">
-      11.7.3 把 SPLADE 说成主流
+      11.7.3 把学习式稀疏检索说成已经淘汰
     </span>
   </a>
   
@@ -8599,9 +8599,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#1173-splade" class="md-nav__link">
+  <a href="#1173" class="md-nav__link">
     <span class="md-ellipsis">
-      11.7.3 把 SPLADE 说成主流
+      11.7.3 把学习式稀疏检索说成已经淘汰
     </span>
   </a>
   
@@ -8718,7 +8718,7 @@
 <h3 id="1121-bm25">11.2.1 BM25 在做什么<a class="headerlink" href="#1121-bm25" title="Permanent link">&para;</a></h3>
 <p>BM25 的打分逻辑可以拆成三个直觉：</p>
 <ol>
-<li><strong>Query 中的词在文档里出现得越多，越相关</strong>（词频）；</li>
+<li><strong>匹配词频增加可提高得分，但收益逐渐饱和</strong>，不是线性无限累加；</li>
 <li><strong>一个词在整个语料中越罕见，它的匹配越有价值</strong>（逆文档频率）——「的」匹配上不说明什么，「XR-2100」匹配上意义重大；</li>
 <li><strong>长文档天然容易包含更多词，需要按长度归一化</strong>，否则长文档会占便宜。</li>
 </ol>
@@ -8737,12 +8737,12 @@
 <li><strong>域外领域</strong>（医疗、法律、企业内部黑话）：Embedding 模型没见过这些分布；</li>
 <li><strong>精确短语匹配</strong>：用户明确要找某个确切说法。</li>
 </ul>
-<p><strong>而且 BM25 还有三个工程优势</strong>：无需训练、无需 GPU、<strong>新文档写入即可检索</strong>（不需要向量化）。</p>
+<p>BM25 无需训练和 GPU，也不需要文档向量化；但新文档仍需完成分词、倒排更新并达到引擎的可见性条件。精确短语、型号完整匹配还要配置分析器和字段，BM25 分数本身不保证词序或字符串完全一致。</p>
 <p>BM25 不是过时技术，在混合检索里通常都是<strong>不可省略的一路</strong>。</p>
 <h3 id="1123">11.2.3 学习式稀疏检索<a class="headerlink" href="#1123" title="Permanent link">&para;</a></h3>
 <p>有一类方法（如 SPLADE）试图兼顾两者：用模型学习稀疏表示，在保留倒排索引效率的同时做词项扩展（把「汽车」自动扩展出「车辆」「轿车」等相关词的权重）。</p>
-<p>这类方法思路清晰，但在工程实践中，<strong>它已经被「BM25 + 稠密检索 + Rerank」这个更简单的组合实质性取代</strong>。原因是后者的每个组件都更成熟、更容易调优、生态也更完整。</p>
-<p>把它当作背景知识即可，不宜写成主流生产方案。</p>
+<p>不能说学习式稀疏检索已被混合方案取代。SPLADE 论文给出词项扩展与稀疏正则化方案；Elastic 的 ELSER v2 官方文档也提供可部署的学习式稀疏检索。这不意味着 ELSER 等同于 SPLADE，或在中文上自动有效：官方建议 ELSER 用于英语资料。</p>
+<p>它减少纯字面重合的限制，但引入编码推理、扩展词项与倒排存储成本。应比较 BM25、学习式稀疏、稠密及其组合；稀疏正则越强通常越省检索资源，也可能损失召回。</p>
 <h2 id="113">11.3 稠密检索：语义匹配<a class="headerlink" href="#113" title="Permanent link">&para;</a></h2>
 <p>原理已在第六章展开，这里只强调它的<strong>失败模式</strong>：</p>
 <table>
@@ -8775,7 +8775,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>这些失败模式恰好是 BM25 的强项。</strong> 混合检索之所以成立，不是因为“两个都用通常更好”这种泛化表述，而是因为两者的失败模式互补。</p>
+<p>BM25 可补充罕见词的词项匹配，但不天然理解“不含糖”、数值范围或模糊短查询。否定、单位、范围、时间和权限等硬条件应解析为可验证谓词；混合检索的依据是实测互补，而非宣称一方能解决另一方所有错误。</p>
 <h2 id="114">11.4 后期交互：中间路线<a class="headerlink" href="#114" title="Permanent link">&para;</a></h2>
 <p>第六章 6.3.4 已介绍原理。这里补充它在检索范式中的定位：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -8788,14 +8788,14 @@
     C -.-&gt; C1[较快 兼顾两者&lt;br/&gt;存储成本高]
     D -.-&gt; D1[最准&lt;br/&gt;无法预计算]</code></pre>
 <p>后期交互的价值在于：它既保留了词级的精确匹配能力（缓解稠密检索的罕见词问题），又具备语义匹配能力（缓解 BM25 的同义词问题），而且文档表示<strong>仍可离线预计算</strong>。</p>
-<p><strong>代价是存储：文档不再是一个向量，而是几百个。</strong> 这个几十倍的开销是它没有大规模普及的主要原因。</p>
+<p>主要代价包括多向量存储、候选生成和细粒度匹配。ColBERTv2 的残差压缩可降低空间；应按向量数、维度、量化与索引开销比较，不能仅用“几百个向量”推出固定几十倍总成本。</p>
 <h3 id="1141">11.4.1 视觉文档检索<a class="headerlink" href="#1141" title="Permanent link">&para;</a></h3>
 <p>后期交互在多模态方向上有一个重要衍生：<strong>直接对文档页面图像做多向量嵌入</strong>，用视觉语言模型编码页面，完全绕开 OCR 和版面解析（第三章 3.5 节）。</p>
 <p>在版面复杂、图表密集的文档上，公开评测显示它优于「OCR + 文本嵌入」管线。</p>
-<p>它的局限也很直接：存储成本高、依赖 GPU、与文本检索的混合方案尚未定型，<strong>2026 年仍不是主流生产选择</strong>。</p>
+<p>主要约束是多向量存储、图像编码和生成成本，以及区域级引用定位；应依据视觉语料比例与实测收益选择，不能由年份推断生产成熟度。</p>
 <h2 id="115">11.5 怎么组合<a class="headerlink" href="#115" title="Permanent link">&para;</a></h2>
 <p><strong>默认方案：BM25 + 稠密检索并行召回，用 RRF 融合，再接 Rerank。</strong></p>
-<p>这个组合从 2023 年至今没有被撼动，原因是：</p>
+<p>它值得作为对照基线，原因是：</p>
 <ul>
 <li>覆盖了字面和语义两类匹配；</li>
 <li>每个组件都成熟、可独立调优、可独立降级；</li>
@@ -8827,29 +8827,30 @@
 <h3 id="1171">11.7.1 认为向量检索全面优于关键词检索<a class="headerlink" href="#1171" title="Permanent link">&para;</a></h3>
 <p>在术语密集领域经常相反。这一类 Query 往往更依赖字面匹配。</p>
 <h3 id="1172">11.7.2 只用一路召回<a class="headerlink" href="#1172" title="Permanent link">&para;</a></h3>
-<p>单路必然存在系统性盲区，且这个盲区无法通过调参消除。</p>
-<h3 id="1173-splade">11.7.3 把 SPLADE 说成主流<a class="headerlink" href="#1173-splade" title="Permanent link">&para;</a></h3>
-<p>它已被更简单的组合实质取代，属知识广度而非推荐方案。</p>
+<p>单路可能在某类输入上持续较弱，但是否需要多路应看新增召回与成本，不能把单路设计本身判为错误。</p>
+<h3 id="1173">11.7.3 把学习式稀疏检索说成已经淘汰<a class="headerlink" href="#1173" title="Permanent link">&para;</a></h3>
+<p>这是一条仍可使用的技术路线；要核实具体模型的语言、许可证、编码与索引成本，而不是用“主流/淘汰”代替比较。</p>
 <h3 id="1174-rerank">11.7.4 把后期交互和 Rerank 混为一谈<a class="headerlink" href="#1174-rerank" title="Permanent link">&para;</a></h3>
 <p>后期交互的文档表示<strong>可离线预计算</strong>，Rerank 的 cross-encoder <strong>必须在线成对计算</strong>。这是架构上的根本差异。</p>
 <h3 id="1175">11.7.5 忽略后期交互的存储成本<a class="headerlink" href="#1175" title="Permanent link">&para;</a></h3>
-<p>几十倍的存储开销是它的主要落地障碍，讨论这一路线时通常需要把部署成本一起算进去。</p>
+<p>需要将压缩后的载荷、索引开销、匹配计算和数据更新成本一起计入，不能只报向量数。</p>
 <h3 id="1176-ocr">11.7.6 说视觉文档检索已经取代了 OCR 管线<a class="headerlink" href="#1176-ocr" title="Permanent link">&para;</a></h3>
-<p>它在特定场景有优势，但尚未成为主流生产方案。</p>
+<p>它在特定视觉任务上有优势，但不能据此宣布全面取代 OCR；文本搜索、数字转录与合规引用仍可能需要 OCR。</p>
 <h2 id="118">11.8 本章总结<a class="headerlink" href="#118" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>三种范式各自擅长不同类型的匹配</strong>，不是新旧替代关系；</li>
 <li><strong>BM25 的三个直觉</strong>：词频、逆文档频率、长度归一化；</li>
-<li><strong>BM25 在术语密集、罕见词、精确匹配、域外领域上常优于稠密检索</strong>，且无需训练、无需 GPU、写入即可检索；</li>
-<li><strong>稠密检索的失败模式</strong>（罕见词、否定、数值、域外、短 Query）恰好是 BM25 的强项——这也是混合检索的主要依据；</li>
-<li><strong>后期交互</strong>兼顾词级与语义匹配且可离线预计算，但<strong>存储开销几十倍</strong>；其视觉版本可绕开文档解析，但尚未主流；</li>
-<li><strong>默认方案</strong>：BM25 + 稠密 + RRF + Rerank，这个组合多年未被撼动；</li>
+<li><strong>BM25 是重要的词项检索基线</strong>；精确匹配依赖分析器与字段，新写入的可见性依赖索引引擎；</li>
+<li><strong>混合检索依赖实测互补</strong>，否定、数值范围与权限不能仅靠 BM25 或向量分数保证；</li>
+<li><strong>后期交互</strong>可离线预计算文档表示，但多向量匹配与索引增加成本；视觉版本减少显式 OCR 依赖；</li>
+<li><strong>常用基线</strong>：BM25 + 稠密 + RRF + Rerank；学习式稀疏和后期交互仍是可比较的替代或补充；</li>
 <li><strong>是否加第三路要靠实测</strong>：分析两路各自独占的召回 Query，比套用通用经验更有针对性。</li>
 </ol>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2004.04906">Dense Passage Retrieval for Open-Domain Question Answering</a></li>
 <li><a href="https://arxiv.org/abs/2107.05720">SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking</a></li>
+<li><a href="https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-elser">Elastic：ELSER 官方文档</a></li>
 <li><a href="https://arxiv.org/abs/2112.01488">ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction</a></li>
 <li><a href="https://arxiv.org/abs/2407.01449">ColPali: Efficient Document Retrieval with Vision Language Models</a></li>
 <li><a href="https://arxiv.org/abs/2407.01219">Searching for Best Practices in Retrieval-Augmented Generation</a></li>
@@ -8876,7 +8877,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

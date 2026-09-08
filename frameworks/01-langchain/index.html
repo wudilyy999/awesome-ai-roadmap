@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="本模块沿着 LangChain 生态展开：从 Chain/LCEL、 create agent ，到 LangGraph 的图编排、持久化与人工介入，再到 LangSmith 的生产质量闭环。在本主题现有模块中，它也是唯一原生覆盖「从原型到生产」全链路的框架，并作为后续 02–06 各模块对照时的参考基线（见各章…">
+        <meta name="description" content="从 Runnable、create_agent 到 LangGraph 状态恢复与 LangSmith 评测，理解 LangChain 生态的 API 分层和生产边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="框架与编排 · LangChain 生态">
-    <meta property="og:description" content="本模块沿着 LangChain 生态展开：从 Chain/LCEL、 create agent ，到 LangGraph 的图编排、持久化与人工介入，再到 LangSmith 的生产质量闭环。在本主题现有模块中，它也是唯一原生覆盖「从原型到生产」全链路的框架，并作为后续 02–06 各模块对照时的参考基线（见各章…">
+    <meta property="og:description" content="从 Runnable、create_agent 到 LangGraph 状态恢复与 LangSmith 评测，理解 LangChain 生态的 API 分层和生产边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="框架与编排 · LangChain 生态">
-    <meta name="twitter:description" content="本模块沿着 LangChain 生态展开：从 Chain/LCEL、 create agent ，到 LangGraph 的图编排、持久化与人工介入，再到 LangSmith 的生产质量闭环。在本主题现有模块中，它也是唯一原生覆盖「从原型到生产」全链路的框架，并作为后续 02–06 各模块对照时的参考基线（见各章…">
+    <meta name="twitter:description" content="从 Runnable、create_agent 到 LangGraph 状态恢复与 LangSmith 评测，理解 LangChain 生态的 API 分层和生产边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · LangChain 生态","description":"本模块沿着 LangChain 生态展开：从 Chain/LCEL、 create agent ，到 LangGraph 的图编排、持久化与人工介入，再到 LangSmith 的生产质量闭环。在本主题现有模块中，它也是唯一原生覆盖「从原型到生产」全链路的框架，并作为后续 02–06 各模块对照时的参考基线（见各章…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · LangChain 生态","description":"从 Runnable、create_agent 到 LangGraph 状态恢复与 LangSmith 评测，理解 LangChain 生态的 API 分层和生产边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/"}]}</script>
     
@@ -8289,8 +8289,9 @@
 
 
 <h1 id="langchain">框架与编排 · LangChain 生态<a class="headerlink" href="#langchain" title="Permanent link">&para;</a></h1>
-<p>本模块沿着 LangChain 生态展开：从 Chain/LCEL、<code>create_agent</code>，到 LangGraph 的图编排、持久化与人工介入，再到 LangSmith 的生产质量闭环。在本主题现有模块中，它也是唯一原生覆盖「从原型到生产」全链路的框架，并作为后续 02–06 各模块对照时的参考基线（见各章节内的“与 LangChain 比较”段落）。</p>
+<p>本模块沿着 LangChain 生态展开：从 Chain/LCEL、<code>create_agent</code>，到 LangGraph 的图编排、持久化与人工介入，再到 LangSmith 的生产质量闭环。它作为后续 02–06 各模块对照时的参考基线；这是一种教学组织方式，不表示其他框架不能用于生产，也不表示采用该生态就自动具备生产可靠性。</p>
 <p>本模块集中维护 LangChain、LangGraph、LangSmith 及相关生态内容，结构与原有学习路径保持一致。</p>
+<p>Python 示例按 LangChain v1 接口讲解，最低 Python 3.10；节点内 <code>asyncio.timeout()</code> 示例需要 Python 3.11。模型标识中的占位符必须替换，并安装对应 provider 包和配置凭证。生产项目需要锁定 <code>langchain</code>、<code>langchain-core</code>、<code>langgraph</code>、provider 与 checkpoint 后端的兼容组合；特定功能的最低版本见第 10、11 章，不能把「v1」当成任意小版本都兼容。</p>
 <h2 id="_1">子模块<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="01-foundations/">基础架构（第 1–3 章）</a></li>
@@ -8338,7 +8339,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="第十八章末尾提到，简单场景可以让模型用 Function Calling 自动规划，复杂场景则需要显式建模。Semantic Kernel 把复杂度分成两类来源，并给出两套对应的框架">
+        <meta name="description" content="区分 SK Process、SK Agent Orchestration 与独立 Microsoft Agent Framework，说明发布状态、API 迁移和持久化边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework">
-    <meta property="og:description" content="第十八章末尾提到，简单场景可以让模型用 Function Calling 自动规划，复杂场景则需要显式建模。Semantic Kernel 把复杂度分成两类来源，并给出两套对应的框架">
+    <meta property="og:description" content="区分 SK Process、SK Agent Orchestration 与独立 Microsoft Agent Framework，说明发布状态、API 迁移和持久化边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/19-process-and-agent-framework/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework">
-    <meta name="twitter:description" content="第十八章末尾提到，简单场景可以让模型用 Function Calling 自动规划，复杂场景则需要显式建模。Semantic Kernel 把复杂度分成两类来源，并给出两套对应的框架">
+    <meta name="twitter:description" content="区分 SK Process、SK Agent Orchestration 与独立 Microsoft Agent Framework，说明发布状态、API 迁移和持久化边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework","description":"第十八章末尾提到，简单场景可以让模型用 Function Calling 自动规划，复杂场景则需要显式建模。Semantic Kernel 把复杂度分成两类来源，并给出两套对应的框架","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/19-process-and-agent-framework/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/19-process-and-agent-framework/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework","description":"区分 SK Process、SK Agent Orchestration 与独立 Microsoft Agent Framework，说明发布状态、API 迁移和持久化边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/19-process-and-agent-framework/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/19-process-and-agent-framework/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Process 与 Agent Framework","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/19-process-and-agent-framework/"}]}</script>
     
@@ -6383,7 +6383,7 @@
         <li class="md-nav__item">
   <a href="#191" class="md-nav__link">
     <span class="md-ellipsis">
-      19.1 两套编排能力，两种复杂度来源
+      19.1 先分清三个容易重名的对象
     </span>
   </a>
   
@@ -6399,9 +6399,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#193-agent-framework" class="md-nav__link">
+  <a href="#193-sk-agent-orchestration" class="md-nav__link">
     <span class="md-ellipsis">
-      19.3 Agent Framework：多智能体协作的编排层
+      19.3 SK Agent Orchestration：协作模式与运行时
     </span>
   </a>
   
@@ -6410,7 +6410,7 @@
         <li class="md-nav__item">
   <a href="#194" class="md-nav__link">
     <span class="md-ellipsis">
-      19.4 多语言一致性与企业落地的取舍
+      19.4 发布与支持状态：不能沿用旧预览结论
     </span>
   </a>
   
@@ -6419,44 +6419,53 @@
         <li class="md-nav__item">
   <a href="#195" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5 常见错误
+      19.5 迁移不是换一个包名
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="19.5 常见错误">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#196" class="md-nav__link">
+    <span class="md-ellipsis">
+      19.6 常见错误
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.6 常见错误">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1951-process-framework-agent-framework" class="md-nav__link">
+  <a href="#1961" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.1 把 Process Framework 和 Agent Framework 混为一谈
+      19.6.1 把三个名称当成同一个运行时
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1952-sdk" class="md-nav__link">
+  <a href="#1962-sdk" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.2 假设三语言 SDK 功能完全对等
+      19.6.2 假设语言 SDK 功能完全对等
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1953-process-framework" class="md-nav__link">
+  <a href="#1963" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.3 忽视 Process Framework 早期版本的稳定性标注
+      19.6.3 用核心包版本替实验功能作保证
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1954" class="md-nav__link">
+  <a href="#1964" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.4 认为「企业级」等于「功能更强」
+      19.6.4 认为「企业级」等于「自动可靠」
     </span>
   </a>
   
@@ -6468,9 +6477,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#196" class="md-nav__link">
+  <a href="#197" class="md-nav__link">
     <span class="md-ellipsis">
-      19.6 本章总结
+      19.7 本章总结
     </span>
   </a>
   
@@ -8387,7 +8396,7 @@
         <li class="md-nav__item">
   <a href="#191" class="md-nav__link">
     <span class="md-ellipsis">
-      19.1 两套编排能力，两种复杂度来源
+      19.1 先分清三个容易重名的对象
     </span>
   </a>
   
@@ -8403,9 +8412,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#193-agent-framework" class="md-nav__link">
+  <a href="#193-sk-agent-orchestration" class="md-nav__link">
     <span class="md-ellipsis">
-      19.3 Agent Framework：多智能体协作的编排层
+      19.3 SK Agent Orchestration：协作模式与运行时
     </span>
   </a>
   
@@ -8414,7 +8423,7 @@
         <li class="md-nav__item">
   <a href="#194" class="md-nav__link">
     <span class="md-ellipsis">
-      19.4 多语言一致性与企业落地的取舍
+      19.4 发布与支持状态：不能沿用旧预览结论
     </span>
   </a>
   
@@ -8423,44 +8432,53 @@
         <li class="md-nav__item">
   <a href="#195" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5 常见错误
+      19.5 迁移不是换一个包名
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="19.5 常见错误">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#196" class="md-nav__link">
+    <span class="md-ellipsis">
+      19.6 常见错误
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.6 常见错误">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1951-process-framework-agent-framework" class="md-nav__link">
+  <a href="#1961" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.1 把 Process Framework 和 Agent Framework 混为一谈
+      19.6.1 把三个名称当成同一个运行时
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1952-sdk" class="md-nav__link">
+  <a href="#1962-sdk" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.2 假设三语言 SDK 功能完全对等
+      19.6.2 假设语言 SDK 功能完全对等
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1953-process-framework" class="md-nav__link">
+  <a href="#1963" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.3 忽视 Process Framework 早期版本的稳定性标注
+      19.6.3 用核心包版本替实验功能作保证
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#1954" class="md-nav__link">
+  <a href="#1964" class="md-nav__link">
     <span class="md-ellipsis">
-      19.5.4 认为「企业级」等于「功能更强」
+      19.6.4 认为「企业级」等于「自动可靠」
     </span>
   </a>
   
@@ -8472,9 +8490,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#196" class="md-nav__link">
+  <a href="#197" class="md-nav__link">
     <span class="md-ellipsis">
-      19.6 本章总结
+      19.7 本章总结
     </span>
   </a>
   
@@ -8514,17 +8532,20 @@
 
 
 <h1 id="semantic-kernel-process-framework-agent-framework">第十九章：Semantic Kernel 的 Process Framework 与 Agent Framework<a class="headerlink" href="#semantic-kernel-process-framework-agent-framework" title="Permanent link">&para;</a></h1>
-<h2 id="191">19.1 两套编排能力，两种复杂度来源<a class="headerlink" href="#191" title="Permanent link">&para;</a></h2>
-<p>第十八章末尾提到，简单场景可以让模型用 Function Calling 自动规划，复杂场景则需要显式建模。Semantic Kernel 把复杂度分成两类来源，并给出两套对应的框架：</p>
+<h2 id="191">19.1 先分清三个容易重名的对象<a class="headerlink" href="#191" title="Permanent link">&para;</a></h2>
+<p>旧 SK 文档中的 Agent Framework 不是独立的 Microsoft Agent Framework。按 2026-09-08 可访问官方资料，应分开理解：</p>
 <ul>
-<li><strong>Process Framework</strong>：复杂度来自<strong>业务流程本身</strong>——一个多步骤、有明确阶段划分的业务流程（比如「收到工单 → 分类 → 路由给对应团队 → 等待处理 → 关闭并通知」），部分步骤需要 AI，部分步骤是纯业务代码；</li>
-<li><strong>Agent Framework</strong>：复杂度来自<strong>多个智能体之间的协作</strong>——多个各有专长的 Agent 需要互相通信、共享上下文、决定谁来处理当前请求。</li>
+<li><strong>SK Process Framework</strong>：以 Step/Event 组织业务流程；官方概览仍标为 experimental；</li>
+<li><strong>SK Agent Framework / Agent Orchestration</strong>：SK 包内的 Agent 抽象及协作层。Agent 不只用于多智能体；Agent Orchestration 概览仍标为 experimental，不能把这个标记扩展成「所有 SK API 都实验性」；</li>
+<li><strong>Microsoft Agent Framework（MAF）</strong>：独立后继 SDK，融合 SK 与 AutoGen 的经验。官方仓库已说明 1.0 为生产可用发布；核心发布状态不等于每个 provider、Workflows 扩展或语言 SDK 都同样稳定，应逐包核对。当前概览明确 Go SDK 仍为 public preview。</li>
 </ul>
 <pre class="mermaid"><code>flowchart TB
     C["流程复杂度来源"] --&gt; B1["业务流程本身分阶段、有状态转移"]
     C --&gt; B2["需要多个专精 Agent 协作"]
-    B1 --&gt; PF["Process Framework&lt;br/&gt;业务流程状态机"]
-    B2 --&gt; AF["Agent Framework&lt;br/&gt;多智能体协作"]</code></pre>
+    B1 --&gt; PF["SK Process&lt;br/&gt;实验性 Step / Event"]
+    B2 --&gt; AF["SK Agent Orchestration&lt;br/&gt;实验性协作层"]
+    PF -.迁移需核对能力.-&gt; MAF["独立 Microsoft Agent Framework&lt;br/&gt;Agents / Workflows / Session"]
+    AF -.迁移指南.-&gt; MAF</code></pre>
 <h2 id="192-process-framework">19.2 Process Framework：业务流程的显式状态机<a class="headerlink" href="#192-process-framework" title="Permanent link">&para;</a></h2>
 <p>Process Framework 把一个业务流程建模为<strong>步骤（Step）+ 事件（Event）</strong>：每个 Step 是一个独立的处理单元（可以包含 AI 调用，也可以是纯业务代码），Step 之间通过发出和监听事件连接：</p>
 <div class="language-csharp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">ProcessBuilder</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">(</span><span class="s">"SupportTicketProcess"</span><span class="p">);</span>
@@ -8539,20 +8560,34 @@
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p">.</span><span class="n">OnEvent</span><span class="p">(</span><span class="s">"TicketClassified"</span><span class="p">)</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">.</span><span class="n">SendEventTo</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ProcessFunctionTargetBuilder</span><span class="p">(</span><span class="n">routeToTeam</span><span class="p">));</span>
 </span></code></pre></div>
-<p><strong>这与 <a href="../../01-langchain/04-langgraph/">LangGraph</a> 用节点和边表达状态图非常接近</strong>：两者都显式声明了流程的阶段划分，都支持在特定步骤暂停等待人工介入，都能持久化流程状态以便恢复。区别更多体现在生态定位上——Process Framework 的建模语言（Step/Event）更贴近传统的业务流程管理（BPM）术语，方便已经熟悉工作流引擎的企业团队理解；LangGraph 的建模语言（Node/Edge/State）更贴近图论和状态机术语，方便习惯函数式/图计算的团队理解。</p>
-<h2 id="193-agent-framework">19.3 Agent Framework：多智能体协作的编排层<a class="headerlink" href="#193-agent-framework" title="Permanent link">&para;</a></h2>
-<p>Agent Framework 面向另一类问题——多个 Agent 各自维护对话历史和角色设定，需要按某种策略决定「下一步该谁发言」：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">semantic_kernel.agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatCompletionAgent</span><span class="p">,</span> <span class="n">GroupChatOrchestration</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">researcher</span> <span class="o">=</span> <span class="n">ChatCompletionAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Researcher"</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="s2">"负责收集资料"</span><span class="p">)</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">writer</span> <span class="o">=</span> <span class="n">ChatCompletionAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Writer"</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="s2">"负责整理成报告"</span><span class="p">)</span>
+<p>上例仅定义流程拓扑，<code>ClassifyTicketStep</code>、<code>RouteToTeamStep</code>、运行时与启动事件还需实现。它和 <a href="../../01-langchain/04-langgraph/">LangGraph</a> 都能表达多步骤控制，但不能因图形相似就认定持久化、暂停和重放语义相同。必须确认所用 SK 语言包和运行时如何保存 Step 状态、事件及外部请求，进程内执行样例本身不是可靠恢复证明。</p>
+<h2 id="193-sk-agent-orchestration">19.3 SK Agent Orchestration：协作模式与运行时<a class="headerlink" href="#193-sk-agent-orchestration" title="Permanent link">&para;</a></h2>
+<p>SK Agent Orchestration 支持 sequential、concurrent、handoff、group chat、magentic 等模式，不只决定谁发言。下面保留存量 Python API 的 group chat 装配方式，模型服务及凭据需预先配置：</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">semantic_kernel.agents</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">ChatCompletionAgent</span><span class="p">,</span> <span class="n">GroupChatOrchestration</span><span class="p">,</span> <span class="n">RoundRobinGroupChatManager</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">)</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">semantic_kernel.agents.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">InProcessRuntime</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">orchestration</span> <span class="o">=</span> <span class="n">GroupChatOrchestration</span><span class="p">(</span><span class="n">agents</span><span class="o">=</span><span class="p">[</span><span class="n">researcher</span><span class="p">,</span> <span class="n">writer</span><span class="p">])</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">orchestration</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">"调研并总结季度行业趋势"</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">researcher</span> <span class="o">=</span> <span class="n">ChatCompletionAgent</span><span class="p">(</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"Researcher"</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="s2">"负责收集资料"</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">chat_service</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">writer</span> <span class="o">=</span> <span class="n">ChatCompletionAgent</span><span class="p">(</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"Writer"</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="s2">"负责整理成报告"</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">chat_service</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">orchestration</span> <span class="o">=</span> <span class="n">GroupChatOrchestration</span><span class="p">(</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="n">researcher</span><span class="p">,</span> <span class="n">writer</span><span class="p">],</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="n">manager</span><span class="o">=</span><span class="n">RoundRobinGroupChatManager</span><span class="p">(</span><span class="n">max_rounds</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">)</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">runtime</span> <span class="o">=</span> <span class="n">InProcessRuntime</span><span class="p">()</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="n">runtime</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">orchestration</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">"调研并总结季度行业趋势"</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">)</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="n">output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="k">await</span> <span class="n">runtime</span><span class="o">.</span><span class="n">stop_when_idle</span><span class="p">()</span>
 </span></code></pre></div>
-<p>这套「多个带角色的 Agent + 一个决定发言顺序的编排策略」的设计，和 <a href="../../05-lightweight-agent-frameworks/">轻量级 Agent 框架</a> 模块里的 AutoGen <code>GroupChat</code>、CrewAI <code>Crew</code> 在概念层面几乎是同构的。多智能体协作在不同框架里换了不同名字（GroupChat / Crew / Orchestration），但要解决的仍是同一组问题：角色划分、发言策略，以及共享上下文的边界。</p>
-<h2 id="194">19.4 多语言一致性与企业落地的取舍<a class="headerlink" href="#194" title="Permanent link">&para;</a></h2>
-<p>Semantic Kernel 的 C#、Python、Java 三个 SDK <strong>共享同一套核心概念（Kernel/Plugin/Process/Agent Framework）</strong>，但功能覆盖和发布节奏并不完全同步——通常 C# SDK 功能最完整、发布最快，Python 紧随其后，Java 覆盖面相对滞后。这对企业选型有直接影响：</p>
+<p>Group chat 与 AutoGen Team 有可比之处，但不等于 CrewAI Crew：顺序任务、消息轮询和动态 handoff 的状态归属及终止语义不同。例子中的轮次上限只防止无界聊天，不证明任务完成；真实系统还需时间预算、结果验收和异常时的运行时清理。</p>
+<h2 id="194">19.4 发布与支持状态：不能沿用旧预览结论<a class="headerlink" href="#194" title="Permanent link">&para;</a></h2>
+<p>SK 提供 C#、Python、Java SDK，但不保证所有 Process/Agent 功能对等；例如本次访问的 SK Agent Orchestration 文档明确 Java 尚不支持。MAF 的当前概览列出 .NET、Python、Go，不能据此推导 SK Java 有直接迁移目标。</p>
 <table>
 <thead>
 <tr>
@@ -8562,45 +8597,90 @@
 </thead>
 <tbody>
 <tr>
-<td>团队主力是 .NET，且需要长期维护</td>
-<td>Semantic Kernel 的多语言一致性设计减少了「AI 团队用 Python、后端团队用 C#」之间的概念鸿沟</td>
+<td>新建 .NET / Python Agent</td>
+<td>优先评估 MAF，并核对所需 provider 和运行时包的稳定性</td>
 </tr>
 <tr>
-<td>需要用到最新发布的实验性能力</td>
-<td>应优先确认该能力是否已经覆盖到团队实际使用的语言 SDK，而不是假设三语言功能对等</td>
+<td>已运行的 SK 项目</td>
+<td>先锁定版本与回归基线，按能力缺口和维护成本分批迁移，不必因为后继发布就立即重写</td>
 </tr>
 <tr>
-<td>追求版本升级的稳定性</td>
-<td>Semantic Kernel 1.0+ 承诺不做破坏性变更，这对长期维护的企业系统是显著优势，但也意味着新范式（比如更激进的 Agent 抽象）落地速度可能慢于社区驱动、迭代更快的框架</td>
+<td>使用 SK 实验性 Process/Orchestration</td>
+<td>独立审查其兼容性；核心包的稳定版本不覆盖所有实验接口</td>
+</tr>
+<tr>
+<td>有长期支持要求</td>
+<td>查具体发布及支持政策，不能把“1.x”解释为永远没有破坏性变更</td>
 </tr>
 </tbody>
 </table>
-<p>这里体现的是 <a href="../../06-selection-portability/">框架选型与可移植架构</a> 反复出现的一组取舍：稳定性和创新速度通常无法同时最大化，企业级中间件往往用前者换后者，选型时要先明确团队更需要哪一边。</p>
-<h2 id="195">19.5 常见错误<a class="headerlink" href="#195" title="Permanent link">&para;</a></h2>
-<h3 id="1951-process-framework-agent-framework">19.5.1 把 Process Framework 和 Agent Framework 混为一谈<a class="headerlink" href="#1951-process-framework-agent-framework" title="Permanent link">&para;</a></h3>
-<p>前者解决「业务流程阶段划分」，后者解决「多智能体协作」——一个复杂系统可能同时需要两者：用 Process Framework 建模整体业务流程，其中某个 Step 内部再调用 Agent Framework 编排多个 Agent 协作完成子任务。</p>
-<h3 id="1952-sdk">19.5.2 假设三语言 SDK 功能完全对等<a class="headerlink" href="#1952-sdk" title="Permanent link">&para;</a></h3>
+<p>微软过渡公告说明：SK v1.x 继续处理关键 bug、安全问题及部分既有功能，主要新功能转向 MAF，并承诺至少支持到 MAF GA 后一年。该公告同时保留了发布当时「MAF 仍在 Preview」的描述；状态判断应结合现行仓库的 1.0 说明，而不是照抄旧公告。这里不推算 SK 的精确终止支持日期，未找到单独的确定 EOL 通告。</p>
+<h2 id="195">19.5 迁移不是换一个包名<a class="headerlink" href="#195" title="Permanent link">&para;</a></h2>
+<p>官方迁移指南给出的主要变化包括：</p>
+<table>
+<thead>
+<tr>
+<th>迁移面</th>
+<th>SK</th>
+<th>MAF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python 包/命名空间</td>
+<td><code>semantic-kernel</code> / <code>semantic_kernel</code></td>
+<td><code>agent-framework</code> / <code>agent_framework</code>，可按 provider 拆包</td>
+</tr>
+<tr>
+<td>.NET 主要抽象</td>
+<td><code>Kernel</code>、<code>ChatCompletionAgent</code></td>
+<td><code>AIAgent</code>，常配合 <code>Microsoft.Extensions.AI</code> 的客户端与消息类型</td>
+</tr>
+<tr>
+<td>工具注册</td>
+<td>Plugin / KernelFunction</td>
+<td>Agent 工具；.NET 可用 <code>AIFunctionFactory.Create</code></td>
+</tr>
+<tr>
+<td>会话与运行</td>
+<td>AgentThread、Invoke</td>
+<td>AgentSession、Run；消息和流式返回类型也改变</td>
+</tr>
+</tbody>
+</table>
+<p>先迁移无副作用、短会话的功能，验证工具 Schema、异常处理、输出与成本；随后再迁移 Filter/middleware、持久会话和长任务。旧检查点不能仅靠重命名字段转换：要盘点待处理事件、已完成业务操作和审批状态，决定让旧任务排空，还是转换业务状态后在新系统重新入场。</p>
+<p>架构讨论中可以用一次退款审批追问：谁持有会话，审批授权保存在哪，崩溃后哪个步骤重做，幂等键由谁生成？这些问题比「两套框架都支持 workflow」更能判断迁移是否安全。</p>
+<h2 id="196">19.6 常见错误<a class="headerlink" href="#196" title="Permanent link">&para;</a></h2>
+<h3 id="1961">19.6.1 把三个名称当成同一个运行时<a class="headerlink" href="#1961" title="Permanent link">&para;</a></h3>
+<p>SK Process、SK Agent Orchestration 与 MAF 有不同包和执行语义。可以用工作流包裹 Agent，但必须指定哪一层拥有检查点、取消、重试与最终提交。</p>
+<h3 id="1962-sdk">19.6.2 假设语言 SDK 功能完全对等<a class="headerlink" href="#1962-sdk" title="Permanent link">&para;</a></h3>
 <p>选型前应该直接查阅目标语言 SDK 的最新文档确认具体能力覆盖，而不是假设「C# 文档写的功能 Python 也一定有」。</p>
-<h3 id="1953-process-framework">19.5.3 忽视 Process Framework 早期版本的稳定性标注<a class="headerlink" href="#1953-process-framework" title="Permanent link">&para;</a></h3>
+<h3 id="1963">19.6.3 用核心包版本替实验功能作保证<a class="headerlink" href="#1963" title="Permanent link">&para;</a></h3>
 <p>引入处于预览阶段的能力时，应结合官方发布说明确认其稳定性承诺，避免把实验性功能当作已受 1.0+ 稳定性保证覆盖的核心 API 长期依赖。</p>
-<h3 id="1954">19.5.4 认为「企业级」等于「功能更强」<a class="headerlink" href="#1954" title="Permanent link">&para;</a></h3>
-<p>企业级中间件的核心价值是治理、稳定性和多语言一致性，不代表它在最新的 Agent 范式（比如复杂反思循环、大规模并行探索）上一定领先社区驱动的框架，选型仍要回到具体需求。</p>
-<h2 id="196">19.6 本章总结<a class="headerlink" href="#196" title="Permanent link">&para;</a></h2>
+<h3 id="1964">19.6.4 认为「企业级」等于「自动可靠」<a class="headerlink" href="#1964" title="Permanent link">&para;</a></h3>
+<p>发布稳定不等于工具副作用自动事务化；仍需权限、幂等、超时、补偿和生产故障演练。</p>
+<h2 id="197">19.7 本章总结<a class="headerlink" href="#197" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Process Framework 解决业务流程本身的阶段划分复杂度</strong>，用 Step/Event 显式建模状态转移，与 LangGraph 的图状态机在能力上高度接近，但建模语言更贴近传统 BPM 术语；</li>
-<li><strong>Agent Framework 解决多智能体协作复杂度</strong>，其角色划分、发言策略、共享上下文的设计与 AutoGen、CrewAI 等框架的多智能体编排概念同构；</li>
-<li><strong>两套框架可以嵌套使用</strong>：整体业务流程用 Process Framework，其中某个步骤内部再用 Agent Framework 编排多智能体子任务；</li>
-<li><strong>多语言一致性是 Semantic Kernel 的核心卖点，但不是绝对的功能对等</strong>，选型前需要确认目标语言 SDK 的具体能力覆盖；</li>
-<li><strong>稳定性与创新速度是一组权衡</strong>：1.0+ 的不破坏性变更承诺换来了长期维护友好性，代价可能是新范式的落地速度慢于社区驱动的框架。</li>
+<li><strong>SK Process 与 SK Agent Orchestration 是存量抽象</strong>，官方相关概览仍标为实验性；</li>
+<li><strong>独立 MAF 是后继，不是旧 Agent Framework 改名后的同一 API</strong>；</li>
+<li><strong>MAF 1.0 核心发布与 SK 支持延续应分别判断</strong>，也要逐包、逐语言核对；</li>
+<li><strong>迁移重点是工具、消息、治理和会话状态语义</strong>，而非简单替换 import；</li>
+<li><strong>恢复能力必须通过故障演练验证</strong>，不由流程图或 SDK 标签保证。</li>
 </ol>
-<p>Semantic Kernel 的 Process Framework 和 Agent Framework 分别对应「业务流程复杂度」和「多智能体协作复杂度」两类问题。与 LangGraph、AutoGen 等社区框架相比，它更稳定的差异点仍然是多语言一致性和企业治理能力。</p>
+<p>维护旧项目时理解 SK 抽象仍有价值；做新选型时，应把 MAF 和实际业务约束放进同一份评估，而不是停留在旧产品分类。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/frameworks/process/process-framework">Semantic Kernel: Process Framework</a></li>
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/">Semantic Kernel: Agent Framework 概述</a></li>
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/">Semantic Kernel: Agent Orchestration</a></li>
+<li><a href="https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/group-chat">Semantic Kernel: Group Chat 完整运行时示例</a></li>
+<li><a href="https://github.com/microsoft/semantic-kernel">Semantic Kernel 官方仓库的 MAF 1.0 说明</a></li>
+<li><a href="https://learn.microsoft.com/en-us/agent-framework/overview/">Microsoft Agent Framework 概览</a></li>
+<li><a href="https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel/">SK → MAF 迁移指南</a></li>
+<li><a href="https://devblogs.microsoft.com/agent-framework/semantic-kernel-and-microsoft-agent-framework/">微软：Semantic Kernel 与 MAF 支持过渡公告</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph 官方文档</a></li>
 </ul>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8623,7 +8703,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

@@ -77,7 +77,7 @@
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：RAG、微调与长上下文的三方取舍","description":"从知识更新、行为学习、上下文长度、成本和可追溯性比较 RAG、模型微调与长上下文，并给出组合选型方法。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/02-rag-finetune-longcontext/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：RAG、微调与长上下文的三方取舍","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/02-rag-finetune-longcontext/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：RAG、微调与长上下文的三方取舍","description":"从知识更新、行为学习、上下文长度、成本和可追溯性比较 RAG、模型微调与长上下文，并给出组合选型方法。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/02-rag-finetune-longcontext/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：RAG、微调与长上下文的三方取舍","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/02-rag-finetune-longcontext/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"RAG、微调与长上下文","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/01-foundations/02-rag-finetune-longcontext/"}]}</script>
     
@@ -4492,7 +4492,7 @@
           <li class="md-nav__item">
   <a href="#242" class="md-nav__link">
     <span class="md-ellipsis">
-      2.4.2 上下文越长，模型用得越差
+      2.4.2 窗口容量不等于有效利用能力
     </span>
   </a>
   
@@ -8586,7 +8586,7 @@
           <li class="md-nav__item">
   <a href="#242" class="md-nav__link">
     <span class="md-ellipsis">
-      2.4.2 上下文越长，模型用得越差
+      2.4.2 窗口容量不等于有效利用能力
     </span>
   </a>
   
@@ -8756,7 +8756,7 @@
 <h1 id="rag">第二章：RAG、微调与长上下文的三方取舍<a class="headerlink" href="#rag" title="Permanent link">&para;</a></h1>
 <h2 id="21">2.1 不要把它当成单选题<a class="headerlink" href="#21" title="Permanent link">&para;</a></h2>
 <p>讨论 RAG 和微调时，最常见的误区是<strong>二选一思维</strong>：把它们当成互斥选项，说完其中一个的优点就结束了。</p>
-<p>2026 年还多了一个维度：模型上下文窗口已经足够大，很多场景会先问「既然能直接塞进去，为什么还要检索」。</p>
+<p>支持长上下文的模型让选型多了一个维度：「既然材料装得下，为什么还要检索？」窗口长度只是条件之一，不能代替质量与成本验证。</p>
 <p>更合适的比较方式，是把微调、长上下文和 RAG 放在一起看，再决定是否组合使用。</p>
 <pre class="mermaid"><code>flowchart TB
     NEED[需求] --&gt; Q1{要改变的是&lt;br/&gt;知识还是行为?}
@@ -8805,7 +8805,7 @@
 <h3 id="231">2.3.1 微调更适合什么<a class="headerlink" href="#231" title="Permanent link">&para;</a></h3>
 <p>微调擅长的是<strong>改变模型的行为方式</strong>，而不是灌输事实：</p>
 <ul>
-<li>固定输出格式（严格的 JSON、特定的报告结构）；</li>
+<li>提高固定格式、特定报告结构的遵循率；严格 JSON/schema 约束还需结构化输出或程序校验，不能靠微调保证；</li>
 <li>特定的语气与风格（客服话术、法律文书口吻）；</li>
 <li>领域术语与表达习惯（医疗、金融的专业措辞）；</li>
 <li>特定任务的能力提升（分类、抽取这类结构化任务）；</li>
@@ -8817,17 +8817,17 @@
 <li><strong>注入大量事实知识</strong>。这需要足够多的样本反复强化，成本高且效果不稳定；</li>
 <li><strong>频繁更新的知识</strong>。改一条就要重训一次，完全不现实；</li>
 <li><strong>溯源</strong>。参数里的知识无法指出来源，这在合规场景是硬伤；</li>
-<li><strong>权限隔离</strong>。模型不知道「谁能看哪些知识」，一旦训进去，所有用户都能问出来。</li>
+<li><strong>权限隔离</strong>。共享参数不提供可靠的文档级 ACL，不能保证敏感知识不会被无权限用户诱出；外部授权仍然必要。</li>
 </ul>
 <p><strong>「不可溯源」和「无法做权限隔离」这两条，往往是企业选择 RAG 的关键原因之一</strong>，而不只是效果好坏的问题。</p>
 <h3 id="233">2.3.3 微调可以学知识，但不适合当知识库<a class="headerlink" href="#233" title="Permanent link">&para;</a></h3>
-<p>「用微调给模型灌知识」不是完全做不到，而是<strong>性价比极低且不可控</strong>。更准确的说法是：</p>
+<p>微调和继续预训练可以学习事实，但是否划算取决于任务、更新频率和监督数据。更准确的说法是：</p>
 <blockquote>
-<p><strong>微调可以改变模型对已有知识的组织和表达方式，但把它当作知识库来用，在成本、时效和可控性上都不划算。</strong></p>
+<p><strong>参数学习可以补充领域知识，但不等价于一个可逐条更新、撤销和审计的知识库。</strong></p>
 </blockquote>
 <h2 id="24">2.4 长上下文：直接把材料全塞进去<a class="headerlink" href="#24" title="Permanent link">&para;</a></h2>
 <p>模型窗口变大后，一个很自然的想法是：把所有资料一次性放进 Prompt，让模型自己找。</p>
-<p>这个做法在特定条件下<strong>确实是最优解</strong>：材料总量能装下、内容稳定、不需要按用户过滤。它省掉了整条检索链路，工程复杂度大幅下降，而且没有「检索不到」这个失败模式。</p>
+<p>这个做法值得作为基线：当前用户有权访问的材料装得下，且读取成本可接受。它省掉检索链路，不会在检索阶段漏掉证据，但模型仍可能在长输入中漏读。长上下文同样可以先执行权限过滤，并逐条标注引用。</p>
 <p>配合 Prompt Caching，重复使用同一批材料的成本还能进一步降低。</p>
 <p>如果知识库只有几十篇稳定文档，直接全塞往往比搭一套 RAG 更快，工程复杂度也更低。</p>
 <h3 id="241">2.4.1 但它有四个硬约束<a class="headerlink" href="#241" title="Permanent link">&para;</a></h3>
@@ -8839,30 +8839,30 @@
 
     C1 --&gt; D1[语料远超窗口时装不下]
     C2 --&gt; D2[高频更新导致缓存频繁失效]
-    C3 --&gt; D3[无法按用户过滤可见材料]
-    C4 --&gt; D4[上下文越长 有效利用率越低]</code></pre>
+    C3 --&gt; D3[输入前仍须执行 ACL&lt;br/&gt;不同权限降低缓存复用]
+    C4 --&gt; D4[位置与干扰内容&lt;br/&gt;可能影响有效利用率]</code></pre>
 <p>前三条是常见工程约束，<strong>第四条直接影响最终效果</strong>。</p>
-<h3 id="242">2.4.2 上下文越长，模型用得越差<a class="headerlink" href="#242" title="Permanent link">&para;</a></h3>
+<h3 id="242">2.4.2 窗口容量不等于有效利用能力<a class="headerlink" href="#242" title="Permanent link">&para;</a></h3>
 <p>这不是猜测，而是有系统性实验证据的。</p>
 <p>早期的 <strong>Lost in the Middle</strong> 研究发现：模型对上下文<strong>开头和结尾</strong>的信息利用得更好，放在中间的关键信息容易被忽略。</p>
 <p>后续更严格的实验进一步表明：</p>
 <ul>
-<li>模型性能会<strong>随输入长度持续下降</strong>，而且这种下降在远未触及窗口上限时就已发生；</li>
+<li>在所测模型和任务上，输入变长可能导致性能下降，且可早于窗口上限；下降不是对所有模型都单调成立的定律；</li>
 <li><strong>当问题和答案之间是语义关联而非字面匹配时，下降更明显</strong>；</li>
 <li><strong>语义相近但错误的干扰内容</strong>，比完全无关的内容伤害更大；</li>
 <li>经典的「大海捞针」测试拿满分，<strong>不代表</strong>模型在真实长上下文任务中可靠——因为它只考察字面匹配。</li>
 </ul>
 <p>这个现象通常被称为 <strong>Context Rot</strong>（上下文腐化）。</p>
-<p><strong>它的直接推论是：单纯塞更多材料不一定提升效果，反而可能降低效果。</strong> 这条结论同时也否定了 RAG 里另一个常见做法——见 2.6 节。</p>
+<p>这些结果支持的工程判断是：单纯塞更多材料不一定提升效果，应区分必要证据与干扰。RAG 的最终上下文选择也面临相同问题——见 2.6 节。</p>
 <h3 id="243-rag">2.4.3 长上下文能取代 RAG 吗<a class="headerlink" href="#243-rag" title="Permanent link">&para;</a></h3>
-<p>已有研究直接测试了这个假设，结论是<strong>目前不能</strong>。长上下文模型在以下情况仍然失败：</p>
+<p>已有研究测试了若干模型与任务，显示长上下文不能无条件替代检索、SQL 等组件；这不排除它在某个小语料任务上比 RAG 更合适。需要检查：</p>
 <ol>
 <li>语料规模超出窗口——这是硬性的；</li>
-<li>语料频繁更新——每次变化都要重新处理全量；</li>
+<li>语料频繁更新——变化位置可能影响前缀缓存复用，需测实际预填充成本；</li>
 <li>需要精确检索的结构化查询；</li>
 <li>相关信息稀疏地分布在大量文档中时的多文档融合。</li>
 </ol>
-<p><strong>2026 年的共识是：两者互补而非替代。</strong></p>
+<p>工程上可以把两者组合，但不应把某年的“共识”当作选型证据。</p>
 <blockquote>
 <p><strong>RAG 负责「从海量语料中筛出候选」，长上下文负责「把候选读得更充分」。</strong></p>
 </blockquote>
@@ -8880,27 +8880,27 @@
 <tbody>
 <tr>
 <td>改变什么</td>
-<td>模型行为</td>
-<td>无</td>
-<td>无</td>
+<td>参数、行为与部分知识</td>
+<td>本次输入</td>
+<td>外部证据与本次输入</td>
 </tr>
 <tr>
 <td>知识规模上限</td>
-<td>受训练数据规模限制</td>
-<td>受窗口限制</td>
-<td>基本无上限</td>
+<td>受容量、数据和训练影响</td>
+<td>受窗口及有效利用能力限制</td>
+<td>受存储、检索和治理预算限制</td>
 </tr>
 <tr>
 <td>知识更新速度</td>
-<td>天/周级</td>
-<td>实时</td>
-<td>实时</td>
+<td>取决于训练与发布流程</td>
+<td>更新输入后生效</td>
+<td>受摄取、发布和缓存滞后限制</td>
 </tr>
 <tr>
 <td>单次推理成本</td>
-<td>低</td>
-<td><strong>高</strong>（每次都带全量材料）</td>
-<td>中</td>
+<td>与所用模型有关</td>
+<td>受输入长度、缓存命中影响</td>
+<td>受检索、重排及生成共同影响</td>
 </tr>
 <tr>
 <td>前期投入</td>
@@ -8916,15 +8916,15 @@
 </tr>
 <tr>
 <td>可溯源</td>
-<td>否</td>
-<td>部分</td>
-<td><strong>是</strong></td>
+<td>参数本身不提供可靠来源</td>
+<td>可携带并验证引用</td>
+<td>可携带并验证引用</td>
 </tr>
 <tr>
 <td>权限隔离</td>
-<td>否</td>
-<td>否</td>
-<td><strong>是</strong></td>
+<td>共享参数不提供文档 ACL</td>
+<td>输入前外部授权</td>
+<td>检索及后续链路外部授权</td>
 </tr>
 <tr>
 <td>主要失败模式</td>
@@ -8934,7 +8934,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>注意成本那两行的方向相反</strong>：微调是前期贵、后期便宜；长上下文是前期便宜、后期每次调用都贵。<strong>语料稳定且调用量大时，这个差异会主导总成本。</strong></p>
+<p>比较总成本时，把数据与训练、索引构建与更新、每次查询、缓存写入/命中和运维分别计费。只有微调后能换用较小模型或明显减少输入时，才可能摊薄训练成本；高命中率长上下文缓存也可能比复杂检索链路便宜。</p>
 <h2 id="26-top-k">2.6 Top-K 不是越大越好<a class="headerlink" href="#26-top-k" title="Permanent link">&para;</a></h2>
 <p>「多召回一些 chunk 总没坏处」并不成立。</p>
 <p>很多人默认 Top-K 越大越好，反正模型自己会挑。但 2.4.2 节的证据表明，无关或语义相近但错误的内容会<strong>主动损害</strong>答案质量，模型并不会干净地忽略它们。</p>
@@ -8956,7 +8956,7 @@
     C --&gt;|否| D{需要按用户过滤吗?}
     D --&gt;|是| RAG
     D --&gt;|否| E{调用量大吗?}
-    E --&gt;|是| RAG2[RAG 更省成本]
+    E --&gt;|是| RAG2[比较缓存与检索的总成本]
     E --&gt;|否| LC[长上下文直接塞]</code></pre>
 <p>可以按四个问题依次判断：<strong>装不装得下 → 更不更新 → 要不要过滤 → 调用量大不大</strong>。任何一个答案指向 RAG，就优先考虑 RAG。</p>
 <h2 id="28">2.8 组合使用才是常态<a class="headerlink" href="#28" title="Permanent link">&para;</a></h2>
@@ -8989,13 +8989,13 @@
 <h3 id="291">2.9.1 把问题答成单选题<a class="headerlink" href="#291" title="Permanent link">&para;</a></h3>
 <p>如果完全不考虑组合使用，往往会遗漏实际系统里的常见做法。</p>
 <h3 id="292">2.9.2 说「微调学不到知识」<a class="headerlink" href="#292" title="Permanent link">&para;</a></h3>
-<p>不准确。应该说性价比低、不可控、不可溯源。</p>
+<p>不准确。可以学习事实，但共享参数不适合承担频繁的逐条更新、撤销与来源审计。</p>
 <h3 id="293-rag">2.9.3 认为长上下文已经淘汰了 RAG<a class="headerlink" href="#293-rag" title="Permanent link">&para;</a></h3>
 <p>有明确的实验证据反驳，且忽略了规模、时效、权限、成本四个约束。</p>
 <h3 id="294">2.9.4 认为窗口够大就可以随便塞<a class="headerlink" href="#294" title="Permanent link">&para;</a></h3>
-<p>上下文腐化是被反复验证的现象，塞得越多有效利用率越低。</p>
+<p>长输入中的位置效应和干扰风险有实验证据，但不是“每加一个 Token 必然变差”；需在当前模型和任务上复测。</p>
 <h3 id="295">2.9.5 只比效果不比成本结构<a class="headerlink" href="#295" title="Permanent link">&para;</a></h3>
-<p>微调是前期贵后期省，长上下文是每次调用都贵。不谈调用量就无法比较。</p>
+<p>不计调用量、模型大小、缓存命中和更新频率，就无法比较训练、检索与长上下文的总成本。</p>
 <h3 id="296">2.9.6 忽略权限与溯源<a class="headerlink" href="#296" title="Permanent link">&para;</a></h3>
 <p>在企业场景里，这两条经常直接决定方案选型，且不可通过「效果更好」来弥补。</p>
 <h2 id="210">2.10 本章总结<a class="headerlink" href="#210" title="Permanent link">&para;</a></h2>
@@ -9003,8 +9003,8 @@
 <li>微调改的是模型行为；长上下文和 RAG 都是在推理时提供材料，区别在于 RAG 先做筛选；</li>
 <li>微调更适合格式、风格、领域表达和小模型降本，不适合承载大量事实知识、频繁更新、溯源和权限隔离；</li>
 <li>长上下文在语料小且稳定时很有效，但仍受规模、时效、权限和质量四个约束；</li>
-<li>上下文腐化是真实存在的：输入变长后，有效利用率会持续下降，「大海捞针」满分不代表真实任务可靠；</li>
-<li>长上下文不能直接取代 RAG，两者更常见的关系是互补：RAG 负责筛，长上下文负责读；</li>
+<li>长输入可能出现非均匀退化，「大海捞针」满分不代表真实任务可靠；</li>
+<li>长上下文可在特定小语料任务中替代检索，也可与 RAG 组合；不能无条件推广到海量语料；</li>
 <li>Top-K 需要按模型和任务实测调优，不存在一组固定答案；</li>
 <li>实际判断通常按四个问题展开：装不装得下、是否频繁更新、是否需要过滤、调用量是否足够大；</li>
 <li>生产系统里，微调、RAG 和长上下文组合使用比单独选一个更常见。</li>
@@ -9041,7 +9041,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

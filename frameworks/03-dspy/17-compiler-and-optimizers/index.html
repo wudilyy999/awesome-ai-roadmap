@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="第十六章讲的 Signature 和 Module 只是声明式编程的前半段；DSPy 的关键能力在 编译 阶段——给定一个 Program 、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错">
+        <meta name="description" content="比较 DSPy 的示例、指令与权重优化，解释 MIPROv2、GEPA 的指标接口、数据划分、搜索预算和部署回归。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十七章：DSPy 的编译器与优化器">
-    <meta property="og:description" content="第十六章讲的 Signature 和 Module 只是声明式编程的前半段；DSPy 的关键能力在 编译 阶段——给定一个 Program 、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错">
+    <meta property="og:description" content="比较 DSPy 的示例、指令与权重优化，解释 MIPROv2、GEPA 的指标接口、数据划分、搜索预算和部署回归。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/17-compiler-and-optimizers/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十七章：DSPy 的编译器与优化器">
-    <meta name="twitter:description" content="第十六章讲的 Signature 和 Module 只是声明式编程的前半段；DSPy 的关键能力在 编译 阶段——给定一个 Program 、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错">
+    <meta name="twitter:description" content="比较 DSPy 的示例、指令与权重优化，解释 MIPROv2、GEPA 的指标接口、数据划分、搜索预算和部署回归。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十七章：DSPy 的编译器与优化器","description":"第十六章讲的 Signature 和 Module 只是声明式编程的前半段；DSPy 的关键能力在 编译 阶段——给定一个 Program 、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/17-compiler-and-optimizers/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十七章：DSPy 的编译器与优化器","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/17-compiler-and-optimizers/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十七章：DSPy 的编译器与优化器","description":"比较 DSPy 的示例、指令与权重优化，解释 MIPROv2、GEPA 的指标接口、数据划分、搜索预算和部署回归。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/17-compiler-and-optimizers/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十七章：DSPy 的编译器与优化器","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/17-compiler-and-optimizers/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"编译器与优化器","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/17-compiler-and-optimizers/"}]}</script>
     
@@ -6273,16 +6273,16 @@
         <li class="md-nav__item">
   <a href="#172" class="md-nav__link">
     <span class="md-ellipsis">
-      17.2 三类优化器：从少样本引导到跨模型迁移
+      17.2 按搜索对象选择优化器
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#173-langsmith" class="md-nav__link">
+  <a href="#173" class="md-nav__link">
     <span class="md-ellipsis">
-      17.3 评测与优化的一体化：和 LangSmith 式可观测性的差异
+      17.3 优化器与观测平台的职责差异
     </span>
   </a>
   
@@ -6351,7 +6351,16 @@
         <li class="md-nav__item">
   <a href="#176" class="md-nav__link">
     <span class="md-ellipsis">
-      17.6 本章总结
+      17.6 优化收益如何证明
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#177" class="md-nav__link">
+    <span class="md-ellipsis">
+      17.7 本章总结
     </span>
   </a>
   
@@ -8396,16 +8405,16 @@
         <li class="md-nav__item">
   <a href="#172" class="md-nav__link">
     <span class="md-ellipsis">
-      17.2 三类优化器：从少样本引导到跨模型迁移
+      17.2 按搜索对象选择优化器
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#173-langsmith" class="md-nav__link">
+  <a href="#173" class="md-nav__link">
     <span class="md-ellipsis">
-      17.3 评测与优化的一体化：和 LangSmith 式可观测性的差异
+      17.3 优化器与观测平台的职责差异
     </span>
   </a>
   
@@ -8474,7 +8483,16 @@
         <li class="md-nav__item">
   <a href="#176" class="md-nav__link">
     <span class="md-ellipsis">
-      17.6 本章总结
+      17.6 优化收益如何证明
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#177" class="md-nav__link">
+    <span class="md-ellipsis">
+      17.7 本章总结
     </span>
   </a>
   
@@ -8515,14 +8533,14 @@
 
 <h1 id="dspy">第十七章：DSPy 的编译器与优化器<a class="headerlink" href="#dspy" title="Permanent link">&para;</a></h1>
 <h2 id="171-prompt">17.1 从「手工调 Prompt」到「指标驱动的自动搜索」<a class="headerlink" href="#171-prompt" title="Permanent link">&para;</a></h2>
-<p>第十六章讲的 <code>Signature</code> 和 <code>Module</code> 只是声明式编程的前半段；DSPy 的关键能力在<strong>编译</strong>阶段——给定一个 <code>Program</code>、一个训练/验证数据集和一个评估指标，编译器会自动搜索能让指标最优的具体实现（Few-shot 示例、Prompt 措辞，甚至更新底层模型权重），而不需要人工反复试错。</p>
-<p>用一个不涉及具体实现细节的抽象目标来描述这个过程：给定程序参数 <span class="arithmatex">\(\theta\)</span>（可以是 few-shot 示例集合、指令措辞、也可以是模型权重）、验证集 <span class="arithmatex">\(D\)</span> 和评估指标 <span class="arithmatex">\(\mu\)</span>，编译器求解</p>
+<p>第十六章讲的 <code>Signature</code> 和 <code>Module</code> 是可运行的基础；DSPy 的优化器在 compile 阶段利用数据和指标搜索更好的参数。Few-shot、指令和权重是不同搜索空间，只有相应优化器才会修改它们，普通 <code>compile()</code> 不等于训练模型，也不保证找到全局最优。</p>
+<p>用抽象目标描述这个过程：给定程序参数 <span class="arithmatex">\(\theta\)</span>、开发验证集 <span class="arithmatex">\(D\)</span> 和指标 <span class="arithmatex">\(\mu\)</span>，目标是最大化下式。实际搜索受预算限制；反复参与选择的验证集不是最终独立测试集。</p>
 <div class="arithmatex">\[
 \theta^{*} = \arg\max_{\theta} \frac{1}{|D|} \sum_{(x, y) \in D} \mu\bigl(f_\theta(x), y\bigr)
 \]</div>
 <p>这与 <a href="../../../llm/">评测与选型主题</a> 中「能力评测指标」一章讨论的是同一套量化方法，只是在 DSPy 里它直接成为<strong>优化目标</strong>，而不只是事后打分工具。</p>
-<h2 id="172">17.2 三类优化器：从少样本引导到跨模型迁移<a class="headerlink" href="#172" title="Permanent link">&para;</a></h2>
-<p>DSPy 提供的优化器（<code>teleprompter</code>）大体分三类，复杂度和适用场景依次递进：</p>
+<h2 id="172">17.2 按搜索对象选择优化器<a class="headerlink" href="#172" title="Permanent link">&para;</a></h2>
+<p><code>teleprompter</code> 是优化器的历史称呼。下面是常见选择，不是完整列表，也不存在固定的「Bootstrap → MIPRO → GEPA」升级顺序：</p>
 <table>
 <thead>
 <tr>
@@ -8533,19 +8551,29 @@
 </thead>
 <tbody>
 <tr>
+<td><code>LabeledFewShot</code></td>
+<td>已有标注示例</td>
+<td>选取演示，不在编译时调用模型；适合作为低成本基线</td>
+</tr>
+<tr>
 <td><code>BootstrapFewShot</code></td>
 <td>Few-shot 示例集合</td>
-<td>用当前 <code>Program</code> 自己在训练集上生成候选推理轨迹，保留通过指标校验的轨迹作为示例</td>
+<td>学生或指定 teacher 运行训练样本，保留通过 metric 的轨迹，并可混合标注示例；不做指令搜索</td>
 </tr>
 <tr>
 <td><code>MIPROv2</code></td>
-<td>指令措辞 + Few-shot 示例</td>
-<td>先用贝叶斯搜索联合优化指令与示例组合，再在验证集上评估候选组合</td>
+<td>指令 + Few-shot 示例</td>
+<td>先自举示例、生成指令候选，再用贝叶斯优化评估并选择组合；可配置零示例优化</td>
 </tr>
 <tr>
 <td><code>GEPA</code></td>
-<td>指令措辞（基于反思的进化搜索）</td>
-<td>让模型对失败样本做自然语言反思，把反思结果变异为新指令，通过评估结果做进化式筛选，比传统贝叶斯搜索更依赖失败案例的语义分析</td>
+<td>默认优化 predictor 指令</td>
+<td>利用执行轨迹和文本反馈反思改写，保留在不同样本上有优势的候选并进行 Pareto 选择；不是权重训练</td>
+</tr>
+<tr>
+<td><code>BootstrapFinetune</code></td>
+<td>模型权重</td>
+<td>从成功轨迹构建训练数据并微调，需要可微调 LM、训练预算与部署支持</td>
 </tr>
 </tbody>
 </table>
@@ -8558,9 +8586,19 @@
     MI --&gt; C
     GE --&gt; C
     C --&gt; D["可直接替换原 Program，接口不变"]</code></pre>
-<p>编译产物替换原 <code>Program</code> 时，调用方代码通常不需要修改。<code>compiled_program = optimizer.compile(program, trainset=trainset)</code> 之后，<code>compiled_program</code> 和 <code>program</code> 暴露的调用接口是一致的，优化只发生在内部的 Prompt 和示例上。</p>
-<h2 id="173-langsmith">17.3 评测与优化的一体化：和 LangSmith 式可观测性的差异<a class="headerlink" href="#173-langsmith" title="Permanent link">&para;</a></h2>
-<p><a href="../../01-langchain/05-production/13-langsmith-production-loop/">LangSmith 生产质量闭环</a> 描述的是一种<strong>事后回路</strong>：先上线，采集 Trace 和生产反馈，离线组建 Dataset，人工或半自动分析后再改 Prompt，本质上是「观测 → 人工决策 → 修改」。</p>
+<p>这些优化器通常返回保持调用接口的程序。要使用返回值，而不是假设原对象已被原地修改。优化产物还可能含更长的示例、指令或新的模型配置，接口不变不意味着延迟和费用不变。</p>
+<p>以下是 MIPROv2 的装配片段，假设已经配置 LM，<code>trainset</code>、<code>valset</code> 中的 <code>dspy.Example</code> 已通过 <code>.with_inputs("question")</code> 标记输入：</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">exact_answer</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">program</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">"question -&gt; answer"</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">MIPROv2</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">exact_answer</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="s2">"light"</span><span class="p">)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">compiled</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="o">=</span><span class="n">valset</span><span class="p">)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">compiled</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"optimized.json"</span><span class="p">)</span>
+</span></code></pre></div>
+<p><code>auto</code> 管预算，不是自动挑优化器；MIPROv2 手动设置 <code>num_trials</code> / <code>num_candidates</code> 时应改用 <code>auto=None</code>。GEPA 的 metric 还需要兼容 <code>pred_name</code>、<code>pred_trace</code> 等参数，可以返回 <code>dspy.Prediction(score=..., feedback=...)</code>；只给标量也可用，但会失去丰富诊断反馈。GEPA 应明确设置 <code>reflection_lm</code> 或自定义 proposer，以及 <code>auto</code> / <code>max_metric_calls</code> 等预算，不能把通用三参数 metric 原封不动当成所有优化器的契约。</p>
+<h2 id="173">17.3 优化器与观测平台的职责差异<a class="headerlink" href="#173" title="Permanent link">&para;</a></h2>
+<p><a href="../../01-langchain/05-production/13-langsmith-production-loop/">LangSmith 生产质量闭环</a> 覆盖 Trace、数据集和评测，不仅用于上线后，也能在开发期运行离线实验。与 DSPy 的区别不是「上线后人工」对「上线前自动」，而是观测/评测平台与程序参数优化器的职责不同。</p>
 <p>DSPy 的评测循环发生在<strong>编译阶段之内</strong>，是「评测即优化」：</p>
 <table>
 <thead>
@@ -8573,29 +8611,29 @@
 <tbody>
 <tr>
 <td><strong>评测发生的时机</strong></td>
-<td>上线后持续采集、离线复盘</td>
-<td>编译时对训练/验证集反复评估</td>
+<td>开发期实验和生产期监控</td>
+<td>编译时反复评估，也可对程序做独立评测</td>
 </tr>
 <tr>
 <td><strong>谁来决定怎么改</strong></td>
-<td>工程师根据 Trace 和评估结果人工调整 Prompt</td>
-<td>优化器根据指标自动搜索 Prompt/示例组合</td>
+<td>平台提供证据，可接人工或自动优化流程</td>
+<td>选定优化器在搜索空间内提出并选择候选</td>
 </tr>
 <tr>
 <td><strong>反馈闭环速度</strong></td>
-<td>依赖生产流量积累和人工分析节奏</td>
-<td>只要有标注数据和指标，可以在开发阶段快速迭代</td>
+<td>取决于数据和自动化集成</td>
+<td>取决于候选数、数据量、模型延迟与并发配额</td>
 </tr>
 <tr>
 <td><strong>可解释性</strong></td>
-<td>Trace 直接可读，容易定位具体失败点</td>
-<td>编译过程是搜索式黑盒，需要额外记录候选方案对比</td>
+<td>看 Trace、评分与实验对比</td>
+<td>保留指令差异、演示、反馈和候选分数，可审计而非必然黑盒</td>
 </tr>
 </tbody>
 </table>
-<p><strong>这不是互斥关系</strong>：即使用 DSPy 编译出了一版 <code>Program</code>，生产环境依然需要 LangSmith、OpenTelemetry 之类的运行时可观测性来发现「训练集没覆盖到的失败模式」，再把这些新失败样本补回 DSPy 的训练集重新编译——两者分别覆盖「开发期离线优化」和「生产期在线监控」两个不同阶段。</p>
+<p><strong>这不是互斥关系</strong>：DSPy 优化产物也需要运行时可观测性来发现数据集未覆盖的失败模式，经过标注后再决定是否重新优化。LangSmith 还可以评测优化前后的程序，因此二者是「搜索候选」与「提供评测、运行证据」的职责分工，不是各自独占一个生命周期阶段。</p>
 <h2 id="174-dspy">17.4 什么时候值得引入 DSPy<a class="headerlink" href="#174-dspy" title="Permanent link">&para;</a></h2>
-<p>编译式优化不是免费的：它要求你有<strong>结构化的评估指标</strong>和<strong>一定规模的标注数据</strong>，还要接受「优化器在搜索什么」不总是完全透明。</p>
+<p>编译式优化需要有代表性的输入和可信的自动反馈，不一定要求每条输入都有人工金标；执行测试、规则校验或经校准的模型评审也能提供信号。数据覆盖和指标质量比固定的「至少多少条」更关键。</p>
 <table>
 <thead>
 <tr>
@@ -8614,11 +8652,11 @@
 </tr>
 <tr>
 <td>Prompt 需要频繁跨模型迁移（换供应商、换版本）</td>
-<td><strong>适合</strong>，重新编译比人工重写全部 Prompt 更省成本</td>
+<td><strong>值得试验</strong>，对比重编译开销与人工基线；不保证必然更省</td>
 </tr>
 <tr>
-<td>团队更看重「Prompt 每一个字都可解释、可审计」</td>
-<td><strong>谨慎</strong>，编译产物的具体措辞是搜索出来的，可解释性弱于手写 Prompt</td>
+<td>团队要求每版 Prompt 可审计</td>
+<td><strong>可以使用</strong>，但必须保存候选、版本、数据摘要与人工批准的产物</td>
 </tr>
 <tr>
 <td>已经有一套基于 LangChain/LlamaIndex 的生产系统</td>
@@ -8628,30 +8666,37 @@
 </table>
 <h2 id="175">17.5 常见错误<a class="headerlink" href="#175" title="Permanent link">&para;</a></h2>
 <h3 id="1751">17.5.1 没有评估指标就直接上优化器<a class="headerlink" href="#1751" title="Permanent link">&para;</a></h3>
-<p>优化器的搜索完全依赖指标函数 <span class="arithmatex">\(\mu\)</span> 的质量；指标定义得粗糙（比如只判断输出格式是否合法，不判断内容是否正确），优化器会精确地把 Prompt 优化到「擅长骗过这个粗糙指标」，而不是真正解决任务。</p>
+<p>搜索方向依赖指标函数 <span class="arithmatex">\(\mu\)</span>；如果只奖励格式合法、不判断内容，优化器可能提高指标而不改善业务质量。反复搜索会放大这种偏差，因此需要独立验收和失败类别分析。</p>
 <h3 id="1752-prompt">17.5.2 把编译产物当成一次性的静态 Prompt 永久使用<a class="headerlink" href="#1752-prompt" title="Permanent link">&para;</a></h3>
-<p>模型供应商更新底层模型后，之前编译出的 Few-shot 示例和措辞不一定还是最优的，需要重新触发编译，而不是把编译产物当成写死的常量。</p>
+<p>模型更新后应先跑回归；出现分布漂移或质量退化再决定重编译。锁定模型、Adapter、DSPy 版本、程序结构与产物，才能区分「模型变了」和「优化变了」。</p>
 <h3 id="1753">17.5.3 用训练集本身当验证集评估优化效果<a class="headerlink" href="#1753" title="Permanent link">&para;</a></h3>
 <p><code>BootstrapFewShot</code> 之类的优化器本身就是在训练集上生成候选示例，如果验证也用同一批数据，测出来的指标会系统性偏高，看不出真实的泛化能力。</p>
 <h3 id="1754-dspy">17.5.4 期望 DSPy 优化器解决模型能力上限问题<a class="headerlink" href="#1754-dspy" title="Permanent link">&para;</a></h3>
-<p>优化器只能在给定模型的能力范围内搜索更好的 Prompt 和示例组合，模型本身做不到的推理（比如复杂数值计算），换多少种 Prompt 措辞也解决不了，这类问题应该交给 <code>ProgramOfThought</code> 生成代码执行，而不是继续加大搜索预算。</p>
-<h2 id="176">17.6 本章总结<a class="headerlink" href="#176" title="Permanent link">&para;</a></h2>
+<p>Prompt 搜索不能保证突破能力瓶颈；但 DSPy 也有权重优化器，不能把整个框架说成只能调措辞。先诊断是证据缺失、计算不可靠还是指标错误，再考虑检索、受限代码执行、换模型或微调。生成代码本身仍可能错，不能用 <code>ProgramOfThought</code> 代替校验与隔离。</p>
+<h2 id="176">17.6 优化收益如何证明<a class="headerlink" href="#176" title="Permanent link">&para;</a></h2>
+<p>验证集参与了候选选择，继续用它报告最终收益会产生选择偏差。保留完全不参与反思和选择的测试集，按文档来源、用户或时间切分，防止同一记录的近似版本同时进入训练与测试。比较未优化程序、简单 few-shot 和优化程序，记录多次运行波动及困难类别，不只报平均分。</p>
+<p>成本账包括学生模型执行、指令/反思模型、模型评审和工具调用。更长的 demonstrations 会在每次推理时收费，所以要同时报告编译一次的成本与线上每请求成本。搜索期间如果允许真实发送邮件或写业务库，每个候选都可能触发副作用；应使用录制数据、只读工具或测试环境。</p>
+<p>深入追问时，应能解释：为什么某个指标提升没有换来业务收益？是否把格式合法当作事实正确？是否让模型评审偏爱更长答案？GEPA 论文的基准成绩不能直接推出你自己的任务优于强化学习；需要在相同模型、数据、预算和测试集上比较。</p>
+<h2 id="177">17.7 本章总结<a class="headerlink" href="#177" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>DSPy 编译可以理解为指标驱动的自动搜索</strong>：给定 <code>Program</code>、数据集和评估指标，优化器搜索能让指标最优的具体实现；</li>
-<li><strong><code>BootstrapFewShot</code>、<code>MIPROv2</code>、<code>GEPA</code> 代表复杂度递增的三类策略</strong>：分别是自举示例、联合搜索指令与示例、基于失败反思的进化搜索；</li>
-<li><strong>编译产物与原 <code>Program</code> 接口一致</strong>，可以无缝替换，优化只发生在内部实现上；</li>
-<li><strong>DSPy 的「评测即优化」和 LangSmith 式的「观测后人工决策」是两个不同阶段的能力，互补而非互斥</strong>；</li>
-<li><strong>引入 DSPy 的前提是有明确的评估指标和一定规模的标注数据</strong>，缺乏这两者时优化器容易退化成盲目搜索甚至过拟合指标本身；</li>
-<li><strong>DSPy 解决不了模型能力上限问题</strong>，它只能在给定模型能力范围内寻找更好的 Prompt 表达方式。</li>
+<li><strong>优化器按搜索对象与反馈选择，而不是按名称升级</strong>：自举示例、联合指令/示例搜索、反思优化和权重训练有不同成本；</li>
+<li><strong>编译产物通常保持调用接口</strong>，上线仍需检查模型配置、延迟、费用和回归质量；</li>
+<li><strong>优化器与可观测性平台互补</strong>，前者搜索候选，后者提供实验和运行证据；</li>
+<li><strong>可信指标、代表性数据与独立测试集缺一不可</strong>，否则优化器可能只学会迎合评分；</li>
+<li><strong>收益要连同编译、推理和运维成本评估</strong>，Prompt 优化不是所有质量问题的解法。</li>
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://dspy.ai/learn/optimization/optimizers/">DSPy: Optimizers 概念</a></li>
+<li><a href="https://dspy.ai/diving-deeper/choosing-an-optimizer/">DSPy: 选择优化器</a></li>
+<li><a href="https://dspy.ai/api/optimizers/MIPROv2/">DSPy: MIPROv2 API 与三阶段机制</a></li>
+<li><a href="https://dspy.ai/api/optimizers/GEPA/overview/">DSPy: GEPA API 与反馈契约</a></li>
 <li><a href="https://dspy.ai/getting-started/gepa-optimization/">DSPy: GEPA 优化教程</a></li>
 <li><a href="https://arxiv.org/abs/2310.03714">DSPy 论文：Khattab et al., "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines"</a></li>
 <li><a href="https://arxiv.org/abs/2507.19457">GEPA 论文：Agrawal et al., "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning"</a></li>
 <li><a href="https://docs.smith.langchain.com/">LangSmith 官方文档</a></li>
 </ul>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8674,7 +8719,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

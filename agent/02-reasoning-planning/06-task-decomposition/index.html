@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Agent 执行时间越长，产生的消息、工具结果和中间结论越多。如果把所有内容都持续加入上下文，会导致">
+        <meta name="description" content="说明任务契约、拆分粒度、DAG 调度、关键路径与局部恢复，处理动态重规划、幂等重试和并发写冲突。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第六章：复杂任务拆分与调度">
-    <meta property="og:description" content="Agent 执行时间越长，产生的消息、工具结果和中间结论越多。如果把所有内容都持续加入上下文，会导致">
+    <meta property="og:description" content="说明任务契约、拆分粒度、DAG 调度、关键路径与局部恢复，处理动态重规划、幂等重试和并发写冲突。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/06-task-decomposition/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第六章：复杂任务拆分与调度">
-    <meta name="twitter:description" content="Agent 执行时间越长，产生的消息、工具结果和中间结论越多。如果把所有内容都持续加入上下文，会导致">
+    <meta name="twitter:description" content="说明任务契约、拆分粒度、DAG 调度、关键路径与局部恢复，处理动态重规划、幂等重试和并发写冲突。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第六章：复杂任务拆分与调度","description":"Agent 执行时间越长，产生的消息、工具结果和中间结论越多。如果把所有内容都持续加入上下文，会导致","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/06-task-decomposition/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第六章：复杂任务拆分与调度","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/06-task-decomposition/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第六章：复杂任务拆分与调度","description":"说明任务契约、拆分粒度、DAG 调度、关键路径与局部恢复，处理动态重规划、幂等重试和并发写冲突。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/06-task-decomposition/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第六章：复杂任务拆分与调度","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/06-task-decomposition/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"复杂任务拆分与调度","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/06-task-decomposition/"}]}</script>
     
@@ -4238,9 +4238,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#6124-40-60" class="md-nav__link">
+  <a href="#6124" class="md-nav__link">
     <span class="md-ellipsis">
-      6.12.4 为什么不能保证降低 40% 到 60%
+      6.12.4 并行收益的限制
     </span>
   </a>
   
@@ -9541,9 +9541,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#6124-40-60" class="md-nav__link">
+  <a href="#6124" class="md-nav__link">
     <span class="md-ellipsis">
-      6.12.4 为什么不能保证降低 40% 到 60%
+      6.12.4 并行收益的限制
     </span>
   </a>
   
@@ -10006,7 +10006,7 @@
     V --&gt;|否| R[局部重试或回退]
     R --&gt; T</code></pre>
 <h3 id="624">6.2.4 支持局部重试和恢复<a class="headerlink" href="#624" title="Permanent link">&para;</a></h3>
-<p>如果第 8 个步骤失败，可靠系统应只重试受影响的步骤，而不是从第 1 步重新执行。</p>
+<p>如果第 8 个步骤失败，应先确定哪些已完成结果仍然有效，再重试受影响的步骤，而不是一律从第 1 步重新执行。若上游输入、权限或业务状态已经变化，旧结果不能仅凭 <code>done</code> 标记复用。</p>
 <p>这要求：</p>
 <ul>
 <li>子任务具有稳定 ID；</li>
@@ -10016,7 +10016,7 @@
 <li>失败影响范围可以追踪。</li>
 </ul>
 <h3 id="625">6.2.5 支持并行执行<a class="headerlink" href="#625" title="Permanent link">&para;</a></h3>
-<p>没有依赖关系的子任务可以并发执行，从而降低总耗时。</p>
+<p>数据依赖已满足且没有共享资源冲突的子任务可以并发执行。没有显式依赖边不等于真正独立：例如两个任务都修改同一配置文件，就需要串行、锁或版本检查。</p>
 <h3 id="626">6.2.6 支持专业化<a class="headerlink" href="#626" title="Permanent link">&para;</a></h3>
 <p>不同子任务可以分配给不同执行器：</p>
 <ul>
@@ -10106,6 +10106,14 @@
 <td><code>risk_level</code></td>
 <td>权限和审批等级</td>
 </tr>
+<tr>
+<td><code>plan_version</code> / <code>input_versions</code></td>
+<td>识别当前计划及输入版本，防止复用过期结果</td>
+</tr>
+<tr>
+<td><code>idempotency_key</code></td>
+<td>有副作用的业务操作在重试时保持同一语义</td>
+</tr>
 </tbody>
 </table>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
@@ -10122,7 +10130,7 @@
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">"schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"competitor-update-list"</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="p">},</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nt">"success_criteria"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="s2">"至少包含两个独立来源"</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="s2">"产品更新优先使用官方发布说明；无法证实的内容标为待核实"</span><span class="p">,</span>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="s2">"每项更新包含发布日期和链接"</span>
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p">],</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="nt">"timeout_seconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span>
@@ -10132,6 +10140,7 @@
 </span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">  </span><span class="nt">"risk_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"read-only"</span>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span>
 </span></code></pre></div>
+<p>这是教学用契约，不是任何框架的完整 API。示例中的时间和重试次数只是配置值；来源数量也不保证事实可靠，两篇转载可能源于同一错误。验收规则应与业务标准一致，而不能完全交给 Planner 临时决定。</p>
 <h2 id="65">6.5 粒度：不能太粗，也不能太细<a class="headerlink" href="#65" title="Permanent link">&para;</a></h2>
 <h3 id="651">6.5.1 粒度过粗<a class="headerlink" href="#651" title="Permanent link">&para;</a></h3>
 <p>例如：</p>
@@ -10265,12 +10274,13 @@
     M2 --&gt; T21[功能对比]
     M2 --&gt; T22[价格对比]
     M2 --&gt; T23[风险分析]</code></pre>
-<p>这和 Hierarchical Task Network 的思路很接近：</p>
+<p>这借鉴了 Hierarchical Task Network（HTN）的分层思路：</p>
 <ul>
 <li>高层任务描述目标；</li>
 <li>方法定义如何展开；</li>
 <li>叶子任务最终由 Tool、模型或 Agent 执行。</li>
 </ul>
+<p>但自然语言多级清单不等于完整 HTN 规划器。经典 HTN 还需要明确定义可用分解方法、方法适用条件、任务顺序约束及原子动作语义；随意生成层级并不会继承形式化规划的保证。</p>
 <h3 id="_2">分层拆分的优势<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>避免一次生成过长计划；</li>
@@ -10409,7 +10419,7 @@
 </table>
 <h2 id="611-dag">6.11 依赖关系与任务 DAG<a class="headerlink" href="#611-dag" title="Permanent link">&para;</a></h2>
 <p>拆分完成后，必须分析子任务之间的依赖关系。</p>
-<p>设每个节点表示任务，每条有向边表示“后一个任务依赖前一个任务”，可以得到任务 DAG：</p>
+<p>设每个节点表示任务，每条有向边表示“后一个任务依赖前一个任务”；确认没有循环后，才得到任务 DAG：</p>
 <pre class="mermaid"><code>flowchart LR
     A[收集竞品 A] --&gt; D[产品对比]
     B[收集竞品 B] --&gt; D
@@ -10424,6 +10434,7 @@
 <p>只有满足某个条件才执行后续任务。</p>
 <h4 id="_9">资源依赖<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h4>
 <p>多个任务竞争相同的限流 API、数据库连接或执行环境。</p>
+<p>资源竞争通常由容量、信号量或锁处理，不一定要为任意两个任务添加顺序边。条件分支还要规定未选分支如何标记为 <code>skipped</code>，汇总节点是等待全部、任一，还是某个指定子集，避免等待永远不会运行的节点。</p>
 <h4 id="_10">安全依赖<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h4>
 <p>某个步骤必须在审批、认证或检查通过后执行。</p>
 <h3 id="6112-dag">6.11.2 DAG 校验<a class="headerlink" href="#6112-dag" title="Permanent link">&para;</a></h3>
@@ -10436,6 +10447,7 @@
 <li>写操作顺序是否安全；</li>
 <li>并发执行是否会产生竞争。</li>
 </ul>
+<p>每版 DAG 保持无环，重试次数、重规划版本和循环退出条件由外层状态机记录。任务不是只有 <code>pending/done</code>：至少应能区分就绪、运行中、成功、失败、阻塞、跳过与取消。分配任务时原子领取或加租约；仅靠“先查询待办，再执行”会让多个 Worker 重复领取。</p>
 <h2 id="612">6.12 并行执行<a class="headerlink" href="#612" title="Permanent link">&para;</a></h2>
 <p>没有依赖的任务可以采用 Fan-out / Fan-in：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -10465,7 +10477,7 @@ Speedup=\frac{T_{seq}}{T_{parallel}}
 <div class="arithmatex">\[
 Saving=1-\frac{T_{parallel}}{T_{seq}}
 \]</div>
-<h3 id="6124-40-60">6.12.4 为什么不能保证降低 40% 到 60%<a class="headerlink" href="#6124-40-60" title="Permanent link">&para;</a></h3>
+<h3 id="6124">6.12.4 并行收益的限制<a class="headerlink" href="#6124" title="Permanent link">&para;</a></h3>
 <p>并行收益取决于：</p>
 <ul>
 <li>可并行任务比例；</li>
@@ -10485,9 +10497,9 @@ Speedup(k)=\frac{1}{(1-p)+\frac{p}{k}}
 <li><code>p</code> 是可并行部分比例；</li>
 <li><code>k</code> 是并行执行单元数量。</li>
 </ul>
-<p>因此，“关键路径时间降低 40% 到 60%”只能作为某个系统的实测结果，不能作为通用规律。</p>
+<p>这个模型假设固定工作量、可并行部分可均分，并忽略通信和争用。实际 Agent 的分支长度、模型限流和重试都可能变化，不能用固定节省比例预测。并行调度通常缩短的是总完成时间，不会自动缩短 DAG 原有的依赖关键路径。</p>
 <h3 id="6125">6.12.5 具体示例<a class="headerlink" href="#6125" title="Permanent link">&para;</a></h3>
-<p>三个独立调研任务分别耗时 40 秒、50 秒和 60 秒，结果合并耗时 10 秒。</p>
+<p>假设三个独立调研任务分别耗时 40 秒、50 秒和 60 秒，结果合并耗时 10 秒。这是用于演算的虚构时长，不是生产测量。</p>
 <p>顺序执行：</p>
 <div class="arithmatex">\[
 T_{seq}=40+50+60+10=160
@@ -10502,7 +10514,7 @@ Saving=1-\frac{70}{160}=56.25\%
 \]</div>
 <p>这里的 56.25% 来自这组具体数据，并不是所有任务都能达到的固定收益。</p>
 <h2 id="613">6.13 关键路径<a class="headerlink" href="#613" title="Permanent link">&para;</a></h2>
-<p>任务 DAG 的总完成时间由最长依赖路径决定，这条路径称为 Critical Path。</p>
+<p>任务 DAG 中按执行时长计的最长依赖路径称为 Critical Path。资源充足、任务立即就绪执行且忽略额外开销时，总完成时间等于这一路径长度；有并发上限、排队或资源争用时，它只是下界。</p>
 <pre class="mermaid"><code>flowchart LR
     A[任务 A&lt;br/&gt;20s] --&gt; C[任务 C&lt;br/&gt;40s]
     B[任务 B&lt;br/&gt;50s] --&gt; D[任务 D&lt;br/&gt;10s]
@@ -10513,6 +10525,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <li>A → C → E：70 秒；</li>
 <li>B → D → E：70 秒。</li>
 </ul>
+<p>若只有一个执行器，总耗时为 130 秒而非 70 秒。图中两条路径并列关键，只缩短其中一条也不会突破另一条的 70 秒下界。</p>
 <p>优化不在关键路径上的任务，可能不会降低整体完成时间。调度器应优先关注：</p>
 <ul>
 <li>关键路径上的慢任务；</li>
@@ -10563,6 +10576,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <li>需要时再加载完整内容。</li>
 </ul>
 <p>这可以降低上下文重复和信息污染。</p>
+<p>Artifact 还应绑定输入版本、生产任务和校验结果；消费者需要检查数据时效与权限，而不只读摘要。摘要可能漏掉例外条件，来源网页也可能包含不可信指令，不能因为进入内部 Artifact 就提升为系统指令。</p>
 <h2 id="616-plannerschedulerexecutor-verifier">6.16 Planner、Scheduler、Executor 与 Verifier<a class="headerlink" href="#616-plannerschedulerexecutor-verifier" title="Permanent link">&para;</a></h2>
 <p>复杂任务的拆分系统，通常会把下面四类职责分开：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -10614,6 +10628,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <p>子任务失败后不应只有“无限重试”一种策略。</p>
 <h3 id="6171">6.17.1 局部重试<a class="headerlink" href="#6171" title="Permanent link">&para;</a></h3>
 <p>适合临时网络错误、限流和偶发模型输出错误。</p>
+<p>只读请求可按错误类型退避并加入抖动；写请求超时则可能是“服务端成功、响应丢失”。先用操作 ID 查询状态，或以同一幂等键重试，不要直接生成新请求再次执行。权限拒绝、非法输入和预算耗尽通常不应原样重试。</p>
 <h3 id="6172">6.17.2 参数调整<a class="headerlink" href="#6172" title="Permanent link">&para;</a></h3>
 <p>根据结构化错误修改查询、参数或超时。</p>
 <h3 id="6173">6.17.3 更换执行器<a class="headerlink" href="#6173" title="Permanent link">&para;</a></h3>
@@ -10627,6 +10642,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <p>如果任务本身过大，可以拆成更小步骤。</p>
 <h3 id="6175">6.17.5 重新规划<a class="headerlink" href="#6175" title="Permanent link">&para;</a></h3>
 <p>如果关键假设失效，需要修改依赖和后续计划。</p>
+<p>更新时保留历史版本，而不是原地覆盖正在执行的计划。应计算受影响子图，取消尚未开始的旧节点，对运行中任务请求取消，并隔离其迟到结果；已完成 Artifact 只有在输入与前提仍有效时才可复用。取消请求不保证外部副作用已撤销。</p>
 <h3 id="6176">6.17.6 补偿操作<a class="headerlink" href="#6176" title="Permanent link">&para;</a></h3>
 <p>对于已经产生副作用的操作，不能简单重试。需要设计：</p>
 <ul>
@@ -10635,6 +10651,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <li>幂等键；</li>
 <li>人工确认。</li>
 </ul>
+<p><a href="https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/">AWS 的幂等 API 设计说明</a>强调，用调用者提供的请求标识表达同一次操作，并在服务端协调去重记录与副作用提交。Task ID 本身不会产生 exactly-once 保证；幂等键的有效期、参数一致性和作用域都要明确。补偿也不是时间倒流：退款不等于撤销发货，已发送邮件通常无法回滚。</p>
 <pre class="mermaid"><code>flowchart TB
     F[任务失败] --&gt; C{失败类型}
     C --&gt;|临时错误| R[退避重试]
@@ -10760,7 +10777,7 @@ Saving=1-\frac{70}{160}=56.25\%
 <li>优先确定性静态拆分；</li>
 <li>对未知部分使用动态 Planner；</li>
 <li>长任务采用分层和滚动规划；</li>
-<li>所有任务建立依赖 DAG；</li>
+<li>对可调度步骤建立依赖图，循环由有界状态机或分版 DAG 表达；</li>
 <li>只并行真正独立的任务；</li>
 <li>用运行指标驱动自适应拆分。</li>
 </ol>
@@ -10787,7 +10804,7 @@ Saving=1-\frac{70}{160}=56.25\%
 </tr>
 <tr>
 <td>Parallel Efficiency</td>
-<td>并行资源是否真正降低关键路径</td>
+<td>在关键路径和容量下界约束下，资源利用能否缩短总完成时间</td>
 </tr>
 <tr>
 <td>Planning Overhead</td>
@@ -10855,6 +10872,8 @@ Saving=1-\frac{70}{160}=56.25\%
 <li><a href="https://www.langchain.com/blog/planning-agents">LangChain: Planning Agents</a></li>
 <li><a href="https://arxiv.org/abs/2312.04511">LLMCompiler: An LLM Compiler for Parallel Function Calling</a></li>
 <li><a href="https://arxiv.org/abs/2305.18323">ReWOO: Decoupling Reasoning from Observations for Efficient Augmented Language Models</a></li>
+<li><a href="https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/">AWS Builders' Library: Making retries safe with idempotent APIs</a></li>
+<li><a href="https://www.cs.umd.edu/projects/shop/">SHOP 系列规划器：作者项目页与实现</a></li>
 </ul>
 
 
@@ -10878,7 +10897,7 @@ Saving=1-\frac{70}{160}=56.25\%
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

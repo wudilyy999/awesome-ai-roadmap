@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="加大 Top-K、换模型或 rerank 有时能改善证据覆盖，但不能替代显式的多步检索、关系建模和答案验证；是否需要这些能力必须在任务集上验证">
+        <meta name="description" content="介绍图关系与社区摘要检索，区分 Microsoft GraphRAG 的索引和查询模式，分析逐边证据、增量更新与成本边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十六章：GraphRAG 与图检索">
-    <meta property="og:description" content="加大 Top-K、换模型或 rerank 有时能改善证据覆盖，但不能替代显式的多步检索、关系建模和答案验证；是否需要这些能力必须在任务集上验证">
+    <meta property="og:description" content="介绍图关系与社区摘要检索，区分 Microsoft GraphRAG 的索引和查询模式，分析逐边证据、增量更新与成本边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/16-graphrag/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十六章：GraphRAG 与图检索">
-    <meta name="twitter:description" content="加大 Top-K、换模型或 rerank 有时能改善证据覆盖，但不能替代显式的多步检索、关系建模和答案验证；是否需要这些能力必须在任务集上验证">
+    <meta name="twitter:description" content="介绍图关系与社区摘要检索，区分 Microsoft GraphRAG 的索引和查询模式，分析逐边证据、增量更新与成本边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十六章：GraphRAG 与图检索","description":"加大 Top-K、换模型或 rerank 有时能改善证据覆盖，但不能替代显式的多步检索、关系建模和答案验证；是否需要这些能力必须在任务集上验证","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/16-graphrag/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十六章：GraphRAG 与图检索","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/16-graphrag/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十六章：GraphRAG 与图检索","description":"介绍图关系与社区摘要检索，区分 Microsoft GraphRAG 的索引和查询模式，分析逐边证据、增量更新与成本边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/16-graphrag/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十六章：GraphRAG 与图检索","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/16-graphrag/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"GraphRAG 与图检索","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/16-graphrag/"}]}</script>
     
@@ -5051,7 +5051,7 @@
           <li class="md-nav__item">
   <a href="#1634" class="md-nav__link">
     <span class="md-ellipsis">
-      16.3.4 抽取质量决定一切
+      16.3.4 抽取质量与证据校验
     </span>
   </a>
   
@@ -8568,7 +8568,7 @@
           <li class="md-nav__item">
   <a href="#1634" class="md-nav__link">
     <span class="md-ellipsis">
-      16.3.4 抽取质量决定一切
+      16.3.4 抽取质量与证据校验
     </span>
   </a>
   
@@ -8731,7 +8731,7 @@
 <pre class="mermaid"><code>flowchart LR
     subgraph 向量检索
         Q1[整个问题一个向量] --&gt; M1[找最相似的片段]
-        M1 --&gt; F1[找不到&lt;br/&gt;因为没有片段同时包含三者]
+        M1 --&gt; F1[单轮候选可能&lt;br/&gt;覆盖不全关系链]
     end
     subgraph 图检索
         Q2[识别实体 A] --&gt; N1[节点 A]
@@ -8745,7 +8745,7 @@
 <p><strong>另一类单轮局部检索较难覆盖的问题</strong>：全局性、主题性的问题。</p>
 <p>「这一千份客户反馈的主要抱怨集中在哪几类？」——这需要<strong>综合整个语料</strong>，而不是找出最相关的几个片段。</p>
 <h2 id="162-graphrag">16.2 GraphRAG 的思路<a class="headerlink" href="#162-graphrag" title="Permanent link">&para;</a></h2>
-<p>GraphRAG 的做法，是把非结构化文本转成结构化的知识图谱，再在图上做检索。</p>
+<p>GraphRAG 泛指利用图结构辅助检索生成的路线。本章构图与社区摘要流程主要对应微软 <strong>Standard GraphRAG</strong>，不能代表所有图 RAG 都必须调用 LLM 抽取。</p>
 <h3 id="1621">16.2.1 构建阶段<a class="headerlink" href="#1621" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TB
     D[文档] --&gt; C[切分]
@@ -8772,12 +8772,22 @@
 </tr>
 <tr>
 <td><strong>全局检索</strong></td>
-<td>用社区摘要作为素材，逐层汇总回答</td>
+<td>对社区报告执行 map-reduce 式问答与汇总</td>
 <td>主题性、全局性问题</td>
+</tr>
+<tr>
+<td><strong>DRIFT</strong></td>
+<td>以社区信息扩展入口，再生成细化追问</td>
+<td>需要更广背景的实体问题</td>
+</tr>
+<tr>
+<td><strong>Basic</strong></td>
+<td>对文本单元进行基础向量 RAG</td>
+<td>建立普通检索对照</td>
 </tr>
 </tbody>
 </table>
-<p><strong>局部检索的典型流程</strong>是「<strong>向量定位入口 + 图遍历接力</strong>」：先用向量检索找到问题涉及的实体节点，再沿着关系边走 1–3 跳收集关联信息。</p>
+<p>微软 Local Search 用实体描述嵌入定位入口，组合相关实体、关系、社区报告和原始文本，再按预算排序过滤。一般图检索可以设 1–3 跳扩展，但不能把这个示例范围说成官方 Local Search 固定算法。</p>
 <p><strong>这个混合思路很重要</strong>：向量负责「从文本世界跳进图世界」，图负责「在结构化世界里走关系」。</p>
 <h2 id="163">16.3 必须诚实说明的代价<a class="headerlink" href="#163" title="Permanent link">&para;</a></h2>
 <p>只讲 GraphRAG 的优点而不谈代价，往往不足以支撑实际选型。</p>
@@ -8790,21 +8800,20 @@
 <p>这是任务与实现相关的经验结论，不应泛化为所有 GraphRAG 都一定更差；应以同一数据集、预算和时延约束下的对照实验决定。</p>
 <h3 id="1632">16.3.2 索引成本很高<a class="headerlink" href="#1632" title="Permanent link">&para;</a></h3>
 <p>构建阶段需要<strong>对每个 chunk 调用 LLM 抽取实体和关系</strong>，再对每个社区生成摘要。</p>
-<p>参考量级：<strong>百万 Token 规模的语料，索引成本在几十到几百美元</strong>，且随语料规模线性增长。</p>
-<p><strong>对比一下</strong>：普通向量索引的成本是几美分。<strong>这是两三个数量级的差距。</strong></p>
+<p>不要套用“每百万 Token 几百美元”的固定估算。应统计抽取输入/输出、重复抽取、实体合并、社区报告与向量化，并按实际价格或自托管资源计费。实体密度和社区重组使成本不一定随原文 Token 线性增长。</p>
+<p>官方 <strong>FastGraphRAG</strong> 用 NLP 名词短语与共现关系替代部分 LLM 抽取，降低成本但产生更噪声化的图；共现不等于真实业务关系。应区分 Standard 与 Fast，而不是把一种索引成本推广给整个产品。</p>
 <h3 id="1633">16.3.3 更新极其困难<a class="headerlink" href="#1633" title="Permanent link">&para;</a></h3>
 <p>新增一份文档，可能改变实体之间的关系，进而改变社区划分，进而使<strong>大量社区摘要失效</strong>。</p>
-<p>原始的 GraphRAG 方案基本上<strong>需要重建</strong>。后续的一些改进方案（如 LightRAG）专门针对这一点做了增量更新支持，<strong>在动态语料上更实用</strong>。</p>
-<h3 id="1634">16.3.4 抽取质量决定一切<a class="headerlink" href="#1634" title="Permanent link">&para;</a></h3>
-<p>实体和关系是<strong>用 LLM 抽出来的</strong>，这意味着：</p>
+<p>不能再把微软实现描述成“只能全量重建”：本次核验的官方 CLI 已列出 <code>standard-update</code> 与 <code>fast-update</code> 索引方法。但可运行 update 不等于任意修改、删除和派生摘要都会正确同步；应固定安装版本，分别测试新增、替换、撤销和权限变化的依赖更新。LightRAG 也研究增量处理，实际代价仍需同任务比较。</p>
+<h3 id="1634">16.3.4 抽取质量与证据校验<a class="headerlink" href="#1634" title="Permanent link">&para;</a></h3>
+<p>Standard 路线依赖 LLM 抽取实体与关系，Fast 路线的 NLP 抽取与共现建图也会产生错误。需要关注：</p>
 <ul>
 <li><strong>实体消歧问题</strong>：「张三」「张总」「张经理」可能是同一个人，也可能不是；</li>
-<li><strong>关系抽取错误</strong>会被固化进图里，且<strong>比文本错误更难发现</strong>——文本错了还能人工看出来，图里的一条错误的边是隐形的；</li>
+<li><strong>关系抽取错误</strong>可能被后续路径和摘要反复使用；若没有来源回链，排查会更困难，但边并非“隐形”，可以通过图检查、原文对照和关系约束发现；</li>
 <li><strong>抽取的一致性差</strong>：同样的关系在不同文档里可能被抽成不同的关系类型。</li>
 </ul>
-<blockquote>
-<p><strong>图的质量上限，等于 LLM 抽取的质量上限。</strong> 而这一层通常没有任何校验。</p>
-</blockquote>
+<p>图中每条事实边应保留支持它的原文、版本、有效期与来源可信度。实体消歧、关系类型约束和人工抽检能改善质量；不能把 LLM 生成的边直接视为已验证事实。</p>
+<p>例如“最大供应商”需要采购金额、统计时间和覆盖范围，只有 <code>供应商</code> 边并不能证明“最大”。图路径回答应逐边核验；社区摘要还需回链原文，不能仅引用二次生成的报告来证明具体数值。最坏情况下 h 跳邻域按分支因子约呈 <code>b^h</code> 增长，需控制实体数、边类型、遍历深度与 Token 预算。</p>
 <h2 id="164">16.4 相关方案对比<a class="headerlink" href="#164" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -8837,7 +8846,7 @@
 </tr>
 </tbody>
 </table>
-<p>原始 GraphRAG 更新困难，而 LightRAG 专门补这一点；这也是两者最值得区分的地方之一。</p>
+<p>这些方案构图、检索和更新策略不同，不能只用“谁支持增量”区分；微软当前官方实现也有更新方法。</p>
 <h2 id="165">16.5 什么时候值得用<a class="headerlink" href="#165" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     S{问题类型} --&gt;|具体事实查找| NO[先以基础 RAG 为基线&lt;br/&gt;再做对照评测]
@@ -8846,7 +8855,7 @@
     M --&gt;|是| YES1[考虑图检索]
     M --&gt;|否| ALT[先试 Agentic RAG&lt;br/&gt;多轮检索也能做多跳]
     G --&gt;|是| YES2[考虑 GraphRAG]
-    G --&gt;|否| ALT2[考虑 RAPTOR&lt;br/&gt;成本更低]</code></pre>
+    G --&gt;|否| ALT2[比较分组摘要或 RAPTOR&lt;br/&gt;实测构建与查询成本]</code></pre>
 <p><strong>值得用的信号</strong>：</p>
 <ul>
 <li>领域<strong>本身就是关系密集的</strong>：组织架构、供应链、知识产权、金融关联、代码依赖；</li>
@@ -8873,28 +8882,28 @@
 <tbody>
 <tr>
 <td>索引成本</td>
-<td><strong>很高</strong></td>
-<td>与普通 RAG 相同</td>
+<td>取决于 Standard/Fast、实体密度、抽取与社区报告规模</td>
+<td>若复用普通索引则接近原检索方案；另建摘要或辅助索引会增加成本</td>
 </tr>
 <tr>
 <td>查询成本</td>
-<td>中</td>
-<td><strong>高</strong>（多轮 LLM 调用）</td>
+<td>Local、Global、DRIFT 等模式的候选量、报告读取与调用次数不同</td>
+<td>取决于实际轮次、工具数量、缓存与停止策略</td>
 </tr>
 <tr>
 <td>更新成本</td>
-<td><strong>很高</strong></td>
-<td>与普通 RAG 相同</td>
+<td>取决于受影响的实体、关系、社区及所用更新方法</td>
+<td>取决于底层索引和额外派生数据，不因采用 Agent 就自动降低</td>
 </tr>
 <tr>
 <td>全局问题能力</td>
-<td><strong>强</strong></td>
-<td>弱</td>
+<td>社区报告可帮助扩大主题覆盖，但需验证摘要遗漏与汇总质量</td>
+<td>可通过查询分解或分组遍历扩大覆盖，需控制漏检、轮次和预算</td>
 </tr>
 <tr>
 <td>多跳能力</td>
-<td>强</td>
-<td>强</td>
+<td>依赖关系准确性、实体链接与路径证据覆盖</td>
+<td>依赖分解质量、逐轮证据覆盖与中间结果校验</td>
 </tr>
 </tbody>
 </table>
@@ -8908,14 +8917,14 @@
 <li><strong>建立文档之间的显式引用关系</strong>（「本条参见第 X 条」），检索时自动带出被引用内容；</li>
 <li><strong>对结构化程度高的部分单独建关系表</strong>，用 SQL 查询，与向量检索结果合并。</li>
 </ul>
-<p><strong>这类方案的成本远低于完整 GraphRAG，却能覆盖相当一部分需求。</strong> 在多跳需求不重、语料更新频繁时，这类折中方案往往更容易落地。</p>
+<p>如果已有可靠实体标签、引用关系或结构化表，这些方案可能减少新增抽取与维护成本；若需要补做消歧、关系标注和持续治理，成本也可能很高。应在同一任务集上比较证据覆盖、更新滞后、索引维护人力、查询延迟与总成本，再判断是否比完整图方案更合适。</p>
 <h2 id="167">16.7 常见错误<a class="headerlink" href="#167" title="Permanent link">&para;</a></h2>
 <h3 id="1671-graphrag">16.7.1 只讲 GraphRAG 的优点<a class="headerlink" href="#1671-graphrag" title="Permanent link">&para;</a></h3>
 <p>如果省略事实查找的对照结果、索引成本和更新困难，就很难完成实际选型。</p>
 <h3 id="1672">16.7.2 把向量检索绝对化为“做不到多跳”<a class="headerlink" href="#1672" title="Permanent link">&para;</a></h3>
 <p>单轮向量召回不显式遍历关系，但查询分解、多轮检索、实体扩展和 Agent 能组合证据。关键是比较这些路径与图检索是否满足任务要求。</p>
 <h3 id="1673">16.7.3 忽略抽取质量的风险<a class="headerlink" href="#1673" title="Permanent link">&para;</a></h3>
-<p>图里的错误边是隐形的，比文本错误更难发现。</p>
+<p>缺少来源回链时，错误边可能难以排查；应保留可检查的边属性与原文定位，并做关系约束和抽样复核。</p>
 <h3 id="1674-graphrag">16.7.4 不知道 GraphRAG 更新困难<a class="headerlink" href="#1674-graphrag" title="Permanent link">&para;</a></h3>
 <p>这在动态语料场景里是决定性的劣势。</p>
 <h3 id="1675-graphrag">16.7.5 认为 GraphRAG 是通用升级<a class="headerlink" href="#1675-graphrag" title="Permanent link">&para;</a></h3>
@@ -8927,7 +8936,7 @@
 <li><strong>单轮向量召回不显式遍历关系图</strong>：对多跳问题常需查询分解、多轮检索、实体扩展或图结构；它不是“绝对做不到”；</li>
 <li><strong>较难覆盖的任务</strong>：多跳关系推理、全局主题综合；是否需要图取决于实测；</li>
 <li><strong>GraphRAG 的思路</strong>：LLM 抽取实体关系构图 → 社区检测 → 社区摘要；检索分<strong>局部</strong>（向量定位 + 图遍历）和<strong>全局</strong>（社区摘要汇总）；</li>
-<li><strong>必须说明的四个代价</strong>：事实查找可能不如基础 RAG 划算、索引成本高、更新困难、抽取质量会限制上限且错误隐形；这些都要用对照实验确认；</li>
+<li><strong>必须比较的四类约束</strong>：事实查找的投入产出、具体索引与查询模式的成本、更新依赖范围、抽取与证据校验质量；这些都要用对照实验确认；</li>
 <li><strong>相关方案</strong>：LightRAG 支持增量更新，HippoRAG 专长多跳，PathRAG 关注关键路径；</li>
 <li><strong>只需要多跳时，应比较 Agentic 多轮检索、结构化查询与图检索</strong>；全局综合也应以任务评测而非“不可替代”判断；</li>
 <li><strong>务实的中间方案</strong>：元数据实体标签、显式引用关系、结构化部分单独建表。</li>
@@ -8936,6 +8945,10 @@
 <ul>
 <li><a href="https://arxiv.org/abs/2404.16130">From Local to Global: A Graph RAG Approach to Query-Focused Summarization</a></li>
 <li><a href="https://microsoft.github.io/graphrag/">Microsoft GraphRAG 官方文档</a></li>
+<li><a href="https://microsoft.github.io/graphrag/index/methods/">Microsoft GraphRAG：索引方法</a></li>
+<li><a href="https://microsoft.github.io/graphrag/cli/">Microsoft GraphRAG：CLI（含更新方法）</a></li>
+<li><a href="https://microsoft.github.io/graphrag/query/overview/">Microsoft GraphRAG：查询模式</a></li>
+<li><a href="https://microsoft.github.io/graphrag/query/local_search/">Microsoft GraphRAG：Local Search</a></li>
 <li><a href="https://arxiv.org/abs/2410.05779">LightRAG: Simple and Fast Retrieval-Augmented Generation</a></li>
 <li><a href="https://arxiv.org/abs/2405.14831">HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models</a></li>
 <li><a href="https://arxiv.org/abs/2502.14902">PathRAG: Pruning Graph-based Retrieval Augmented Generation with Relational Paths</a></li>
@@ -8963,7 +8976,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="与 LangChain 和 LlamaIndex 常见的「手写 Prompt、手工调参」做法相比，DSPy 把 Prompt 视为程序里的可优化对象。它用「声明式签名 + 编译器」替代手写 Prompt，用「指标驱动的优化器」替代人工试错">
+        <meta name="description" content="学习 DSPy 的签名、模块、Adapter 与指标驱动优化，比较示例、指令和权重搜索及其数据和成本要求。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="框架与编排 · DSPy 声明式优化">
-    <meta property="og:description" content="与 LangChain 和 LlamaIndex 常见的「手写 Prompt、手工调参」做法相比，DSPy 把 Prompt 视为程序里的可优化对象。它用「声明式签名 + 编译器」替代手写 Prompt，用「指标驱动的优化器」替代人工试错">
+    <meta property="og:description" content="学习 DSPy 的签名、模块、Adapter 与指标驱动优化，比较示例、指令和权重搜索及其数据和成本要求。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="框架与编排 · DSPy 声明式优化">
-    <meta name="twitter:description" content="与 LangChain 和 LlamaIndex 常见的「手写 Prompt、手工调参」做法相比，DSPy 把 Prompt 视为程序里的可优化对象。它用「声明式签名 + 编译器」替代手写 Prompt，用「指标驱动的优化器」替代人工试错">
+    <meta name="twitter:description" content="学习 DSPy 的签名、模块、Adapter 与指标驱动优化，比较示例、指令和权重搜索及其数据和成本要求。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · DSPy 声明式优化","description":"与 LangChain 和 LlamaIndex 常见的「手写 Prompt、手工调参」做法相比，DSPy 把 Prompt 视为程序里的可优化对象。它用「声明式签名 + 编译器」替代手写 Prompt，用「指标驱动的优化器」替代人工试错","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · DSPy 声明式优化","description":"学习 DSPy 的签名、模块、Adapter 与指标驱动优化，比较示例、指令和权重搜索及其数据和成本要求。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/03-dspy/"}]}</script>
     
@@ -8289,7 +8289,7 @@
 
 
 <h1 id="dspy">框架与编排 · DSPy 声明式优化<a class="headerlink" href="#dspy" title="Permanent link">&para;</a></h1>
-<p>与 LangChain 和 LlamaIndex 常见的「手写 Prompt、手工调参」做法相比，DSPy 把 Prompt 视为程序里的可优化对象。它用「声明式签名 + 编译器」替代手写 Prompt，用「指标驱动的优化器」替代人工试错。</p>
+<p>DSPy 把指令、示例或可训练模型参数视为程序中的优化对象。Signature 与 Module 先构成可运行程序，开发者再选择优化器、数据、指标和预算；这并不取消手写任务指令、程序结构设计和独立测试。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="16-declarative-programming-model/">第十六章：DSPy 的声明式编程模型：Signature、Module 与 Program</a></li>
@@ -8299,16 +8299,20 @@
 <pre class="mermaid"><code>flowchart LR
     A["Signature&lt;br/&gt;声明输入输出契约"] --&gt; B["Module&lt;br/&gt;Predict / ChainOfThought / ReAct"]
     B --&gt; C["Program&lt;br/&gt;Module 组合"]
-    C --&gt; D["Optimizer&lt;br/&gt;BootstrapFewShot / MIPROv2 / GEPA"]
-    D --&gt;|"编译"| E["针对具体模型优化过的&lt;br/&gt;Prompt / Few-shot 示例 / 权重"]
-    E -.回填.-&gt; C</code></pre>
+    C --&gt; D["按搜索对象选择 Optimizer"]
+    D --&gt;|"示例 / 指令搜索"| E["Prompt / Few-shot 示例"]
+    D --&gt;|"如 BootstrapFinetune"| F["可微调模型的权重"]
+    E -.回填.-&gt; C
+    F -.部署与配置.-&gt; C</code></pre>
 <h2 id="_3">阅读建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li>建议先读第十六章，理解 Signature / Module / Program 如何把「做什么」和「怎么做」分开；再读第十七章，看编译器如何利用这种分离自动搜索更优实现；</li>
 <li>如果想和 LangChain、LlamaIndex 对照，两章都会标注 DSPy 的评测循环与 LangSmith 式可观测性的差异，适合先读 <a href="../01-langchain/05-production/">LangChain 生态 · 生产闭环</a> 再回来比较；</li>
 <li>如果主要想判断是否值得引入 DSPy，可直接看第十七章 17.4 节，再对照 <a href="../06-selection-portability/">框架选型与可移植架构</a>。</li>
+<li>结合 <a href="https://dspy.ai/diving-deeper/choosing-an-optimizer/">官方优化器指南</a> 阅读：为什么 GEPA 需要有意义的反馈、验证集为何不能充当最终测试集、编译后每次推理是否更贵，比记住优化器名称更重要。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8331,7 +8335,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="比较全量微调、参数高效微调和指令微调的适用场景，说明数据、算力、稳定性与部署成本之间的取舍。">
+        <meta name="description" content="比较全量微调、LoRA 与 QLoRA 的参数和显存预算，区分 SFT、DPO 训练目标，并说明数据评测、遗忘与部署维护的取舍。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第八章：大模型微调方案">
-    <meta property="og:description" content="比较全量微调、参数高效微调和指令微调的适用场景，说明数据、算力、稳定性与部署成本之间的取舍。">
+    <meta property="og:description" content="比较全量微调、LoRA 与 QLoRA 的参数和显存预算，区分 SFT、DPO 训练目标，并说明数据评测、遗忘与部署维护的取舍。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第八章：大模型微调方案">
-    <meta name="twitter:description" content="比较全量微调、参数高效微调和指令微调的适用场景，说明数据、算力、稳定性与部署成本之间的取舍。">
+    <meta name="twitter:description" content="比较全量微调、LoRA 与 QLoRA 的参数和显存预算，区分 SFT、DPO 训练目标，并说明数据评测、遗忘与部署维护的取舍。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第八章：大模型微调方案","description":"比较全量微调、参数高效微调和指令微调的适用场景，说明数据、算力、稳定性与部署成本之间的取舍。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第八章：大模型微调方案","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第八章：大模型微调方案","description":"比较全量微调、LoRA 与 QLoRA 的参数和显存预算，区分 SFT、DPO 训练目标，并说明数据评测、遗忘与部署维护的取舍。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第八章：大模型微调方案","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"大模型微调","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/08-finetuning/"}]}</script>
     
@@ -1107,17 +1107,17 @@
         <li class="md-nav__item">
   <a href="#81" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1 前置问题：什么时候才真的需要微调
+      8.1 前置问题：错误是否适合用微调解决
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.1 前置问题：什么时候才真的需要微调">
+    <nav class="md-nav" aria-label="8.1 前置问题：错误是否适合用微调解决">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#811" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.1 微调的成本远比想象大
+      8.1.1 先做错误归因
     </span>
   </a>
   
@@ -1126,7 +1126,7 @@
           <li class="md-nav__item">
   <a href="#812" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.2 先试这三条更轻的路
+      8.1.2 哪些场景值得微调
     </span>
   </a>
   
@@ -1135,16 +1135,7 @@
           <li class="md-nav__item">
   <a href="#813" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.3 三种场景微调才真的值得做
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#814" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.1.4 一个重要的反例
+      8.1.3 成本不能脱离配置报价
     </span>
   </a>
   
@@ -1158,7 +1149,7 @@
         <li class="md-nav__item">
   <a href="#82" class="md-nav__link">
     <span class="md-ellipsis">
-      8.2 关键框架：两个正交维度
+      8.2 两个维度：更新哪些参数，使用什么信号
     </span>
   </a>
   
@@ -1167,17 +1158,17 @@
         <li class="md-nav__item">
   <a href="#83" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3 维度一：改哪些参数
+      8.3 参数方案与显存预算
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.3 维度一：改哪些参数">
+    <nav class="md-nav" aria-label="8.3 参数方案与显存预算">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#831" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.1 全量微调：所有参数都改
+      8.3.1 全量微调
     </span>
   </a>
   
@@ -1186,16 +1177,16 @@
           <li class="md-nav__item">
   <a href="#832-lora" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.2 LoRA：只改一小部分
+      8.3.2 LoRA
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#833-qlora-gpu" class="md-nav__link">
+  <a href="#833-qlora" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.3 QLoRA：消费级 GPU 的入场券
+      8.3.3 QLoRA
     </span>
   </a>
   
@@ -1204,7 +1195,7 @@
           <li class="md-nav__item">
   <a href="#834" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.4 三者对比
+      8.3.4 三种方案怎样比较
     </span>
   </a>
   
@@ -1218,17 +1209,17 @@
         <li class="md-nav__item">
   <a href="#84" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4 维度二：学什么目标
+      8.4 训练目标：数据如何变成梯度
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.4 维度二：学什么目标">
+    <nav class="md-nav" aria-label="8.4 训练目标：数据如何变成梯度">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#841-sft" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4.1 SFT：学会按指令回答
+      8.4.1 SFT：模仿示范
     </span>
   </a>
   
@@ -1237,7 +1228,7 @@
           <li class="md-nav__item">
   <a href="#842-dpo" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4.2 DPO：学会哪种回答更受欢迎
+      8.4.2 DPO：学习相对偏好
     </span>
   </a>
   
@@ -1251,17 +1242,26 @@
         <li class="md-nav__item">
   <a href="#85" class="md-nav__link">
     <span class="md-ellipsis">
-      8.5 实战选型
+      8.5 一个可执行的选型过程
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.5 实战选型">
+    <nav class="md-nav" aria-label="8.5 一个可执行的选型过程">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#851" class="md-nav__link">
     <span class="md-ellipsis">
-      8.5.1 一个常见误区：方案越重越好
+      8.5.1 评估与数据切分
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#852" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.5.2 什么需要随训练产物一起保存
     </span>
   </a>
   
@@ -1275,78 +1275,9 @@
         <li class="md-nav__item">
   <a href="#86" class="md-nav__link">
     <span class="md-ellipsis">
-      8.6 常见错误
+      8.6 常见错误与排查
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="8.6 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#861" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.1 一遇到效果不好就上微调
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#862" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.2 把五个名词当成并列项罗列
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#863" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.3 用微调来灌注频繁变化的事实知识
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#864" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.4 低估维护成本
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#865" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.5 忽略灾难性遗忘
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#866-qlora" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.6 认为 QLoRA 精度损失很大
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#867" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.7 认为方案越重效果越好
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -8546,17 +8477,17 @@
         <li class="md-nav__item">
   <a href="#81" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1 前置问题：什么时候才真的需要微调
+      8.1 前置问题：错误是否适合用微调解决
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.1 前置问题：什么时候才真的需要微调">
+    <nav class="md-nav" aria-label="8.1 前置问题：错误是否适合用微调解决">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#811" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.1 微调的成本远比想象大
+      8.1.1 先做错误归因
     </span>
   </a>
   
@@ -8565,7 +8496,7 @@
           <li class="md-nav__item">
   <a href="#812" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.2 先试这三条更轻的路
+      8.1.2 哪些场景值得微调
     </span>
   </a>
   
@@ -8574,16 +8505,7 @@
           <li class="md-nav__item">
   <a href="#813" class="md-nav__link">
     <span class="md-ellipsis">
-      8.1.3 三种场景微调才真的值得做
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#814" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.1.4 一个重要的反例
+      8.1.3 成本不能脱离配置报价
     </span>
   </a>
   
@@ -8597,7 +8519,7 @@
         <li class="md-nav__item">
   <a href="#82" class="md-nav__link">
     <span class="md-ellipsis">
-      8.2 关键框架：两个正交维度
+      8.2 两个维度：更新哪些参数，使用什么信号
     </span>
   </a>
   
@@ -8606,17 +8528,17 @@
         <li class="md-nav__item">
   <a href="#83" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3 维度一：改哪些参数
+      8.3 参数方案与显存预算
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.3 维度一：改哪些参数">
+    <nav class="md-nav" aria-label="8.3 参数方案与显存预算">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#831" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.1 全量微调：所有参数都改
+      8.3.1 全量微调
     </span>
   </a>
   
@@ -8625,16 +8547,16 @@
           <li class="md-nav__item">
   <a href="#832-lora" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.2 LoRA：只改一小部分
+      8.3.2 LoRA
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#833-qlora-gpu" class="md-nav__link">
+  <a href="#833-qlora" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.3 QLoRA：消费级 GPU 的入场券
+      8.3.3 QLoRA
     </span>
   </a>
   
@@ -8643,7 +8565,7 @@
           <li class="md-nav__item">
   <a href="#834" class="md-nav__link">
     <span class="md-ellipsis">
-      8.3.4 三者对比
+      8.3.4 三种方案怎样比较
     </span>
   </a>
   
@@ -8657,17 +8579,17 @@
         <li class="md-nav__item">
   <a href="#84" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4 维度二：学什么目标
+      8.4 训练目标：数据如何变成梯度
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.4 维度二：学什么目标">
+    <nav class="md-nav" aria-label="8.4 训练目标：数据如何变成梯度">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#841-sft" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4.1 SFT：学会按指令回答
+      8.4.1 SFT：模仿示范
     </span>
   </a>
   
@@ -8676,7 +8598,7 @@
           <li class="md-nav__item">
   <a href="#842-dpo" class="md-nav__link">
     <span class="md-ellipsis">
-      8.4.2 DPO：学会哪种回答更受欢迎
+      8.4.2 DPO：学习相对偏好
     </span>
   </a>
   
@@ -8690,17 +8612,26 @@
         <li class="md-nav__item">
   <a href="#85" class="md-nav__link">
     <span class="md-ellipsis">
-      8.5 实战选型
+      8.5 一个可执行的选型过程
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8.5 实战选型">
+    <nav class="md-nav" aria-label="8.5 一个可执行的选型过程">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#851" class="md-nav__link">
     <span class="md-ellipsis">
-      8.5.1 一个常见误区：方案越重越好
+      8.5.1 评估与数据切分
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#852" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.5.2 什么需要随训练产物一起保存
     </span>
   </a>
   
@@ -8714,78 +8645,9 @@
         <li class="md-nav__item">
   <a href="#86" class="md-nav__link">
     <span class="md-ellipsis">
-      8.6 常见错误
+      8.6 常见错误与排查
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="8.6 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#861" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.1 一遇到效果不好就上微调
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#862" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.2 把五个名词当成并列项罗列
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#863" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.3 用微调来灌注频繁变化的事实知识
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#864" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.4 低估维护成本
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#865" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.5 忽略灾难性遗忘
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#866-qlora" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.6 认为 QLoRA 精度损失很大
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#867" class="md-nav__link">
-    <span class="md-ellipsis">
-      8.6.7 认为方案越重效果越好
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -8832,155 +8694,148 @@
 
 
 <h1 id="_1">第八章：大模型微调方案<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="81">8.1 前置问题：什么时候才真的需要微调<a class="headerlink" href="#81" title="Permanent link">&para;</a></h2>
-<p>很多人一遇到「模型表现不好」就想上微调，这是新人的本能反应。但踩过坑的人都知道：<strong>微调是最后手段，不是第一选择。</strong></p>
-<h3 id="811">8.1.1 微调的成本远比想象大<a class="headerlink" href="#811" title="Permanent link">&para;</a></h3>
+<h2 id="81">8.1 前置问题：错误是否适合用微调解决<a class="headerlink" href="#81" title="Permanent link">&para;</a></h2>
+<p>微调不是第一反应，也不是必须最后才允许尝试的方案。应先建立基线，确认问题来自知识访问、任务行为、输出约束还是模型容量，再比较收益与成本。</p>
+<h3 id="811">8.1.1 先做错误归因<a class="headerlink" href="#811" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TB
+    NEED["模型表现不达标"] --&gt; Q1{"主要错误是什么？"}
+    Q1 --&gt;|格式不合法| P1["提示与示例&lt;br/&gt;结构化输出或约束解码"]
+    Q1 --&gt;|事实缺失或过时| P2["检索或数据库工具&lt;br/&gt;检查召回和证据使用"]
+    Q1 --&gt;|稳定的任务行为不佳| P3["SFT 候选实验"]
+    Q1 --&gt;|候选质量有可比较差异| P4["偏好数据与 DPO 等方案"]
+    P1 --&gt; E["同一测试集比较质量、成本与延迟"]
+    P2 --&gt; E
+    P3 --&gt; E
+    P4 --&gt; E</code></pre>
+<p>这些方案可组合。例如，RAG 负责提供最新合同，SFT 教模型基于证据回答并引用出处。若检索没有召回正确条款，继续调生成模型通常解决不了根因。</p>
+<h3 id="812">8.1.2 哪些场景值得微调<a class="headerlink" href="#812" title="Permanent link">&para;</a></h3>
+<ul>
+<li>高频、稳定的领域任务，已有一致且可验证的示范数据。</li>
+<li>需要可靠的工具调用、结构化表达或专门术语，而较轻量基线仍不达标。</li>
+<li>在明确任务分布上用较小模型替代大模型，且累计服务成本能覆盖训练和维护。</li>
+</ul>
+<p>微调可以学到事实知识，但<strong>不适合作为需要频繁更新、精确追溯的数据库</strong>。产品价格、库存、政策版本通常应通过检索或工具访问。</p>
+<h3 id="813">8.1.3 成本不能脱离配置报价<a class="headerlink" href="#813" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>成本项</th>
-<th>说明</th>
+<th>应记录什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>数据成本</strong></td>
-<td>高质量数据集光标注可能就要花几万到几十万</td>
+<td>数据</td>
+<td>授权、标注、清洗、质量复核、分布覆盖</td>
 </tr>
 <tr>
-<td><strong>算力成本</strong></td>
-<td>少说几张 A100</td>
+<td>训练</td>
+<td>模型大小、精度、序列长度、有效 batch、更新 token 数、硬件小时</td>
 </tr>
 <tr>
-<td><strong>工程经验</strong></td>
-<td>调参、防过拟合、防灾难性遗忘</td>
+<td>评估</td>
+<td>业务测试集、人工复核、通用能力与安全回归</td>
 </tr>
 <tr>
-<td><strong>维护成本（最坑）</strong></td>
-<td>底层基础模型一升级，之前微调的版本基本就废了，得重新来一遍</td>
+<td>维护</td>
+<td>基座与 tokenizer 版本、adapter 兼容性、部署、回滚</td>
 </tr>
 </tbody>
 </table>
-<p>最后一条尤其致命——<strong>微调产出的是一个会随基座过期的资产</strong>。</p>
-<h3 id="812">8.1.2 先试这三条更轻的路<a class="headerlink" href="#812" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>flowchart TB
-    NEED["模型表现不好"] --&gt; Q1{"想要特定&lt;br/&gt;输出格式?"}
-    Q1 --&gt;|是| P1["Prompt + Few-shot&lt;br/&gt;写清格式要求 + 3-5 个示例"]
-    Q1 --&gt;|否| Q2{"想要特定&lt;br/&gt;回答风格?"}
-    Q2 --&gt;|是| P2["System Prompt 描述风格&lt;br/&gt;+ 几个对话示例"]
-    Q2 --&gt;|否| Q3{"想让模型懂&lt;br/&gt;某个领域知识?"}
-    Q3 --&gt;|是| P3["RAG 检索增强&lt;br/&gt;挂领域知识库实时查"]
-    Q3 --&gt;|否| FT["以上都试过不达标&lt;br/&gt;→ 才考虑微调"]
-
-    style FT fill:#fdecea</code></pre>
-<h3 id="813">8.1.3 三种场景微调才真的值得做<a class="headerlink" href="#813" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>需要持续以一种特殊风格输出</strong>，Prompt 控制不住（如生成特定格式的代码、特定语气的文案）；</li>
-<li><strong>需要模型稳定掌握某类任务模式或内部术语表达</strong>；</li>
-<li><strong>想用小模型替代大模型省成本</strong>（7B 微调模型替代 70B 通用模型，推理成本能省很多）。</li>
-</ol>
-<h3 id="814">8.1.4 一个重要的反例<a class="headerlink" href="#814" title="Permanent link">&para;</a></h3>
-<blockquote>
-<p><strong>如果需求是「补充经常变化的事实知识」，微调通常不是好选择。</strong></p>
-</blockquote>
-<p>产品价格、政策条款、库存状态、合同原文这些应该放进 RAG 或数据库实时查。</p>
-<p><strong>微调适合学行为、格式、风格和任务模式，不适合当一个会频繁更新的知识库。</strong></p>
-<h2 id="82">8.2 关键框架：两个正交维度<a class="headerlink" href="#82" title="Permanent link">&para;</a></h2>
-<p>这里有个特别容易踩的坑：很多人把「全量微调、LoRA、QLoRA、SFT、DPO」当成同一类的「不同微调方法」来背。</p>
-<p><strong>其实它们分属两个完全不同的维度。</strong></p>
-<pre class="mermaid"><code>flowchart LR
-    subgraph D1["维度一 · 改哪些参数（怎么改）"]
-        A1["全量微调&lt;br/&gt;全改"]
-        A2["LoRA&lt;br/&gt;改一小部分"]
-        A3["QLoRA&lt;br/&gt;改一小部分 + 量化基座"]
-    end
-    subgraph D2["维度二 · 学什么目标（改成什么）"]
-        B1["SFT&lt;br/&gt;学指令格式"]
-        B2["DPO&lt;br/&gt;学偏好对齐"]
-    end
-    D1 -.-&gt;|任意组合| D2</code></pre>
-<p><strong>这两个维度是正交的，可以任意组合</strong>：全量微调 + SFT、LoRA + SFT、QLoRA + SFT、LoRA + DPO、QLoRA + DPO……每种组合都是合法的微调方案。</p>
-<blockquote>
-<p>把「改哪些参数」和「学什么目标」分开看，LoRA、QLoRA、SFT、DPO 才不会混成一团。</p>
-</blockquote>
-<h2 id="83">8.3 维度一：改哪些参数<a class="headerlink" href="#83" title="Permanent link">&para;</a></h2>
-<h3 id="831">8.3.1 全量微调：所有参数都改<a class="headerlink" href="#831" title="Permanent link">&para;</a></h3>
-<p>最朴素的方案，把所有参数拿出来在新数据上继续训练。效果上限最高，因为模型有最大自由度。</p>
-<p><strong>但代价大到吓人。</strong> 一个 7B 模型的全量微调显存账：</p>
+<p>不存在“微调至少几张 A100”或“标注必然几十万元”的统一门槛。基座升级后，旧微调模型也不会自动失效：可以继续部署旧版本；若要迁移到新基座，则通常需要重训或适配并重新验证，不能盲目加载旧 adapter。</p>
+<h2 id="82">8.2 两个维度：更新哪些参数，使用什么信号<a class="headerlink" href="#82" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>例子</th>
+<th>决定什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>参数化与精度</td>
+<td>全量微调、LoRA、QLoRA</td>
+<td>哪些权重更新、以什么精度存储和计算</td>
+</tr>
+<tr>
+<td>训练数据与目标</td>
+<td>SFT、DPO、奖励优化</td>
+<td>从示范、偏好或奖励中学习什么</td>
+</tr>
+</tbody>
+</table>
+<p>因此可以有 LoRA + SFT、全量微调 + DPO、QLoRA + DPO。<strong>概念上可组合，不等于任何框架、模型和量化后端都支持任意组合</strong>。</p>
+<p>SFT 和 DPO 当然也可以称为训练方法；这里要避免的只是把它们与 LoRA 当成互斥选项。SFT 不仅学格式，偏好优化也不仅学文风。</p>
+<h2 id="83">8.3 参数方案与显存预算<a class="headerlink" href="#83" title="Permanent link">&para;</a></h2>
+<h3 id="831">8.3.1 全量微调<a class="headerlink" href="#831" title="Permanent link">&para;</a></h3>
+<p>全量微调更新全部或几乎全部模型参数，表达自由度大，但不保证同样数据和预算下效果最好。小数据、分布偏移或不合适的学习率，都可能导致过拟合与通用能力退化。</p>
+<p>以 <strong>7 × 10⁹ 参数、无分片无卸载</strong>为例，下面只计算持久模型状态，使用十进制 GB：</p>
 <table>
 <thead>
 <tr>
 <th>项目</th>
-<th>显存（FP16）</th>
+<th>假定精度</th>
+<th>大小</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>权重本身</td>
-<td>约 14 GB</td>
+<td>计算用权重</td>
+<td>BF16 / FP16，2 字节</td>
+<td>14 GB</td>
 </tr>
 <tr>
 <td>梯度</td>
-<td>约 14 GB</td>
+<td>若为 2 字节</td>
+<td>14 GB</td>
 </tr>
 <tr>
-<td>优化器状态（Adam 两个矩，FP32）</td>
-<td>约 56 GB</td>
+<td>FP32 主权重副本</td>
+<td>若优化器保留，4 字节</td>
+<td>28 GB</td>
 </tr>
 <tr>
-<td><strong>合计</strong></td>
-<td><strong>80 GB 起步</strong></td>
+<td>Adam 一阶矩与二阶矩</td>
+<td>各 FP32，共 8 字节</td>
+<td>56 GB</td>
+</tr>
+<tr>
+<td><strong>此配置合计</strong></td>
+<td>每参数 16 字节</td>
+<td><strong>112 GB</strong></td>
 </tr>
 </tbody>
 </table>
-<p>70B 模型更夸张，要几十张 A100 组集群。</p>
-<p><strong>更糟的是灾难性遗忘（Catastrophic Forgetting）</strong>：模型在新任务上学好了，原本预训练学到的通用能力反而下降。因为所有参数都在被改写，新数据分布有偏的话，模型会忘掉通用知识。</p>
-<h3 id="832-lora">8.3.2 LoRA：只改一小部分<a class="headerlink" href="#832-lora" title="Permanent link">&para;</a></h3>
-<p><strong>核心洞见</strong>：模型参数的更新量 <span class="arithmatex">\(\Delta W = W_{\mathrm{after}} - W_{\mathrm{before}}\)</span> 虽然维度很大（比如 <span class="arithmatex">\(4096 \times 4096\)</span>），但<strong>真正有意义的变化只发生在一个低维子空间里</strong>——权重更新具有「内在低秩性」。</p>
-<p>做法：冻结原始权重 <span class="arithmatex">\(W\)</span>，在旁边新增两个小矩阵：</p>
+<p>若梯度也是 FP32，此例增加到 <strong>126 GB</strong>；若实现不维护 FP32 主权重，预算又不同。还没有算激活、logits、临时 buffer、通信与分配器开销，所以不能把“权重 + 梯度 + 两个矩约 84 GB”当成完整训练显存。</p>
+<p>ZeRO / FSDP 把状态分片，offload 把部分状态移到主机，梯度检查点通过重算节省激活；这些方法改变<strong>单卡峰值显存与速度</strong>，不是消除了全部成本。</p>
+<h3 id="832-lora">8.3.2 LoRA<a class="headerlink" href="#832-lora" title="Permanent link">&para;</a></h3>
+<p>对列向量输入，冻结 <code>W</code>，仅训练低秩增量：</p>
 <div class="arithmatex">\[
-W' = W + BA, \quad A \in \mathbb{R}^{r \times d},\ B \in \mathbb{R}^{d \times r},\ r \ll d
+W' = W+\frac{\alpha}{r}BA,\qquad
+A\in\mathbb{R}^{r\times d_{\mathrm{in}}},
+\quad B\in\mathbb{R}^{d_{\mathrm{out}}\times r}
 \]</div>
-<p>训练时只更新 <span class="arithmatex">\(A\)</span> 和 <span class="arithmatex">\(B\)</span>（通常 <span class="arithmatex">\(r = 8\)</span> 或 <span class="arithmatex">\(16\)</span>）。</p>
-<p><strong>便利贴类比</strong>：全量微调像把一本厚教科书全部重写，LoRA 像在书的空白处贴便利贴——<strong>原书一字不动</strong>，便利贴上写着修正和补充，看书时原文 + 便利贴一起看。</p>
-<p>参数量对比很直观：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>参数量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>一个 <span class="arithmatex">\(4096 \times 4096\)</span> 权重矩阵</td>
-<td>1600 万</td>
-</tr>
-<tr>
-<td>LoRA <span class="arithmatex">\(r=16\)</span>：<span class="arithmatex">\(4096 \times 16 + 16 \times 4096\)</span></td>
-<td>13 万（<strong>1/120</strong>）</td>
-</tr>
-<tr>
-<td>整个 7B 模型可训练参数</td>
-<td>从 70 亿降到 2000 万量级</td>
-</tr>
-<tr>
-<td>显存需求</td>
-<td>从 80GB+ 降到 20GB 量级，<strong>一张 A100 就够</strong></td>
-</tr>
-</tbody>
-</table>
-<p>LoRA 是 2023 年之后最主流的微调方案，几乎所有开源社区微调项目都在用。详见 <a href="../09-lora/">第九章</a>。</p>
-<h3 id="833-qlora-gpu">8.3.3 QLoRA：消费级 GPU 的入场券<a class="headerlink" href="#833-qlora-gpu" title="Permanent link">&para;</a></h3>
-<p>LoRA 解决了「不用 80GB 也能微调」，但 20GB 对个人开发者仍有门槛（4090 是 24GB，刚够 7B）。</p>
-<p>QLoRA 的思路：</p>
+<p>“更新可以用低秩形式有效近似”是有实证支持的建模假设，<strong>不代表所有任务真实更新的秩都只有 8 或 16</strong>。</p>
+<p>对一个 <code>4096 × 4096</code> 矩阵、<code>r = 16</code>：</p>
+<ul>
+<li>原矩阵：16,777,216 参数；</li>
+<li>LoRA 两个矩阵：131,072 参数；</li>
+<li>可训练参数比：<strong>1/128</strong>。</li>
+</ul>
+<p>整个模型的比例要对所有目标矩阵求和；还取决于是否更新 embedding、输出头、bias 等。不能从这个单层例子推出任何 7B 模型都只有 2000 万可训练参数。</p>
+<p>LoRA 大幅减少可训练参数对应的梯度与优化器状态，但<strong>基座仍需前向传播，梯度仍需经冻结层传到 adapter</strong>。因此激活不会按参数比例一起缩小，速度也不会自动提高 128 倍。详见 <a href="../09-lora/">第九章</a>。</p>
+<h3 id="833-qlora">8.3.3 QLoRA<a class="headerlink" href="#833-qlora" title="Permanent link">&para;</a></h3>
+<p>QLoRA 把冻结基座低比特存储，与可训练的 LoRA 结合。原论文包含：</p>
 <ol>
-<li><strong>先把基础模型 4-bit 量化</strong>（用 NF4 格式，专为权重的近似高斯分布设计），7B 显存从 14GB 压到 4GB 左右；</li>
-<li><strong>在量化后的基座上套 LoRA</strong>。</li>
+<li><strong>NF4</strong>：针对近似正态权重分布设计的 4-bit 表示。</li>
+<li><strong>Double quantization</strong>：再量化部分量化常数，降低元数据开销。</li>
+<li><strong>Paged optimizers</strong>：借助内存分页应对显存峰值；换页可能有传输开销。</li>
 </ol>
-<p>整个微调过程显存降到 10GB 以内，<strong>一张 4090 就能微调 7B 甚至 13B</strong>。</p>
-<p><strong>精度损失非常小</strong>，实测效果和全精度 LoRA 几乎没差别。这一招直接让微调民主化了。</p>
-<h3 id="834">8.3.4 三者对比<a class="headerlink" href="#834" title="Permanent link">&para;</a></h3>
+<p>前向时按需把量化权重恢复到计算精度，通常用 BF16 等完成计算；<strong>不是把全部训练算术、激活和梯度都变成 4-bit</strong>。梯度更新 adapter，不直接更新离散的基座量化值。</p>
+<p>7B 参数的裸 4-bit 位存储约为 3.5 GB，但还要加入量化元数据、未量化模块、adapter、优化器和激活。原论文展示了其配置下在<strong>单张 48GB GPU 微调 65B 模型</strong>，不意味着任意 7B / 13B 长上下文训练都能在 10GB 内完成。</p>
+<p>论文中的任务效果可接近 16-bit 微调；这不是对任何模型、量化设置和任务的无损保证。量化误差、目标模块覆盖和优化设置都需验证。</p>
+<h3 id="834">8.3.4 三种方案怎样比较<a class="headerlink" href="#834" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -8992,141 +8847,120 @@ W' = W + BA, \quad A \in \mathbb{R}^{r \times d},\ B \in \mathbb{R}^{d \times r}
 </thead>
 <tbody>
 <tr>
-<td>可训练参数</td>
-<td>100%</td>
-<td>约 0.3%</td>
-<td>约 0.3%</td>
+<td>更新参数</td>
+<td>全部或大部分</td>
+<td>选定矩阵的低秩参数</td>
+<td>低比特冻结基座上的低秩参数</td>
 </tr>
 <tr>
-<td>7B 训练显存</td>
-<td>80GB+</td>
-<td>20GB 量级</td>
-<td>10GB 以内</td>
+<td>主要显存压力</td>
+<td>权重、梯度、优化器、激活</td>
+<td>基座权重与激活，另有 adapter 状态</td>
+<td>量化基座、激活与 adapter 状态</td>
 </tr>
 <tr>
-<td>硬件门槛</td>
-<td>多卡 A100</td>
-<td>单张 A100</td>
-<td><strong>单张 4090</strong></td>
+<td>表达约束</td>
+<td>较少</td>
+<td>rank 与目标模块限制</td>
+<td>同左，另有量化误差</td>
 </tr>
 <tr>
-<td>效果上限</td>
-<td>最高</td>
-<td>接近全量</td>
-<td>略低于 LoRA，差距很小</td>
+<td>合并部署</td>
+<td>不需 adapter 合并</td>
+<td>浮点合并后可无额外分支</td>
+<td>合并与再量化需核对后端和误差</td>
 </tr>
 <tr>
-<td>灾难性遗忘</td>
-<td>风险最高</td>
-<td>低（基座冻结）</td>
-<td>低</td>
+<td>速度</td>
+<td>取决于系统与 batch</td>
+<td>常减少权重梯度计算</td>
+<td>反量化有成本，较大 batch 也可能受益</td>
 </tr>
 <tr>
-<td>训练速度</td>
-<td>慢</td>
-<td>快</td>
-<td>比 LoRA 略慢（有反量化开销）</td>
+<td>通用能力退化</td>
+<td>需回归评测</td>
+<td>同样需评测，可停用 adapter 回退</td>
+<td>同样需评测</td>
 </tr>
 </tbody>
 </table>
-<h2 id="84">8.4 维度二：学什么目标<a class="headerlink" href="#84" title="Permanent link">&para;</a></h2>
-<p>「改哪些参数」回答的是「怎么改」，但还有更核心的问题：<strong>改的目标是什么？</strong></p>
-<h3 id="841-sft">8.4.1 SFT：学会按指令回答<a class="headerlink" href="#841-sft" title="Permanent link">&para;</a></h3>
-<p>预训练模型本质是文本续写机器，不知道「问问题」是什么意思。SFT 把它从<strong>续写模式</strong>切换到<strong>对话模式</strong>。</p>
-<p>数据格式是 (指令, 期望回答) 对：</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>请介绍一下北京  →  北京是中国的首都，位于华北平原……
-</span></code></pre></div>
-<p><strong>SFT 是一个「目标」，不是「方法」。</strong> 可以用全量微调做 SFT、用 LoRA 做 SFT、用 QLoRA 做 SFT。工业界最常见的组合是 <strong>QLoRA + SFT</strong>，性价比最高。</p>
-<p>数据的关键仍然是<strong>质量大于数量</strong>（见 <a href="../06-llm-training/">第六章</a>）。</p>
-<h3 id="842-dpo">8.4.2 DPO：学会哪种回答更受欢迎<a class="headerlink" href="#842-dpo" title="Permanent link">&para;</a></h3>
-<p>SFT 之后模型会按指令回答了，但风格不一定是用户喜欢的（太啰嗦、太简洁、说话不得体）。这时需要<strong>偏好对齐</strong>。</p>
-<p>早期标配是 RLHF：收集偏好数据 → 训奖励模型 → PPO 优化。但流程长、要维护好几个模型、训练不稳定。</p>
-<p>DPO 发现一个数学等价转换：<strong>RLHF 的优化目标可以推导成纯监督学习的损失函数</strong>，完全绕过奖励模型和 PPO。直接拿 (问题, 好回答, 差回答) 三元组训练。</p>
-<p><strong>DPO 同样是「目标」不是「方法」</strong>，可以用全量微调实现，也可以用 LoRA 实现。最常见的工业组合是 <strong>LoRA + DPO</strong>。</p>
-<blockquote>
-<p>别说得太绝对：Llama 2-Chat 公开流程主要是 SFT + 拒绝采样 + PPO/RLHF；社区模型为降低成本才大量换成 DPO。</p>
-</blockquote>
-<p>两者的详细对比见 <a href="../11-dpo-vs-ppo/">第十一章</a>。</p>
-<h2 id="85">8.5 实战选型<a class="headerlink" href="#85" title="Permanent link">&para;</a></h2>
+<p>不要为三者预先排定“最高、次高、最低”的质量顺序。</p>
+<h2 id="84">8.4 训练目标：数据如何变成梯度<a class="headerlink" href="#84" title="Permanent link">&para;</a></h2>
+<h3 id="841-sft">8.4.1 SFT：模仿示范<a class="headerlink" href="#841-sft" title="Permanent link">&para;</a></h3>
+<p>给定指令及上下文，在示范回答上计算自回归交叉熵。通常把 prompt 和 padding 对应 label 设为忽略值，只对 assistant 的目标 token 计损失。</p>
+<p>实施时尤其检查：</p>
+<ul>
+<li><strong>模板一致</strong>：训练和推理使用相同角色分隔符与结束标记。</li>
+<li><strong>标签对齐</strong>：移位通常由模型或 trainer 内部处理，避免重复 shift。</li>
+<li><strong>截断位置</strong>：长 prompt 不能把整段目标回答裁掉；否则有效监督可能为空。</li>
+<li><strong>Packing 边界</strong>：分清样本边界、attention mask 与 position id，避免无意混入前一条样本上下文。</li>
+</ul>
+<p>少量高质量示范可能有效，但应通过学习曲线判断需求，不能把 LIMA 的实验结果变成“千条足够所有任务”。</p>
+<h3 id="842-dpo">8.4.2 DPO：学习相对偏好<a class="headerlink" href="#842-dpo" title="Permanent link">&para;</a></h3>
+<p>标准 DPO 接收同一 prompt 的 chosen / rejected，使用策略与冻结参考策略对两份回答的 log probability 计算偏好损失。其简化来自特定奖励与偏好建模假设，而非“所有 RLHF 都与监督学习完全等价”。</p>
+<p>数据检查至少包括：两份回答是否对应同一问题、偏好标签是否可靠、长度与格式是否成为捷径、是否只覆盖旧策略容易生成的答案。DPO 不要求一定采用 LoRA，也不存在已知的“工业界最常见组合”可无依据地背诵。</p>
+<h2 id="85">8.5 一个可执行的选型过程<a class="headerlink" href="#85" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>你的情况</th>
-<th>推荐组合</th>
-<th>理由</th>
+<th>已确认的约束</th>
+<th>可以先试什么</th>
+<th>什么情况下升级</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>个人开发者 / 资源受限小团队</strong></td>
-<td><strong>QLoRA + SFT</strong></td>
-<td>一张 4090 训 7B，几千条精标数据就够。<strong>绝大多数项目走这条路就够了</strong></td>
+<td>基座浮点权重装不下，任务允许量化</td>
+<td>QLoRA + SFT 小实验</td>
+<td>量化误差或吞吐不能接受时换配置</td>
 </tr>
 <tr>
-<td>中小企业，有几张 A100</td>
+<td>浮点基座装得下，需要高效适配</td>
 <td>LoRA + SFT</td>
-<td>基座不量化，精度略好、训练更快</td>
+<td>扩大目标模块 / rank 仍受容量限制时比较全量</td>
 </tr>
 <tr>
-<td>需要回答风格贴合用户偏好</td>
-<td>SFT 之后加 <strong>LoRA + DPO</strong></td>
-<td>先学格式再对齐风格，社区 Instruct 模型的主流轻量路线</td>
+<td>示范表现已可用，有可靠成对偏好</td>
+<td>DPO，可配 LoRA</td>
+<td>覆盖不足且有可靠在线奖励时比较在线优化</td>
 </tr>
 <tr>
-<td>大厂，充足 GPU，追求最高效果</td>
-<td>全量微调 + SFT（+ RLHF）</td>
-<td>最贵也最强，但要承担几十张 A100 的成本和工程复杂度</td>
+<td>明显领域迁移，有大量数据和预算</td>
+<td>继续预训练、SFT 或全量适配的对照</td>
+<td>根据任务收益与通用能力退化决定</td>
 </tr>
 </tbody>
 </table>
-<h3 id="851">8.5.1 一个常见误区：方案越重越好<a class="headerlink" href="#851" title="Permanent link">&para;</a></h3>
-<p>工程上恰恰相反。<strong>能用轻量方案搞定的需求，一定不要上重的</strong>，原因有三：</p>
-<ol>
-<li>训练成本指数级上升；</li>
-<li>调参难度上升；</li>
-<li>维护成本上升（基座升级后要重新微调）。</li>
-</ol>
-<p>所以实战中绝大多数项目都在用 QLoRA + SFT 这种最轻组合，只有需求真的特殊才往上加。</p>
-<h2 id="86">8.6 常见错误<a class="headerlink" href="#86" title="Permanent link">&para;</a></h2>
-<h3 id="861">8.6.1 一遇到效果不好就上微调<a class="headerlink" href="#861" title="Permanent link">&para;</a></h3>
-<p>先试 Prompt + Few-shot、System Prompt、RAG。这一句说出来，就说明不是「为了微调而微调」。</p>
-<h3 id="862">8.6.2 把五个名词当成并列项罗列<a class="headerlink" href="#862" title="Permanent link">&para;</a></h3>
-<p>「全量微调 / LoRA / QLoRA」是<strong>改哪些参数</strong>，「SFT / DPO」是<strong>学什么目标</strong>，两个维度正交可任意组合。这是本章最核心的框架。</p>
-<h3 id="863">8.6.3 用微调来灌注频繁变化的事实知识<a class="headerlink" href="#863" title="Permanent link">&para;</a></h3>
-<p>价格、条款、库存这类应该走 RAG。微调学的是行为、格式、风格、任务模式。</p>
-<h3 id="864">8.6.4 低估维护成本<a class="headerlink" href="#864" title="Permanent link">&para;</a></h3>
-<p>基座一升级微调版本就废了。这是很多团队上了微调之后才发现的坑。</p>
-<h3 id="865">8.6.5 忽略灾难性遗忘<a class="headerlink" href="#865" title="Permanent link">&para;</a></h3>
-<p>全量微调风险最高。LoRA/QLoRA 因为冻结基座，天然缓解了这个问题——这也是它们除省显存之外的一个重要优点。</p>
-<h3 id="866-qlora">8.6.6 认为 QLoRA 精度损失很大<a class="headerlink" href="#866-qlora" title="Permanent link">&para;</a></h3>
-<p>实测和全精度 LoRA 几乎没差别。NF4 是专为权重分布设计的量化格式。</p>
-<h3 id="867">8.6.7 认为方案越重效果越好<a class="headerlink" href="#867" title="Permanent link">&para;</a></h3>
-<p>成本、调参难度、维护成本都会指数级上升。大多数团队最后输的，都是收益撑不起额外复杂度。</p>
+<p>不是按“个人 / 大厂”选方案，而是按约束与实测差距选择。</p>
+<h3 id="851">8.5.1 评估与数据切分<a class="headerlink" href="#851" title="Permanent link">&para;</a></h3>
+<p>先冻结一份目标测试集；按用户、文档、时间或问题来源分组切分，避免近重复示范跨到测试集。比较原基座、提示基线、微调模型，保持解码预算一致。</p>
+<p>除目标分数外，还要测：</p>
+<ul>
+<li>未见任务和通用能力是否下降；</li>
+<li>幻觉、误拒绝和敏感信息复现是否增加；</li>
+<li>输出长度变化是否制造了偏好评估假象；</li>
+<li>每次成功请求成本是否真的降低。</li>
+</ul>
+<h3 id="852">8.5.2 什么需要随训练产物一起保存<a class="headerlink" href="#852" title="Permanent link">&para;</a></h3>
+<p>基座精确 revision、tokenizer / chat template、adapter 配置、量化配置、数据版本、训练参数和评测结果。仅保存 <code>adapter_model</code> 文件，不足以可靠复现一个微调系统。</p>
+<h2 id="86">8.6 常见错误与排查<a class="headerlink" href="#86" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>“基座冻结，所以不会遗忘。”</strong> 激活后的模型使用 <code>W + ΔW</code>，行为仍会变；停用 adapter 可以恢复基座不等于启用时无退化。</li>
+<li><strong>“微调是把知识永久写进模型。”</strong> 它只是改变分布，不能保证精确记忆、检索或更新。</li>
+<li><strong>“QLoRA 一定更快、更差或无损。”</strong> 三种结论都取决于量化、内核、任务和 batch。</li>
+<li><strong>“参数少就无需调参。”</strong> 学习率、训练步数、rank、alpha、目标层与数据质量仍需联合检查。</li>
+<li><strong>“越重成本越指数增长。”</strong> 不应把复杂度形容词当成增长规律，按实际状态量、FLOPs 和实验次数核算。</li>
+</ul>
 <h2 id="87">8.7 本章总结<a class="headerlink" href="#87" title="Permanent link">&para;</a></h2>
-<ol>
-<li><strong>微调是最后手段</strong>：先试 Prompt + Few-shot、System Prompt、RAG；</li>
-<li><strong>微调成本包含数据、算力、工程和维护</strong>，其中基座升级导致的重做最坑；</li>
-<li><strong>三种值得微调的场景</strong>：Prompt 控不住的输出风格、稳定的任务模式与内部术语、用小模型替大模型省钱；</li>
-<li><strong>频繁变化的事实知识不该用微调</strong>，该走 RAG；</li>
-<li><strong>两个正交维度是回答本题的钥匙</strong>：改哪些参数 vs 学什么目标；</li>
-<li><strong>全量微调</strong>效果上限最高，但 7B 就要 80GB 显存，且灾难性遗忘风险最大；</li>
-<li><strong>LoRA 基于更新量的内在低秩性</strong>，冻结基座只训两个小矩阵，参数量降到 1/120；</li>
-<li><strong>QLoRA = 4-bit NF4 量化基座 + LoRA</strong>，10GB 以内，一张 4090 搞定 7B，精度损失极小；</li>
-<li><strong>SFT 学格式，DPO 学偏好</strong>，两者都是目标，可与任一参数方案组合；</li>
-<li><strong>实战首选 QLoRA + SFT</strong>，能轻则轻，方案越重成本、调参和维护都指数级上升。</li>
-</ol>
-<blockquote>
-<p>先判断需求到底该不该微调，再区分参数方案和训练目标；多数项目从 QLoRA + SFT 起步就够了。</p>
-</blockquote>
+<p>先用错误分析确定训练信号，再根据显存和表达需求选择参数方案。全量微调、LoRA、QLoRA 的区别不只是“几张卡”，更包括优化状态、激活、量化与部署约束。<strong>可靠的选型结论来自同口径评测与可回滚产物，而不是固定推荐组合。</strong></p>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://arxiv.org/abs/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a></li>
-<li><a href="https://arxiv.org/abs/2305.14314">QLoRA: Efficient Finetuning of Quantized LLMs</a></li>
-<li><a href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization: Your Language Model is Secretly a Reward Model</a></li>
-<li><a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions with human feedback（InstructGPT）</a></li>
-<li><a href="https://arxiv.org/abs/2305.11206">LIMA: Less Is More for Alignment</a></li>
-<li><a href="https://arxiv.org/abs/1902.00751">Parameter-Efficient Transfer Learning for NLP（Adapter）</a></li>
-<li><a href="https://github.com/huggingface/peft">Hugging Face PEFT</a></li>
+<li><a href="https://arxiv.org/abs/2106.09685">LoRA</a></li>
+<li><a href="https://arxiv.org/abs/2305.14314">QLoRA</a></li>
+<li><a href="https://huggingface.co/docs/transformers/v4.46.3/model_memory_anatomy">Transformers v4.46.3：Model training anatomy</a></li>
+<li><a href="https://huggingface.co/docs/peft/package_reference/lora">PEFT：LoRA 配置与初始化</a></li>
+<li><a href="https://arxiv.org/html/2305.18290v3">DPO</a></li>
+<li><a href="https://arxiv.org/abs/2305.11206">LIMA</a></li>
 </ul>
 
 
@@ -9150,7 +8984,7 @@ W' = W + BA, \quad A \in \mathbb{R}^{r \times d},\ B \in \mathbb{R}^{d \times r}
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="RAG 是一条多环节的流水线。 最终答案不好，可能是任何一个环节出了问题">
+        <meta name="description" content="定义 RAG 检索与证据覆盖指标，区分 Ragas 的参考依赖，评测引用蕴含、拒答、时效与端到端任务效果。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十八章：RAG 评估体系">
-    <meta property="og:description" content="RAG 是一条多环节的流水线。 最终答案不好，可能是任何一个环节出了问题">
+    <meta property="og:description" content="定义 RAG 检索与证据覆盖指标，区分 Ragas 的参考依赖，评测引用蕴含、拒答、时效与端到端任务效果。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/18-rag-evaluation/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十八章：RAG 评估体系">
-    <meta name="twitter:description" content="RAG 是一条多环节的流水线。 最终答案不好，可能是任何一个环节出了问题">
+    <meta name="twitter:description" content="定义 RAG 检索与证据覆盖指标，区分 Ragas 的参考依赖，评测引用蕴含、拒答、时效与端到端任务效果。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十八章：RAG 评估体系","description":"RAG 是一条多环节的流水线。 最终答案不好，可能是任何一个环节出了问题","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/18-rag-evaluation/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十八章：RAG 评估体系","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/18-rag-evaluation/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十八章：RAG 评估体系","description":"定义 RAG 检索与证据覆盖指标，区分 Ragas 的参考依赖，评测引用蕴含、拒答、时效与端到端任务效果。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/18-rag-evaluation/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十八章：RAG 评估体系","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/18-rag-evaluation/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"RAG 评估体系","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/05-generation-evaluation/18-rag-evaluation/"}]}</script>
     
@@ -5139,6 +5139,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#1822" class="md-nav__link">
+    <span class="md-ellipsis">
+      18.2.2 先固定分母，再比较分数
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5182,6 +5191,15 @@
   <a href="#1841-citation" class="md-nav__link">
     <span class="md-ellipsis">
       18.4.1 Citation、时效与鲁棒性
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1842" class="md-nav__link">
+    <span class="md-ellipsis">
+      18.4.2 拒答与统计可信度
     </span>
   </a>
   
@@ -8571,6 +8589,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#1822" class="md-nav__link">
+    <span class="md-ellipsis">
+      18.2.2 先固定分母，再比较分数
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -8614,6 +8641,15 @@
   <a href="#1841-citation" class="md-nav__link">
     <span class="md-ellipsis">
       18.4.1 Citation、时效与鲁棒性
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1842" class="md-nav__link">
+    <span class="md-ellipsis">
+      18.4.2 拒答与统计可信度
     </span>
   </a>
   
@@ -8842,7 +8878,7 @@
     E --&gt; E4[线上&lt;br/&gt;真实用户怎么反馈的]</code></pre>
 <p>只看端到端分数只能发现退化，不能定位病因；只看检索又无法判断整条链路是否完成任务。两类评测需要同时存在。</p>
 <h2 id="182">18.2 检索层指标<a class="headerlink" href="#182" title="Permanent link">&para;</a></h2>
-<p>前提：需要一个<strong>标注了每个 Query 对应哪些 chunk 是正确依据</strong>的评测集。</p>
+<p>前提：固定语料快照、查询时刻与用户可见范围，标注原文证据及其对应 chunk。相关性、能支持某个事实、足够回答整个问题不是同一标签；多跳题需要证据组，重复转载或 overlap 不能重复算作独立依据。</p>
 <table>
 <thead>
 <tr>
@@ -8902,8 +8938,8 @@
 </tr>
 <tr>
 <td>Hit@5 高但答案差</td>
-<td>检索没问题，<strong>生成层有问题</strong></td>
-<td>生成层</td>
+<td>可能只命中部分证据，也可能被装配截断或生成误读</td>
+<td>证据覆盖 / 上下文 / 生成层</td>
 </tr>
 <tr>
 <td>Recall@K 低但 Hit@K 高</td>
@@ -8913,8 +8949,20 @@
 </tbody>
 </table>
 <p>实际分析时，通常把这组指标作为诊断表来定位问题。</p>
+<h3 id="1822">18.2.2 先固定分母，再比较分数<a class="headerlink" href="#1822" title="Permanent link">&para;</a></h3>
+<p>设某题的有效相关证据集合为 G，去重后的前 K 个结果为 R：</p>
+<ul>
+<li><code>Hit@K</code> 为二值命中：R 与 G 有交集记 1，否则记 0，再按问题平均。</li>
+<li><code>Recall@K = |R ∩ G| / |G|</code>。只有一个相关单元时它与 Hit@K 相同，多证据题则不同。</li>
+<li><code>Precision@K = |R ∩ G| / K</code>。不足 K 条时，本评测按空位为不相关处理；若用实际返回数作分母，应另行命名并报告返回数。</li>
+<li><code>MRR@K</code> 只看 K 内第一条相关证据，未命中记 0，不反映其余必要证据是否齐全。</li>
+<li><code>NDCG@K</code> 用分级相关性增益与位置折扣，再除以相同标签下的理想排序分数；报告采用线性还是指数增益。没有相关证据的样本应单列，不把未定义分数填成满分。</li>
+</ul>
+<p>例如一题需 A、B、C 三条互不替代的证据，只返回 A 时 Hit@5 为 1，但证据 Recall 为 1/3，完整证据组成功率为 0。存在多组等价依据时，应标注可替代证据组，避免把“没找齐所有重复来源”误判为不能作答。</p>
+<p>比较切分方案时，固定原文 span 标签与上下文 Token 预算，再映射到各方案的块；同时记录粗排、重排和最终 Prompt 的覆盖，不能只比较不同大小块的 Top-5。标注往往不穷尽所有相关文档，未标注项应抽样补判，而不是默认全不相关。</p>
+<p>还需区分 <strong>ANN Recall@K</strong>：它与相同向量、过滤和度量下的精确 Top-K 比较，衡量近似索引损失；上述业务 Recall 则与人工证据比较。精确近邻不是语义真值。</p>
 <h2 id="183">18.3 生成层指标<a class="headerlink" href="#183" title="Permanent link">&para;</a></h2>
-<p>RAGAS 这类框架提供了几个常用的无参考答案指标：</p>
+<p>Ragas 提供多种生成和上下文指标，<strong>并非全部无参考答案</strong>。以下依本次可访问官方文档区分含义；实际运行需固定包版本、指标类、提示词、Judge 和输入字段，不能混合不同 API 口径：</p>
 <table>
 <thead>
 <tr>
@@ -8933,14 +8981,15 @@
 </tr>
 <tr>
 <td><strong>Context Precision（上下文精确率）</strong></td>
-<td>检索到的材料中，<strong>相关的是否排在前面</strong></td>
+<td>基于参考答案判断各块是否有用，再评估相关块是否靠前；它不是普通 Precision@K</td>
 </tr>
 <tr>
 <td><strong>Context Recall（上下文召回率）</strong></td>
-<td>回答所需的信息<strong>是否都被检索到了</strong></td>
+<td>将参考答案拆成主张，判断被检索上下文覆盖的比例，<strong>需要 reference</strong></td>
 </tr>
 </tbody>
 </table>
+<p>Faithfulness 通常只需生成答案和检索上下文，不需标准答案；Response/Answer Relevancy 也可不依赖标准答案，但不检验事实真假。官方文档还区分基于生成回答的 <code>ContextUtilization</code>、非 LLM 文本匹配和 ID-based recall 等变体。名称相近不意味着输入、分母或统计目标一致。</p>
 <h3 id="1831">18.3.1 四个使用边界<a class="headerlink" href="#1831" title="Permanent link">&para;</a></h3>
 <p>使用这些指标时，需要同时看清它们的边界。</p>
 <p><strong>（1）Faithfulness 不等于事实正确性</strong></p>
@@ -8948,14 +8997,14 @@
 <blockquote>
 <p><strong>Faithfulness 衡量的是「答案忠实于材料」，不是「答案事实正确」。</strong> 材料本身错了，忠实度依然满分。</p>
 </blockquote>
-<p><strong>（2）Faithfulness 可以被"我不知道"刷满</strong></p>
-<p>模型回答「材料中没有相关信息」时，这个陈述完全忠实于材料，<strong>忠实度得分很高</strong>。</p>
-<p>因此 Faithfulness 需要和 Answer Relevancy 联合解释，否则一个倾向拒答的系统也可能拿到很高的忠实度分数。</p>
+<p><strong>（2）拒答和空主张不能按普通答案计分</strong></p>
+<p>“我不知道”可能不含可验证主张，具体实现可能返回 NaN、无效或其他约定分数，并非必然满分。“材料中没有相关信息”也不自动成立。</p>
+<p>应单列拒答、无主张和评测失败率，并报告有效样本数，不能静默丢弃它们。与任务正确率、答案覆盖和拒答混淆矩阵一起看，避免系统通过少说或全拒答隐藏错误。</p>
 <p><strong>（3）LLM-as-Judge 的循环性问题</strong></p>
 <p>用 LLM 评估 LLM 的输出，存在<strong>同源偏见</strong>：评判模型可能偏好与自己风格相似的回答，也可能与被评模型犯同样的错误。</p>
 <p><strong>缓解</strong>：用与生成模型<strong>不同</strong>的模型做评判；用人工标注的子集<strong>校准</strong>评判模型的一致性。</p>
 <p><strong>（4）无参考答案带来的噪声</strong></p>
-<p>Context Recall 等指标在没有标准答案时依赖 LLM 推断，<strong>方差较大</strong>。</p>
+<p>Context Recall 不能凭空知道遗漏了哪些证据，需要参考答案、参考上下文或参考 ID。其噪声来自标注不全、主张拆分和 Judge 判断；“不用人工标注每个 chunk”不等于“不要任何参考”。</p>
 <p>这些指标更适合看趋势和相对比较，不适合当作绝对分数。像「Faithfulness 从 0.82 涨到 0.85」这样的变化，需要结合评测集和判定方差一起解释。</p>
 <h2 id="184">18.4 端到端评估<a class="headerlink" href="#184" title="Permanent link">&para;</a></h2>
 <p>最终还是要回答「用户的问题解决了吗」。</p>
@@ -8973,7 +9022,7 @@
 <td><strong>人工评分</strong></td>
 <td>专家按维度打分</td>
 <td>高</td>
-<td><strong>最高</strong></td>
+<td>依赖专业背景、明确准则与标注一致性；需双标、仲裁和抽检</td>
 </tr>
 <tr>
 <td><strong>LLM-as-Judge</strong></td>
@@ -9010,8 +9059,8 @@
 <tbody>
 <tr>
 <td><strong>Citation 完整性</strong></td>
-<td>关键可核查主张是否都有引用</td>
-<td>人工或断言统计“有有效来源的主张 / 应引用主张”</td>
+<td>关键可核查主张是否都有充分支持</td>
+<td>统计“被实际所引证据充分支持的主张 / 应引用主张”，不是有编号就算通过</td>
 </tr>
 <tr>
 <td><strong>Citation 正确性</strong></td>
@@ -9036,6 +9085,37 @@
 </tbody>
 </table>
 <p>时效评测必须固定“查询时刻”和可见版本；否则系统可能引用今天正确、当时错误的材料。鲁棒性不应只报告攻击成功率，还要报告正常任务效用，避免以全拒答获得表面高分（安全细节见<a href="../../06-operations-security/20-rag-challenges-security/">第二十章</a>）。</p>
+<p>引用正确性应在实际引用的段落或媒体区域上判断蕴含，不在整个上下文中“找一个能支持的来源”替代。对于多引用主张，分别报告联合支持和无关引用比例；数值、主体、否定及时间条件都在判定范围。ALCE 将回答正确性与引用质量分开评测，适合参考其拆分思路，而不是只做 URL 可访问检查。</p>
+<h3 id="1842">18.4.2 拒答与统计可信度<a class="headerlink" href="#1842" title="Permanent link">&para;</a></h3>
+<p>先按当前权限和快照标注可回答/不可回答，再统计：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回答覆盖率</td>
+<td>实际作答数 / 全部问题数</td>
+</tr>
+<tr>
+<td>错误接受率</td>
+<td>对不可回答题仍作事实回答的数量 / 不可回答题数</td>
+</tr>
+<tr>
+<td>错误拒答率</td>
+<td>对可回答题拒答的数量 / 可回答题数</td>
+</tr>
+<tr>
+<td>作答风险</td>
+<td>作答中的错误数 / 实际作答数</td>
+</tr>
+</tbody>
+</table>
+<p>部分回答需标明已支持与未支持的子问题，另外测问题覆盖。绘制作答风险—覆盖曲线，在开发集选闸门，再用冻结测试集报告；不能在测试集上反复挑阈值。</p>
+<p>比较两个系统时，在同一问题、快照、预算与评分规则下做成对评测，报告差值、样本量及置信区间，例如按问题 bootstrap；同一文档生成大量相似问题时按文档分组抽样。Judge 固定版本与提示词，盲化系统名称、随机化 A/B 顺序，并用人工双标与仲裁检查一致性。换一个 Judge 只能缓解同源偏见，不能自动消除位置、长度和风格偏置。</p>
 <h2 id="185">18.5 评测集怎么建<a class="headerlink" href="#185" title="Permanent link">&para;</a></h2>
 <p>这一部分通常最耗时，但决定评估体系是否可用。</p>
 <h3 id="1851">18.5.1 分三档<a class="headerlink" href="#1851" title="Permanent link">&para;</a></h3>
@@ -9069,6 +9149,7 @@
 </tr>
 </tbody>
 </table>
+<p>这些数量只是组织回归测试的示例，不代表统计充分性，也不是统一最低标准。需要多少样本取决于希望检出的差异、错误基线、置信区间宽度、问题间相关性及各业务分组的覆盖；低频高风险错误通常需要专门采样，不能凭“超过 500 条”认定评测充分。</p>
 <h3 id="1852">18.5.2 必须覆盖的问题类型<a class="headerlink" href="#1852" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>简单事实查找</strong>；</li>
@@ -9115,7 +9196,7 @@
 </tbody>
 </table>
 <p><strong>公开基准的作用是横向比较方法，而不是预测你的系统在你的数据上的表现。</strong></p>
-<p>以 CRAG Benchmark 这类更贴近真实场景的评测为例，<strong>即使是当时最好的系统，准确率也只在 50% 上下</strong>。这说明 RAG 仍有明显边界，也能避免对外给出过高承诺。</p>
+<p>报告 CRAG 结果时必须附任务、数据版本、模型和计分规则，不能把某次论文实验的分数当作当前系统能力上限。TREC RAG 也有各年度任务与判断口径，横比前应确认语料和评价目标一致。</p>
 <h2 id="187">18.7 线上指标<a class="headerlink" href="#187" title="Permanent link">&para;</a></h2>
 <p>离线评测跑得再好，也要看真实用户的反馈。</p>
 <table>
@@ -9128,7 +9209,7 @@
 <tbody>
 <tr>
 <td><strong>点踩率 / 点赞率</strong></td>
-<td>最直接的用户满意度信号</td>
+<td>主动反馈用户的满意度信号；需同时报告反馈率与样本构成，不能直接代表全体请求</td>
 </tr>
 <tr>
 <td><strong>转人工率</strong></td>
@@ -9136,11 +9217,11 @@
 </tr>
 <tr>
 <td><strong>追问率</strong></td>
-<td>用户需要追问，说明首次回答不完整</td>
+<td>可能表示未解决，也可能是自然深入探索，需结合会话标注</td>
 </tr>
 <tr>
 <td><strong>引用点击率</strong></td>
-<td>用户是否在核查来源（信任度的反向信号）</td>
+<td>可能表示核查、兴趣或操作需要，不能直接当作信任的正向或反向指标</td>
 </tr>
 <tr>
 <td><strong>拒答率</strong></td>
@@ -9152,7 +9233,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>点踩数据的最大价值不是统计比例，而是作为评测集的来源</strong>——把点踩的 Query 收集起来人工分析，是最高质量的问题发现渠道。</p>
+<p>点踩是高价值的问题线索，但可能来自事实错误、权限限制、延迟、表达偏好或不合理预期，需脱敏、分诊、抽检和标注后进入评测集。主动反馈存在选择偏差：还应从全部请求中随机或分层抽样，覆盖无反馈和正反馈，并结合任务完成情况评估总体质量，不能只用负反馈推断整体错误率。</p>
 <h2 id="188">18.8 建立评估的正确顺序<a class="headerlink" href="#188" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     S1[1. 收集真实问题] --&gt; S2[2. 人工标注正确 chunk 和参考答案]
@@ -9168,7 +9249,7 @@
 <h3 id="1892-faithfulness">18.9.2 把 Faithfulness 当作事实正确性<a class="headerlink" href="#1892-faithfulness" title="Permanent link">&para;</a></h3>
 <p>它衡量的是忠实于材料，材料错了也能满分。这是最常见的误解。</p>
 <h3 id="1893-faithfulness-answer-relevancy">18.9.3 只看 Faithfulness 不看 Answer Relevancy<a class="headerlink" href="#1893-faithfulness-answer-relevancy" title="Permanent link">&para;</a></h3>
-<p>一个只会拒答的系统忠实度很高。</p>
+<p>拒答或无主张的评分可能无效，必须单列并联合报告覆盖、错误拒答与作答风险。</p>
 <h3 id="1894-llm-as-judge">18.9.4 LLM-as-Judge 不做校准<a class="headerlink" href="#1894-llm-as-judge" title="Permanent link">&para;</a></h3>
 <p>未校准的评判分数没有可信度。</p>
 <h3 id="1895">18.9.5 用生成模型自己做评判<a class="headerlink" href="#1895" title="Permanent link">&para;</a></h3>
@@ -9180,13 +9261,13 @@
 <h3 id="1898-ragas">18.9.8 把 RAGAS 分数当绝对值报告<a class="headerlink" href="#1898-ragas" title="Permanent link">&para;</a></h3>
 <p>这类指标方差大，适合看趋势和相对比较。</p>
 <h3 id="1899">18.9.9 只有离线评测没有线上回流<a class="headerlink" href="#1899" title="Permanent link">&para;</a></h3>
-<p>线上点踩数据是最高质量的问题来源。</p>
+<p>线上点踩是高价值的诊断来源，需分诊与抽检；还应回流总体请求的随机或分层样本，避免只优化会主动负反馈的用户和问题。</p>
 <h2 id="1810">18.10 本章总结<a class="headerlink" href="#1810" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>必须分层评估</strong>：检索层、生成层、端到端、线上——只看总分无法定位问题；</li>
-<li><strong>检索层指标</strong>（Hit@K、Recall@K、MRR、NDCG）的价值在于<strong>组合起来做诊断</strong>：Hit@50 低 = 召回问题，Hit@50 高但 Hit@5 低 = 排序问题，Hit@5 高但答案差 = 生成问题；</li>
+<li><strong>检索指标要明确真值、分母和候选阶段</strong>；Hit 高不代表证据充分，ANN 近似召回不等于业务证据召回；</li>
 <li><strong>RAGAS 四指标</strong>：Faithfulness、Answer Relevancy、Context Precision、Context Recall；</li>
-<li><strong>四条局限</strong>：忠实度≠正确性、可被拒答刷满、LLM-as-Judge 有同源偏见、无参考答案导致方差大；<strong>适合看趋势不适合当绝对分</strong>；</li>
+<li><strong>使用边界</strong>：忠实度不等于正确性，空主张要单列，Judge 需人工校准，Context Recall 需要参考；</li>
 <li><strong>端到端还要测 Citation 完整性/正确性/可访问性、固定时刻的时效性，以及成对扰动下的鲁棒性</strong>；</li>
 <li><strong>端到端推荐组合</strong>：程序化断言为主 + LLM-as-Judge 补充 + 人工抽查校准；</li>
 <li><strong>评测集分三档</strong>（Smoke / Regression / Full），<strong>必须包含无答案、诱导、时效、引用和鲁棒性成对问题</strong>；</li>
@@ -9197,6 +9278,10 @@
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2309.15217">Ragas: Automated Evaluation of Retrieval Augmented Generation</a></li>
+<li><a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_recall/">Ragas：Context Recall</a></li>
+<li><a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_precision/">Ragas：Context Precision</a></li>
+<li><a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/">Ragas：Faithfulness</a></li>
+<li><a href="https://arxiv.org/abs/2305.14627">ALCE：Enabling Large Language Models to Generate Text with Citations</a></li>
 <li><a href="https://arxiv.org/abs/2405.07437">Evaluation of Retrieval-Augmented Generation: A Survey</a></li>
 <li><a href="https://arxiv.org/abs/2406.04744">CRAG - Comprehensive RAG Benchmark</a></li>
 <li><a href="https://trec-rag.github.io/">TREC RAG Track</a></li>
@@ -9224,7 +9309,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

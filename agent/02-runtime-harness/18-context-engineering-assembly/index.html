@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="第二章 2.8 节已经把 Context Engineering 定义为&quot;管理有限上下文&quot;的四类操作（Write / Select / Compress / Isolate），第十章完整展开了 Compress 这一类操作的具体方法（Sliding Window、Summarization、Structured…">
+        <meta name="description" content="解释请求上下文的来源、信任层级、工具调用配对、缓存布局和预算预留，避免压缩或检索改变授权语义。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十八章：Context Engineering 与上下文装配">
-    <meta property="og:description" content="第二章 2.8 节已经把 Context Engineering 定义为&quot;管理有限上下文&quot;的四类操作（Write / Select / Compress / Isolate），第十章完整展开了 Compress 这一类操作的具体方法（Sliding Window、Summarization、Structured…">
+    <meta property="og:description" content="解释请求上下文的来源、信任层级、工具调用配对、缓存布局和预算预留，避免压缩或检索改变授权语义。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十八章：Context Engineering 与上下文装配">
-    <meta name="twitter:description" content="第二章 2.8 节已经把 Context Engineering 定义为&quot;管理有限上下文&quot;的四类操作（Write / Select / Compress / Isolate），第十章完整展开了 Compress 这一类操作的具体方法（Sliding Window、Summarization、Structured…">
+    <meta name="twitter:description" content="解释请求上下文的来源、信任层级、工具调用配对、缓存布局和预算预留，避免压缩或检索改变授权语义。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十八章：Context Engineering 与上下文装配","description":"第二章 2.8 节已经把 Context Engineering 定义为\"管理有限上下文\"的四类操作（Write / Select / Compress / Isolate），第十章完整展开了 Compress 这一类操作的具体方法（Sliding Window、Summarization、Structured…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十八章：Context Engineering 与上下文装配","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/"},"datePublished":"2026-08-31","dateModified":"2026-08-31"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十八章：Context Engineering 与上下文装配","description":"解释请求上下文的来源、信任层级、工具调用配对、缓存布局和预算预留，避免压缩或检索改变授权语义。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十八章：Context Engineering 与上下文装配","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Context Engineering 与装配","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-runtime-harness/18-context-engineering-assembly/"}]}</script>
     
@@ -8539,14 +8539,15 @@
     HIST --&gt; ASSEMBLE
     USER --&gt; ASSEMBLE
     ASSEMBLE --&gt; REQ</code></pre>
-<p>这五类来源的生命周期完全不同：System Prompt 通常整个会话不变；Instructions/Memory 按任务或项目变化（第七、八章讨论的长期记忆检索结果就注入在这里）；Tool Definitions 可能随本轮上下文动态收缩（第 19 章 19.8 节的渐进式披露）；Conversation History 每轮追加；Current Turn Input 每轮全新。装配管线的职责就是把这五路不同节奏变化的内容，稳定地拼成一份连贯的请求。</p>
+<p>这五类来源的生命周期不同：System Prompt 通常较稳定；Instructions/Memory 按任务或项目变化；Tool Definitions 可能随本轮上下文动态收缩（第 19 章 19.7 节）；Conversation History 追加或压缩；Current Turn Input 带来新输入。装配管线要保持消息结构和来源层级，不是把这些内容拼成同权限的一段文本。</p>
 <h2 id="183">18.3 装配顺序为什么重要<a class="headerlink" href="#183" title="Permanent link">&para;</a></h2>
 <p>装配顺序不是审美问题，而是同时影响三件事：</p>
 <ol>
 <li><strong>Prompt Cache 命中率。</strong> 主流模型的 Prompt Caching 按"从头开始的最长公共前缀"匹配缓存（第十章 10.14–10.18 节已详细讨论 Prompt Caching 的机制与限制）。如果易变的内容（比如当前时间戳、本轮的工具结果）被放在前面，会导致后面几乎不变的大段内容（工具定义、系统提示词）也无法命中缓存。<strong>装配顺序的第一条原则是：把最稳定的内容放在最前面，把最易变的内容放在最后面。</strong></li>
 <li><strong>模型的注意力分配。</strong> 位置越靠近末尾，通常获得越强的近因效应；关键指令放在系统提示词开头和当前输入结尾，往往比塞在历史消息中间更容易被遵守。</li>
-<li><strong>工具调用的确定性。</strong> MCP 规范明确要求"服务器应当以确定的顺序返回工具列表(相同的工具集合下,多次请求返回顺序一致)，这样确定性顺序能让客户端可靠地缓存工具列表，并提升工具在模型上下文中出现时的 Prompt Cache 命中率"(<a href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools">Model Context Protocol: Tools</a>)——这条协议层面的要求，本质上是 18.3 条第一点在工具定义这个具体来源上的落地。</li>
+<li><strong>工具列表序列化的稳定性。</strong> MCP 2026-07-28 对确定性列表顺序使用的是 <strong>SHOULD</strong>，有助于工具列表与提示缓存；它不是 <strong>MUST</strong>，更不保证模型选择工具具有确定性（<a href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools">Tools</a>）。</li>
 </ol>
+<p>这些是缓存布局原则，不能覆盖信任层级。检索文档、长期记忆、Skill 内容和模型摘要不应仅因“稳定”就被提升为系统级指令；来源与权限标签必须独立保存。不同 API 对工具字段的内部序列化顺序、显式缓存和前缀缓存支持不同，应以对应提供商为准。</p>
 <h2 id="184-system-prompt">18.4 System Prompt 的分层来源<a class="headerlink" href="#184-system-prompt" title="Permanent link">&para;</a></h2>
 <p>生产级 harness 的系统提示词很少是一整块写死的字符串，而是分层拼接：</p>
 <ul>
@@ -8557,12 +8558,12 @@
 </ul>
 <p>这几层的加载时机不同：会话启动时一次性加载 vs 按需触发加载，是 18.2 节 "Instructions / Memory" 这一路输入内部还需要再拆分的子结构。</p>
 <h2 id="185">18.5 工具定义注入的代价<a class="headerlink" href="#185" title="Permanent link">&para;</a></h2>
-<p>工具 Schema 本身要消耗上下文预算，而且是<strong>每一轮都要重复发送</strong>的固定开销（模型 API 通常是无状态的，每次调用都要带上完整的工具定义）。这意味着工具数量和 Schema 复杂度直接线性影响每一轮的固定成本。第 19 章 19.8 节会讨论几种降低这项开销的机制（渐进式披露、Code Execution with MCP），本章只强调装配层的结论：<strong>工具定义应该被当作"每轮都要付的税"来预算，而不是一次性成本</strong>。</p>
+<p>工具 Schema 占用本轮有效上下文。无状态请求常需重复提供定义，但服务端会话、工具检索与缓存可能减少传输或重复计算；“占用窗口”“网络发送字节数”和“计费 Token”不能混为一谈。第 19 章 19.7 节讨论动态工具集。预算应按实际提供商的缓存读写计价核算，不能假设每轮都按全额价格重新处理。</p>
 <h2 id="186-working-memory-prompt">18.6 历史消息装配：从 Working Memory 到 Prompt<a class="headerlink" href="#186-working-memory-prompt" title="Permanent link">&para;</a></h2>
 <p>第七、八章定义的 Working Memory 是 harness 在进程内维护的结构化状态（近期消息、任务状态、草稿、工件引用）；装配管线要把这些结构化状态<strong>序列化</strong>成模型能理解的消息序列。这一步不是简单的字符串拼接，至少要处理三个问题：</p>
 <ul>
 <li><strong>工具调用与工具结果必须严格配对</strong>，且 ID 匹配（第 19 章 19.3 节的调用契约）——断开配对会导致模型 API 直接拒绝请求。</li>
-<li><strong>压缩后的历史（第十章的 Summarization/Structured Extraction 结果）要以模型能识别的形式插入</strong>，通常作为一条系统级或工具级的"历史摘要"消息，而不是伪装成用户或助手说过的话。</li>
+<li><strong>压缩后的历史要标明是派生摘要及其来源</strong>，保持原有信任边界，不能把包含网页指令的摘要提升为系统消息。选择消息角色时遵循 API 规则，也不能伪造没有对应调用的工具结果。</li>
 <li><strong>多模态或超大工具结果（如整份文件、长日志）不应该原样内嵌</strong>，而应替换为引用 + 按需检索的占位符——这正是第二章 2.8.4 节 "Just-in-Time 检索" 在装配层的具体动作。</li>
 </ul>
 <h2 id="187-just-in-time-prompt-cache">18.7 Just-in-Time 装配与 Prompt Cache 断点对齐<a class="headerlink" href="#187-just-in-time-prompt-cache" title="Permanent link">&para;</a></h2>
@@ -8572,7 +8573,7 @@
 <div class="arithmatex">\[
 \sum_{i=1}^{5} b_i \le B - r
 \]</div>
-<p>其中 <span class="arithmatex">\(r\)</span> 是为本轮模型输出预留的最小 token 余量。当左侧超过阈值时，装配管线需要按优先级降级——通常的降级顺序是：先触发第十章讨论的压缩策略缩减 Conversation History，再考虑收缩 Tool Definitions（渐进式披露只保留最相关的一批工具），System Prompt 和 Current Turn Input 通常是预算控制中最后才会被裁剪的部分，因为裁剪它们直接影响任务正确性。</p>
+<p>其中 <span class="arithmatex">\(r\)</span> 是本轮输出与提供商计入窗口的推理 Token 预留量，还应计入多模态、消息包装等开销并留安全余量。超限时优先压缩可恢复历史、缩减工具和大结果；不可静默裁剪授权、用户硬约束或未完成调用。仍装不下时应明确报错或请求缩小任务，而不是发送语义残缺的请求。</p>
 <h2 id="189">18.9 一个装配管线的参考实现结构<a class="headerlink" href="#189" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">assemble_context</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">turn_input</span><span class="p">):</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -8594,7 +8595,7 @@
 <li><strong>把装配逻辑和压缩策略耦合在一起实现。</strong> 装配管线应该只负责"按顺序拼接、校验预算、触发降级"，具体怎么压缩应该委托给独立的压缩模块（第十章），保持职责分离便于替换压缩算法。</li>
 </ul>
 <h2 id="1811">18.11 本章总结<a class="headerlink" href="#1811" title="Permanent link">&para;</a></h2>
-<p>装配管线在每次模型调用前，把 System Prompt、Instructions/Memory、Tool Definitions、Conversation History、Current Turn Input 五类互相独立变化的来源，按"最稳定的放最前、最易变的放最后"的顺序拼接成一份请求，这个顺序同时决定了 Prompt Cache 命中率、模型注意力分配和工具调用的确定性。System Prompt 本身是分层来源的叠加；工具定义是每轮重复的固定开销；历史消息装配需要保证工具调用配对、处理压缩结果和大结果的引用化；JIT 检索结果应插入在显式的缓存断点之后；预算超限时按可预测的优先级降级,而不是简单粗暴截断。</p>
+<p>上下文装配首先保证消息合法、来源可信级别不被抬高、关键约束不丢失，再优化稳定前缀和按需检索。工具定义的窗口占用不等于每轮全价计费；缓存断点也取决于 API。预算超限不能靠静默截掉授权或待执行调用来解决。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic: Effective context engineering for AI agents</a></li>
@@ -8625,7 +8626,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 17:30:27 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

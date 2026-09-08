@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="普通问答通常一次检索就能得到答案；研究任务往往一开始就没有固定路径">
+        <meta name="description" content="分析研究型 Agent 的证据链、串并行规划、停止预算与 Deep Agents backend 边界，区分引用质量和报告长度。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十二章：Deep Research 的实现逻辑">
-    <meta property="og:description" content="普通问答通常一次检索就能得到答案；研究任务往往一开始就没有固定路径">
+    <meta property="og:description" content="分析研究型 Agent 的证据链、串并行规划、停止预算与 Deep Agents backend 边界，区分引用质量和报告长度。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十二章：Deep Research 的实现逻辑">
-    <meta name="twitter:description" content="普通问答通常一次检索就能得到答案；研究任务往往一开始就没有固定路径">
+    <meta name="twitter:description" content="分析研究型 Agent 的证据链、串并行规划、停止预算与 Deep Agents backend 边界，区分引用质量和报告长度。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十二章：Deep Research 的实现逻辑","description":"普通问答通常一次检索就能得到答案；研究任务往往一开始就没有固定路径","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十二章：Deep Research 的实现逻辑","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十二章：Deep Research 的实现逻辑","description":"分析研究型 Agent 的证据链、串并行规划、停止预算与 Deep Agents backend 边界，区分引用质量和报告长度。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十二章：Deep Research 的实现逻辑","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Deep Research 实现逻辑","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/05-production/12-deep-research/"}]}</script>
     
@@ -8907,7 +8907,7 @@
 
 <h1 id="deep-research">第十二章：Deep Research 的实现逻辑<a class="headerlink" href="#deep-research" title="Permanent link">&para;</a></h1>
 <h2 id="121-deep-research">12.1 Deep Research 是什么<a class="headerlink" href="#121-deep-research" title="Permanent link">&para;</a></h2>
-<p>普通问答通常一次检索就能得到答案；研究任务往往一开始就没有固定路径。</p>
+<p>简单事实问答可能一次检索就能得到答案；开放研究任务往往一开始就没有固定路径。需要多跳检索的普通问答与 Deep Research 并无严格次数分界。</p>
 <p>例如比较三家云厂商的 Agent 托管能力，需要分别查产品定位、价格、限制和区域差异，还要处理<strong>产品改名、资料过期和来源矛盾</strong>。</p>
 <blockquote>
 <p>Deep Research 关注的是一套研究流程：系统要围绕研究目标决定下一步搜什么、哪些问题可以并行、证据是否充分，以及何时停止。</p>
@@ -8942,6 +8942,7 @@
 <blockquote>
 <p>边界需要明确：Deep Agents 是单独安装的 <code>deepagents</code> SDK/harness，不是 LangChain 核心包的开关，也不替你提供模型、身份系统、业务授权、数据治理或安全隔离。<code>task</code> 子 Agent 默认是一次性、隔离上下文后只回传最终报告；任务清单从 v0.7 起是 opt-in，不应假设每个 Deep Agent 都会规划或长期记忆。</p>
 </blockquote>
+<p>这里的 <code>task</code> 指同步子 Agent：主调用等待它完成，不代表所有委派都能后台运行。官方另有 async subagents，用于长任务、运行中追加指令和取消；该页面仍标注为 preview，依赖实现 Agent Protocol 的服务端，可以是 LangSmith Deployment，也可以自行托管兼容服务。不能把同步子任务包装成线程就宣称已经具备持久化后台调度。可选任务清单也不等于模型一定产生有效研究计划。</p>
 <h2 id="122">12.2 核心流程<a class="headerlink" href="#122" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     S1["① 澄清问题并确定范围"] --&gt; S2["② 生成 Research Brief"]
@@ -9050,6 +9051,8 @@
 <blockquote>
 <p><strong>通用 Benchmark 可以用于版本比较，但不能代替企业自己的业务数据集。</strong></p>
 </blockquote>
+<p>证据压缩后至少保留「主张、原文片段、URL/文档 ID、页码或段落位置、来源版本与抓取时间」。写作模型使用这些证据 ID，而不是凭记忆重新生成链接；最后逐项验证引用是否支持相邻主张，并统计需要引用却缺少证据的主张。一个链接真实存在只能证明可访问，不能证明结论正确；多篇转载也不构成多个独立来源。</p>
+<p>停止条件不宜只写「继续直到充分」：设定必须覆盖的研究维度、未解决冲突清单、连续补搜的新增有效证据量，以及硬性时间/费用上限。预算耗尽时应交付部分结论并标明缺口，而不是让总结模型把未查到的内容补成肯定事实。</p>
 <h2 id="125">12.5 如何控制成本和安全<a class="headerlink" href="#125" title="Permanent link">&para;</a></h2>
 <h3 id="1251">12.5.1 成本受「宽度」和「深度」双重影响<a class="headerlink" href="#1251" title="Permanent link">&para;</a></h3>
 <table>
@@ -9144,16 +9147,17 @@
 </tbody>
 </table>
 <blockquote>
-<p>只有 Sandbox 和 LocalShell backend 会提供 shell <code>execute</code>。Sandbox 是隔离边界，不是「默认安全」的同义词：把最小权限凭证按需注入，使用只读/受限网络与 CPU、内存、时间配额，并在删除、外发、付费调用等动作前启用 <code>interrupt_on</code> 审批。不要把宿主机的环境变量或云凭证直接暴露给 Agent。</p>
+<p>上表中 Sandbox 和 LocalShell backend 提供 shell <code>execute</code>，自定义 backend 或工具还可能扩展能力。Sandbox 是隔离边界，不是「默认安全」的同义词：把最小权限凭证按需注入，使用只读/受限网络与 CPU、内存、时间配额，并在删除、外发、付费调用等动作前启用 <code>interrupt_on</code> 审批。不要把宿主机的环境变量或云凭证直接暴露给 Agent。</p>
 </blockquote>
 <p><strong>推荐组合</strong>：临时中间产物放 thread-scoped State backend；经审核、需要跨会话保留的资料放带租户 namespace 的 Store backend；代码执行放一次性 sandbox。需要同时使用时用 Composite backend 按路径路由，而不是把所有数据和权限放进一个可写本地目录。</p>
 <h2 id="126">12.6 哪些场景适合<a class="headerlink" href="#126" title="Permanent link">&para;</a></h2>
-<p>同时满足下列三项时，Deep Research 才值得引入：</p>
+<p>先判断是否需要动态、多轮的证据收集，再判断是否值得使用并行研究员。能否拆成独立子课题只影响并行方案，不是 Deep Research 的必要条件：</p>
 <pre class="mermaid"><code>flowchart TB
     Q1{"问题是否开放到&lt;br/&gt;需要多轮搜索和动态调整方向?"}
     Q1 --&gt;|一次权威检索就能回答| N1["不用&lt;br/&gt;复杂研究流程只会增加成本"]
     Q1 --&gt;|是| Q2{"能否拆出相对独立的子课题?"}
-    Q2 --&gt;|不能| N2["不用&lt;br/&gt;并行 Researcher 会频繁等待和交换状态"]
+    Q2 --&gt;|不能| N2["使用串行研究&lt;br/&gt;避免强行并行"]
+    N2 --&gt; Q3
     Q2 --&gt;|能| Q3{"报告价值能否覆盖&lt;br/&gt;多轮模型与搜索成本?"}
     Q3 --&gt;|不能| N3["不用"]
     Q3 --&gt;|能| Y["适合 Deep Research"]
@@ -9175,7 +9179,7 @@
 </tr>
 <tr>
 <td>多个子任务必须严格共享中间状态</td>
-<td><strong>强行并行只会增加冲突</strong></td>
+<td>不适合强行并行；可采用串行研究或显式依赖工作流</td>
 </tr>
 <tr>
 <td>数据源本身不可靠或没有访问权限</td>
@@ -9213,9 +9217,9 @@
 <h2 id="128">12.8 本章总结<a class="headerlink" href="#128" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>Deep Research 是一类研究型 Agent 架构</strong>，不是核心包中的一个开关；</li>
-<li><strong>它建立在 LangChain 的模型/工具/Agent 与 LangGraph 的状态与编排能力之上</strong>；</li>
+<li><strong>本章参考实现使用 LangChain 与 LangGraph</strong>，研究型 Agent 的一般方法并不依赖这套框架；</li>
 <li><strong>六步流程</strong>：明确范围 → 生成 Brief → 拆分子课题 → 并行检索核验 → 压缩证据查缺 → 统一写作；</li>
-<li><strong>Research Brief 是稳定的成功标准</strong>，缺了它搜索必然跑偏；</li>
+<li><strong>Research Brief 明确成功标准</strong>，可以降低搜索偏离目标的风险；</li>
 <li><strong>只有独立子课题适合并行</strong>，有依赖就串行；</li>
 <li><strong>子 Agent 的第一目的是隔离上下文</strong>，并行是隔离之后的自然结果；</li>
 <li><strong>并行搜证据、统一写报告</strong>，避免章节重复与结论冲突；</li>
@@ -9223,7 +9227,7 @@
 <li><strong>评测既看答案也看轨迹、覆盖率、引用正确性、耗时和成本</strong>；</li>
 <li><strong>成本受宽度和深度双重影响</strong>，单分支上限之外还要有总预算和取消策略；</li>
 <li><strong>外部文档是不可信输入</strong>：工具只读、最小权限、密钥隔离、高风险人工审批；</li>
-<li><strong>三项条件都成立才值得用</strong>：问题足够开放、子课题可独立、报告价值覆盖成本。</li>
+<li><strong>开放程度和报告价值决定是否研究，子课题独立性决定是否并行</strong>；串行研究同样可以是 Deep Research；</li>
 <li><strong>Deep Agents 是 SDK/harness 而非安全或正确性承诺</strong>：文件、持久化和 shell 权限取决于 backend；不可信代码要在受限 sandbox 中执行。</li>
 </ol>
 <blockquote>
@@ -9236,6 +9240,8 @@
 <li><a href="https://docs.langchain.com/oss/python/deepagents/overview">Deep Agents 概览</a></li>
 <li><a href="https://docs.langchain.com/oss/python/deepagents/backends">Deep Agents Backends</a></li>
 <li><a href="https://docs.langchain.com/oss/python/deepagents/sandboxes">Deep Agents Sandboxes</a></li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/subagents">Deep Agents 同步子 Agent</a></li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/async-subagents">Deep Agents 异步子 Agent</a></li>
 <li><a href="https://github.com/langchain-ai/deepagents">deepagents 官方仓库</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph 官方文档</a></li>
 <li><a href="https://docs.langchain.com/langsmith/evaluation">LangSmith Evaluation 文档</a></li>
@@ -9263,7 +9269,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

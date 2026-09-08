@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Demo 阶段的 LLM 应用往往就是一次 client.chat.completions.create() 调用。要撑住真实流量，这一次调用的前后会长出一整条链路：网关、编排、输出校验、可观测性、评测和发布都得补上">
+        <meta name="description" content="沿请求、评测和反馈链路梳理 LLM 生产架构，明确入口鉴权、模型网关、工具执行与日志采集的边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第二章：AI 应用生产架构全景">
-    <meta property="og:description" content="Demo 阶段的 LLM 应用往往就是一次 client.chat.completions.create() 调用。要撑住真实流量，这一次调用的前后会长出一整条链路：网关、编排、输出校验、可观测性、评测和发布都得补上">
+    <meta property="og:description" content="沿请求、评测和反馈链路梳理 LLM 生产架构，明确入口鉴权、模型网关、工具执行与日志采集的边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/02-production-architecture-overview/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第二章：AI 应用生产架构全景">
-    <meta name="twitter:description" content="Demo 阶段的 LLM 应用往往就是一次 client.chat.completions.create() 调用。要撑住真实流量，这一次调用的前后会长出一整条链路：网关、编排、输出校验、可观测性、评测和发布都得补上">
+    <meta name="twitter:description" content="沿请求、评测和反馈链路梳理 LLM 生产架构，明确入口鉴权、模型网关、工具执行与日志采集的边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：AI 应用生产架构全景","description":"Demo 阶段的 LLM 应用往往就是一次 client.chat.completions.create() 调用。要撑住真实流量，这一次调用的前后会长出一整条链路：网关、编排、输出校验、可观测性、评测和发布都得补上","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/02-production-architecture-overview/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：AI 应用生产架构全景","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/02-production-architecture-overview/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：AI 应用生产架构全景","description":"沿请求、评测和反馈链路梳理 LLM 生产架构，明确入口鉴权、模型网关、工具执行与日志采集的边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/02-production-architecture-overview/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：AI 应用生产架构全景","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/02-production-architecture-overview/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"AI 应用生产架构","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/01-foundations/02-production-architecture-overview/"}]}</script>
     
@@ -8578,9 +8578,9 @@
     style VALIDATE fill:#fff3cd
     style OBS fill:#e6f4ea
     style CICD fill:#fce8e6</code></pre>
-<p>这张图不是某一家公司的具体实现，而是把 OpenAI、Anthropic 官方生产指南和大厂工程博客（Netflix、Uber、Stripe 等）里反复出现的模块抽象出来的<strong>共性骨架</strong>。沿着请求链路往下看，先是网关和编排层，再到输出校验、可观测性、评测、发布和反馈回流。</p>
+<p>这张图是便于讨论的逻辑视图，不是某家公司的部署案例，也不规定组件的物理顺序。图中的网关合并了入口与模型调用治理；实际系统常是「入口 API 网关 → 编排层 → 模型网关 → 供应商」，编排层每次调用模型都经过模型网关，调用工具则经过独立的授权与执行边界。</p>
 <h2 id="22">2.2 请求路径：网关、编排、供应商<a class="headerlink" href="#22" title="Permanent link">&para;</a></h2>
-<p>请求进来先经过<strong>模型网关</strong>：统一鉴权、按策略路由到具体模型、失败时回退到备用模型。网关本身怎么搭建（多模型统一接口、限流配额、Key 管理）属于 <a href="../../../tools/05-transport-gateway/14-llm-gateway/">Tools · LLM 网关</a>，本主题<a href="../../02-request-reliability/03-model-gateway-routing-fallback/">第 3 章</a>讲的是路由策略和回退链路怎么设计,<a href="../../02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/">第 4 章</a>讲调用失败时的重试与熔断。</p>
+<p>入口层验证用户与租户身份；<strong>模型网关</strong>管理模型供应商凭据、配额、路由和回退。两者不能替代工具服务对具体资源的授权。网关组件见 <a href="../../../tools/05-transport-gateway/14-llm-gateway/">Tools · LLM 网关</a>，路由见<a href="../../02-request-reliability/03-model-gateway-routing-fallback/">第 3 章</a>，超时和重试见<a href="../../02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/">第 4 章</a>。</p>
 <p>网关之后是<strong>编排层</strong>——单次问答可能只是一次模型调用，但 Agent 需要多轮工具调用与规划（见 <a href="../../../agent/">Agent</a>），知识密集型任务需要先检索再生成（见 <a href="../../../rag/">RAG</a>）。编排层最终落到具体的<strong>模型供应商</strong>：可能是托管 API，也可能是自研部署（部署细节见 <a href="../../../llm/03-inference-serving/">LLM · 推理与部署</a>）。</p>
 <h2 id="23">2.3 输出侧：校验、降级<a class="headerlink" href="#23" title="Permanent link">&para;</a></h2>
 <p>模型返回的文本不能直接信任。<strong>输出校验</strong>检查它是否符合下游期望的结构化契约（<a href="../../03-output-safety/05-structured-output-contracts/">第 5 章</a>），以及是否触发了安全护栏（<a href="../../03-output-safety/06-guardrails-degradation/">第 6 章</a>）。校验不通过不代表直接报错给用户——降级路径可能是换用更保守的模型重试、返回缓存答案或模板化兜底回复,这也是第 6 章的核心内容。</p>
@@ -8622,16 +8622,16 @@
     LOG -.人工定期抽查.-&gt; EVAL[小型评测集]
 
     style GW fill:#e8f0fe</code></pre>
-<p>关键取舍是:<strong>网关可以先用开源方案(如 LiteLLM)顶上而不是自建;可观测性最低限度是把每次调用的输入输出结构化落盘;评测可以从人工定期抽查几十条样本开始,不必一开始就上自动化流水线。</strong> 随着流量增长,再按图 2.1 逐步补齐路由回退、自动化评测门禁、灰度发布这些能力——<strong>过早搭建全套基础设施本身就是一种浪费</strong>,这一点在第 12 章的容量规划里还会展开。</p>
+<p>网关可以先用现成组件，日志先记录请求关联 ID、版本、延迟、状态和用量，<strong>不默认落盘原始输入输出</strong>。人工抽查几十条可以发现明显问题，但不能证明低失败率。即使规模很小，仍需鉴权、总超时、限流、成本上限和可关闭的发布开关；涉及副作用时再补工具授权、审批和幂等。是否需要多模型回退取决于风险与恢复目标，不是所有应用的上线前提。</p>
 <h2 id="27">2.7 常见错误<a class="headerlink" href="#27" title="Permanent link">&para;</a></h2>
 <h3 id="271-demo">2.7.1 把 Demo 架构直接套用到生产<a class="headerlink" href="#271-demo" title="Permanent link">&para;</a></h3>
-<p>Demo 里「一次 API 调用直接返回」在生产里必须补上路由回退、输出校验、可观测性,否则任何一次供应商抖动或模型输出异常都会直接影响用户。</p>
+<p>Demo 里「一次 API 调用直接返回」缺少失败预算和恢复路径。生产中至少应说明供应商不可用时，是快速失败、排队、降级还是切换；不能为了表面可用，把未经授权的数据发给备用供应商。</p>
 <h3 id="272">2.7.2 把所有能力一步到位建齐<a class="headerlink" href="#272" title="Permanent link">&para;</a></h3>
 <p>小团队一上来就搭建灰度发布、自动化评测门禁、多模型路由,投入产出比很低。应该按第 2.6 节的精简版起步,随流量和风险增长补齐。</p>
 <h3 id="273">2.7.3 把可观测性当成事后补救<a class="headerlink" href="#273" title="Permanent link">&para;</a></h3>
 <p>不少团队等出了生产事故才想起来加日志和 Trace。可观测性应该在架构设计阶段就规划好数据边界(见第 8 章),而不是事后补丁。</p>
 <h3 id="274">2.7.4 反馈闭环只停留在「收集」,没有「回流」<a class="headerlink" href="#274" title="Permanent link">&para;</a></h3>
-<p>收集了用户点赞点踩却从不用来更新评测集,反馈闭环就是摆设。收集到的信号必须真正流回评测和发布决策,才算闭环。</p>
+<p>反馈应经授权、去重和人工归因后回流；反馈中的敏感内容可能需要删除而非保存。一个样本进入调参集后，不应再作为独立留出测试证明改进有效。</p>
 <h2 id="28">2.8 本章总结<a class="headerlink" href="#28" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>生产架构是 Demo 的一次调用「长出」的一整条链路</strong>:网关 → 编排 → 供应商 → 输出校验 → 返回,外加可观测性、评测、发布、反馈四条支路;</li>
@@ -8670,7 +8670,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

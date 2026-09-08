@@ -77,7 +77,7 @@
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十一章：A2A 协议","description":"解释 A2A 协议中的 Agent Card、任务生命周期、消息与制品，并比较 A2A、MCP 和应用内部多 Agent 编排。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/11-a2a-protocol/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十一章：A2A 协议","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/11-a2a-protocol/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十一章：A2A 协议","description":"解释 A2A 协议中的 Agent Card、任务生命周期、消息与制品，并比较 A2A、MCP 和应用内部多 Agent 编排。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/11-a2a-protocol/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十一章：A2A 协议","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/11-a2a-protocol/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"A2A 协议","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/04-agent-communication/11-a2a-protocol/"}]}</script>
     
@@ -8739,6 +8739,7 @@
 
 
 <h1 id="a2a">第十一章：A2A 协议<a class="headerlink" href="#a2a" title="Permanent link">&para;</a></h1>
+<p><strong>版本基准（2026-09-08 核查）</strong>：官网 <code>latest</code> 仍标 v1.0.0，但官方仓库最新 Release 是 <a href="https://github.com/a2aproject/A2A/releases/tag/v1.0.1">v1.0.1</a>。本章按该发布标签的<a href="https://github.com/a2aproject/A2A/blob/v1.0.1/docs/specification.md">规范正文</a>和 <a href="https://github.com/a2aproject/A2A/blob/v1.0.1/specification/a2a.proto"><code>specification/a2a.proto</code></a>核对；线上 <code>A2A-Version</code> 为 <code>1.0</code>，不含补丁号。协议规范、SDK 版本、Agent 软件版本三者不同。</p>
 <h2 id="111-agent">11.1 单个 Agent 的三个天花板<a class="headerlink" href="#111-agent" title="Permanent link">&para;</a></h2>
 <p>一个 Agent 可以近似看成 <strong>一个 LLM + 一组工具 + 一段上下文窗口</strong>。这三个维度各有上限：</p>
 <table>
@@ -8751,7 +8752,7 @@
 <tbody>
 <tr>
 <td><strong>工具数量</strong></td>
-<td>装 100 个工具，模型选择准确率显著下降，且工具定义每轮全量重传（见 <a href="../../01-function-calling/03-tool-schema-design/">第三章</a>）</td>
+<td>相近工具可能增加选择混淆；全量注入会增加成本，但可检索或延迟加载（见<a href="../../01-function-calling/03-tool-schema-design/">第三章</a>）</td>
 </tr>
 <tr>
 <td><strong>上下文窗口</strong></td>
@@ -8759,7 +8760,7 @@
 </tr>
 <tr>
 <td><strong>专业能力</strong></td>
-<td>同一个 Agent 既做代码审查又做市场分析，不如各自专精的 Agent</td>
+<td>不同任务需要不同知识与工具配置，是否拆分应评测协调成本和最终质量</td>
 </tr>
 </tbody>
 </table>
@@ -8774,19 +8775,20 @@
     end
 
     subgraph MULTI["多 Agent"]
-        O["调度 Agent&lt;br/&gt;上下文里只有&lt;br/&gt;三份几百字摘要"]
+        O["调度 Agent&lt;br/&gt;接收摘要与证据引用&lt;br/&gt;必要时追溯原始材料"]
         A1["市场 Agent&lt;br/&gt;几十个网页在&lt;br/&gt;它自己的上下文里"]
         A2["技术 Agent&lt;br/&gt;工具文档在&lt;br/&gt;它自己的上下文里"]
         O --&gt; A1
         O --&gt; A2
-        A1 -.只回传结论.-&gt; O
-        A2 -.只回传结论.-&gt; O
+        A1 -.回传结论与证据.-&gt; O
+        A2 -.回传结论与证据.-&gt; O
     end
 
     style S1 fill:#fce8e6
     style O fill:#e6f4ea</code></pre>
 <p>市场 Agent 自己去搜几十个网页、写草稿、反复迭代，这些<strong>中间过程全在它自己的上下文里</strong>。任务完成后只把一份几百字的结论回传。</p>
 <p>调度 Agent 的上下文里只多了一份摘要，而不是几十个网页原文。<strong>这就是多 Agent 协作在上下文层面的核心收益：把调研过程的上下文压力隔离在专业 Agent 内部。</strong></p>
+<p>这是多 Agent 架构可能带来的收益，不是 A2A 协议保证。总 token 可能增加，摘要也可能丢失证据；应回传来源、假设和可取回的原始制品，而不只是一句结论。</p>
 <h2 id="112-agent">11.2 基础问题：Agent 之间怎么互相认识<a class="headerlink" href="#112-agent" title="Permanent link">&para;</a></h2>
 <p>Agent A 要把任务委托给 Agent B，前提是它得知道 B 能做什么。</p>
 <p>最直接但也最难维护的方案，是把配置写死：A 的代码里硬编码「B 可以做竞品分析」。B 的能力一变，A 的代码就得改。</p>
@@ -8796,29 +8798,40 @@
 <div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Market Research Agent"</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"面向科技行业的市场趋势与竞品调研"</span><span class="p">,</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://agents.example.com/market"</span><span class="p">,</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.2.0"</span><span class="p">,</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">"capabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">"streaming"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">"pushNotifications"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="p">},</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="nt">"skills"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"competitor-analysis"</span><span class="p">,</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"竞品分析"</span><span class="p">,</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"针对指定产品品类，输出竞品清单、定位对比与差异化分析"</span><span class="p">,</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">"examples"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"分析国内 AI 编程助手的竞争格局"</span><span class="p">]</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trend-analysis"</span><span class="p">,</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"行业趋势分析"</span><span class="p">,</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"基于公开数据与新闻，输出指定行业未来 12 个月的趋势判断"</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">"supportedInterfaces"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://agents.example.com/market"</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">"protocolBinding"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSONRPC"</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">"protocolVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="p">],</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.2.0"</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">"defaultInputModes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"text/plain"</span><span class="p">],</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nt">"defaultOutputModes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"text/plain"</span><span class="p">],</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nt">"capabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">"streaming"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">"pushNotifications"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="nt">"skills"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"competitor-analysis"</span><span class="p">,</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"竞品分析"</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"针对指定产品品类，输出竞品清单、定位对比与差异化分析"</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">      </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"market"</span><span class="p">,</span><span class="w"> </span><span class="s2">"research"</span><span class="p">],</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">      </span><span class="nt">"examples"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"分析国内 AI 编程助手的竞争格局"</span><span class="p">]</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trend-analysis"</span><span class="p">,</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"行业趋势分析"</span><span class="p">,</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"基于公开资料整理行业趋势，并标注来源、时间与不确定性"</span><span class="p">,</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">      </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"trends"</span><span class="p">]</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>名片里最关键的是 <strong>skills 列表</strong>。调度 Agent 靠这些描述做路由决策——「这个任务和哪个 Agent 的哪个 skill 最匹配」。</p>
-<p>这和 <a href="../../01-function-calling/03-tool-schema-design/">工具的 description</a> 起的作用完全一致：<strong>都是在被选择的那一刻，对方唯一能看到的信息</strong>。写得含糊，这个 Agent 就很难被正确路由到任务。</p>
+<p>示例是公开能力卡，未配置受保护操作。<code>version: "1.2.0"</code> 是这个 Agent 软件的示例版本，不是 A2A 版本；1.0 用 <code>supportedInterfaces</code> 声明接口，而不是旧版顶层 <code>url</code>。生产卡还应按需声明 <code>securitySchemes</code>、<code>securityRequirements</code>，并确认所需流式/推送能力确实启用。</p>
+<p>描述可辅助路由，但还要结合输入输出模式、认证要求、可信来源和任务约束。Card 内容不是授权证明，也不是能力正确性的测评报告。</p>
 <blockquote>
 <p>注意这里的 <code>skills</code> 和 <a href="../../03-skills/08-what-is-skill/">第八章</a> 讲的 Agent Skill <strong>不是一回事</strong>。A2A 的 skill 是「对外声明的能力条目」，Agent Skill 是「Agent 内部的流程知识模块」。名字撞车，层次完全不同。</p>
 </blockquote>
@@ -8826,22 +8839,37 @@
 <p>新加一个 Agent 后，支持相同发现机制的调用方可以读取其 Agent Card 并考虑调用它；是否自动接纳仍应经过信任、认证和策略检查。</p>
 <p>这和 MCP 的 <code>tools/list</code> 自动发现是同一个思路——<a href="../../02-mcp/04-what-is-mcp/">第四章</a> 里说过，「自动发现」才是标准化协议真正的价值所在。</p>
 <h2 id="113-task-a2a">11.3 Task 是 A2A 的一等公民<a class="headerlink" href="#113-task-a2a" title="Permanent link">&para;</a></h2>
-<p>A2A 里任务协作的基本单位是 <strong>Task</strong>：调度 Agent 委托任务 = 创建一个 Task；接收方执行；完成后把产出（<strong>artifacts</strong>，可以是文本、文件等）返回。</p>
+<p>A2A 的 <strong>Task</strong> 是有状态的工作单元。Client 发 Message 后，Server 可以直接返回 Message，也可以创建并返回 Task；不是每条消息都创建任务。任务产出用 <strong>Artifact</strong>，消息用于交互、澄清和状态沟通。</p>
+<p><code>taskId</code> 由 Server 创建，<code>contextId</code> 关联同一会话中的多个任务与消息，<code>messageId</code> 标识消息；它们不是用户身份，也不会自动提供业务幂等性。<code>Part</code> 可携带文本、原始/引用文件或结构化数据。</p>
 <pre class="mermaid"><code>stateDiagram-v2
-    [*] --&gt; submitted: 调度 Agent 提交
+state "TASK_STATE_SUBMITTED" as submitted
+state "TASK_STATE_WORKING" as working
+state "TASK_STATE_INPUT_REQUIRED" as input_required
+state "TASK_STATE_AUTH_REQUIRED" as auth_required
+state "TASK_STATE_COMPLETED" as completed
+state "TASK_STATE_FAILED" as failed
+state "TASK_STATE_CANCELED" as canceled
+state "TASK_STATE_REJECTED" as rejected
+[*] --&gt; submitted: 调度 Agent 提交
     submitted --&gt; working: 接收方开始执行
     working --&gt; input_required: 需要补充信息
     input_required --&gt; working: 调用方补充后继续
+    working --&gt; auth_required: 需要追加认证
+    auth_required --&gt; working: 完成认证后继续
     working --&gt; completed: 执行成功
     working --&gt; failed: 执行失败
-    working --&gt; canceled: 调用方取消
+    working --&gt; canceled: 取消获准
+    submitted --&gt; rejected: 接收方拒绝
+    working --&gt; rejected: 无法继续受理
     completed --&gt; [*]
     failed --&gt; [*]
-    canceled --&gt; [*]</code></pre>
+    canceled --&gt; [*]
+    rejected --&gt; [*]</code></pre>
+<p>这是典型路径，不要求每个任务走过全部状态。1.0 的 ProtoJSON 使用图中的 <code>TASK_STATE_*</code> 枚举名；旧文章中的小写或连字符值不能直接用于 1.0 报文。<code>TASK_STATE_UNSPECIFIED</code> 不应作为正常业务状态；完成、失败、取消、拒绝是终态，补充输入和追加认证是中断态。</p>
 <h3 id="1131">11.3.1 为什么需要这么完整的状态机<a class="headerlink" href="#1131" title="Permanent link">&para;</a></h3>
 <p>因为 <strong>A2A 是专门为长时间任务设计的</strong>。</p>
-<p>一个「竞品分析」任务可能要跑几分钟：先搜索、再整理、再写报告。不可能让调度 Agent 同步阻塞等着。</p>
-<p>所以调度 Agent 提交任务后可以去处理别的事，通过两种方式得知完成：</p>
+<p>竞品分析可能跨多个工具或人工环节；支持后台处理可以让调用方不必一直阻塞，但同步等待仍是一种合法实现选择。</p>
+<p>调用方可通过三种机制跟踪任务：</p>
 <table>
 <thead>
 <tr>
@@ -8858,8 +8886,8 @@
 </tr>
 <tr>
 <td><strong>Push Notification</strong></td>
-<td>接收方完成时主动回调调用方</td>
-<td>任务多、耗时长，避免空轮询</td>
+<td>接收方在任务更新时回调注册端点，不仅限于完成</td>
+<td>需能力支持、可达 webhook 和认证</td>
 </tr>
 <tr>
 <td><strong>流式</strong></td>
@@ -8871,6 +8899,7 @@
 <h3 id="1132">11.3.2 黑盒是解耦的意义<a class="headerlink" href="#1132" title="Permanent link">&para;</a></h3>
 <p>调度 Agent 的视角非常干净：<strong>提交 Task → 查状态 → 取 artifacts</strong>。</p>
 <p>它完全不需要知道接收方内部用了什么工具、调了几次 LLM、是不是又委托给了别的 Agent。每个专业 Agent 的实现对外不可见——这正是解耦的价值。</p>
+<p>连接中断不等于任务取消。重连可 <code>GetTask</code> 或 <code>SubscribeToTask</code> 获取状态；后者首条事件为当前 Task，但不保证补齐全部历史增量。<code>CancelTask</code> 是取消请求，可能因已完成或不可取消而失败；已发邮件、已付款等副作用更不会自动回滚。处理 Artifact 增量要依据 <code>artifactId</code>、<code>append</code>、<code>lastChunk</code>，不能把每个流事件都当独立完整文件。</p>
 <h2 id="114-agent">11.4 架构本质：Agent 的微服务化<a class="headerlink" href="#114-agent" title="Permanent link">&para;</a></h2>
 <p>有后端经验的话，A2A 会很眼熟——<strong>它就是 Agent 世界里的微服务架构</strong>：</p>
 <table>
@@ -8890,12 +8919,12 @@
 <td>Agent Card</td>
 </tr>
 <tr>
-<td>服务注册中心的一条记录</td>
-<td><code>/.well-known/agent-card.json</code></td>
+<td>能力元数据入口</td>
+<td><code>/.well-known/agent-card.json</code>，不是全局注册中心</td>
 </tr>
 <tr>
-<td>异步消息队列</td>
-<td>Task 状态机 + Push Notification</td>
+<td>异步工作抽象</td>
+<td>Task 与更新机制；不提供消息队列的持久化交付保证</td>
 </tr>
 <tr>
 <td>服务间多种 RPC/HTTP 调用</td>
@@ -8907,7 +8936,7 @@
 <p>这个理念和 MCP 一脉相承：<strong>MCP 让工具成为独立标准化服务，A2A 让 Agent 成为独立标准化服务。</strong></p>
 <p>A2A 由 Google 在 2025 年 4 月提出，同年 6 月捐给 Linux 基金会独立治理——这一步和 MCP 走的路径也很像：先由一家推出，再交给中立组织维护，以争取生态采纳。</p>
 <h2 id="115-a2a-protocol-binding">11.5 A2A 的多种 protocol binding<a class="headerlink" href="#115-a2a-protocol-binding" title="Permanent link">&para;</a></h2>
-<p>A2A 把<strong>数据模型与操作</strong>和网络 binding 分开。v1.0.0 定义 JSON-RPC、gRPC、HTTP/REST binding，并允许自定义 binding；同一 Task、Message、Part、Artifact 语义不应因 binding 改变。</p>
+<p>A2A 1.0 把<strong>数据模型与操作</strong>和网络 binding 分开，定义 JSON-RPC、gRPC、HTTP/REST binding，并允许自定义 binding。v1.0.1 为补丁发布，修正文档和 HTTP 媒体类型等，不改变 <code>Major.Minor</code> 协商标识。</p>
 <table>
 <thead>
 <tr>
@@ -8920,7 +8949,7 @@
 <tr>
 <td><strong>JSON-RPC</strong></td>
 <td>复用 RPC 方法与错误模型</td>
-<td><code>message/stream</code> 使用 SSE</td>
+<td><code>SendStreamingMessage</code> 使用 SSE</td>
 </tr>
 <tr>
 <td><strong>HTTP/REST</strong></td>
@@ -8940,6 +8969,7 @@
 </tbody>
 </table>
 <p>WebSocket <strong>不是 A2A 核心 binding</strong>；需要它的双方可定义 custom binding 或用它承载自己的会话层，但不能据此宣称通用 A2A 互操作。WebRTC 同样不是 A2A binding：A2A 可通过 file URI 或文件 Part 交换音频/视频等内容，实时媒体协商与传输需由应用另行设计。</p>
+<p>1.0 JSON-RPC 方法是 <code>SendMessage</code>、<code>GetTask</code>、<code>CancelTask</code>、<code>SubscribeToTask</code> 等；HTTP 路径对应 <code>POST /message:send</code>、<code>GET /tasks/{id}</code>、<code>POST /tasks/{id}:cancel</code>。不要把旧版 <code>message/send</code>、<code>tasks/get</code> 混进新协议。HTTP 客户端显式发送 <code>A2A-Version: 1.0</code>；省略版本按兼容规则解释为 <code>0.3</code>，不是自动使用最新。v1.0.1 HTTP 绑定优先使用 <code>application/a2a+json</code>，SSE 响应仍是 <code>text/event-stream</code>。</p>
 <h2 id="116-a2a-mcp">11.6 A2A 与 MCP：一纵一横<a class="headerlink" href="#116-a2a-mcp" title="Permanent link">&para;</a></h2>
 <p>理清两者关系最简单的方式是<strong>看方向</strong>：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -8982,13 +9012,13 @@
 </tr>
 </tbody>
 </table>
-<p>类比：<strong>MCP 是每个员工的工具箱</strong>，决定这个人能用什么工具干活；<strong>A2A 是公司的协作流程</strong>，决定不同岗位的人怎么分工交接。工具箱和协作流程是两回事，缺哪个都不行。</p>
+<p>“纵向/横向”是常见用法的示意，不是强制拓扑。MCP 可以暴露 Agent 能力，A2A 后端也可以是确定性程序；核心区别是对外契约，而非对端是否真的使用模型。</p>
 <p>复杂系统里两者同时在用：MCP 管纵向连接，A2A 管横向协作。</p>
 <h3 id="1161">11.6.1 一个自然的推论<a class="headerlink" href="#1161" title="Permanent link">&para;</a></h3>
 <p>既然一个 Agent 对外是 A2A 服务、对下用 MCP 连工具，那么<strong>能不能把一个 Agent 直接包装成 MCP Server 给别的 Agent 用</strong>？</p>
 <p>技术上可以，而且社区里确实有这种做法。但两者的语义不同：</p>
 <ul>
-<li><strong>包成 MCP 工具</strong>：调用方把它当成一次同步的函数调用，期待快速返回。适合能力边界窄、执行快的 Agent；</li>
+<li><strong>包成 MCP 工具</strong>：对外提供工具契约，也可通过 MRTR、显式 handle 或可选 Tasks 扩展处理长任务，不能说 MCP 只能同步；</li>
 <li><strong>走 A2A</strong>：有完整的任务生命周期、异步、可取消、可补充输入、可流式。适合长时间、多轮、需要澄清的复杂委托。</li>
 </ul>
 <p>判断依据是：<strong>这个委托更像「调一次接口」还是「派一个活」</strong>。</p>
@@ -9002,27 +9032,25 @@
 <h3 id="1174-a2a-skill-agent-skill">11.7.4 把 A2A 的 skill 和 Agent Skill 混为一谈<a class="headerlink" href="#1174-a2a-skill-agent-skill" title="Permanent link">&para;</a></h3>
 <p>名字撞车但层次不同：A2A 的 skill 是对外的能力声明条目，Agent Skill 是 Agent 内部的流程知识模块。</p>
 <h3 id="1175-a2a-a2a">11.7.5 认为有了 A2A 就必须用 A2A<a class="headerlink" href="#1175-a2a-a2a" title="Permanent link">&para;</a></h3>
-<p>绝大多数多 Agent 系统跑在<strong>单进程内</strong>（比如 LangGraph 的多节点图），Agent 之间直接传共享状态就行，根本不需要跨进程协议。A2A 的价值出现在<strong>Agent 由不同团队开发、独立部署、跨组织协作</strong>的时候。为一个单进程系统引入 A2A 是过度设计。</p>
+<p>同进程多节点可直接调用函数或传状态，未必需要跨系统协议。A2A 更适合不同实现、独立部署或跨组织协作；也应评估已有内部 RPC 是否已经满足需求，不根据“多 Agent”这个名称自动引入协议。</p>
 <h3 id="1176-agent-card">11.7.6 忽略 Agent Card 的描述质量<a class="headerlink" href="#1176-agent-card" title="Permanent link">&para;</a></h3>
 <p>和工具 description 一样，写得含糊的 Agent Card 会导致这个 Agent 要么永远派不到活，要么被派到不该做的活。</p>
 <h2 id="118">11.8 本章总结<a class="headerlink" href="#118" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>A2A 解决的是单 Agent 的三个天花板</strong>：工具数量、上下文窗口、专业能力；</li>
-<li><strong>多 Agent 在上下文层面的真正收益是中间过程隔离</strong>，调度 Agent 只收结论不收原始素材；</li>
+<li><strong>A2A 解决跨实现协作接口</strong>，不自动提升专业能力或降低总上下文成本；</li>
+<li><strong>多 Agent 可隔离中间过程</strong>，但摘要会丢信息；调度者仍应能追溯证据，而非只能接收结论；</li>
 <li><strong>Agent Card 实现能力声明与发现</strong>；可通过已知 URL、配置或 well-known 约定取得，skills 描述可辅助路由；</li>
 <li><strong>Task 是一等公民</strong>，完整状态机是为异步长任务设计的，支持轮询、回调、流式三种感知方式；</li>
-<li><strong>架构本质是 Agent 的微服务化</strong>：Agent Card 对应 API 文档，Task 状态机对应异步消息队列；</li>
+<li><strong>黑盒委托利于解耦</strong>，但 Task 状态机不等于持久化消息队列或 exactly-once 执行；</li>
 <li><strong>多 binding 保持同一语义</strong>：JSON-RPC、HTTP/REST、gRPC 是核心 binding；SSE 用于相应 binding 的流式更新，WebSocket/WebRTC 不属于核心 binding；</li>
 <li><strong>与 MCP 是一纵一横</strong>：MCP 向下连工具，A2A 向外连 Agent，互补不竞争；</li>
 <li><strong>不是所有多 Agent 系统都需要 A2A</strong>，单进程内协作用共享状态更简单，A2A 面向跨团队跨部署的场景。</li>
 </ol>
-<blockquote>
-<p><strong>可以把它理解成：MCP 负责给 Agent 接工具，A2A 负责让 Agent 之间交接任务；一个管纵向能力，一个管横向协作。</strong></p>
-</blockquote>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://a2a-protocol.org/">A2A 协议官网</a></li>
-<li><a href="https://a2a-protocol.org/v1.0.0/specification">A2A v1.0.0 规范</a></li>
+<li><a href="https://github.com/a2aproject/A2A/blob/v1.0.1/docs/specification.md">A2A v1.0.1 发布规范</a></li>
+<li><a href="https://github.com/a2aproject/A2A/blob/v1.0.1/specification/a2a.proto">A2A v1.0.1 规范数据定义</a></li>
 <li><a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/">Google: Announcing the Agent2Agent Protocol</a></li>
 <li><a href="https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents">Linux Foundation: A2A Project</a></li>
 <li><a href="https://modelcontextprotocol.io/docs/getting-started/intro">Model Context Protocol 官方文档</a></li>
@@ -9050,7 +9078,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

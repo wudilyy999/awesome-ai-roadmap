@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="多模态 RAG 不只是“给 RAG 加图片”。它要让文本、页面图像、表格、图表、音频或视频证据在同一条可审计链路中被摄取、表示、检索、引用和评估">
+        <meta name="description" content="说明文本、页面、表格与音视频的多表示检索，覆盖跨模态证据融合、原件引用、成本和定位评测。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第二十一章：多模态 RAG">
-    <meta property="og:description" content="多模态 RAG 不只是“给 RAG 加图片”。它要让文本、页面图像、表格、图表、音频或视频证据在同一条可审计链路中被摄取、表示、检索、引用和评估">
+    <meta property="og:description" content="说明文本、页面、表格与音视频的多表示检索，覆盖跨模态证据融合、原件引用、成本和定位评测。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第二十一章：多模态 RAG">
-    <meta name="twitter:description" content="多模态 RAG 不只是“给 RAG 加图片”。它要让文本、页面图像、表格、图表、音频或视频证据在同一条可审计链路中被摄取、表示、检索、引用和评估">
+    <meta name="twitter:description" content="说明文本、页面、表格与音视频的多表示检索，覆盖跨模态证据融合、原件引用、成本和定位评测。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：多模态 RAG","description":"多模态 RAG 不只是“给 RAG 加图片”。它要让文本、页面图像、表格、图表、音频或视频证据在同一条可审计链路中被摄取、表示、检索、引用和评估","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：多模态 RAG","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/"},"datePublished":"2026-08-31","dateModified":"2026-08-31"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：多模态 RAG","description":"说明文本、页面、表格与音视频的多表示检索，覆盖跨模态证据融合、原件引用、成本和定位评测。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：多模态 RAG","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"多模态 RAG","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/04-advanced/21-multimodal-rag/"}]}</script>
     
@@ -8527,7 +8527,7 @@
 </table>
 <p>可以使用发布者声明的图文共享空间进行跨模态召回，也可以保留每种模态的专用索引后融合。两者都要求记录模型、版本、预处理、归一化和相似度度量；<strong>不能因维度相同就混算向量。</strong> 文本 Query/Document 的兼容性要求见<a href="../../02-ingestion-indexing/07-embedding-selection/">第七章</a>。</p>
 <h2 id="214-retrieval">21.4 Retrieval：按意图路由，证据级融合<a class="headerlink" href="#214-retrieval" title="Permanent link">&para;</a></h2>
-<p>查询可能是文本找文本（“退款规则是什么”）、文本找图（“这张错误截图属于什么界面”）、图找图，或需要表格和图表共同回答。稳妥流程是：</p>
+<p>查询可能是文本找文本（“退款规则是什么”）、文本找图（“找到退款流程图”）、图找文本（上传截图后询问界面说明）、图找图，或需要表格和图表共同回答。稳妥流程是：</p>
 <ul>
 <li>根据 Query 与可用媒体决定启用的模态，而不是对所有索引盲搜；</li>
 <li>并行召回文本、视觉和结构化候选，并在<strong>证据单元</strong>而非整份文档上去重；</li>
@@ -8575,6 +8575,8 @@
 </tbody>
 </table>
 <p>不要只用“VQA 答对率”代表系统质量：它既看不到是否找到了正确媒体，也看不到答案是否引用了错误页、泄露了无权文件或使用了过期版本。评测设计和 Citation/时效/鲁棒性指标见<a href="../../05-generation-evaluation/18-rag-evaluation/">第十八章</a>。</p>
+<p>定位也要预先定义容差：页面命中不等于区域命中，区域可用 IoU 辅助评估，视频可用时间段重叠与事件覆盖评估；这些几何指标仍不能替代事实支持判断。对图表数值须保留单位、坐标轴尺度、图例及读数误差，不能把估读值呈现为精确原始数据。</p>
+<p>成本对比至少包含每页图像 Token、每页向量数与维度、关键帧采样密度、OCR/ASR 开销和生成输入。多向量 MaxSim 的朴素打分约为 <code>O(mnd)</code>：m 个查询向量与 n 个页面向量逐对比较，每对 d 维；专用索引与压缩可降低实际代价。减少帧或降低分辨率可省成本，却可能漏掉短事件或小字，需用相同证据任务验证，不宜仅按“每个文档一个向量”估算。</p>
 <h2 id="217-security">21.7 Security：媒体同样是不可信输入<a class="headerlink" href="#217-security" title="Permanent link">&para;</a></h2>
 <p>图片内文字、PDF 隐藏层、字幕、元数据和工具返回的 URL 都可能携带间接 Prompt Injection。视觉分隔框、<code>&lt;image&gt;</code> 标签或“以下内容只是数据”的提示可辅助归因，<strong>不是安全边界</strong>。主防线仍是检索 ACL、处理不可信媒体的能力隔离、确定性数据流/参数校验、出口控制和高风险操作确认（见<a href="../../06-operations-security/20-rag-challenges-security/">第二十章</a>与<a href="../../../agent/05-production/15-agent-security/">Agent 安全</a>）。</p>
 <p>特别注意：缩略图、OCR 文本、向量、缓存和日志都是原件的派生副本，必须受相同的租户、保留和删除策略约束。</p>
@@ -8617,7 +8619,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 16:17:00 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

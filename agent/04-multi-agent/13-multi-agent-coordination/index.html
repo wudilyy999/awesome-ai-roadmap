@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="解释 Multi-Agent 的协作拓扑、路由、交接、共享状态和动态切换，并分析通信开销与失败传播问题。">
+        <meta name="description" content="解释 Multi-Agent 的协作、路由、交接与共享状态，分析并行调度、预算和失败恢复，并区分语义协作与存储共识。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十三章：Multi-Agent 协作、路由与动态切换">
-    <meta property="og:description" content="解释 Multi-Agent 的协作拓扑、路由、交接、共享状态和动态切换，并分析通信开销与失败传播问题。">
+    <meta property="og:description" content="解释 Multi-Agent 的协作、路由、交接与共享状态，分析并行调度、预算和失败恢复，并区分语义协作与存储共识。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十三章：Multi-Agent 协作、路由与动态切换">
-    <meta name="twitter:description" content="解释 Multi-Agent 的协作拓扑、路由、交接、共享状态和动态切换，并分析通信开销与失败传播问题。">
+    <meta name="twitter:description" content="解释 Multi-Agent 的协作、路由、交接与共享状态，分析并行调度、预算和失败恢复，并区分语义协作与存储共识。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十三章：Multi-Agent 协作、路由与动态切换","description":"解释 Multi-Agent 的协作拓扑、路由、交接、共享状态和动态切换，并分析通信开销与失败传播问题。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十三章：Multi-Agent 协作、路由与动态切换","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/"},"datePublished":"2026-08-31","dateModified":"2026-09-02"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十三章：Multi-Agent 协作、路由与动态切换","description":"解释 Multi-Agent 的协作、路由、交接与共享状态，分析并行调度、预算和失败恢复，并区分语义协作与存储共识。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十三章：Multi-Agent 协作、路由与动态切换","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Multi-Agent 协作与路由","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/04-multi-agent/13-multi-agent-coordination/"}]}</script>
     
@@ -4378,6 +4378,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#13165" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.16.5 强一致需要到哪一层
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4719,6 +4728,39 @@
       13.41 推荐生产架构
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="13.41 推荐生产架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#13411-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.41.1 并行调度与 Join
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13412" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.41.2 预算预留与故障恢复
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13413" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.41.3 评测协作而不只是评测回答
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -9363,6 +9405,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#13165" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.16.5 强一致需要到哪一层
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -9705,6 +9756,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="13.41 推荐生产架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#13411-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.41.1 并行调度与 Join
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13412" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.41.2 预算预留与故障恢复
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13413" class="md-nav__link">
+    <span class="md-ellipsis">
+      13.41.3 评测协作而不只是评测回答
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -9942,6 +10026,7 @@
 
 
 <h1 id="multi-agent">第十三章：Multi-Agent 协作、路由与动态切换<a class="headerlink" href="#multi-agent" title="Permanent link">&para;</a></h1>
+<p>本章资料核验截至 2026-09-08。除明确标注框架或协议的部分外，JSON 均为应用层契约示例，字段名、数量和日期不是标准要求。讨论协作时需同时说明：模型提议什么、Runtime 强制什么、存储系统承诺什么。</p>
 <h2 id="131">13.1 问题的本质<a class="headerlink" href="#131" title="Permanent link">&para;</a></h2>
 <p>多 Agent 分工只回答了：</p>
 <blockquote>
@@ -10041,7 +10126,7 @@
 <li>大 Context 聚集点；</li>
 <li>全局错误来源。</li>
 </ul>
-<p>大型系统常采用分层 Orchestrator，而不是一个 Agent 管理所有 Worker。</p>
+<p>顶层上下文或调度成为瓶颈时，可以采用分层 Orchestrator；但多一层也多一次交接和信息压缩，不能仅凭系统规模决定。逻辑上的单一调度权可以由可恢复的服务实现，不等于依赖一个不可恢复的模型会话。</p>
 <h2 id="135-shared-workspace-blackboard">13.5 Shared Workspace / Blackboard<a class="headerlink" href="#135-shared-workspace-blackboard" title="Permanent link">&para;</a></h2>
 <p>多个 Agent 通过共享工作区交换 Task、事实和 Artifact。</p>
 <pre class="mermaid"><code>flowchart TB
@@ -10121,7 +10206,7 @@
 </tr>
 <tr>
 <td>Event Stream</td>
-<td>保存有序事件</td>
+<td>在约定的分区或键范围保存有序事件</td>
 <td>状态重建、审计</td>
 </tr>
 <tr>
@@ -10138,10 +10223,10 @@
 </table>
 <p>生产系统常同时使用：</p>
 <blockquote>
-<p><strong>消息触发执行 + State 保存事实 + Artifact 传递大结果。</strong></p>
+<p><strong>消息触发执行 + State 保存任务状态及带来源的事实候选 + Artifact 传递大结果。</strong></p>
 </blockquote>
 <h2 id="138-request-response">13.8 Request / Response<a class="headerlink" href="#138-request-response" title="Permanent link">&para;</a></h2>
-<p>调用 Agent 明确知道目标 Agent，并同步等待结果。</p>
+<p>调用方明确知道目标服务，并关联请求与响应；等待可以用同步阻塞，也可以用异步 I/O。不能把 Request/Response 等同于阻塞线程。</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant O as Orchestrator
     participant R as Research Agent
@@ -10156,10 +10241,10 @@
 </ul>
 <p>限制：</p>
 <ul>
-<li>调用方被阻塞；</li>
+<li>若要使用返回值，后续依赖仍需等待；</li>
 <li>长任务容易超时；</li>
 <li>强耦合；</li>
-<li>不适合断线恢复。</li>
+<li>断线恢复需要持久化 Task ID、查询接口和重试语义，单个 RPC 本身不够。</li>
 </ul>
 <h2 id="139-queue">13.9 Queue<a class="headerlink" href="#139-queue" title="Permanent link">&para;</a></h2>
 <p>Producer 将 Task 放入队列，Worker 竞争消费。</p>
@@ -10186,6 +10271,7 @@
 <li>Task Lease。</li>
 </ul>
 <p>分布式系统中很难依赖“绝对只执行一次”，更常见做法是至少一次投递配合幂等执行。</p>
+<p>例如 <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues-at-least-once-delivery.html">SQS Standard Queue</a>明确允许重复投递。ACK、消息去重与外部副作用是不同层次：Worker 退款成功后在 ACK 前崩溃，重投仍可能再次退款。应以稳定的业务操作 ID 调用支持幂等的退款 API，记录回执，并在超时后先查询结果。队列即使在自身边界内提供 exactly-once 处理，也不能自动覆盖外部系统的副作用。</p>
 <h2 id="1310-pubsub">13.10 Pub/Sub<a class="headerlink" href="#1310-pubsub" title="Permanent link">&para;</a></h2>
 <p>Publisher 将事件发送到 Topic，不需要知道具体订阅者：</p>
 <pre class="mermaid"><code>flowchart LR
@@ -10208,7 +10294,7 @@
 <li>难以知道所有下游是否完成。</li>
 </ul>
 <h2 id="1311-event-stream">13.11 Event Stream<a class="headerlink" href="#1311-event-stream" title="Permanent link">&para;</a></h2>
-<p>Event Stream 保存任务发生的有序事件：</p>
+<p>Event Stream 在定义好的顺序范围内保存事件；多分区不自动形成全局总序，生产者时间戳也不代表提交顺序：</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"event_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"evt-1004"</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"agent.task.completed"</span><span class="p">,</span>
@@ -10234,6 +10320,7 @@
 <li>保留策略；</li>
 <li>版本兼容。</li>
 </ul>
+<p>状态重建应折叠已经记录的事件，而不是重发邮件、付款或重新调用模型。消费者保存处理位置，并让状态更新与去重记录处于同一事务边界；保留窗口之外的事件需要快照或归档补足。缺失事件或不可重放的外部读取，会让“可回放”失去意义。</p>
 <h2 id="1312-artifact-store">13.12 Artifact Store<a class="headerlink" href="#1312-artifact-store" title="Permanent link">&para;</a></h2>
 <p>Agent 不应通过消息传递大型完整内容。</p>
 <p>推荐消息只包含：</p>
@@ -10260,6 +10347,7 @@
 <li>多次序列化；</li>
 <li>内容版本不一致。</li>
 </ul>
+<p>URI 必须指向可定位的不可变版本；<code>latest</code> 指针会让 Worker 读取到不同内容。Hash 只能验证字节未变，不能证明来源可信或结论正确；读取时还要检查租户、授权、Schema 和输入版本，不能因为发来一个 URI 就信任其中的指令。</p>
 <h2 id="1313">13.13 共享状态如何分层<a class="headerlink" href="#1313" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     S[System State] --&gt; G[Global State]
@@ -10268,7 +10356,7 @@
     S --&gt; A[Artifact State]
     S --&gt; E[Event / Audit State]</code></pre>
 <h3 id="13131-global-state">13.13.1 Global State<a class="headerlink" href="#13131-global-state" title="Permanent link">&para;</a></h3>
-<p>所有相关 Agent 可以读取：</p>
+<p>按任务相关性和权限暴露，而不是无条件向所有 Agent 开放：</p>
 <ul>
 <li>用户原始目标；</li>
 <li>全局约束；</li>
@@ -10344,7 +10432,7 @@
 </tr>
 <tr>
 <td>Counter</td>
-<td>Atomic Increment</td>
+<td>原子增量；重复事件另行去重</td>
 </tr>
 <tr>
 <td>Artifact</td>
@@ -10367,7 +10455,7 @@
 </ul>
 <p>LangGraph 并不是所有字段都“只追加”：</p>
 <ul>
-<li>没有自定义 Reducer 时，默认更新通常覆盖旧值；</li>
+<li>没有自定义 Reducer 时，单次更新默认覆盖旧值；</li>
 <li>列表可以使用 Append Reducer；</li>
 <li>可以定义自定义 Reducer；</li>
 <li>某些场景可以显式 Overwrite。</li>
@@ -10377,6 +10465,8 @@
     UPDATE[Node Update] --&gt; R
     R --&gt; NEW[New State Value]</code></pre>
 <p>因此，必须为每个字段明确设计合并语义。</p>
+<p>同一 super-step 的多个节点并行写入没有合并语义的同一字段，会触发 <a href="https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE"><code>INVALID_CONCURRENT_GRAPH_UPDATE</code></a>，不是“最后完成的节点覆盖其他节点”。<code>operator.add</code> 合并列表能处理并发追加，却不会自动去重；<code>add_messages</code> 则按消息 ID 支持新增和替换，并有删除机制，不能把它当作普通列表追加。</p>
+<p>Reducer 是图运行时的状态合并函数，不是跨进程数据库事务或分布式锁。Checkpointer 的线程内恢复也不自动解决多个运行竞争业务资源的问题；内存 Checkpointer 在进程退出后不能恢复。所谓 Private State 是数据组织方式，不是访问控制或日志脱敏承诺，应单独审查流式输出、Trace 和存储权限。</p>
 <h2 id="1316">13.16 并发写入<a class="headerlink" href="#1316" title="Permanent link">&para;</a></h2>
 <p>多个 Agent 并行更新同一状态时，需要处理：</p>
 <ul>
@@ -10393,7 +10483,7 @@
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>review_status    -&gt; Review Agent
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>global_status    -&gt; Orchestrator
 </span></code></pre></div>
-<p>这是最简单的冲突预防方式。</p>
+<p>这是较简单的冲突预防方式，但 Owner 的约束要由存储层执行。一个角色有多个副本，或旧 Worker 在超时后继续运行时，仍可能存在多个实际写入者。</p>
 <h3 id="13162-optimistic-concurrency">13.16.2 Optimistic Concurrency<a class="headerlink" href="#13162-optimistic-concurrency" title="Permanent link">&para;</a></h3>
 <p>写入时携带版本：</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
@@ -10404,24 +10494,83 @@
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="p">}</span>
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>版本不匹配则拒绝，并要求重新读取状态。</p>
+<p>提交时核对当前版本与预期版本、再写入更新，必须由存储系统原子执行，不能先在客户端比较再另发写入。版本不匹配后重新读取并重新判断业务前提，而不是仅把 <code>expected_version</code> 改成新值后盲目重试。</p>
+<p>例如两个 Worker 同时把任务从 <code>running</code> 改为 <code>completed</code>，服务端要同时验证当前 <code>attempt_id</code>、Owner、计划版本、租约以及状态转换是否合法。已取消或已重新分配的任务不能被迟到的成功消息改回完成。</p>
 <h3 id="13163-reducer">13.16.3 Reducer<a class="headerlink" href="#13163-reducer" title="Permanent link">&para;</a></h3>
-<p>对于可合并数据，定义确定性 Reducer：</p>
-<ul>
-<li>List Append；</li>
-<li>Set Union；</li>
-<li>Max Timestamp；</li>
-<li>Highest-confidence Value；</li>
-<li>Domain-specific Merge。</li>
-</ul>
+<p>对于可合并数据，先说明事件是否可能乱序、重复，再选择规则：</p>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>能解决什么</th>
+<th>边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List Append</td>
+<td>保存多个结果</td>
+<td>顺序影响输出，重复投递会重复追加</td>
+</tr>
+<tr>
+<td>Set Union / 按稳定 ID 合并</td>
+<td>可交换地收集结果、去重</td>
+<td>同 ID 不同内容应报冲突，不宜静默覆盖</td>
+</tr>
+<tr>
+<td>Last Write Wins</td>
+<td>按明确定义的版本和决胜规则保留一个值</td>
+<td>可能丢失业务信息；本机时间戳受时钟偏差影响</td>
+</tr>
+<tr>
+<td>Domain-specific Merge</td>
+<td>例如保留不同来源的事实候选</td>
+<td>事实是否兼容仍需领域验证</td>
+</tr>
+</tbody>
+</table>
+<p>跨副本、任意顺序合并时，常需结合律、交换律；要容忍重复还需幂等性，或在合并前去重。确定性函数本身不等于 CRDT，也不保证这些性质。选择“模型自报置信度最高”的值不可靠：不同模型的分数未必校准，更不能拿它解决权限或资金冲突。</p>
 <h3 id="13164-lease">13.16.4 Lease<a class="headerlink" href="#13164-lease" title="Permanent link">&para;</a></h3>
 <p>一个 Agent 在有限时间内拥有 Task：</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">"owner"</span><span class="p">:</span><span class="w"> </span><span class="s2">"agent-a"</span><span class="p">,</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">"lease_expires_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28T09:05:00Z"</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">"attempt_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"attempt-3"</span><span class="p">,</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">"fencing_token"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">"lease_expires_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28T09:05:00Z"</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>Agent 失联后 Lease 过期，任务可以重新分配。</p>
+<p>Lease 过期不代表旧进程已经停止。暂停的 Worker 恢复后仍可能写入；每次领取应生成单调递增的 fencing token，由接受写入的存储或副作用网关原子地拒绝旧 token。只在 Prompt 中传入 token 没有约束力；外部 API 不支持 fencing 时，需要由可控网关串行化或使用业务幂等与对账，不能声称排除了全部晚到副作用。</p>
+<p>仅记住“见过的最大 token”的接收端，要先见到新 token 才能拒绝旧持有者；这不等于租约一过期就即时禁止写入。若要求后者，需要让提交原子地验证当前租约/Owner，例如 <a href="https://etcd.io/docs/v3.6/dev-guide/api_concurrency_reference_v3/">etcd Lock 的事务保护方式</a>。跨系统副作用仍不在该事务保证内。</p>
+<h3 id="13165">13.16.5 强一致需要到哪一层<a class="headerlink" href="#13165" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>需要的保证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务领取、预算预留、唯一最终提交</td>
+<td>在权威账本中原子检查并更新；跨字段不变量需要事务</td>
+</tr>
+<tr>
+<td>已提交 Artifact</td>
+<td>不可变版本；读取结果时核对输入与计划版本</td>
+</tr>
+<tr>
+<td>搜索候选、工作笔记、进度投影</td>
+<td>可容忍一定陈旧度，但必须标注版本和来源</td>
+</tr>
+<tr>
+<td>互相矛盾的业务结论</td>
+<td>留存证据，由规则或 Owner 裁决；数据库一致不等于事实正确</td>
+</tr>
+</tbody>
+</table>
+<p>“三个 Agent 一致认为应该退款”只是应用层意见，不是 Raft/Paxos 共识。Raft 让副本对日志顺序达成一致，并不判断退款是否合规；要抵抗不可信 Agent，也不能直接套用 Raft 的崩溃故障假设。强共识、线性一致性和事务隔离是相关但不同的概念，应按底层 API 的实际保证设计。</p>
+<p>例如 <a href="https://etcd.io/docs/v3.6/learning/api_guarantees/">etcd 的 API 保证</a>区分 KV 的默认线性一致性与可能延迟的 Watch；收到某条 Watch 事件不等于此刻读取到了全局最新状态。预算扣减不能依赖可能过期的进度看板。丢失多数派时，依赖共识的提交可能无法推进；此时可继续只读探索，但不要绕过账本继续提交不可逆操作。</p>
 <h2 id="1317">13.17 错误必须成为一等状态<a class="headerlink" href="#1317" title="Permanent link">&para;</a></h2>
 <p>错误不能只写进日志或被静默吞掉。</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
@@ -10526,6 +10675,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li><code>Rₐ</code>：Risk。</li>
 </ul>
 <p>评分可以由规则、统计模型或 LLM 辅助生成。</p>
+<p>这只是候选排序的示意函数，不是优化正确性的保证。权限、数据驻留、协议版本和可用预算先做硬过滤，不能让“质量分高”抵消越权。剩余指标需统一量纲、按任务类别估计，并考虑数据量与置信区间；历史成功率会受路由选择偏差影响，不能把只接简单任务的 Agent 直接排在前面。</p>
 <h2 id="1322-llm-based-dynamic-routing">13.22 LLM-based Dynamic Routing<a class="headerlink" href="#1322-llm-based-dynamic-routing" title="Permanent link">&para;</a></h2>
 <p>LLM 根据：</p>
 <ul>
@@ -10561,9 +10711,10 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>可能选择越权 Agent；</li>
 <li>候选过多时判断质量下降。</li>
 </ul>
+<p>示例中的 <code>confidence: 0.91</code> 是模型自报值，不表示已校准的 91% 成功概率。阈值应在独立标注的路由评测集上校准；没有校准时，把它视为辅助信号，依据可执行校验和拒绝策略决定是否派发。</p>
 <h3 id="13223">13.22.3 不一定额外增加一次模型调用<a class="headerlink" href="#13223" title="Permanent link">&para;</a></h3>
 <p>如果 Orchestrator 当前模型调用本来就需要决定下一动作，可以让它同时返回 Route。</p>
-<p>只有把路由做成独立 LLM 节点时，才一定新增调用。</p>
+<p>路由若作为每次必经的独立 LLM 节点，通常会新增调用；命中规则、缓存或批处理的设计则需另算。即使合并在已有调用里，候选描述、结构化输出和后续重试仍有成本。</p>
 <h2 id="1323-dynamic-routing">13.23 Dynamic Routing 必须受约束<a class="headerlink" href="#1323-dynamic-routing" title="Permanent link">&para;</a></h2>
 <p>动态不等于允许模型选择任意 Agent。</p>
 <p>Runtime 应：</p>
@@ -10590,7 +10741,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
     H --&gt;|否| RULE{Rule Match?}
     RULE --&gt;|是| STATIC
     RULE --&gt;|否| LLM[LLM Router within Allowlist]
-    LLM --&gt; CONF{Confidence and Validation Pass?}
+    LLM --&gt; CONF{Policy and Validation Pass?}
     CONF --&gt;|是| TARGET[Target Agent]
     CONF --&gt;|否| SAFE[Safe Stop / Human / Orchestrator]</code></pre>
 <p>需要修正一个常见说法：</p>
@@ -10640,6 +10791,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>不需要原 Agent 汇总结果。</li>
 </ul>
 <h3 id="13253">13.25.3 对比<a class="headerlink" href="#13253" title="Permanent link">&para;</a></h3>
+<p>这里按“谁在调用结束后决定下一步”作工程区分；SDK 文档可能广义地把 Handoff 也称为 delegation，应以控制流为准。进程内 Handoff 是 Runner 的执行转移；跨服务交接还需持久化接收确认和 Owner 变更，不能把一次网络发送当作控制权已成功转移。</p>
 <table>
 <thead>
 <tr>
@@ -10682,6 +10834,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>transfer_to_refund_agent
 </span></code></pre></div>
 <p>模型选择该 Tool 后，Runtime 将控制权转给对应 Agent。</p>
+<p>框架提供这些能力不意味着默认完成所有授权和恢复。按 <a href="https://openai.github.io/openai-agents-python/handoffs/">Handoffs 文档</a>，<code>input_type</code> 定义模型生成的交接参数，并不替换接收方的整段输入，也不是身份凭据；需要按参数授权时，在产生副作用前检查。<code>Agent.as_tool()</code> 更适合返回结果给原调用方，Handoff 则让接收 Agent 接管后续执行。具体参数与 Guardrail 覆盖范围应按部署时锁定的 SDK 版本确认。</p>
 <h2 id="1327-handoff-contract">13.27 Handoff Contract<a class="headerlink" href="#1327-handoff-contract" title="Permanent link">&para;</a></h2>
 <p>一个可靠 Handoff 不应只传一句“交给你了”。</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
@@ -10715,8 +10868,9 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>Deadline；</li>
 <li>返回或终止策略。</li>
 </ul>
+<p>其中“用户已完成身份验证”是自然语言摘要，不能作为可信身份。接收方应从受信 Runtime 取得用户身份、租户、授权范围、验证有效期及审批回执，并重新检查订单归属。<code>return_policy</code> 等字段是应用约定，SDK 不会因 JSON 中出现它们就自动执行。</p>
 <h2 id="1328-handoff-context-filtering">13.28 Handoff Context Filtering<a class="headerlink" href="#1328-handoff-context-filtering" title="Permanent link">&para;</a></h2>
-<p>接收 Agent 不应默认看到全部历史。</p>
+<p>安全设计上应只传必需历史；但 OpenAI Agents SDK 的 Handoff 默认会让接收方看到此前会话，需显式配置 <code>input_filter</code> 等机制。这是推荐策略与框架默认行为的区别。</p>
 <p>可以传递：</p>
 <ul>
 <li>结构化摘要；</li>
@@ -10767,6 +10921,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>有明确返回原因；</li>
 <li>不超过预算。</li>
 </ul>
+<p>检测状态时忽略时间戳、Token 计数等无关变化，否则每轮 Hash 都不同会掩盖循环；也不能只凭出现新文件就认定进展。进展应绑定尚未满足的验收项，并由 Runtime 设置最大修订、深度和总调用预算。</p>
 <h2 id="1330-routing-fallback">13.30 Routing Fallback<a class="headerlink" href="#1330-routing-fallback" title="Permanent link">&para;</a></h2>
 <p>Router 无法可靠选择时，应返回：</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
@@ -10816,6 +10971,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>多种协议绑定。</li>
 </ul>
 <p>它允许 Agent 在不了解彼此内部 Memory、Tools 和实现细节的情况下协作。</p>
+<p>本轮按 <a href="https://github.com/a2aproject/A2A/blob/v1.0.1/docs/specification.md">v1.0.1 发布标签的规范</a>对照，GitHub <a href="https://github.com/a2aproject/A2A/releases/tag/v1.0.1">Release 发布时间为 2026-05-28</a>；官网 latest 仍标 v1.0.0，不能据此否认后续发布。线上协议版本为 <code>1.0</code>，与规范补丁号、SDK 和 Agent 软件版本分开。对接时固定 binding，不能混用旧字段或 RPC 名。Streaming、Push Notification 等还要检查能力声明；发送 Message 可以返回 Task 或直接返回 Message，不是每次调用都创建任务。</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant C as A2A Client
     participant S as Remote Agent
@@ -10861,10 +11017,11 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li><code>task_id</code>：归属任务；</li>
 <li><code>correlation_id</code>：关联一次完整运行；</li>
 <li><code>causation_id</code>：追踪因果链；</li>
-<li><code>idempotency_key</code>：防重复副作用；</li>
-<li><code>deadline</code>：防止过期任务继续执行；</li>
+<li><code>idempotency_key</code>：由接收端按业务操作保存、核验并去重，字段本身不会防重复；</li>
+<li><code>deadline</code>：由 Runtime 在派发、重试和提交前检查，不能自动终止远程副作用；</li>
 <li><code>trace_id</code>：可观测性。</li>
 </ul>
+<p>重投同一业务操作时保持幂等键稳定，不能每次重试都生成新键；新一轮执行使用独立 <code>attempt_id</code>，并附输入版本。相同幂等键却携带不同参数应拒绝。去重范围至少应区分租户和操作类型，保留时长要覆盖消息可能重放的窗口。</p>
 <h2 id="1334">13.34 取消传播<a class="headerlink" href="#1334" title="Permanent link">&para;</a></h2>
 <p>用户取消全局任务时，需要取消：</p>
 <ul>
@@ -10880,7 +11037,8 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
     O --&gt; W2[Cancel Worker B]
     O --&gt; Q[Remove Queued Tasks]
     O --&gt; T[Cancel Tool Calls]</code></pre>
-<p>Agent 和 Tool 必须支持 Cancellation Token 或任务状态检查。</p>
+<p>对可控 Agent 和 Tool 应实现 Cancellation Token 或任务状态检查；外部服务未必支持取消，即使支持也可能来不及阻止已发生的副作用。先在权威账本持久化取消意图，再停止新增派发并向执行者传播；队列消息即使无法删除，领取时也应检查任务状态。迟到结果只留审计、不再推进下游。</p>
+<p>取消不是回滚。已发送邮件无法“撤销执行”，已支付资金可能需要独立退款流程；补偿操作也要授权、幂等和记录失败。应分别记录“请求取消”“已确认停止”“副作用待对账”，不要用一个 <code>cancelled</code> 状态掩盖未知结果。</p>
 <h2 id="1335">13.35 超时与重试<a class="headerlink" href="#1335" title="Permanent link">&para;</a></h2>
 <h3 id="13351-timeout">13.35.1 Timeout<a class="headerlink" href="#13351-timeout" title="Permanent link">&para;</a></h3>
 <p>区分：</p>
@@ -10890,6 +11048,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>Task Timeout；</li>
 <li>全局 Run Timeout。</li>
 </ul>
+<p>子任务 Deadline 不应晚于父任务的剩余期限，并预留汇总或安全退出时间。客户端超时只说明未及时收到结果，不证明服务端没有完成操作。</p>
 <h3 id="13352-retry">13.35.2 Retry<a class="headerlink" href="#13352-retry" title="Permanent link">&para;</a></h3>
 <p>只对可重试错误执行，并采用：</p>
 <ul>
@@ -10898,6 +11057,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>最大次数；</li>
 <li>幂等键。</li>
 </ul>
+<p>由一层负责统筹重试，避免 SDK、Worker、Orchestrator 同时重试造成放大；重试也占预算和并发槽。429 或临时服务错误可以按服务提示延迟，Schema 错误、权限拒绝、确定性测试失败应修正原因或重规划，而不是原样反复调用。</p>
 <h3 id="13353-fallback">13.35.3 Fallback<a class="headerlink" href="#13353-fallback" title="Permanent link">&para;</a></h3>
 <p>可以：</p>
 <ul>
@@ -10936,6 +11096,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>Route Decision；</li>
 <li>Error Code。</li>
 </ul>
+<p>保留输入版本、模型及工具版本、关键调度决定、验证回执和预算预留记录，才能区分计划错误、执行错误和验收错误。Trace 应脱敏并限制访问；不要求记录隐藏推理。重放已记录的工具结果有助于定位调度问题，重新调用模型或外部 API 则可能得到不同结果，不能据此承诺字节级复现。</p>
 <h2 id="1337">13.37 安全<a class="headerlink" href="#1337" title="Permanent link">&para;</a></h2>
 <p>动态切换会扩大权限边界。</p>
 <p>必须检查：</p>
@@ -10969,7 +11130,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 
     L --&gt; C{Validated Route}
     C --&gt;|通过| TARGET[Allowed Agent]
-    C --&gt;|低置信度| H[Human Support]
+    C --&gt;|未通过或无法确认| H[Human Support]
 
     F --&gt; APPROVE{Refund Approval}
     APPROVE --&gt;|批准| TOOL[Refund Tool]
@@ -11000,12 +11161,13 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <ul>
 <li>Explore Agent 只读；</li>
 <li>Coding Agent 可修改工作区；</li>
-<li>Review Agent 只读 Diff；</li>
+<li>Review Agent 只读 Diff 及相关上下文、测试和依赖；</li>
 <li>Orchestrator 保留最终控制；</li>
 <li>Patch 和报告使用 Artifact；</li>
 <li>Review Finding 使用结构化 Schema；</li>
 <li>最大修订次数由 Runtime 控制。</li>
 </ul>
+<p>若扩展为并行 Coding Worker，先固定接口和基准提交，为各自提供独立工作区；用 Patch 及基准 SHA 交付，由一个合并者在集成分支执行测试。没有文本冲突不等于语义兼容，例如两个模块各自通过测试却使用不同的单位或错误约定；反复发生这种问题说明任务拆分边界需要调整。</p>
 <h2 id="1340">13.40 选型表<a class="headerlink" href="#1340" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -11056,8 +11218,8 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <td>Constrained LLM Routing</td>
 </tr>
 <tr>
-<td>大量 Agent</td>
-<td>Hierarchical Orchestrator</td>
+<td>顶层调度或上下文成为瓶颈</td>
+<td>评估分层 Orchestrator</td>
 </tr>
 </tbody>
 </table>
@@ -11084,13 +11246,13 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
     AN --&gt; EVENTS
 
     EVENTS --&gt; STATE[Materialized State]
-    STATE --&gt; ROUTER
+    STATE -.Progress hints.-&gt; ROUTER
     ART --&gt; VERIFY[Verifier]
     VERIFY --&gt; JOIN[Result Aggregator]
     JOIN --&gt; WF
 
     ROUTER --&gt;|Handoff| SPECIAL[Specialist Agent]
-    ROUTER --&gt;|Low Confidence| HUMAN[Human Review]
+    ROUTER --&gt;|Unresolved or Invalid Route| HUMAN[Human Review]
 
     WF -.Trace.-&gt; OBS[Observability]
     ROUTER -.Route Decisions.-&gt; OBS
@@ -11107,8 +11269,30 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <li>Event Stream 保留审计和状态变化；</li>
 <li>Verifier 检查输出；</li>
 <li>Handoff 只用于真正需要转移控制权的场景；</li>
-<li>低置信度和高风险请求安全停止或转人工。</li>
+<li>无法可靠路由或未通过风险校验的请求安全停止或转人工。</li>
 </ol>
+<p>这是功能分解示意，不要求每项都部署成独立服务。尤其不要把异步 <code>Materialized State</code> 当作领取、预算或提交的授权依据；这些检查应回到权威 Task Ledger。若选用账本作为真相源，可用同一事务写入状态变化与待发送事件（<a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html">Transactional Outbox</a>），再异步投递；否则“状态已提交但通知未发送”的崩溃窗口会造成任务遗漏。事件溯源则是另一种真相源选择，不能同时把两份可独立修改的数据都当权威。</p>
+<h3 id="13411-join">13.41.1 并行调度与 Join<a class="headerlink" href="#13411-join" title="Permanent link">&para;</a></h3>
+<p>模型提出 DAG 后，调度器检查依赖存在、无环、输出契约兼容；只有必需前置任务已验收通过，节点才进入 Ready 集合。随后原子领取租约、预留预算，再投递。不要先让模型调用发生，再事后发现没有额度。</p>
+<p>并发上限需同时覆盖 Run、租户、模型端点和外部 Tool；限制 Worker 数不代表限制住 Worker 内部的并行调用。就绪任务较多时，兼顾关键路径优先级和公平性，避免一个大任务长期占满资源。队列用于背压，但排队耗时也计入端到端延迟。</p>
+<p>Join 的语义必须在执行前确定：</p>
+<ul>
+<li><strong>All-required</strong>：等待全部必需结果，逐项验收；可选任务失败可返回带缺口说明的部分结果。</li>
+<li><strong>First-valid</strong>：适合可互相替代的候选，采用第一个通过独立验证的结果，而非第一个返回文本的结果；剩余工作要取消并核算费用。</li>
+<li><strong>K-of-N</strong>：适合明确允许冗余的任务。达到数量阈值不等于事实正确，相同模型或相同来源的结果可能高度相关；更不等于存储系统的法定多数派提交。</li>
+</ul>
+<p>Worker 报告 <code>completed</code> 后应先进入待验证状态。只有当前计划版本下所有必需验收项有证据、没有会影响结论的未决副作用，并且最终提交成功，Run 才算成功。任一分支永远等待、循环新增任务或静默遗漏依赖，都不能靠“队列暂时为空”判断完成。</p>
+<h3 id="13412">13.41.2 预算预留与故障恢复<a class="headerlink" href="#13412" title="Permanent link">&para;</a></h3>
+<p>共享余额不能由每个 Worker 各自读一份后判断“还有钱”。在账本中维持已结算成本、在途预留和上限，例如：</p>
+<div class="arithmatex">\[
+C_{spent}+C_{reserved}\le B_{run}
+\]</div>
+<p>这是一条调度不变量，不是对未知外部账单的数学保证。预留量应覆盖调用可控的最大 Token、工具次数和供应商计费约束；若无法给出硬上界，就不能承诺绝不超支，需要保守余量、供应商限额和超支处置。</p>
+<p>派发时原子增加预留，收到可信用量后原子结算并释放差额；不确定是否已经产生费用时保留预留，查询或对账后再释放。父任务为汇总和必要验证保留额度，子 Agent 无权自行扩大子树预算。限制总调用次数、递归深度、重试次数和截止时间，才能防止“每个 Agent 都没超局部预算、全局却超支”。</p>
+<p>恢复时按持久化的 Run ID、Task ID、attempt 和输入版本识别已完成工作；先核对租约、回执与预算，再重派失联任务。不要把恢复写成重跑整个模型计划，否则已执行副作用可能重复。</p>
+<h3 id="13413">13.41.3 评测协作而不只是评测回答<a class="headerlink" href="#13413" title="Permanent link">&para;</a></h3>
+<p>除了<a href="../09-single-vs-multi-agent/">第九章 §9.31：评估 Multi-Agent 是否值得</a>，还要测路由误派与拒绝是否合理、Handoff 约束保留率、必需依赖覆盖、陈旧结果拒收、重试放大、重复副作用和预算超限。质量、费用、端到端延迟及其尾部应一起报告，不能只展示成功样本的平均用时。</p>
+<p>用固定故障时序验证不变量：领取后宕机、外部操作成功但回执丢失、旧 Worker 在重新分配后回包、取消与完成同时发生、账本提交后通知投递失败。记录系统是否安全终止、保留部分成果或正确重试，并把“无法确认副作用”单列，不能计作已恢复成功。</p>
 <h2 id="1342">13.42 设计检查表<a class="headerlink" href="#1342" title="Permanent link">&para;</a></h2>
 <h3 id="13421">13.42.1 协作拓扑<a class="headerlink" href="#13421" title="Permanent link">&para;</a></h3>
 <ul>
@@ -11188,17 +11372,25 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
 <p>造成传输和 Context 成本，应改用 Artifact。</p>
 <h2 id="1344">13.44 本章总结<a class="headerlink" href="#1344" title="Permanent link">&para;</a></h2>
 <p>Multi-Agent 协作要把通信、状态、路由、控制权转移、可靠性、安全和可观测性一起设计清楚，少掉任何一项，系统一放大就容易出问题。</p>
-<p>单团队生产环境里，更常见的组合是：</p>
+<p>对需要异步多 Agent 协作的单团队系统，可以从以下组合中选取必要部分：</p>
 <blockquote>
-<p><strong>Workflow 控制高层边界，Orchestrator 管理任务，Hybrid Router 选择 Worker，消息触发执行，State 记录事实，Artifact 传递结果，Verifier 检查质量。</strong></p>
+<p><strong>Workflow 控制高层边界，Orchestrator 管理任务，Hybrid Router 选择 Worker，消息触发执行，State 记录任务状态，Artifact 传递结果，Verifier 检查质量。</strong></p>
 </blockquote>
-<p>Handoff 适合让专业 Agent 直接接住后续交互；Delegation 更像把一段子任务外包出去，结果再交回原调用方。动态路由也别放得太开，候选集、权限、预算和退出条件都要先收紧；真正拿不准或已经碰到高风险时，直接安全停止或转人工更稳妥。</p>
+<p>Handoff 适合让专业 Agent 接管后续交互；Delegation 则把子任务结果交回原调用方。动态路由需要候选集、权限、预算和退出条件约束，模型自报置信度不能替代授权或验收。账本共识决定状态如何提交，证据验证决定业务结论是否可信；异步进度投影和多数 Agent 的意见都不能替代这两层保证。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/graph-api">LangGraph Graph API</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE">LangGraph：并行状态更新错误</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph Persistence</a></li>
 <li><a href="https://openai.github.io/openai-agents-python/">OpenAI Agents SDK</a></li>
+<li><a href="https://github.com/openai/swarm">OpenAI Swarm：迁移至 Agents SDK 的官方说明</a></li>
 <li><a href="https://openai.github.io/openai-agents-python/handoffs/">OpenAI Agents SDK: Handoffs</a></li>
-<li><a href="https://a2a-protocol.org/latest/specification/">A2A Protocol Specification</a></li>
+<li><a href="https://github.com/a2aproject/A2A/blob/v1.0.1/docs/specification.md">A2A v1.0.1 Protocol Specification</a></li>
+<li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues-at-least-once-delivery.html">Amazon SQS：至少一次投递</a></li>
+<li><a href="https://etcd.io/docs/v3.6/learning/api_guarantees/">etcd v3.6：API 一致性与租约保证</a></li>
+<li><a href="https://etcd.io/docs/v3.6/dev-guide/api_concurrency_reference_v3/">etcd v3.6：Lock 与事务保护</a></li>
+<li><a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html">AWS：Transactional Outbox</a></li>
+<li><a href="https://raft.github.io/">Raft：作者维护的算法与论文入口</a></li>
 <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic: Building Effective Agents</a></li>
 </ul>
 
@@ -11223,7 +11415,7 @@ Score(a)=\alpha C_a+\beta Q_a+\gamma A_a-\delta L_a-\epsilon K_a-\zeta R_a
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

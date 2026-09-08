@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="覆盖 MCP 架构、能力、传输、选型以及协议身份与安全边界">
+        <meta name="description" content="按 MCP 2026-07-28 核查角色、能力、逐请求协商、传输及授权，并区分旧版本兼容路径。">
       
       
         <meta name="author" content="Polo Li">
@@ -66,18 +66,18 @@
     <meta property="og:locale" content="zh_CN">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
-    <meta property="og:title" content="Tools · MCP">
-    <meta property="og:description" content="覆盖 MCP 架构、能力、传输、选型以及协议身份与安全边界">
+    <meta property="og:title" content="Tools · 模型上下文协议">
+    <meta property="og:description" content="按 MCP 2026-07-28 核查角色、能力、逐请求协商、传输及授权，并区分旧版本兼容路径。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Tools · MCP">
-    <meta name="twitter:description" content="覆盖 MCP 架构、能力、传输、选型以及协议身份与安全边界">
+    <meta name="twitter:title" content="Tools · 模型上下文协议">
+    <meta name="twitter:description" content="按 MCP 2026-07-28 核查角色、能力、逐请求协商、传输及授权，并区分旧版本兼容路径。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Tools · MCP","description":"覆盖 MCP 架构、能力、传输、选型以及协议身份与安全边界","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Tools · 模型上下文协议","description":"按 MCP 2026-07-28 核查角色、能力、逐请求协商、传输及授权，并区分旧版本兼容路径。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/02-mcp/"}]}</script>
     
@@ -102,7 +102,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tools-mcp" class="md-skip">
+        <a href="#tools" class="md-skip">
           跳转至
         </a>
       
@@ -8267,8 +8267,9 @@
   
 
 
-<h1 id="tools-mcp">Tools · MCP<a class="headerlink" href="#tools-mcp" title="Permanent link">&para;</a></h1>
+<h1 id="tools">Tools · 模型上下文协议<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h1>
 <p>覆盖 MCP 架构、能力、传输、选型以及协议身份与安全边界。</p>
+<p>以 <a href="https://modelcontextprotocol.io/specification/versioning">2026-07-28 Current 规范</a>为基准：无初始化握手的核心语义，不可与 2025-11-25 及以前的会话模型混用。Sampling、Roots、Logging 已弃用但尚未移除；Tasks 已迁到可选扩展。SDK 版本号不等于协议版本。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="04-what-is-mcp/">第四章：MCP 模型上下文协议的核心内容</a></li>
@@ -8300,7 +8301,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 16:17:00 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

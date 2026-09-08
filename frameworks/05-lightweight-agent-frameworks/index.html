@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="前四个模块的框架覆盖了编排、数据层或企业中间件等多个层面。本模块涉及的三个框架更聚焦：它们主要解决「多智能体协作」或「单个 Agent 的类型安全」，数据处理、生产可观测性等能力通常需要外部组件补齐。阅读时更值得关注能力边界，而不只是 API 名称">
+        <meta name="description" content="比较 AutoGen 消息运行时、CrewAI 任务与流程、PydanticAI 类型化 Agent，结合维护状态、持久执行和成本划定适用边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="框架与编排 · 轻量级 Agent 框架：AutoGen、CrewAI 与 PydanticAI">
-    <meta property="og:description" content="前四个模块的框架覆盖了编排、数据层或企业中间件等多个层面。本模块涉及的三个框架更聚焦：它们主要解决「多智能体协作」或「单个 Agent 的类型安全」，数据处理、生产可观测性等能力通常需要外部组件补齐。阅读时更值得关注能力边界，而不只是 API 名称">
+    <meta property="og:description" content="比较 AutoGen 消息运行时、CrewAI 任务与流程、PydanticAI 类型化 Agent，结合维护状态、持久执行和成本划定适用边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="框架与编排 · 轻量级 Agent 框架：AutoGen、CrewAI 与 PydanticAI">
-    <meta name="twitter:description" content="前四个模块的框架覆盖了编排、数据层或企业中间件等多个层面。本模块涉及的三个框架更聚焦：它们主要解决「多智能体协作」或「单个 Agent 的类型安全」，数据处理、生产可观测性等能力通常需要外部组件补齐。阅读时更值得关注能力边界，而不只是 API 名称">
+    <meta name="twitter:description" content="比较 AutoGen 消息运行时、CrewAI 任务与流程、PydanticAI 类型化 Agent，结合维护状态、持久执行和成本划定适用边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · 轻量级 Agent 框架：AutoGen、CrewAI 与 PydanticAI","description":"前四个模块的框架覆盖了编排、数据层或企业中间件等多个层面。本模块涉及的三个框架更聚焦：它们主要解决「多智能体协作」或「单个 Agent 的类型安全」，数据处理、生产可观测性等能力通常需要外部组件补齐。阅读时更值得关注能力边界，而不只是 API 名称","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · 轻量级 Agent 框架：AutoGen、CrewAI 与 PydanticAI","description":"比较 AutoGen 消息运行时、CrewAI 任务与流程、PydanticAI 类型化 Agent，结合维护状态、持久执行和成本划定适用边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/"}]}</script>
     
@@ -8289,7 +8289,8 @@
 
 
 <h1 id="agent-autogencrewai-pydanticai">框架与编排 · 轻量级 Agent 框架：AutoGen、CrewAI 与 PydanticAI<a class="headerlink" href="#agent-autogencrewai-pydanticai" title="Permanent link">&para;</a></h1>
-<p>前四个模块的框架覆盖了编排、数据层或企业中间件等多个层面。本模块涉及的三个框架更聚焦：它们主要解决「多智能体协作」或「单个 Agent 的类型安全」，数据处理、生产可观测性等能力通常需要外部组件补齐。阅读时更值得关注能力边界，而不只是 API 名称。</p>
+<p>这里保留「轻量级」目录名称以维持导航，但它不是严格的技术分类：AutoGen 有消息运行时，CrewAI 有 Crew 与 Flow，PydanticAI 也有多 Agent 和持久执行集成，不能据此断言只适合原型或单次调用。</p>
+<p>截至 2026-09-08，<a href="https://github.com/microsoft/autogen">AutoGen 官方仓库</a> 已明确进入维护模式，并建议新用户采用 Microsoft Agent Framework。本模块既讲存量抽象，也修正新项目选型边界；角色数量、类型校验与运行可靠性应分别评估。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="20-autogen-and-crewai/">第二十章：AutoGen 与 CrewAI 的多智能体抽象</a></li>
@@ -8297,16 +8298,17 @@
 </ol>
 <h2 id="_2">模块关系<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
-    A["AutoGen&lt;br/&gt;Actor 模型 + 事件驱动运行时"] -.对话式多智能体.-&gt; D["适用边界对照&lt;br/&gt;（第二十一章）"]
+    A["AutoGen（维护模式）&lt;br/&gt;Core / AgentChat"] -.对话式多智能体.-&gt; D["适用边界对照&lt;br/&gt;（第二十一章）"]
     C["CrewAI&lt;br/&gt;角色化 Crew / Process / Flow"] -.角色化多智能体.-&gt; D
-    P["PydanticAI&lt;br/&gt;类型校验 + 依赖注入"] -.单 Agent 类型安全.-&gt; D</code></pre>
+    P["PydanticAI&lt;br/&gt;类型 / 历史 / 持久执行集成"] -.可测试性与运行边界.-&gt; D</code></pre>
 <h2 id="_3">阅读建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li>如果需要多个 Agent 协作，可读第二十章，对比「分布式 / 事件驱动」和「角色化快速搭建」两种路线；</li>
+<li>如果需要多个 Agent 协作，可读第二十章，对比消息策略、任务顺序和 Flow 控制，并用单 Agent 基线核对收益；</li>
 <li>如果更关心单 Agent 的工程正确性（类型、校验、依赖注入），可直接读第二十一章前半部分；</li>
 <li>如果正在选型、不确定用哪个，可直接看第二十一章的决策矩阵，再跳转 <a href="../06-selection-portability/">框架选型与可移植架构</a> 看跨全部框架的统一对照。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8329,7 +8331,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

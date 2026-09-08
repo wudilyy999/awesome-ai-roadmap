@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sliding Window 只保留最近若干轮或若干 Token，删除更早的内容">
+        <meta name="description" content="比较窗口裁剪、摘要、结构化抽取与外部化，说明压缩失真、恢复边界、Token 预算和缓存的区别及评测方法。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十章：Agent 记忆与上下文压缩">
-    <meta property="og:description" content="Sliding Window 只保留最近若干轮或若干 Token，删除更早的内容">
+    <meta property="og:description" content="比较窗口裁剪、摘要、结构化抽取与外部化，说明压缩失真、恢复边界、Token 预算和缓存的区别及评测方法。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十章：Agent 记忆与上下文压缩">
-    <meta name="twitter:description" content="Sliding Window 只保留最近若干轮或若干 Token，删除更早的内容">
+    <meta name="twitter:description" content="比较窗口裁剪、摘要、结构化抽取与外部化，说明压缩失真、恢复边界、Token 预算和缓存的区别及评测方法。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：Agent 记忆与上下文压缩","description":"Sliding Window 只保留最近若干轮或若干 Token，删除更早的内容","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：Agent 记忆与上下文压缩","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：Agent 记忆与上下文压缩","description":"比较窗口裁剪、摘要、结构化抽取与外部化，说明压缩失真、恢复边界、Token 预算和缓存的区别及评测方法。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：Agent 记忆与上下文压缩","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"记忆与上下文压缩","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/03-memory-context/10-agent-memory-compression/"}]}</script>
     
@@ -4471,6 +4471,21 @@
       10.18 KV Cache 与 Prompt Caching
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="10.18 KV Cache 与 Prompt Caching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10181-compaction-prompt-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.18.1 服务端 Compaction 也不等于 Prompt Cache
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -9489,6 +9504,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="10.18 KV Cache 与 Prompt Caching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10181-compaction-prompt-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      10.18.1 服务端 Compaction 也不等于 Prompt Cache
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -9768,6 +9798,7 @@
 
 
 <h1 id="agent">第十章：Agent 记忆与上下文压缩<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h1>
+<p>本章讨论应用层上下文管理；JSON、时间、数量与预算均为教学示例，不是生产配置或实测结果。</p>
 <h2 id="101">10.1 为什么需要记忆压缩<a class="headerlink" href="#101" title="Permanent link">&para;</a></h2>
 <p>Agent 在长任务中会持续产生：</p>
 <ul>
@@ -9792,6 +9823,7 @@
 <blockquote>
 <p><strong>在有限 Token Budget 内，尽可能保留完成当前任务所需的信息。</strong></p>
 </blockquote>
+<p>长窗口能容纳更多内容，但不能保证每项证据都被正确使用；反过来，短上下文也不天然更准确。删除必要的原文、多跳证据或反例会降低质量，应以具体模型和任务的对照实验选择压缩强度，而不是假设“越短越好”。</p>
 <p>写成一个简单目标函数，就是：</p>
 <div class="arithmatex">\[
 J(C)=U(C)-\lambda L(C)
@@ -9808,6 +9840,7 @@ L(C)\le B
 <li><code>B</code> 是可用 Token Budget；</li>
 <li><code>λ</code> 表示长度成本权重。</li>
 </ul>
+<p>这是设计目标的示意，不是可以直接计算出最优摘要的算法。<code>U(C)</code> 通常只能由下游任务表现近似评估，授权范围、必需证据及消息协议应先作为硬约束；高效用不能抵消违规。</p>
 <h2 id="102">10.2 四类基础方法<a class="headerlink" href="#102" title="Permanent link">&para;</a></h2>
 <p>四种常见方法解决的是不同问题：</p>
 <table>
@@ -9842,7 +9875,7 @@ L(C)\le B
 <td>Structured Extraction</td>
 <td>对话文本是否是最佳表示</td>
 <td>转换为结构化状态</td>
-<td style="text-align: right;">取决于 Schema</td>
+<td style="text-align: right;">一般有损；仅对完整可逆表示例外</td>
 </tr>
 </tbody>
 </table>
@@ -9857,8 +9890,9 @@ L(C)\le B
     I --&gt; C
     E --&gt; C</code></pre>
 <p>这四种方法通常组合使用，而不是互相替代。</p>
+<p>外部化是把内容搬出活跃 Context，不一定减少总存储；从窗口移除也不等于从记忆库删除。应用层摘要、服务端 compaction、KV Cache 量化/淘汰分别改变文本表示、服务托管上下文或推理状态，不应统称为同一种“记忆压缩”。</p>
 <h2 id="103-sliding-window">10.3 Sliding Window：按时间截断<a class="headerlink" href="#103-sliding-window" title="Permanent link">&para;</a></h2>
-<p>Sliding Window 只保留最近若干轮或若干 Token，删除更早的内容。</p>
+<p>Sliding Window 只在活跃 Context 保留最近若干轮或若干 Token，移除更早内容；是否删除持久化原记录由另一套保留策略决定。</p>
 <pre class="mermaid"><code>flowchart LR
     M1[Message 1] --&gt; M2[Message 2]
     M2 --&gt; M3[Message 3]
@@ -9912,12 +9946,14 @@ L(C)\le B
 <li>未解决问题；</li>
 <li>高风险操作约束。</li>
 </ul>
+<p>Pin 的是当前仍有效的受信内容，不是永久固定历史文本。用户改了目标或权限已撤销，应更新或撤销相应项；权限判断始终由运行时执行，不能只依靠上下文中的一句规则。若必需项本身超过预算，应拆分任务或停止请求，而不是静默截断。</p>
 <pre class="mermaid"><code>flowchart TB
     PIN[Pinned Context] --&gt; CTX[Current Context]
     RECENT[Recent Window] --&gt; CTX
     RET[Retrieved Memory] --&gt; CTX</code></pre>
 <h3 id="1033-tool">10.3.3 不要切断 Tool 交互<a class="headerlink" href="#1033-tool" title="Permanent link">&para;</a></h3>
 <p>Tool Call 和对应 Tool Result 应视为一个逻辑单元。只保留调用、不保留结果，或只保留结果、不保留调用，都可能破坏上下文。</p>
+<p>还可能直接违反 API 的消息格式要求。并行调用要核对各个 call ID 与结果；未完成调用不能伪造为成功结果。某些 API 还要求保留特定 continuation/reasoning item，应遵循其协议。需要裁剪时，可整体移除已完成交互并保存摘要/引用，而不是留下悬空的 tool result。</p>
 <p>同样需要避免切断：</p>
 <ul>
 <li>用户问题与 Agent 回答；</li>
@@ -9947,7 +9983,7 @@ L(C)\le B
 <p>优点：</p>
 <ul>
 <li>实现简单；</li>
-<li>摘要长度稳定；</li>
+<li>可通过输出预算约束摘要长度；</li>
 <li>适合连续对话。</li>
 </ul>
 <p>风险：</p>
@@ -9956,6 +9992,7 @@ L(C)\le B
 <li>早期细节可能逐渐丢失；</li>
 <li>模型生成的错误可能进入后续摘要。</li>
 </ul>
+<p>例如原文是“测试超时，支付结果未知，不要重试”，摘要变成“支付失败，可以重试”，既丢了不确定性，也反转了操作约束。后续再摘要不会自动恢复这些信息，必须回到原始事件或权威业务状态核对。</p>
 <h3 id="1042-hierarchical-summary">10.4.2 Hierarchical Summary<a class="headerlink" href="#1042-hierarchical-summary" title="Permanent link">&para;</a></h3>
 <p>先生成局部摘要，再合并成阶段或任务摘要：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -9982,6 +10019,7 @@ L(C)\le B
 <li>未解决冲突。</li>
 </ul>
 <p>不再保留每一次搜索尝试的详细过程。</p>
+<p>但应保留已排除路径及排除理由的简记，避免下一阶段重复失败搜索。任务切换后重新评估摘要，不能把针对旧问题生成的摘要当作通用知识索引。</p>
 <h3 id="1044-event-summary">10.4.4 Event Summary<a class="headerlink" href="#1044-event-summary" title="Permanent link">&para;</a></h3>
 <p>按关键事件总结：</p>
 <ul>
@@ -10018,6 +10056,8 @@ L(C)\le B
 <li>对目标、权限和数字使用结构化状态；</li>
 <li>使用 Verifier 检查遗漏和矛盾。</li>
 </ul>
+<p>Verifier 也可能漏判，尤其当它与摘要器只读取同一份有缺陷的摘要时。需要把摘要和原始证据对照，精确核验 ID、数字、否定、时间范围及状态；对丢失项重新取回原文。引用还应带来源事件、版本或内容哈希，只有 URL 而网页已变化时，不能恢复当时证据。</p>
+<p>摘要是派生数据，权限通常不能宽于其所含来源的共同可读范围；若需要扩大读者范围，应经过独立脱敏与发布审核。来源被撤回、删除或替代后，要失效或重建依赖它的摘要，而不是只删向量记录。</p>
 <h2 id="105-importance-filtering">10.5 Importance Filtering：按价值选择<a class="headerlink" href="#105-importance-filtering" title="Permanent link">&para;</a></h2>
 <p>时间顺序不代表信息价值。用户第一轮给出的安全约束，可能比最近十轮普通消息更重要。</p>
 <p>Importance Filtering 根据当前任务选择应保留的内容。</p>
@@ -10061,6 +10101,7 @@ U_i=
 <li><code>Nᵢ</code>：Novelty；</li>
 <li><code>Cᵢ</code>：Token Cost。</li>
 </ul>
+<p>这些分量需要在任务样本上校准，公式并不意味着有现成准确的“重要性分数”。同一信息在不同问题下价值不同：摘要中的结论可用于概览，财务核对却可能必须读取整行账目和单位。</p>
 <h3 id="1052-hard-rules-model-scoring">10.5.2 Hard Rules 与 Model Scoring<a class="headerlink" href="#1052-hard-rules-model-scoring" title="Permanent link">&para;</a></h3>
 <p>不应让模型独自决定所有信息的重要性。</p>
 <h4 id="hard-rules">Hard Rules<a class="headerlink" href="#hard-rules" title="Permanent link">&para;</a></h4>
@@ -10087,11 +10128,11 @@ U_i=
 <li>重要性评分受当前 Prompt 偏置；</li>
 <li>恶意内容可能伪装成高优先级指令。</li>
 </ul>
-<p>因此，被过滤内容最好外部化保存，而不是立即永久删除。</p>
+<p>因此，仍有合法用途的原文可按保留政策外部化，支持后续取回；敏感或未授权内容不能借“以后可能有用”永久保存。</p>
 <h2 id="106-structured-extraction">10.6 Structured Extraction：改变信息表示<a class="headerlink" href="#106-structured-extraction" title="Permanent link">&para;</a></h2>
 <p>自然语言对话通常冗长、重复且难以精确更新。Structured Extraction 将历史转换为高密度状态。</p>
 <pre class="mermaid"><code>flowchart LR
-    CHAT[Conversation] --&gt; EX[Extractor]
+    CHAT[Conversation] --&gt; EX[Extractor + Evidence Validation]
     EX --&gt; FACTS[Facts]
     EX --&gt; STATE[Task State]
     EX --&gt; TODO[Todo]
@@ -10105,22 +10146,26 @@ U_i=
 </span></code></pre></div>
 <p>结构化后：</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"repository"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zongyangbigpolo/awesome-ai-roadmap"</span><span class="p">,</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"publishing_policy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"repository"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example/knowledge-base"</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"publishing_preference"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">"target_branch"</span><span class="p">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">"create_pull_request"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">},</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"explicit_user_instruction"</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"explicit_user_instruction"</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">"source_event_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"event-example"</span><span class="p">,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">"verification_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_stated"</span><span class="p">,</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"current_repository"</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>结构化表示：</p>
 <ul>
-<li>Token 更少；</li>
+<li>对冗长重复对话可能减少 Token，短句转 JSON 反而可能更长；</li>
 <li>更容易精确更新；</li>
 <li>更适合规则执行；</li>
 <li>更容易检测冲突；</li>
-<li>不依赖语义猜测。</li>
+<li>验证后可以按字段查询，不必每次重新解释整段对话。</li>
 </ul>
+<p>抽取本身仍可能误读。“用户偏好直接提交”不能变成绕过分支保护的权限。这里只有数据表示变化，没有发生发布，也没有证明用户拥有发布权限。</p>
 <h3 id="1062">10.6.2 适合抽取的内容<a class="headerlink" href="#1062" title="Permanent link">&para;</a></h3>
 <h4 id="task-state">Task State<a class="headerlink" href="#task-state" title="Permanent link">&para;</a></h4>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
@@ -10163,15 +10208,18 @@ U_i=
 <li>Schema 版本变化需要迁移。</li>
 </ul>
 <p>因此，应保留来源引用，并允许在需要时返回原文。</p>
+<p>Schema 合法只证明字段形状正确，不证明内容真实。运行状态应由执行器及工具确认结果更新；模型可提出补丁，但不能仅从“我准备执行”抽取出 <code>completed</code>。含糊的声明应保留 <code>unknown</code>、适用范围和原话，不能强行填成确定事实。</p>
 <h2 id="107">10.7 四种方法如何组合<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
 <p>工程上通常把这几种方法串起来用：</p>
 <pre class="mermaid"><code>flowchart TB
     H[Full History] --&gt; PIN[Pin Hard Constraints]
     PIN --&gt; EXT[Externalize Large Artifacts]
     EXT --&gt; STR[Structured Extraction]
-    STR --&gt; IMP[Importance Filtering]
+    STR --&gt; SPLIT[划分近期交互与较早历史]
+    SPLIT --&gt; IMP[较早历史 Importance Filtering]
     IMP --&gt; SUM[Summarize Older History]
-    SUM --&gt; WIN[Keep Recent Sliding Window]
+    SPLIT --&gt; WIN[Keep Recent Sliding Window]
+    SUM --&gt; PACK[Context Packing]
     WIN --&gt; PACK[Context Packing]</code></pre>
 <p>一种常见 Context 结构是：</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1. System and safety instructions
@@ -10181,8 +10229,8 @@ U_i=
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>5. Summary of earlier stages
 </span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>6. Recent message window
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>7. Current Tool results
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>8. Output token reserve
 </span></code></pre></div>
+<p>输出预算是请求配置和容量预留，不是要在 Prompt 中写入的一段文字。上述序号是组织示例，不是模型指令优先级；历史摘要与召回数据不能因放在前面就获得系统指令权限。</p>
 <p>各方法分工如下：</p>
 <ul>
 <li>Sliding Window 保留近期细节；</li>
@@ -10218,6 +10266,7 @@ U_i=
 <li>数字不同的近似句子；</li>
 <li>正向与否定表达。</li>
 </ul>
+<p>同一错误发生多次还可能说明故障持续，不能去重后丢掉发生次数和时间跨度。多个来源相同结论若都转载自同一原文，只能保留一条来源链，不能当作独立佐证。</p>
 <h2 id="109-externalization">10.9 额外方法：Externalization<a class="headerlink" href="#109-externalization" title="Permanent link">&para;</a></h2>
 <p>Externalization 将大内容移出 Context，只保留摘要和引用。</p>
 <p>适合：</p>
@@ -10240,6 +10289,7 @@ U_i=
 </span></code></pre></div>
 <p>需要时通过 Tool 按片段重新读取。</p>
 <p>这种方法不是删除信息，而是将“始终在 Context 中”改为“按需加载”。</p>
+<p>前提是引用可解析、有版本、未过期，且 Agent 有可用的读取工具。URI 和哈希不包含原文；对象已删、权限撤销、链接过期或检索失败时，恢复就不成立。按片段读取应返回位置、范围及是否截断，并在工具端鉴权；摘要泄露敏感结论也属于泄露，不能只保护原始对象。</p>
 <h2 id="1010-hierarchical-memory">10.10 额外方法：Hierarchical Memory<a class="headerlink" href="#1010-hierarchical-memory" title="Permanent link">&para;</a></h2>
 <p>分层记忆同时保留不同粒度：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -10250,7 +10300,7 @@ U_i=
     S2 --&gt; E3[Raw Events]
     S2 --&gt; E4[Artifacts]</code></pre>
 <p>Agent 先读取 Task Summary；只有需要细节时，才展开 Stage Summary 或 Raw Event。</p>
-<p>这是一种 Progressive Disclosure，可以显著降低无关上下文。</p>
+<p>这是一种 Progressive Disclosure，可能减少无关上下文，但会增加检索轮次和遗漏风险。概要若没提到关键细节，Agent 可能不会展开正确分支，因此要保留直接检索原文的路径，并测量端到端延迟。</p>
 <h2 id="1011-delta-state-compaction">10.11 额外方法：Delta 与 State Compaction<a class="headerlink" href="#1011-delta-state-compaction" title="Permanent link">&para;</a></h2>
 <p>对持续变化的状态，不需要每次保存完整副本。</p>
 <p>例如计划更新：</p>
@@ -10272,6 +10322,7 @@ U_i=
     D2 --&gt; D3[Delta N]
     D3 --&gt; NEW[New Snapshot]</code></pre>
 <p>这种方法主要减少状态存储和传输，不等同于自然语言摘要。</p>
+<p>恢复要有确定的事件顺序、稳定事件 ID、状态版本和幂等应用规则，且 Snapshot 与已纳入的日志位点一致。不能只凭时间戳推断所有并发事件的先后。事件回放也不应重新执行付款、发信等副作用；已发生的外部效果需要独立的执行记录与核对。</p>
 <h2 id="1012">10.12 压缩触发时机<a class="headerlink" href="#1012" title="Permanent link">&para;</a></h2>
 <h3 id="10121-token">10.12.1 Token 阈值<a class="headerlink" href="#10121-token" title="Permanent link">&para;</a></h3>
 <p>当 Context 使用量接近预算时触发。</p>
@@ -10293,7 +10344,7 @@ U_i=
 <h3 id="10123-tool-result">10.12.3 Tool Result 过大<a class="headerlink" href="#10123-tool-result" title="Permanent link">&para;</a></h3>
 <p>大型 Tool 输出应立即外部化，而不是先塞入完整 Context 再压缩。</p>
 <h3 id="10124-checkpoint">10.12.4 Checkpoint<a class="headerlink" href="#10124-checkpoint" title="Permanent link">&para;</a></h3>
-<p>任务暂停、转交 Agent 或持久化之前进行压缩和状态保存。</p>
+<p>任务暂停或转交 Agent 时可生成压缩交接信息，但保存 checkpoint 不应以 LLM 摘要成功为前提。先可靠保存精确状态、事件位点和工具结果，再异步生成可替换的摘要，避免压缩失败时连恢复点一起丢失。</p>
 <h3 id="10125-context">10.12.5 Context 质量下降<a class="headerlink" href="#10125-context" title="Permanent link">&para;</a></h3>
 <p>即使尚未接近长度上限，如果出现：</p>
 <ul>
@@ -10303,6 +10354,7 @@ U_i=
 <li>Tool 选择变差；</li>
 </ul>
 <p>也应重新构建 Context。</p>
+<p>这些只是诊断信号，也可能来自错误工具或不准确计划，不能一律归咎于上下文太长。重构失败时应保留旧状态与失败原因，回退到原文选择或分阶段执行，而不是继续基于不完整摘要行动。</p>
 <h2 id="1013-token-budget">10.13 Token Budget 分配<a class="headerlink" href="#1013-token-budget" title="Permanent link">&para;</a></h2>
 <p>总 Context Budget 不应全部用于历史：</p>
 <div class="arithmatex">\[
@@ -10331,6 +10383,8 @@ B_{output}
 <li><code>B_tool</code>：当前 Tool 结果；</li>
 <li><code>B_output</code>：模型输出预留。</li>
 </ul>
+<p>上式是预算分账示意：先确定该模型 API 的容量口径，再分配输入、输出与安全余量。某些推理模型还将推理 Token 计入输出额度或共享窗口；工具 Schema、图片/音频表示、消息封装也会消耗容量。应以实际 tokenizer 或服务端计数为准，不能按字符数估计后当作硬保证。</p>
+<p>设压缩触发阈值时，应预留最大可接受工具结果和下一轮输出，而不采用通用的“使用到某个百分比再压缩”。工具结果无上限时，应先限制、分页或外部化，避免一条响应挤爆窗口。</p>
 <p>预算应随任务阶段动态调整。例如：</p>
 <ul>
 <li>搜索阶段给 Tool Result 更多空间；</li>
@@ -10339,7 +10393,7 @@ B_{output}
 </ul>
 <h2 id="1014-prompt-caching">10.14 Prompt Caching 是什么<a class="headerlink" href="#1014-prompt-caching" title="Permanent link">&para;</a></h2>
 <blockquote>
-<p>Prompt Caching 处理的是跨请求的前缀计算复用；RAG 上下文增强中如何用它控制索引成本，见<a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/">RAG：语义被切断怎么办</a>。</p>
+<p>Prompt Caching 处理的是跨请求的前缀计算复用，不直接缓存 Embedding 或向量索引；与 RAG 入库时上下文增强的关系，见<a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/">RAG：语义被切断怎么办</a>。</p>
 </blockquote>
 <p>Prompt Caching 缓存重复 Prompt 前缀的中间计算结果，使后续请求可以复用。</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -10402,7 +10456,7 @@ B_{output}
 </tr>
 <tr>
 <td>是否解决噪音问题</td>
-<td>是</td>
+<td>可能减少噪音，也可能误删证据</td>
 <td>否</td>
 </tr>
 </tbody>
@@ -10432,7 +10486,7 @@ B_{output}
 </ul>
 <h2 id="1017-prompt-caching">10.17 Prompt Caching 的限制<a class="headerlink" href="#1017-prompt-caching" title="Permanent link">&para;</a></h2>
 <ul>
-<li>通常要求前缀完全或高度一致；</li>
+<li>对这里讨论的前缀缓存，要求可复用前缀精确匹配，而不是语义相似或“高度一致”；</li>
 <li>缓存有生命周期；</li>
 <li>不同模型或配置可能不能共享；</li>
 <li>动态内容放在前缀中会降低命中率；</li>
@@ -10442,6 +10496,8 @@ B_{output}
 <li>具体费用和缓存规则由模型服务商决定。</li>
 </ul>
 <p>Prompt 设计时通常将稳定内容放在前面，动态内容放在后面，以提高缓存复用。</p>
+<p><a href="https://developers.openai.com/api/docs/guides/prompt-caching">OpenAI 官方文档</a>说明，需匹配实际渲染的前缀；模型、工具 Schema、顺序及相关设置变化都可能改变可复用部分。缓存最低长度、断点方式、写入费用和保留时间依模型与服务版本而异，不能把某个型号的数字推广为统一规则。</p>
+<p>频繁改写前面的摘要可能使后续缓存失效，压缩调用自身也有成本。对照总账单和首 Token 延迟，分别测量冷缓存、热缓存及压缩后的请求；不要为了缓存命中继续发送失效权限或过期敏感数据。</p>
 <h2 id="1018-kv-cache-prompt-caching">10.18 KV Cache 与 Prompt Caching<a class="headerlink" href="#1018-kv-cache-prompt-caching" title="Permanent link">&para;</a></h2>
 <p>KV Cache 是 Transformer 推理中缓存 Attention Key/Value 状态的底层机制。</p>
 <p>Prompt Caching 是模型服务对应用暴露的跨请求复用能力，底层可能利用 KV 或其他缓存实现。</p>
@@ -10468,11 +10524,16 @@ B_{output}
 </tbody>
 </table>
 <p>两者都属于计算优化，不属于语义记忆压缩。</p>
+<p>但 KV Cache 的量化、淘汰、卸载又是另一组推理系统技术，它们可能改变精度、显存与延迟，并不等价于生成可审计摘要。应用若只使用托管 API，不应假定能操作这些底层状态。</p>
+<h3 id="10181-compaction-prompt-cache">10.18.1 服务端 Compaction 也不等于 Prompt Cache<a class="headerlink" href="#10181-compaction-prompt-cache" title="Permanent link">&para;</a></h3>
+<p>截至本章审校时，<a href="https://developers.openai.com/api/docs/guides/compaction">OpenAI Responses 的 Compaction</a>支持返回不透明的加密 compaction item，供后续请求继续使用。这是缩减后续 Context 的服务能力，不是仅复用前缀计算，也不能假定其内部就是可读的自然语言摘要。</p>
+<p>应用应按 API 协议传递该 item，不解析或手工改写其内容；模型支持范围及服务端状态保留选项需查当前文档。它不能替代应用自己的任务状态、事实来源、权限及删除管理，也不能当成跨供应商可移植的审计记录。</p>
 <h2 id="1019">10.19 压缩质量怎么评估<a class="headerlink" href="#1019" title="Permanent link">&para;</a></h2>
 <h3 id="10191-compression-ratio">10.19.1 Compression Ratio<a class="headerlink" href="#10191-compression-ratio" title="Permanent link">&para;</a></h3>
 <div class="arithmatex">\[
 CR=1-\frac{L_{after}}{L_{before}}
 \]</div>
+<p>这里将 <code>CR</code> 定义为 Token 减少率，其他资料可能将压缩比定义为 <code>L_before / L_after</code>，报告时必须注明口径。应使用同一 tokenizer、相同内容边界；外部化后只统计 URI 的 Token，却遗漏再读取的费用，会夸大节省。</p>
 <p>压缩比例高不代表质量高。如果关键约束被删除，再短也没有价值。</p>
 <h3 id="10192-constraint-retention">10.19.2 Constraint Retention<a class="headerlink" href="#10192-constraint-retention" title="Permanent link">&para;</a></h3>
 <p>检查：</p>
@@ -10513,10 +10574,13 @@ CR=1-\frac{L_{after}}{L_{before}}
 <h2 id="1020">10.20 压缩测试方法<a class="headerlink" href="#1020" title="Permanent link">&para;</a></h2>
 <h3 id="10201-needle-test">10.20.1 Needle Test<a class="headerlink" href="#10201-needle-test" title="Permanent link">&para;</a></h3>
 <p>在长历史中放入关键约束，检查压缩后是否保留并正确使用。</p>
+<p>单个 needle 测试不足以证明长程推理能力，还要覆盖多个相关证据、干扰项、时间更新、否定和没有答案的情况。</p>
 <h3 id="10202-replay-test">10.20.2 Replay Test<a class="headerlink" href="#10202-replay-test" title="Permanent link">&para;</a></h3>
 <p>从 Checkpoint 和压缩 Context 恢复 Agent，观察能否继续任务。</p>
+<p>分别在“工具执行前”“执行后但状态落盘前”“摘要生成中”中断；断言不会重复副作用、不会把未知结果改为成功、不会读取已撤销权限的 Artifact。恢复正确性应检查实际状态，不只检查回答文本。</p>
 <h3 id="10203-differential-test">10.20.3 Differential Test<a class="headerlink" href="#10203-differential-test" title="Permanent link">&para;</a></h3>
 <p>使用完整历史和压缩历史分别执行相同任务，比较结果差异。</p>
+<p>完整历史必须能装入模型，并说明是否发生服务端裁剪；它是基线，不是正确答案。再加入无记忆、近期窗口、直接提供人工标注证据的对照，固定模型版本及任务分布，多次运行并报告波动。除了最终正确率，还统计约束保留、证据可追溯性和压缩造成的退化。</p>
 <h3 id="10204-adversarial-test">10.20.4 Adversarial Test<a class="headerlink" href="#10204-adversarial-test" title="Permanent link">&para;</a></h3>
 <p>测试：</p>
 <ul>
@@ -10535,6 +10599,8 @@ CR=1-\frac{L_{after}}{L_{before}}
 <li>重复动作；</li>
 <li>Artifact 丢失。</li>
 </ul>
+<p>测试步数来自业务轨迹分布，不是可靠性的统一门槛。要记录累计压缩次数，检查远期信息是否逐轮丢失；总成本应包含摘要生成、写入索引、额外检索和恢复调用。</p>
+<p>公开数据可以参考 <a href="https://github.com/snap-research/locomo">LoCoMo</a> 的事件摘要与问答、<a href="https://github.com/xiaowu0162/LongMemEval">LongMemEval</a> 的知识更新与弃答，以及 <a href="https://github.com/xiaowu0162/LongMemEval-V2">LongMemEval-V2</a> 的轨迹经验检索。它们不直接验证你自己的 checkpoint、ACL 或副作用恢复；固定数据版本，按会话/轨迹分组统计，避免把相关问题当作独立用户样本。</p>
 <h2 id="1021">10.21 常见反模式<a class="headerlink" href="#1021" title="Permanent link">&para;</a></h2>
 <h3 id="10211-n">10.21.1 只保留最近 N 轮<a class="headerlink" href="#10211-n" title="Permanent link">&para;</a></h3>
 <p>可能删除最初目标和安全约束。</p>
@@ -10551,47 +10617,49 @@ CR=1-\frac{L_{after}}{L_{before}}
 <h3 id="10217-compression-ratio">10.21.7 只追求最高 Compression Ratio<a class="headerlink" href="#10217-compression-ratio" title="Permanent link">&para;</a></h3>
 <p>会鼓励系统删除真正有价值的信息。</p>
 <h3 id="10218">10.21.8 摘要把「未验证的结论」写成「已确认的事实」<a class="headerlink" href="#10218" title="Permanent link">&para;</a></h3>
-<p>这是长周期 Agent 中危害最大、也最隐蔽的一种压缩失效。</p>
-<p>典型场景：某个命令因超时或被中断而只输出了部分结果，摘要却把它记录为「已执行成功，结果为 X」。这条虚假的确定性会随摘要一路传播到后续所有轮次，而且因为它以「事实」形式出现，<strong>后续不会有任何环节去重新验证它</strong>。</p>
+<p>这种失效容易在多轮任务中传播，尤其会影响下一步操作判断。</p>
+<p>典型场景：某个命令因超时或被中断而只输出了部分结果，摘要却把它记录为「已执行成功，结果为 X」。如果后续没有独立验证，这条虚假的确定性就可能传播到后面的计划和操作。</p>
 <p>缓解方式有三条：</p>
 <ol>
-<li>摘要中显式保留状态标记（<code>verified</code> / <code>unverified</code> / <code>failed</code>），而不是只记结论；</li>
+<li>分开保留执行状态（<code>pending</code> / <code>succeeded</code> / <code>failed</code> / <code>unknown</code>）与结论验证状态（<code>verified</code> / <code>unverified</code>），而不是只记结论；</li>
 <li>保留工具调用的退出码与截断标记，不要在摘要阶段丢弃；</li>
 <li>对关键结论保留原始引用（日志位置、文件路径），使其可被重新核对。</li>
 </ol>
 <h3 id="10219">10.21.9 只依赖上下文内的摘要链承载长期决策<a class="headerlink" href="#10219" title="Permanent link">&para;</a></h3>
 <p>多轮压缩会累积信息损耗，早期的关键决策与约束在若干轮压缩后可能彻底消失，形成难以追溯的「历史债」。</p>
-<p>正确做法是把重要决策<strong>同时写入外部文件或结构化状态</strong>（即 10.9 节的 Externalization），让它不依赖摘要链的存续。压缩链负责「最近发生了什么」，外部文件负责「已经定下来的事」。</p>
+<p>可将重要决策同时写入外部文件或结构化状态（即 10.9 节的 Externalization），并保存来源、版本和适用范围。外部保存不代表模型自动能读到它，还需有稳定加载入口和读回校验；决策变化时同步失效旧记录，不能让旧文件一直充当有效约束。</p>
 <h2 id="1022">10.22 推荐的生产级压缩管道<a class="headerlink" href="#1022" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
     INPUT[Messages + Tool Results + State] --&gt; CLASS[Classify]
 
-    CLASS --&gt; PIN[Pinned Constraints]
-    CLASS --&gt; STATE[Structured State]
+    CLASS --&gt; PIN[当前有效的 Pinned Constraints]
+    CLASS --&gt; STATE[经执行证据核对的 Structured State]
     CLASS --&gt; LARGE[Large Artifacts]
     CLASS --&gt; HISTORY[Historical Messages]
 
     LARGE --&gt; EXT[Externalize + Reference]
-    HISTORY --&gt; DEDUP[Deduplicate]
+    HISTORY --&gt; SPLIT[按完整交互与阶段分组]
+    SPLIT --&gt; RECENT[近期完整交互]
+    SPLIT --&gt; DEDUP[较早历史去重]
     DEDUP --&gt; IMP[Importance Filter]
     IMP --&gt; SUM[Hierarchical Summary]
-    SUM --&gt; WIN[Recent Sliding Window]
 
     PIN --&gt; PACK[Context Packer]
     STATE --&gt; PACK
     EXT --&gt; PACK
-    WIN --&gt; PACK
-    RET[Retrieved Long-term Memory] --&gt; PACK
+    SUM --&gt; PACK
+    RECENT --&gt; PACK
+    RET[经权限与版本复核的 Long-term Memory] --&gt; PACK
 
     PACK --&gt; CACHE[Prompt Cache Stable Prefix]
     CACHE --&gt; MODEL[Model]
 
     MODEL --&gt; OBS[New Observation]
     OBS --&gt; INPUT</code></pre>
-<p>默认配置通常会从这套压缩组合起步：</p>
+<p>可按任务需要选择以下组合；短任务不一定需要摘要和分层存储：</p>
 <ol>
-<li>永久 Pin 系统、安全、目标和成功标准；</li>
-<li>将任务状态抽取为结构化数据；</li>
+<li>保留当前有效的系统、安全、目标和成功标准，并随权限和目标变化更新；</li>
+<li>将任务状态抽取为结构化数据，并用执行证据核对；</li>
 <li>大型 Tool Result 立即外部化；</li>
 <li>对历史做去重和重要性过滤；</li>
 <li>已完成阶段使用分层摘要；</li>
@@ -10599,7 +10667,7 @@ CR=1-\frac{L_{after}}{L_{before}}
 <li>长期记忆按当前任务检索；</li>
 <li>按 Token Budget 组装 Context；</li>
 <li>对稳定前缀使用 Prompt Caching；</li>
-<li>保留原始来源以支持恢复和审计。</li>
+<li>在授权与保留期限内保留原始来源，验证引用可读和恢复路径可用。</li>
 </ol>
 <h2 id="1023">10.23 方法选择表<a class="headerlink" href="#1023" title="Permanent link">&para;</a></h2>
 <table>
@@ -10654,7 +10722,7 @@ CR=1-\frac{L_{after}}{L_{before}}
 <li><strong>Sliding Window</strong>：按时间截断历史；</li>
 <li><strong>Summarization</strong>：在截断前提炼语义；</li>
 <li><strong>Importance Filtering</strong>：打破时间顺序，按价值选择；</li>
-<li><strong>Structured Extraction</strong>：将对话转换为高密度状态。</li>
+<li><strong>Structured Extraction</strong>：提取候选状态并核对证据；Schema 合法不保证事实正确，也不保证 Token 更少。</li>
 </ol>
 <p>现代系统通常还会结合：</p>
 <ul>
@@ -10670,10 +10738,7 @@ CR=1-\frac{L_{after}}{L_{before}}
 <p><strong>记忆压缩决定带什么信息，Prompt Caching 决定重复信息如何减少计算。</strong></p>
 </blockquote>
 <p>两者互补，但 Prompt Caching 不会释放 Context Window，也不能替代摘要、过滤和结构化抽取。</p>
-<p>落到实现上，通常会这样组合：</p>
-<blockquote>
-<p><strong>关键约束结构化并固定保留，大型信息外部化，旧历史分层摘要，近期细节使用窗口，长期知识按需检索，稳定前缀再使用缓存。</strong></p>
-</blockquote>
+<p>压缩后至少核对一次目标、未决状态、关键证据和引用可读性。若这些无法恢复，应回到原始记录或明确报告信息不足，而不是把流畅的摘要当作完整历史。</p>
 <h2 id="_3">参考资料<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2310.08560">MemGPT: Towards LLMs as Operating Systems</a></li>
@@ -10681,9 +10746,14 @@ CR=1-\frac{L_{after}}{L_{before}}
 <li><a href="https://research.trychroma.com/context-rot">Chroma Research: Context Rot</a></li>
 <li><a href="https://blog.langchain.com/context-engineering-for-agents/">LangChain: Context Engineering for Agents</a></li>
 <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching">Anthropic Prompt Caching</a></li>
-<li><a href="https://platform.openai.com/docs/guides/prompt-caching">OpenAI Prompt Caching</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/prompt-caching">OpenAI Prompt Caching</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/compaction">OpenAI Compaction</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/add-memory">LangGraph Memory</a></li>
+<li><a href="https://github.com/snap-research/locomo">LoCoMo 官方数据与评测</a></li>
+<li><a href="https://github.com/xiaowu0162/LongMemEval">LongMemEval 官方实现</a></li>
+<li><a href="https://github.com/xiaowu0162/LongMemEval-V2">LongMemEval-V2 官方实现</a></li>
 </ul>
+<p>审校口径：截至 2026-09-08。API 文档滚动更新；本文不固定缓存价格、阈值或保留时间。Anthropic 缓存文档本次访问受地域限制，未据此新增具体参数结论。原创文字与图示：Polo Li，CC BY 4.0。</p>
 
 
 
@@ -10706,7 +10776,7 @@ CR=1-\frac{L_{after}}{L_{before}}
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

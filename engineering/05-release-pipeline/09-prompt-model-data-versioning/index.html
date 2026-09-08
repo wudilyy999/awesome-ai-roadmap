@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Prompt 决定了系统行为,但很多团队把它当成字符串常量随手改,改完直接生效,没有版本号,没有变更记录,出问题时无法确定&quot;上一个还工作的版本是哪个&quot;。 Prompt、模型选择、检索数据这三者任何一个变化,都可能改变系统输出 ,理应像应用代码一样接受版本管理的约束">
+        <meta name="description" content="用可追溯的发布清单关联 Prompt、模型快照、检索和策略版本，区分快照锁定、行为复现与安全回滚。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第九章：Prompt / 模型 / 数据版本管理">
-    <meta property="og:description" content="Prompt 决定了系统行为,但很多团队把它当成字符串常量随手改,改完直接生效,没有版本号,没有变更记录,出问题时无法确定&quot;上一个还工作的版本是哪个&quot;。 Prompt、模型选择、检索数据这三者任何一个变化,都可能改变系统输出 ,理应像应用代码一样接受版本管理的约束">
+    <meta property="og:description" content="用可追溯的发布清单关联 Prompt、模型快照、检索和策略版本，区分快照锁定、行为复现与安全回滚。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第九章：Prompt / 模型 / 数据版本管理">
-    <meta name="twitter:description" content="Prompt 决定了系统行为,但很多团队把它当成字符串常量随手改,改完直接生效,没有版本号,没有变更记录,出问题时无法确定&quot;上一个还工作的版本是哪个&quot;。 Prompt、模型选择、检索数据这三者任何一个变化,都可能改变系统输出 ,理应像应用代码一样接受版本管理的约束">
+    <meta name="twitter:description" content="用可追溯的发布清单关联 Prompt、模型快照、检索和策略版本，区分快照锁定、行为复现与安全回滚。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：Prompt / 模型 / 数据版本管理","description":"Prompt 决定了系统行为,但很多团队把它当成字符串常量随手改,改完直接生效,没有版本号,没有变更记录,出问题时无法确定\"上一个还工作的版本是哪个\"。 Prompt、模型选择、检索数据这三者任何一个变化,都可能改变系统输出 ,理应像应用代码一样接受版本管理的约束","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：Prompt / 模型 / 数据版本管理","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：Prompt / 模型 / 数据版本管理","description":"用可追溯的发布清单关联 Prompt、模型快照、检索和策略版本，区分快照锁定、行为复现与安全回滚。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：Prompt / 模型 / 数据版本管理","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Prompt、模型与数据版本","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/09-prompt-model-data-versioning/"}]}</script>
     
@@ -8603,7 +8603,7 @@
 <h3 id="922-prompt">9.2.2 Prompt 变更走和代码一样的评审流程<a class="headerlink" href="#922-prompt" title="Permanent link">&para;</a></h3>
 <p>Prompt 改动应该进入版本控制系统,通过 Pull Request 走评审,并附上<a href="../../04-evaluation-observability/07-offline-eval-eval-driven-development/">第 7 章</a>离线评测的对比分数,而不是在生产配置后台直接编辑生效。</p>
 <h2 id="93">9.3 模型版本锁定<a class="headerlink" href="#93" title="Permanent link">&para;</a></h2>
-<p>第 1 章提到过 LLMOps 独有的风险:<strong>厂商静默升级模型版本</strong>。多数供应商同时提供"浮动别名"(如 <code>gpt-4o</code>)和"固定快照"(如 <code>gpt-4o-2026-08-06</code>)两种引用方式:</p>
+<p>部分供应商提供浮动别名和固定快照。例如 OpenAI GPT-4o 文档列有 <code>gpt-4o</code> 与 <code>gpt-4o-2024-08-06</code>；这是已发布的历史快照示例，不是当前选型推荐。不要按日期自行拼出未发布的模型名。是否支持固定版本、可用区域和退役时间，要以具体模型生命周期文档为准：</p>
 <table>
 <thead>
 <tr>
@@ -8620,12 +8620,12 @@
 </tr>
 <tr>
 <td>固定快照</td>
-<td>明确指向某个不变的模型版本</td>
-<td>生产环境的默认选择,行为可复现</td>
+<td>指向明确的模型版本，但仍有退役与服务配置变化</td>
+<td>优先用于受控发布，减少版本变量；不保证逐字可复现</td>
 </tr>
 </tbody>
 </table>
-<p>生产环境应默认使用固定快照,<strong>主动升级到新快照本身也是一次需要经过评测门禁的"发布"</strong>,而不是被动接受厂商推送。升级前后的评测对比,和<a href="../10-llm-cicd-canary-ab/">第 10 章</a>的灰度发布流程完全一致。</p>
+<p>生产环境在供应商支持时优先锁定快照，升级视为一次发布。若只能使用自动更新部署，应记录实际响应模型标识、持续跑探针并准备替代路径。即使温度为零或设置 seed，也不能把托管推理当成跨时间、硬件和服务配置的逐字复现保证。</p>
 <h2 id="94">9.4 数据版本管理:让评测和排障可复现<a class="headerlink" href="#94" title="Permanent link">&para;</a></h2>
 <p>这里的"数据"包括 RAG 知识库快照、Few-shot 示例集、评测用的黄金测试集。数据版本管理要解决的核心问题是:<strong>给定一次线上请求的排查结果,能不能倒查回"当时用的是哪个版本的知识库"</strong>。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 每次知识库更新后生成的版本清单示例</span>
@@ -8634,9 +8634,9 @@
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">text-embedding-3-large</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">indexed_at</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2026-08-25T02:00:00Z</span>
 </span></code></pre></div>
-<p>常见做法是用 DVC、LakeFS 等工具对数据集做类似 Git 的版本管理,或者至少为每次索引重建生成一个不可变的版本标签。<strong>没有数据版本,离线评测的分数会失去可比性</strong>——如果知识库在两次评测之间偷偷更新过,分数变化到底是 Prompt 改动的效果还是数据变化的效果,根本无法区分。</p>
+<p>常见做法是用 DVC、LakeFS 等工具对数据集做类似 Git 的版本管理,或者至少为每次索引重建生成一个不可变的版本标签。还应记录文档与 chunk ID、切分规则、嵌入模型、索引配置、重排器和权限策略版本；只记录源文件哈希不足以复现检索。删除与权限撤销应覆盖旧索引和缓存，回滚不能恢复已撤销的数据访问。<strong>没有数据版本,离线评测的分数会失去可比性</strong>——如果知识库在两次评测之间偷偷更新过,分数变化到底是 Prompt 改动的效果还是数据变化的效果,根本无法区分。</p>
 <h2 id="95">9.5 模型注册表:统一记录"什么版本在哪里跑"<a class="headerlink" href="#95" title="Permanent link">&para;</a></h2>
-<p>三者版本信息最终应该汇总到一个模型/配置注册表,而不是分散在各个服务的配置文件里:</p>
+<p>把相关版本汇总为不可变的发布清单，各资产可独立编号，但线上一次请求要能关联到完整组合：</p>
 <table>
 <thead>
 <tr>
@@ -8656,6 +8656,14 @@
 <tr>
 <td>知识库/数据版本</td>
 <td>排查检索内容变化的根因</td>
+</tr>
+<tr>
+<td>代码、工具 Schema、权限与护栏版本</td>
+<td>区分生成质量变化和执行策略变化，防止只回滚模型却留下不兼容配置</td>
+</tr>
+<tr>
+<td>评测集、评分器、rubric 与运行 ID</td>
+<td>分数必须绑定具体评测条件，单个 <code>eval_score</code> 不能作为完整发布证据</td>
 </tr>
 <tr>
 <td>关联的评测分数与变更时间</td>
@@ -8683,7 +8691,8 @@
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://platform.openai.com/docs/models#model-version">OpenAI: Model version and lifecycle</a></li>
+<li><a href="https://developers.openai.com/api/docs/models/gpt-4o">OpenAI: GPT-4o snapshots</a></li>
+<li><a href="https://developers.openai.com/api/docs/deprecations">OpenAI: Deprecations</a></li>
 <li><a href="https://dvc.org/doc">DVC: Data Version Control</a></li>
 <li><a href="https://mlflow.org/docs/latest/model-registry.html">MLflow: Model Registry</a></li>
 <li><a href="https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning">Google Cloud: MLOps continuous delivery and automation pipelines</a></li>
@@ -8710,7 +8719,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

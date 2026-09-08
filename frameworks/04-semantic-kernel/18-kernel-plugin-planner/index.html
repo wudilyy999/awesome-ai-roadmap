@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（&quot;Kernel&quot;）到设计目标都更接近 企业中间件 ：它优先解决的是「怎么把 AI 模型接入已有的 C /Java/Python 代码库、权限体…">
+        <meta name="description" content="解释 Semantic Kernel 的 Kernel 调用链、Plugin、自动函数调用与 Filter，修正生命周期误区并标明 Microsoft Agent Framework 迁移背景。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner">
-    <meta property="og:description" content="前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（&quot;Kernel&quot;）到设计目标都更接近 企业中间件 ：它优先解决的是「怎么把 AI 模型接入已有的 C /Java/Python 代码库、权限体…">
+    <meta property="og:description" content="解释 Semantic Kernel 的 Kernel 调用链、Plugin、自动函数调用与 Filter，修正生命周期误区并标明 Microsoft Agent Framework 迁移背景。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/18-kernel-plugin-planner/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner">
-    <meta name="twitter:description" content="前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（&quot;Kernel&quot;）到设计目标都更接近 企业中间件 ：它优先解决的是「怎么把 AI 模型接入已有的 C /Java/Python 代码库、权限体…">
+    <meta name="twitter:description" content="解释 Semantic Kernel 的 Kernel 调用链、Plugin、自动函数调用与 Filter，修正生命周期误区并标明 Microsoft Agent Framework 迁移背景。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner","description":"前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（\"Kernel\"）到设计目标都更接近 企业中间件 ：它优先解决的是「怎么把 AI 模型接入已有的 C /Java/Python 代码库、权限体…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/18-kernel-plugin-planner/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/18-kernel-plugin-planner/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner","description":"解释 Semantic Kernel 的 Kernel 调用链、Plugin、自动函数调用与 Filter，修正生命周期误区并标明 Microsoft Agent Framework 迁移背景。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/18-kernel-plugin-planner/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/18-kernel-plugin-planner/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Kernel、Plugin 与 Planner","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/18-kernel-plugin-planner/"}]}</script>
     
@@ -6360,7 +6360,7 @@
         <li class="md-nav__item">
   <a href="#181" class="md-nav__link">
     <span class="md-ellipsis">
-      18.1 定位：企业中间件，而不是研究框架
+      18.1 定位与阅读边界
     </span>
   </a>
   
@@ -6369,16 +6369,16 @@
         <li class="md-nav__item">
   <a href="#182-kernel" class="md-nav__link">
     <span class="md-ellipsis">
-      18.2 Kernel：依赖注入容器，不是执行引擎
+      18.2 Kernel：服务容器，也是调用链的协调入口
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#183-pluginsemantic-function-native-function" class="md-nav__link">
+  <a href="#183-pluginprompt" class="md-nav__link">
     <span class="md-ellipsis">
-      18.3 Plugin：Semantic Function 与 Native Function 的统一契约
+      18.3 Plugin：Prompt 函数与原生代码函数
     </span>
   </a>
   
@@ -6394,9 +6394,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#185-filter-hook" class="md-nav__link">
+  <a href="#185-filter" class="md-nav__link">
     <span class="md-ellipsis">
-      18.5 企业治理层：Filter 与 Hook
+      18.5 Filter：拦截调用，而非自动获得合规
     </span>
   </a>
   
@@ -6415,7 +6415,7 @@
           <li class="md-nav__item">
   <a href="#1861-kernel" class="md-nav__link">
     <span class="md-ellipsis">
-      18.6.1 把 Kernel 当作一次性执行对象
+      18.6.1 把所有 Kernel 都注册成全局单例
     </span>
   </a>
   
@@ -8396,7 +8396,7 @@
         <li class="md-nav__item">
   <a href="#181" class="md-nav__link">
     <span class="md-ellipsis">
-      18.1 定位：企业中间件，而不是研究框架
+      18.1 定位与阅读边界
     </span>
   </a>
   
@@ -8405,16 +8405,16 @@
         <li class="md-nav__item">
   <a href="#182-kernel" class="md-nav__link">
     <span class="md-ellipsis">
-      18.2 Kernel：依赖注入容器，不是执行引擎
+      18.2 Kernel：服务容器，也是调用链的协调入口
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#183-pluginsemantic-function-native-function" class="md-nav__link">
+  <a href="#183-pluginprompt" class="md-nav__link">
     <span class="md-ellipsis">
-      18.3 Plugin：Semantic Function 与 Native Function 的统一契约
+      18.3 Plugin：Prompt 函数与原生代码函数
     </span>
   </a>
   
@@ -8430,9 +8430,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#185-filter-hook" class="md-nav__link">
+  <a href="#185-filter" class="md-nav__link">
     <span class="md-ellipsis">
-      18.5 企业治理层：Filter 与 Hook
+      18.5 Filter：拦截调用，而非自动获得合规
     </span>
   </a>
   
@@ -8451,7 +8451,7 @@
           <li class="md-nav__item">
   <a href="#1861-kernel" class="md-nav__link">
     <span class="md-ellipsis">
-      18.6.1 把 Kernel 当作一次性执行对象
+      18.6.1 把所有 Kernel 都注册成全局单例
     </span>
   </a>
   
@@ -8532,63 +8532,70 @@
 
 
 <h1 id="semantic-kernel-kernelplugin-planner">第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner<a class="headerlink" href="#semantic-kernel-kernelplugin-planner" title="Permanent link">&para;</a></h1>
-<h2 id="181">18.1 定位：企业中间件，而不是研究框架<a class="headerlink" href="#181" title="Permanent link">&para;</a></h2>
-<p>前三个模块的框架（LangChain、LlamaIndex、DSPy）都诞生于 Python 生态，服务对象偏向快速迭代的应用团队。Semantic Kernel 从命名（"Kernel"）到设计目标都更接近<strong>企业中间件</strong>：它优先解决的是「怎么把 AI 模型接入已有的 C#/Java/Python 代码库、权限体系和可观测性基础设施」，而不是「怎么最快搭出一个原型」。</p>
-<blockquote>
-<p><strong>微软官方把它定义为「轻量级、开源的开发套件，帮助你把最新的 AI 模型集成进 C#、Python 或 Java 代码库，充当高效的中间件」</strong>——「中间件」这个词准确概括了它和 LangChain 的定位差异：LangChain 更像一套完整的应用开发框架，Semantic Kernel 更像一层接入已有企业系统的适配层。</p>
-</blockquote>
-<h2 id="182-kernel">18.2 <code>Kernel</code>：依赖注入容器，不是执行引擎<a class="headerlink" href="#182-kernel" title="Permanent link">&para;</a></h2>
-<p><code>Kernel</code> 对象本身并不执行任何 AI 逻辑，它是一个<strong>依赖注入容器</strong>，负责注册和管理模型服务、Plugin、过滤器（filter）等组件：</p>
+<h2 id="181">18.1 定位与阅读边界<a class="headerlink" href="#181" title="Permanent link">&para;</a></h2>
+<p>Semantic Kernel（SK）把模型服务、函数、依赖注入和调用过滤器组合起来，适合说明 AI 如何接入既有 C#、Python 或 Java 应用。它也能做 Agent 和多智能体编排，不能仅把它视为模型适配器，或以「企业/研究」划线排除其他框架。</p>
+<p><strong>截至 2026-09-08 核对，官方仓库已将 Microsoft Agent Framework（MAF）列为 SK 的后继，并说明 MAF 1.0 是生产可用发布。</strong> 本章保留 SK 核心概念用于维护存量项目；新 Agent 项目应同时评估 MAF，不要把 SK 旧文档里的 “Agent Framework” 与独立的 Microsoft Agent Framework 混为一谈。支持范围与迁移边界见第十九章。</p>
+<h2 id="182-kernel">18.2 <code>Kernel</code>：服务容器，也是调用链的协调入口<a class="headerlink" href="#182-kernel" title="Permanent link">&para;</a></h2>
+<p><code>Kernel</code> 管理服务和 Plugin，也参与函数执行、Prompt 渲染、服务选择与 Filter 链。它不是模型推理实现或持久化工作流引擎，但说它「完全不执行逻辑」同样不准确：</p>
 <div class="language-csharp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">builder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Kernel</span><span class="p">.</span><span class="n">CreateBuilder</span><span class="p">();</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">builder</span><span class="p">.</span><span class="n">AddAzureOpenAIChatCompletion</span><span class="p">(</span><span class="n">deploymentName</span><span class="p">,</span><span class="w"> </span><span class="n">endpoint</span><span class="p">,</span><span class="w"> </span><span class="n">apiKey</span><span class="p">);</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">builder</span><span class="p">.</span><span class="n">Plugins</span><span class="p">.</span><span class="n">AddFromType</span><span class="o">&lt;</span><span class="n">OrderPlugin</span><span class="o">&gt;</span><span class="p">();</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">Kernel</span><span class="w"> </span><span class="n">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
 </span></code></pre></div>
-<p><strong>这种「容器 + 注册」的模式是 .NET 企业开发里的标准范式</strong>（类似 ASP.NET Core 的依赖注入），对已经在用 .NET 技术栈的团队来说几乎零学习成本；对习惯了 LangChain 那种「直接实例化对象、函数式组合」风格的团队，则需要适应一层额外的容器抽象。</p>
-<h2 id="183-pluginsemantic-function-native-function">18.3 Plugin：Semantic Function 与 Native Function 的统一契约<a class="headerlink" href="#183-pluginsemantic-function-native-function" title="Permanent link">&para;</a></h2>
+<p>这种注册模式便于复用 .NET 依赖注入经验，但仍需理解服务生命周期、可变 Plugin 集合和请求隔离；熟悉 ASP.NET Core 不等于自动理解工具调用与模型重试。</p>
+<h2 id="183-pluginprompt">18.3 Plugin：Prompt 函数与原生代码函数<a class="headerlink" href="#183-pluginprompt" title="Permanent link">&para;</a></h2>
 <p>Semantic Kernel 用 <strong>Plugin</strong> 统一了「用自然语言描述的函数」和「用代码写的函数」：</p>
 <ul>
-<li><strong>Semantic Function</strong>：本质是一个 Prompt 模板，声明输入变量和期望输出，交给模型执行；</li>
-<li><strong>Native Function</strong>：普通的 C#/Python/Java 方法，用 <code>[KernelFunction]</code>（C#）或 <code>@kernel_function</code>（Python）装饰后即可被模型发现和调用。</li>
+<li><strong>Prompt function</strong>：从模板创建 <code>KernelFunction</code>，历史材料常称 Semantic Function；</li>
+<li><strong>Native function</strong>：从代码方法创建 <code>KernelFunction</code>，C# 常用 <code>[KernelFunction]</code>，Python 常用 <code>@kernel_function</code>；还需要注册并在调用设置中向模型开放，装饰器本身不授予调用权限。</li>
 </ul>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">OrderPlugin</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="nd">@kernel_function</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"查询订单的物流状态"</span><span class="p">)</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_shipping_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="k">return</span> <span class="n">shipping_service</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">order_id</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">semantic_kernel.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">kernel_function</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">OrderPlugin</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="nd">@kernel_function</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"查询订单的物流状态"</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_shipping_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="k">return</span> <span class="n">shipping_service</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">order_id</span><span class="p">)</span>
 </span></code></pre></div>
-<p>两者对模型来说是<strong>同一种调用契约</strong>——模型只看到函数名、描述和参数 Schema，不关心背后是一次 Prompt 补全还是一次数据库查询。这与 <a href="../../../tools/">Tools 主题</a> 中 Function Calling 的协议本质是一致的：<strong>Semantic Kernel 没有发明新协议，而是把 Function Calling 包装成了一套面向企业代码库的注册与发现机制</strong>。</p>
+<p>向模型开放为工具时，两者都可呈现为函数名、描述和参数 Schema；实现中可能是模型调用，也可能是数据库查询。Plugin 是函数分组，既能供模型选择，也能由应用直接调用。模型只提出调用意图，应用负责执行、鉴权、校验参数与返回结果。</p>
 <h2 id="184-planner">18.4 Planner：从「手写编排」到「模型自动规划」<a class="headerlink" href="#184-planner" title="Permanent link">&para;</a></h2>
-<p>早期 Semantic Kernel 提供显式的 Planner（如 Stepwise Planner），让模型根据已注册的 Plugin 自动生成一个函数调用序列去完成目标。<strong>随着底层模型的 Function Calling 能力增强，这一层规划逻辑已经越来越多地下沉为模型原生能力</strong>（模型自己决定调用哪个函数、按什么顺序调用），Planner 更多变成了「自动规划」与「手写显式流程」之间的一个可选项，而不是唯一路径。</p>
+<p>早期版本使用 Stepwise 等 Planner。当前官方 Planning 文档以<strong>自动函数调用循环</strong>为主要路径：向模型给出可用工具，执行其请求，把结果写回历史，再继续直到结束或达到限制。维护旧 Planner 要看具体包的弃用/迁移说明，不应把旧类当作新项目默认 API。</p>
+<p>例如 C# 的 <code>FunctionChoiceBehavior.Auto()</code> 配合聊天服务和 Kernel 启用自动调用。模型负责选择，不代表执行事务、权限或可靠恢复也「下沉给模型」；这些仍由应用控制。</p>
 <pre class="mermaid"><code>flowchart TB
     G["业务目标"] --&gt; D{"流程复杂度"}
     D --&gt;|"简单、一两步"| M["直接用模型的 Function Calling 自动选择 Plugin"]
-    D --&gt;|"复杂、需要人工审核关键步骤"| PF["显式编写 Process Framework 流程（见第十九章）"]</code></pre>
-<p>这条分岔路径和 <a href="../../01-langchain/04-langgraph/09-langchain-vs-langgraph/">LangChain 生态 · 第九章</a> 讨论的「什么时候从 <code>create_agent</code> 下沉到 LangGraph」属于同一类工程判断：简单场景交给模型自动规划；复杂到需要精细控制分支、审批和恢复时，再显式建模流程。Semantic Kernel 只是把这条「显式流程」路径独立命名为 Process Framework（见第十九章）。</p>
-<h2 id="185-filter-hook">18.5 企业治理层：Filter 与 Hook<a class="headerlink" href="#185-filter-hook" title="Permanent link">&para;</a></h2>
-<p>Semantic Kernel 把「内容安全、审计日志、成本控制」这类横切关注点抽象成 <strong>Filter</strong>（也称 Hook），可以在函数调用前后、Prompt 渲染前后插入统一的检查逻辑：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">AuditFilter</span><span class="p">(</span><span class="n">FunctionInvocationFilter</span><span class="p">):</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_function_invocation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="nb">next</span><span class="p">):</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>        <span class="n">log_audit_trail</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="k">await</span> <span class="nb">next</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">redact_sensitive_output</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+    D --&gt;|"有审批/事务/恢复要求"| PF["显式工作流&lt;br/&gt;核对 SK 实验包或 MAF Workflows"]</code></pre>
+<p>这与 <a href="../../01-langchain/04-langgraph/09-langchain-vs-langgraph/">LangChain 生态 · 第九章</a> 的判断类似，但触发因素不是单纯的步骤数：即使只有一次转账，也需要明确权限与审批；即使有多轮只读搜索，也可能用受预算限制的函数调用循环。</p>
+<h2 id="185-filter">18.5 Filter：拦截调用，而非自动获得合规<a class="headerlink" href="#185-filter" title="Permanent link">&para;</a></h2>
+<p>SK 提供函数调用、Prompt 渲染和自动函数调用三类 Filter，可用于鉴权、审计、结果覆盖或提前终止。下面是 Python 的注册片段；<code>kernel</code> 与审计函数由应用提供：</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Callable</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">semantic_kernel.filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilterTypes</span><span class="p">,</span> <span class="n">FunctionInvocationContext</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nd">@kernel</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">FilterTypes</span><span class="o">.</span><span class="n">FUNCTION_INVOCATION</span><span class="p">)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">audit_filter</span><span class="p">(</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">context</span><span class="p">:</span> <span class="n">FunctionInvocationContext</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="nb">next</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">FunctionInvocationContext</span><span class="p">],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="kc">None</span><span class="p">]],</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">log_audit_trail</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">plugin_name</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="k">await</span> <span class="nb">next</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
 </span></code></pre></div>
-<p>这一层设计目标与 <a href="../../01-langchain/02-agent-building/05-tool-registration/">LangChain 生态 · 第五章</a> 中的 Middleware 概念高度相似——<strong>都是在工具调用的生命周期里插入统一的横切逻辑</strong>，区别在于 Semantic Kernel 的 Filter 从设计之初就把「合规审计」列为一等场景，文档和示例也更偏向企业安全团队会关心的问题（数据分类、内容安全策略、遥测标准）。</p>
+<p>不调用 <code>next(context)</code> 会短路执行；如要拒绝请求，应显式返回受控错误或替代结果。审计不应默认记录完整参数与 Prompt，避免泄漏个人信息。Filter 与其他框架的 middleware 职责类似，真正的治理效果取决于策略、覆盖范围和测试，不由「企业级」标签保证。</p>
 <h2 id="186">18.6 常见错误<a class="headerlink" href="#186" title="Permanent link">&para;</a></h2>
-<h3 id="1861-kernel">18.6.1 把 <code>Kernel</code> 当作一次性执行对象<a class="headerlink" href="#1861-kernel" title="Permanent link">&para;</a></h3>
-<p><code>Kernel</code> 是长生命周期的依赖注入容器，通常在应用启动时构建一次，而不是每次请求都重新 <code>CreateBuilder()</code>——重复构建会丢失服务注册和 Filter 链的复用价值。</p>
+<h3 id="1861-kernel">18.6.1 把所有 Kernel 都注册成全局单例<a class="headerlink" href="#1861-kernel" title="Permanent link">&para;</a></h3>
+<p>官方 C# 文档建议将轻量的 Kernel 注册为 transient，因为 Plugin 集合可变。昂贵的模型客户端等服务可复用；租户身份、聊天历史和请求级 Plugin 不应在无隔离的单例上修改。具体 Plugin 服务能否单例，还取决于线程安全和自身依赖生命周期。</p>
 <h3 id="1862-semantic-function-native-function">18.6.2 忽视 Semantic Function 和 Native Function 的边界含糊问题<a class="headerlink" href="#1862-semantic-function-native-function" title="Permanent link">&para;</a></h3>
 <p>同一个功能既可以写成 Semantic Function（靠 Prompt 生成结果）也可以写成 Native Function（靠代码计算结果），选择应该基于「这个逻辑是否需要语言理解能力」，而不是团队更熟悉哪种写法——把本该用代码精确计算的逻辑交给 Semantic Function，会引入不必要的不确定性。</p>
 <h3 id="1863-planner">18.6.3 认为 Planner 是唯一的编排方式<a class="headerlink" href="#1863-planner" title="Permanent link">&para;</a></h3>
-<p>模型原生的 Function Calling 已经能覆盖大量简单编排场景，不是所有项目都需要显式 Planner；反过来，复杂流程也不应该指望 Planner 自动规划出可靠的多步骤业务逻辑，应该走 Process Framework。</p>
+<p>自动函数调用是当前主要路径；需要可靠业务控制时，应评估显式工作流及其运行时保证，而不是直接假定 SK Process Framework 的实验能力已等价于成熟业务引擎。</p>
 <h3 id="1864-filter">18.6.4 把 Filter 只当作日志埋点<a class="headerlink" href="#1864-filter" title="Permanent link">&para;</a></h3>
 <p>Filter 的价值不只是记录日志，还包括在函数调用前做权限校验、在调用后做敏感信息脱敏——只用来打日志会浪费这层横切能力。</p>
+<p>还应追问：同一函数被应用直接调用时会不会绕过 Kernel？缓存命中是否绕过了用户级鉴权？自动重试会不会再次扣款？可靠设计应把最终授权和幂等校验放在业务服务内，Filter 做统一入口控制，而不是唯一防线。</p>
 <h2 id="187">18.7 本章总结<a class="headerlink" href="#187" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Semantic Kernel 的定位是企业中间件</strong>，核心问题是「怎么把 AI 模型接入已有的多语言代码库和治理体系」，而不是「怎么最快搭原型」；</li>
-<li><strong><code>Kernel</code> 是依赖注入容器</strong>，管理模型服务、Plugin 和 Filter 的注册，通常在应用启动时构建一次；</li>
-<li><strong>Plugin 统一了 Semantic Function（Prompt 驱动）和 Native Function（代码驱动）</strong>，对模型暴露相同的调用契约，本质仍是 Function Calling；</li>
-<li><strong>Planner 的角色正在从「唯一编排方式」演变为「简单场景的自动规划选项」</strong>，复杂流程应该显式建模（见第十九章 Process Framework）；</li>
-<li><strong>Filter/Hook 把内容安全、审计、成本控制这些企业级横切关注点变成一等公民</strong>，是它区别于其他框架 Middleware 概念的重点。</li>
+<li><strong>SK 适合解释企业接入与治理抽象</strong>；新 Agent 项目还应评估其后继 MAF；</li>
+<li><strong>Kernel 协调服务与调用链</strong>，生命周期应隔离可变请求状态，而不是统一单例；</li>
+<li><strong>Plugin 分组 Prompt 与代码函数</strong>，工具选择和真实执行、授权是两回事；</li>
+<li><strong>当前主要规划路径是自动函数调用</strong>，可靠审批与恢复仍需显式设计；</li>
+<li><strong>Filter 提供治理插入点，不自动提供合规或恰好一次执行保证</strong>。</li>
 </ol>
 <p>可以把 Semantic Kernel 看作一层企业接入中间件：它不把重点放在 Agent 玩法的丰富度上，而是放在 AI 能力如何进入既有代码库、依赖注入体系和合规审计流程。</p>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -8597,8 +8604,10 @@
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/concepts/kernel">Semantic Kernel: Kernel 概念</a></li>
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/concepts/plugins/">Semantic Kernel: Plugins 概念</a></li>
 <li><a href="https://learn.microsoft.com/en-us/semantic-kernel/concepts/planning">Semantic Kernel: Planning 概念</a></li>
-<li><a href="https://learn.microsoft.com/en-us/semantic-kernel/concepts/filters">Semantic Kernel: Filters 概念</a></li>
+<li><a href="https://learn.microsoft.com/en-us/semantic-kernel/concepts/enterprise-readiness/filters">Semantic Kernel: Filters 概念</a></li>
+<li><a href="https://github.com/microsoft/semantic-kernel">Semantic Kernel 官方仓库与后继框架说明</a></li>
 </ul>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8621,7 +8630,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

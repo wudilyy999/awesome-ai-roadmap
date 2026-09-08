@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="直接比较功能表，容易漏掉一个前提：LangChain Agent 本身就运行在 LangGraph 之上">
+        <meta name="description" content="解释 LangGraph 的 super-step、reducer、检查点、中断重放、子图记忆和容错机制，并给出受控审批与流式投影示例。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十章：LangGraph 的核心优势">
-    <meta property="og:description" content="直接比较功能表，容易漏掉一个前提：LangChain Agent 本身就运行在 LangGraph 之上">
+    <meta property="og:description" content="解释 LangGraph 的 super-step、reducer、检查点、中断重放、子图记忆和容错机制，并给出受控审批与流式投影示例。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/10-langgraph-advantages/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十章：LangGraph 的核心优势">
-    <meta name="twitter:description" content="直接比较功能表，容易漏掉一个前提：LangChain Agent 本身就运行在 LangGraph 之上">
+    <meta name="twitter:description" content="解释 LangGraph 的 super-step、reducer、检查点、中断重放、子图记忆和容错机制，并给出受控审批与流式投影示例。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：LangGraph 的核心优势","description":"直接比较功能表，容易漏掉一个前提：LangChain Agent 本身就运行在 LangGraph 之上","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/10-langgraph-advantages/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：LangGraph 的核心优势","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/10-langgraph-advantages/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：LangGraph 的核心优势","description":"解释 LangGraph 的 super-step、reducer、检查点、中断重放、子图记忆和容错机制，并给出受控审批与流式投影示例。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/10-langgraph-advantages/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：LangGraph 的核心优势","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/10-langgraph-advantages/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"LangGraph 核心优势","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/04-langgraph/10-langgraph-advantages/"}]}</script>
     
@@ -9207,10 +9207,12 @@
 <blockquote>
 <p><strong>复杂流程的中间变量不必全部塞进消息历史，也不必让每个节点看到所有数据。</strong></p>
 </blockquote>
+<p>但输入/输出 Schema 不是安全沙箱：它们约束接口，不阻止拥有进程权限的节点访问其他资源；<code>values</code> 流还可能包含内部通道。流式出口与日志必须另外做最小化投影，不能以为字段标成 private 就不会泄露。</p>
 <h3 id="1024">10.2.4 自由度也意味着责任<a class="headerlink" href="#1024" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p><strong>LangGraph 不会因为用了图就自动让流程合理。</strong> State 字段怎么设计、并行写入如何合并、节点边界切多细，都由开发者决定，<strong>错误的 State 设计照样会造成状态膨胀、并发覆盖和难以维护</strong>。</p>
 </blockquote>
+<p>默认单值通道在同一 super-step 收到多个更新会抛出 <code>InvalidUpdateError</code>，不是静默覆盖。Reducer 应明确重复结果如何去重、顺序是否影响含义：列表追加能收集结果，但不能自动保证证据的业务顺序或幂等性。并行分支可按稳定证据 ID 合并，最终展示时再排序。</p>
 <h2 id="103-api">10.3 两种编排 API 怎么选<a class="headerlink" href="#103-api" title="Permanent link">&para;</a></h2>
 <p>LangGraph 同时提供 <code>StateGraph</code> 和 <strong>Functional API</strong>。两者<strong>共享同一套运行时能力</strong>，但编程方式不同。</p>
 <table>
@@ -9290,11 +9292,12 @@
 <blockquote>
 <p><strong>恢复时，节点里的代码可能重新执行；从旧 checkpoint 重放时，后续模型调用和 API 请求也会再次发生。</strong></p>
 </blockquote>
-<p><strong>因此外部副作用必须有幂等保护</strong>：业务幂等键、upsert、发送记录或先查后写。复杂节点还应该把非确定性操作和副作用划分成更清楚的恢复边界。</p>
+<p><strong>因此外部副作用必须有幂等保护</strong>：由外部服务接受业务幂等键，或用唯一约束、原子 upsert、事务 outbox 等约束一次业务动作。普通「先查后写」存在并发竞态，不足以保证幂等；数据库记录成功与外部系统成功也未必能原子提交。复杂节点还应该把非确定性操作和副作用划分成更清楚的恢复边界。</p>
 <blockquote>
 <p><strong>LangGraph 能提供可靠执行的基础设施，却不能替业务自动定义幂等语义。</strong></p>
 <p>把 Checkpointer 说成「绝对不会重复执行」会误导对恢复机制的理解。</p>
 </blockquote>
+<p>检查点粒度是 super-step：同一步的节点读取该步开始时的状态，结果在更新阶段合并；不是某分支一写字段，另一个分支立刻可见。<code>sync</code> 持久化在进入下一步前等待写入，<code>async</code> 让写入与下一步重叠但增加进程崩溃时的恢复窗口，<code>exit</code> 主要在运行退出时保存。选择模式是在写入延迟与故障恢复目标之间取舍，并不改变外部服务的事务语义。</p>
 <h2 id="105">10.5 人工怎样进入任意一步<a class="headerlink" href="#105" title="Permanent link">&para;</a></h2>
 <p><strong>Agent 真正进入生产系统后，完全自治往往不是终点。</strong> 退款、付款、删库、发送正式邮件、发布内容等动作需要人看一眼；有些流程还要等人工补充材料、修改状态，甚至等待几天后再继续。</p>
 <h3 id="1051-interrupt">10.5.1 <code>interrupt()</code> 的工作方式<a class="headerlink" href="#1051-interrupt" title="Permanent link">&para;</a></h3>
@@ -9321,6 +9324,7 @@
 <li><strong><code>interrupt()</code> 的调用顺序不要随意改变</strong>；</li>
 <li><strong>中断载荷应保持可序列化</strong>。</li>
 </ul>
+<p><code>interrupt()</code> 使用运行时控制异常实现暂停，不能被包在会吞掉异常的宽泛 <code>try/except</code> 内。存在多个并行中断时，应按 interrupt ID 绑定恢复值；相同 <code>thread_id</code> 只是找到线程，不证明调用者拥有审批权。</p>
 <h3 id="1054">10.5.4 审批恢复是安全协议，不是一个布尔转换<a class="headerlink" href="#1054" title="Permanent link">&para;</a></h3>
 <p>不要写 <code>bool(review["approved"])</code>：<code>bool("false")</code> 在 Python 中是 <code>True</code>。恢复载荷必须用严格 schema 校验，并与<strong>正在等待的任务 ID 和审批版本</strong>绑定；审批人身份只能由认证后的服务端注入，不能相信浏览器、模型或恢复 JSON 自报的 <code>reviewer_id</code>。</p>
 <p>同一任务版本只接受一个决策。把「写入审批决定」做成带唯一约束的原子操作（如数据库唯一键 <code>(request_id, approval_version)</code>）；网络重试携带同一个 <code>decision_id</code> 时返回原结果，不得再次触发采购。</p>
@@ -9344,7 +9348,7 @@
 <tbody>
 <tr>
 <td><code>RetryPolicy</code></td>
-<td>当前 LangGraph 版本均可用</td>
+<td>本章讨论的 LangGraph v1 接口</td>
 <td>只为可重试的临时故障配置；明确 <code>retry_on</code>，不要重试参数、权限和业务拒绝</td>
 </tr>
 <tr>
@@ -9383,6 +9387,7 @@
 <blockquote>
 <p><code>max_attempts</code> 包含第一次尝试。节点级 timeout/error handler 是 LangGraph 1.2 的能力；若受限于更旧版本，应在异步节点中用 <code>asyncio.timeout()</code>（或调用方超时）实现限制，而不是假设 <code>timeout=</code> 会生效。</p>
 </blockquote>
+<p>超时不等于远端操作已取消：<code>asyncio.to_thread</code> 能避免阻塞事件循环，但协程取消后底层线程或已发出的 HTTP 请求可能仍在执行。需要 SDK 自身的网络 deadline，以及对「结果未知」的查询/对账路径；否则超时重试仍可能重复产生副作用。三次尝试的总耗时还包含三次单次超时与退避，不能把 <code>run_timeout=30</code> 解释为整个任务最多 30 秒。</p>
 <h3 id="1062">10.6.2 并行节点失败会怎样<a class="headerlink" href="#1062" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p><strong>配合持久化检查点，LangGraph 会保存同一步中已经成功完成节点的结果。恢复时，成功分支不必全部重跑，只重试失败部分。</strong></p>
@@ -9422,16 +9427,20 @@
 <tbody>
 <tr>
 <td>一次性子任务</td>
-<td>每次调用都从新状态开始</td>
+<td><code>checkpointer=None</code>（默认）：每次调用从新状态开始，但在本次调用内继承父图 checkpointer，仍支持中断和恢复</td>
 </tr>
 <tr>
 <td>确实需要连续记忆的子 Agent</td>
-<td>让子图在同一线程的多次调用间积累状态</td>
+<td><code>checkpointer=True</code>：同一线程跨调用积累状态，需防止同一子图 namespace 的并发调用冲突</td>
+</tr>
+<tr>
+<td>完全无检查点的子任务</td>
+<td><code>checkpointer=False</code>：显式关闭该子图检查点，不具备上述恢复能力</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>完全无状态的调用虽然更简单，但也不能依赖中断与可靠恢复能力。</strong></p>
+<p><strong>不保留跨调用历史，不等于调用期间没有检查点。</strong> 前两种模式需要父图配置 checkpointer；它们的区别是状态保留作用域，不是能否中断。</p>
 </blockquote>
 <h3 id="1072-agent">10.7.2 多 Agent 不等于效果必然更好<a class="headerlink" href="#1072-agent" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -9476,21 +9485,16 @@
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">state</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="p">}</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">stream</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">stream_events</span><span class="p">(</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="p">{</span><span class="s2">"messages"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"研究采购政策"</span><span class="p">}]},</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">version</span><span class="o">=</span><span class="s2">"v3"</span><span class="p">,</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">)</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">interleave</span><span class="p">(</span><span class="s2">"messages"</span><span class="p">,</span> <span class="s2">"values"</span><span class="p">):</span>
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"messages"</span><span class="p">:</span>
-</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
-</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>            <span class="k">yield</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"token"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="n">token</span><span class="p">}</span>
-</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        <span class="c1"># 不要输出 auth header、用户资料、密钥、内部证据全文或审批意见。</span>
-</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>        <span class="k">yield</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"progress"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="n">project_progress</span><span class="p">(</span><span class="n">item</span><span class="p">)}</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">stream_public_progress</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">stream</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">stream_events</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"v3"</span><span class="p">)</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        <span class="c1"># 本例仅公开进度，不透传任意模型节点生成的文本。</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        <span class="k">yield</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"progress"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="n">project_progress</span><span class="p">(</span><span class="n">item</span><span class="p">)}</span>
 </span></code></pre></div>
 <blockquote>
 <p>v3 投影简化了消息、工具调用、状态和子图事件的消费；它<strong>不自动脱敏</strong>。在产生事件处建立白名单，并为日志/Trace 使用独立脱敏策略。原始协议事件只应进入受控的调试通道。</p>
 </blockquote>
+<p>这个片段假定 Agent 定义了表中的公开进度字段；<code>phase</code> 和 <code>status</code> 应使用受控枚举，不能把敏感原文塞进一个名字安全的字段。需要展示答案时，应只转发指定对外回答节点，并在输出前执行适用的内容策略；其他模型节点的文本可能只是内部草稿。只有在完整输出后运行的检查无法收回已经推到浏览器的 Token。</p>
 <h2 id="109">10.9 状态如何走向生产部署<a class="headerlink" href="#109" title="Permanent link">&para;</a></h2>
 <p><strong>长时间运行的 Agent 不能只靠进程内列表保存状态，也不能把用户偏好和当前任务进度混进一个向量库。</strong></p>
 <table>
@@ -9582,7 +9586,7 @@
 </span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>    <span class="k">if</span> <span class="n">existing</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        <span class="n">approval_ledger</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">decision</span>
 </span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>        <span class="k">return</span> <span class="n">decision</span>
-</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    <span class="k">if</span> <span class="n">existing</span><span class="o">.</span><span class="n">decision_id</span> <span class="o">==</span> <span class="n">decision</span><span class="o">.</span><span class="n">decision_id</span><span class="p">:</span>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    <span class="k">if</span> <span class="n">existing</span> <span class="o">==</span> <span class="n">decision</span><span class="p">:</span>
 </span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>        <span class="k">return</span> <span class="n">existing</span>  <span class="c1"># 同一决策的安全重试</span>
 </span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"该任务版本已作出不可覆盖的审批决定"</span><span class="p">)</span>
 </span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>
@@ -9621,50 +9625,52 @@
 </span><span id="__span-2-73"><a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a>    <span class="p">}</span>
 </span><span id="__span-2-74"><a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a>
 </span><span id="__span-2-75"><a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a><span class="k">def</span><span class="w"> </span><span class="nf">route_after_review</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PurchaseState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"execute"</span><span class="p">,</span> <span class="s2">"reject"</span><span class="p">]:</span>
-</span><span id="__span-2-76"><a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a>    <span class="c1"># 审批结果决定后续确定性路径</span>
-</span><span id="__span-2-77"><a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a>    <span class="k">return</span> <span class="s2">"execute"</span> <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">"approved"</span><span class="p">]</span> <span class="k">else</span> <span class="s2">"reject"</span>
-</span><span id="__span-2-78"><a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a>
-</span><span id="__span-2-79"><a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a><span class="k">def</span><span class="w"> </span><span class="nf">execute_purchase</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PurchaseState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-</span><span id="__span-2-80"><a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a>    <span class="c1"># 真实调用必须携带 request_id，防止恢复或重试造成重复采购</span>
-</span><span id="__span-2-81"><a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"result"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"采购申请 </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">'request_id'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 已执行"</span><span class="p">}</span>
-</span><span id="__span-2-82"><a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a>
-</span><span id="__span-2-83"><a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a><span class="k">def</span><span class="w"> </span><span class="nf">reject_purchase</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PurchaseState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-</span><span id="__span-2-84"><a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a>    <span class="c1"># 拒绝路径不触发外部采购副作用</span>
-</span><span id="__span-2-85"><a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"result"</span><span class="p">:</span> <span class="s2">"采购申请未通过"</span><span class="p">}</span>
-</span><span id="__span-2-86"><a id="__codelineno-2-86" name="__codelineno-2-86" href="#__codelineno-2-86"></a>
-</span><span id="__span-2-87"><a id="__codelineno-2-87" name="__codelineno-2-87" href="#__codelineno-2-87"></a><span class="n">builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">PurchaseState</span><span class="p">)</span>
-</span><span id="__span-2-88"><a id="__codelineno-2-88" name="__codelineno-2-88" href="#__codelineno-2-88"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"normalize"</span><span class="p">,</span> <span class="n">normalize_request</span><span class="p">)</span>
-</span><span id="__span-2-89"><a id="__codelineno-2-89" name="__codelineno-2-89" href="#__codelineno-2-89"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"budget"</span><span class="p">,</span> <span class="n">check_budget</span><span class="p">)</span>
-</span><span id="__span-2-90"><a id="__codelineno-2-90" name="__codelineno-2-90" href="#__codelineno-2-90"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"compliance"</span><span class="p">,</span> <span class="n">check_compliance</span><span class="p">)</span>
-</span><span id="__span-2-91"><a id="__codelineno-2-91" name="__codelineno-2-91" href="#__codelineno-2-91"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"human_review"</span><span class="p">,</span> <span class="n">human_review</span><span class="p">)</span>
-</span><span id="__span-2-92"><a id="__codelineno-2-92" name="__codelineno-2-92" href="#__codelineno-2-92"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"execute"</span><span class="p">,</span> <span class="n">execute_purchase</span><span class="p">)</span>
-</span><span id="__span-2-93"><a id="__codelineno-2-93" name="__codelineno-2-93" href="#__codelineno-2-93"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"reject"</span><span class="p">,</span> <span class="n">reject_purchase</span><span class="p">)</span>
-</span><span id="__span-2-94"><a id="__codelineno-2-94" name="__codelineno-2-94" href="#__codelineno-2-94"></a>
-</span><span id="__span-2-95"><a id="__codelineno-2-95" name="__codelineno-2-95" href="#__codelineno-2-95"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">"normalize"</span><span class="p">)</span>
-</span><span id="__span-2-96"><a id="__codelineno-2-96" name="__codelineno-2-96" href="#__codelineno-2-96"></a>
-</span><span id="__span-2-97"><a id="__codelineno-2-97" name="__codelineno-2-97" href="#__codelineno-2-97"></a><span class="c1"># 从同一节点扇出，预算和合规检查进入并行分支</span>
-</span><span id="__span-2-98"><a id="__codelineno-2-98" name="__codelineno-2-98" href="#__codelineno-2-98"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"normalize"</span><span class="p">,</span> <span class="s2">"budget"</span><span class="p">)</span>
-</span><span id="__span-2-99"><a id="__codelineno-2-99" name="__codelineno-2-99" href="#__codelineno-2-99"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"normalize"</span><span class="p">,</span> <span class="s2">"compliance"</span><span class="p">)</span>
-</span><span id="__span-2-100"><a id="__codelineno-2-100" name="__codelineno-2-100" href="#__codelineno-2-100"></a>
-</span><span id="__span-2-101"><a id="__codelineno-2-101" name="__codelineno-2-101" href="#__codelineno-2-101"></a><span class="c1"># 使用多起点边做 fan-in，两项检查都完成后才进入人工审批</span>
-</span><span id="__span-2-102"><a id="__codelineno-2-102" name="__codelineno-2-102" href="#__codelineno-2-102"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">([</span><span class="s2">"budget"</span><span class="p">,</span> <span class="s2">"compliance"</span><span class="p">],</span> <span class="s2">"human_review"</span><span class="p">)</span>
-</span><span id="__span-2-103"><a id="__codelineno-2-103" name="__codelineno-2-103" href="#__codelineno-2-103"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span><span class="s2">"human_review"</span><span class="p">,</span> <span class="n">route_after_review</span><span class="p">)</span>
-</span><span id="__span-2-104"><a id="__codelineno-2-104" name="__codelineno-2-104" href="#__codelineno-2-104"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"execute"</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
-</span><span id="__span-2-105"><a id="__codelineno-2-105" name="__codelineno-2-105" href="#__codelineno-2-105"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"reject"</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
-</span><span id="__span-2-106"><a id="__codelineno-2-106" name="__codelineno-2-106" href="#__codelineno-2-106"></a>
-</span><span id="__span-2-107"><a id="__codelineno-2-107" name="__codelineno-2-107" href="#__codelineno-2-107"></a><span class="c1"># 内存检查点仅用于示例，生产环境应替换为数据库后端</span>
-</span><span id="__span-2-108"><a id="__codelineno-2-108" name="__codelineno-2-108" href="#__codelineno-2-108"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">checkpointer</span><span class="o">=</span><span class="n">InMemorySaver</span><span class="p">())</span>
-</span><span id="__span-2-109"><a id="__codelineno-2-109" name="__codelineno-2-109" href="#__codelineno-2-109"></a>
-</span><span id="__span-2-110"><a id="__codelineno-2-110" name="__codelineno-2-110" href="#__codelineno-2-110"></a><span class="k">def</span><span class="w"> </span><span class="nf">resume_from_authenticated_reviewer</span><span class="p">(</span>
-</span><span id="__span-2-111"><a id="__codelineno-2-111" name="__codelineno-2-111" href="#__codelineno-2-111"></a>    <span class="n">reviewer_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span>
-</span><span id="__span-2-112"><a id="__codelineno-2-112" name="__codelineno-2-112" href="#__codelineno-2-112"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-</span><span id="__span-2-113"><a id="__codelineno-2-113" name="__codelineno-2-113" href="#__codelineno-2-113"></a>    <span class="c1"># Web/API 层必须先验证会话、MFA 和审批权限；覆盖而非采纳客户端 reviewer_id。</span>
-</span><span id="__span-2-114"><a id="__codelineno-2-114" name="__codelineno-2-114" href="#__codelineno-2-114"></a>    <span class="n">server_payload</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">client_payload</span><span class="p">,</span> <span class="s2">"reviewer_id"</span><span class="p">:</span> <span class="n">reviewer_id</span><span class="p">}</span>
-</span><span id="__span-2-115"><a id="__codelineno-2-115" name="__codelineno-2-115" href="#__codelineno-2-115"></a>    <span class="k">return</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">Command</span><span class="p">(</span><span class="n">resume</span><span class="o">=</span><span class="n">server_payload</span><span class="p">),</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</span><span id="__span-2-76"><a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a>    <span class="c1"># 人工同意不能覆盖预算或合规硬约束。</span>
+</span><span id="__span-2-77"><a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a>    <span class="n">allowed</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"budget_ok"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">state</span><span class="p">[</span><span class="s2">"compliance_ok"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">state</span><span class="p">[</span><span class="s2">"approved"</span><span class="p">]</span>
+</span><span id="__span-2-78"><a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a>    <span class="k">return</span> <span class="s2">"execute"</span> <span class="k">if</span> <span class="n">allowed</span> <span class="k">else</span> <span class="s2">"reject"</span>
+</span><span id="__span-2-79"><a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a>
+</span><span id="__span-2-80"><a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a><span class="k">def</span><span class="w"> </span><span class="nf">execute_purchase</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PurchaseState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="__span-2-81"><a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a>    <span class="c1"># 真实调用必须携带 request_id，防止恢复或重试造成重复采购</span>
+</span><span id="__span-2-82"><a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"result"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"演示：采购申请 </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">'request_id'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 通过，未执行真实采购"</span><span class="p">}</span>
+</span><span id="__span-2-83"><a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a>
+</span><span id="__span-2-84"><a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a><span class="k">def</span><span class="w"> </span><span class="nf">reject_purchase</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PurchaseState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="__span-2-85"><a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a>    <span class="c1"># 拒绝路径不触发外部采购副作用</span>
+</span><span id="__span-2-86"><a id="__codelineno-2-86" name="__codelineno-2-86" href="#__codelineno-2-86"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"result"</span><span class="p">:</span> <span class="s2">"采购申请未通过"</span><span class="p">}</span>
+</span><span id="__span-2-87"><a id="__codelineno-2-87" name="__codelineno-2-87" href="#__codelineno-2-87"></a>
+</span><span id="__span-2-88"><a id="__codelineno-2-88" name="__codelineno-2-88" href="#__codelineno-2-88"></a><span class="n">builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">PurchaseState</span><span class="p">)</span>
+</span><span id="__span-2-89"><a id="__codelineno-2-89" name="__codelineno-2-89" href="#__codelineno-2-89"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"normalize"</span><span class="p">,</span> <span class="n">normalize_request</span><span class="p">)</span>
+</span><span id="__span-2-90"><a id="__codelineno-2-90" name="__codelineno-2-90" href="#__codelineno-2-90"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"budget"</span><span class="p">,</span> <span class="n">check_budget</span><span class="p">)</span>
+</span><span id="__span-2-91"><a id="__codelineno-2-91" name="__codelineno-2-91" href="#__codelineno-2-91"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"compliance"</span><span class="p">,</span> <span class="n">check_compliance</span><span class="p">)</span>
+</span><span id="__span-2-92"><a id="__codelineno-2-92" name="__codelineno-2-92" href="#__codelineno-2-92"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"human_review"</span><span class="p">,</span> <span class="n">human_review</span><span class="p">)</span>
+</span><span id="__span-2-93"><a id="__codelineno-2-93" name="__codelineno-2-93" href="#__codelineno-2-93"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"execute"</span><span class="p">,</span> <span class="n">execute_purchase</span><span class="p">)</span>
+</span><span id="__span-2-94"><a id="__codelineno-2-94" name="__codelineno-2-94" href="#__codelineno-2-94"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">"reject"</span><span class="p">,</span> <span class="n">reject_purchase</span><span class="p">)</span>
+</span><span id="__span-2-95"><a id="__codelineno-2-95" name="__codelineno-2-95" href="#__codelineno-2-95"></a>
+</span><span id="__span-2-96"><a id="__codelineno-2-96" name="__codelineno-2-96" href="#__codelineno-2-96"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">"normalize"</span><span class="p">)</span>
+</span><span id="__span-2-97"><a id="__codelineno-2-97" name="__codelineno-2-97" href="#__codelineno-2-97"></a>
+</span><span id="__span-2-98"><a id="__codelineno-2-98" name="__codelineno-2-98" href="#__codelineno-2-98"></a><span class="c1"># 从同一节点扇出，预算和合规检查进入并行分支</span>
+</span><span id="__span-2-99"><a id="__codelineno-2-99" name="__codelineno-2-99" href="#__codelineno-2-99"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"normalize"</span><span class="p">,</span> <span class="s2">"budget"</span><span class="p">)</span>
+</span><span id="__span-2-100"><a id="__codelineno-2-100" name="__codelineno-2-100" href="#__codelineno-2-100"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"normalize"</span><span class="p">,</span> <span class="s2">"compliance"</span><span class="p">)</span>
+</span><span id="__span-2-101"><a id="__codelineno-2-101" name="__codelineno-2-101" href="#__codelineno-2-101"></a>
+</span><span id="__span-2-102"><a id="__codelineno-2-102" name="__codelineno-2-102" href="#__codelineno-2-102"></a><span class="c1"># 使用多起点边做 fan-in，两项检查都完成后才进入人工审批</span>
+</span><span id="__span-2-103"><a id="__codelineno-2-103" name="__codelineno-2-103" href="#__codelineno-2-103"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">([</span><span class="s2">"budget"</span><span class="p">,</span> <span class="s2">"compliance"</span><span class="p">],</span> <span class="s2">"human_review"</span><span class="p">)</span>
+</span><span id="__span-2-104"><a id="__codelineno-2-104" name="__codelineno-2-104" href="#__codelineno-2-104"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span><span class="s2">"human_review"</span><span class="p">,</span> <span class="n">route_after_review</span><span class="p">)</span>
+</span><span id="__span-2-105"><a id="__codelineno-2-105" name="__codelineno-2-105" href="#__codelineno-2-105"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"execute"</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+</span><span id="__span-2-106"><a id="__codelineno-2-106" name="__codelineno-2-106" href="#__codelineno-2-106"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">"reject"</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+</span><span id="__span-2-107"><a id="__codelineno-2-107" name="__codelineno-2-107" href="#__codelineno-2-107"></a>
+</span><span id="__span-2-108"><a id="__codelineno-2-108" name="__codelineno-2-108" href="#__codelineno-2-108"></a><span class="c1"># 内存检查点仅用于示例，生产环境应替换为数据库后端</span>
+</span><span id="__span-2-109"><a id="__codelineno-2-109" name="__codelineno-2-109" href="#__codelineno-2-109"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">checkpointer</span><span class="o">=</span><span class="n">InMemorySaver</span><span class="p">())</span>
+</span><span id="__span-2-110"><a id="__codelineno-2-110" name="__codelineno-2-110" href="#__codelineno-2-110"></a>
+</span><span id="__span-2-111"><a id="__codelineno-2-111" name="__codelineno-2-111" href="#__codelineno-2-111"></a><span class="k">def</span><span class="w"> </span><span class="nf">resume_from_authenticated_reviewer</span><span class="p">(</span>
+</span><span id="__span-2-112"><a id="__codelineno-2-112" name="__codelineno-2-112" href="#__codelineno-2-112"></a>    <span class="n">reviewer_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span>
+</span><span id="__span-2-113"><a id="__codelineno-2-113" name="__codelineno-2-113" href="#__codelineno-2-113"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="__span-2-114"><a id="__codelineno-2-114" name="__codelineno-2-114" href="#__codelineno-2-114"></a>    <span class="c1"># Web/API 层必须先验证会话、MFA 和审批权限；覆盖而非采纳客户端 reviewer_id。</span>
+</span><span id="__span-2-115"><a id="__codelineno-2-115" name="__codelineno-2-115" href="#__codelineno-2-115"></a>    <span class="n">server_payload</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">client_payload</span><span class="p">,</span> <span class="s2">"reviewer_id"</span><span class="p">:</span> <span class="n">reviewer_id</span><span class="p">}</span>
+</span><span id="__span-2-116"><a id="__codelineno-2-116" name="__codelineno-2-116" href="#__codelineno-2-116"></a>    <span class="k">return</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">Command</span><span class="p">(</span><span class="n">resume</span><span class="o">=</span><span class="n">server_payload</span><span class="p">),</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 </span></code></pre></div>
 <blockquote>
-<p>示例账本只展示语义，进程重启会丢失数据。生产实现应在事务中写入审批决定、审计审批身份和时间，并以 <code>request_id</code>（或等价业务幂等键）调用采购系统；恢复、超时重试和重复点击都不得执行第二次。</p>
+<p>示例内存账本只演示单进程、串行执行，不保证跨重启、跨 worker 或并发一致性。生产实现应以服务端持久化唯一约束和事务写入审批决定，检查同一幂等键的载荷是否一致，审计审批身份和时间，并以 <code>request_id</code>（或等价业务幂等键）调用采购系统；恢复、超时重试和重复点击都不得执行第二次。人工批准只满足该审批环节，不能覆盖权限、预算或合规硬约束。</p>
 </blockquote>
+<p>示例没有连接真实预算、合规和采购服务，也没有实现 Web 认证，不可直接作为支付系统使用。生产金额宜使用最小货币单位整数或受控 Decimal，而不是用浮点 <code>round</code> 实现财务规则；审批版本应绑定已提交材料，材料变化就生成新版本，不沿用旧批准。</p>
 <h2 id="1011">10.11 常见错误<a class="headerlink" href="#1011" title="Permanent link">&para;</a></h2>
 <h3 id="10111-langgraph">10.11.1 说 LangGraph「多出了」持久化、流式和人工介入<a class="headerlink" href="#10111-langgraph" title="Permanent link">&para;</a></h3>
 <p><strong>LangChain Agent 也能用同一套运行时</strong>，差别是控制粒度。</p>
@@ -9681,7 +9687,7 @@
 <h3 id="10117-bool">10.11.7 用 <code>bool()</code> 解析审批载荷<a class="headerlink" href="#10117-bool" title="Permanent link">&para;</a></h3>
 <p><code>bool("false")</code> 是 <code>True</code>。恢复载荷要严格 schema 校验，绑定任务 ID 与审批版本；审批身份由认证服务端注入，同一版本的决定必须一次性、幂等地持久化。</p>
 <h3 id="10118-reducer">10.11.8 并行写同一字段不定义 Reducer<a class="headerlink" href="#10118-reducer" title="Permanent link">&para;</a></h3>
-<p><strong>不能指望最后写入者碰巧正确。</strong></p>
+<p>默认单值通道会报并发更新错误；自定义 reducer 后仍需定义去重与业务排序，不能只靠列表拼接。</p>
 <h3 id="10119-time-travel">10.11.9 把 time travel 当成「撤销现实操作」<a class="headerlink" href="#10119-time-travel" title="Permanent link">&para;</a></h3>
 <p><strong>它只是可定位、可重放、可分叉的调试基础</strong>，重放后模型输出和副作用可能不同。</p>
 <h3 id="101110-agent">10.11.10 认为多 Agent 一定更好<a class="headerlink" href="#101110-agent" title="Permanent link">&para;</a></h3>
@@ -9720,6 +9726,8 @@
 <li><a href="https://docs.langchain.com/oss/python/langgraph/fault-tolerance">LangGraph: Fault tolerance</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langchain/event-streaming">LangChain: Event streaming</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langchain/agents">LangChain: Agents 概念文档</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/checkpointers">LangGraph Checkpointers：检查点与恢复语义</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE">LangGraph 并行状态更新错误</a></li>
 </ul>
 
 
@@ -9743,7 +9751,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

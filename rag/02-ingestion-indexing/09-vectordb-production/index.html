@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="线上向量库是否可用，最终要落到一组具体数字和约束上，而不是只说用了哪个产品">
+        <meta name="description" content="以容量、ANN 近似召回、业务证据覆盖和请求链路为依据，讨论向量库参数、尾延迟、写入可见性与质量监控。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第九章：向量库生产实践与性能调优">
-    <meta property="og:description" content="线上向量库是否可用，最终要落到一组具体数字和约束上，而不是只说用了哪个产品">
+    <meta property="og:description" content="以容量、ANN 近似召回、业务证据覆盖和请求链路为依据，讨论向量库参数、尾延迟、写入可见性与质量监控。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/09-vectordb-production/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第九章：向量库生产实践与性能调优">
-    <meta name="twitter:description" content="线上向量库是否可用，最终要落到一组具体数字和约束上，而不是只说用了哪个产品">
+    <meta name="twitter:description" content="以容量、ANN 近似召回、业务证据覆盖和请求链路为依据，讨论向量库参数、尾延迟、写入可见性与质量监控。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：向量库生产实践与性能调优","description":"线上向量库是否可用，最终要落到一组具体数字和约束上，而不是只说用了哪个产品","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/09-vectordb-production/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：向量库生产实践与性能调优","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/09-vectordb-production/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第九章：向量库生产实践与性能调优","description":"以容量、ANN 近似召回、业务证据覆盖和请求链路为依据，讨论向量库参数、尾延迟、写入可见性与质量监控。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/09-vectordb-production/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第九章：向量库生产实践与性能调优","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/09-vectordb-production/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"向量库生产实践","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/02-ingestion-indexing/09-vectordb-production/"}]}</script>
     
@@ -8858,15 +8858,15 @@
 <h2 id="94">9.4 参数怎么调<a class="headerlink" href="#94" title="Permanent link">&para;</a></h2>
 <h3 id="941">9.4.1 调参的正确顺序<a class="headerlink" href="#941" title="Permanent link">&para;</a></h3>
 <p><strong>先定召回率目标，再调延迟；不要反过来。</strong></p>
-<p>原因是：召回率是<strong>效果的下限</strong>（漏了就是漏了，后面所有环节都救不回来），而延迟是可以通过扩容、缓存等手段缓解的。</p>
+<p>原因是：候选覆盖会约束后续可获得的证据上限，排序不能找回未入选证据。但质量、成本与延迟仍需共同满足 SLO，不能假定扩容一定解决尾延迟。</p>
 <p>流程：</p>
 <ol>
-<li>用 FLAT（精确搜索）跑一遍评测集，得到<strong>召回率的天花板</strong>和 Top-K 的<strong>标准答案</strong>；</li>
+<li>在相同向量、度量、ACL 和时间过滤下跑 FLAT，得到<strong>精确近邻 Top-K</strong>，作为衡量 ANN 近似损失的基准；它不是人工标注的业务正确答案；</li>
 <li>建 ANN 索引，调 <code>ef_search</code> / <code>nprobe</code>，找到<strong>达到目标召回率的最小值</strong>；</li>
 <li>在这个配置下测延迟和吞吐；</li>
 <li>如果延迟不达标，再考虑量化、分片、加机器。</li>
 </ol>
-<p><strong>第 1 步经常被跳过，但它是唯一能让你知道「ANN 到底漏了多少」的方法。</strong></p>
+<p>应同时报告两种召回：ANN Recall@K 是 ANN 结果与精确近邻集合的重合比例；业务 Recall@K 是检索结果覆盖人工证据的比例。ANN 接近 100% 但业务召回差时，问题可能在表示或数据，而不是索引参数。</p>
 <h3 id="942">9.4.2 关键参数的调节方向<a class="headerlink" href="#942" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8900,9 +8900,9 @@
 </tbody>
 </table>
 <p><strong>注意 <code>M</code> 和 <code>ef_construction</code> 是建索引时确定的，改动需要重建；只有 <code>ef_search</code> / <code>nprobe</code> 可以在线调整。</strong></p>
-<p>这意味着：<strong><code>ef_search</code> 是你在生产环境里唯一的实时旋钮</strong>，可以用它做降级——流量高峰时调小换取延迟，平峰时调大换取召回。</p>
+<p><code>ef_search</code> 可用于在线调节，但候选数、迭代扫描预算和路由也可能可调。高峰降级必须记录质量变化，并保持 ACL 与拒答闸门，不能只看延迟恢复。</p>
 <h2 id="95">9.5 延迟：把预算拆开看<a class="headerlink" href="#95" title="Permanent link">&para;</a></h2>
-<p><strong>整条 RAG 链路的延迟不是由向量检索主导的。</strong> 参考量级：</p>
+<p>以下是示例预算量级，不是某套硬件的实测，更不是服务承诺；真实瓶颈也可能在网络、过滤检索或排队：</p>
 <table>
 <thead>
 <tr>
@@ -8932,7 +8932,7 @@
 <td><strong>300 ms–2 s</strong></td>
 </tr>
 <tr>
-<td><strong>端到端 P95</strong></td>
+<td><strong>请求到首 Token 的预算示例</strong></td>
 <td><strong>800 ms–3 s</strong></td>
 </tr>
 </tbody>
@@ -8942,9 +8942,8 @@
 <li><strong>向量检索通常不是瓶颈。</strong> 花大力气把检索从 10ms 优化到 5ms，对用户毫无感知；</li>
 <li><strong>延迟的大头通常在 Rerank 和 LLM 生成。</strong> 优化延迟应该从这两处入手——减少 Rerank 候选数、用流式输出让首 Token 尽快返回。</li>
 </ol>
-<blockquote>
-<p><strong>同理，成本结构也由 LLM 生成主导，向量检索的成本占比通常不到 1%。</strong> 讨论 RAG 降本时盯着向量库省钱，方向是错的。</p>
-</blockquote>
+<p>首 Token 时间包括此前的改写、检索、重排、排队和预填充；完整答案还要加解码及校验时间。各环节 P95 不能直接相加成端到端 P95，应对同一请求 trace 统计。</p>
+<p>成本也必须分摊生成、检索集群、闲置资源、索引更新、缓存和运维。大库低查询量时存储可能占主导，高输出 Token 场景则可能由生成主导，不存在“检索不到 1%”的通用比例。</p>
 <h2 id="96">9.6 常见瓶颈与解决思路<a class="headerlink" href="#96" title="Permanent link">&para;</a></h2>
 <h3 id="961">9.6.1 内存不够<a class="headerlink" href="#961" title="Permanent link">&para;</a></h3>
 <table>
@@ -8958,8 +8957,8 @@
 <tbody>
 <tr>
 <td>Scalar int8 量化</td>
-<td>内存降至约 1/4</td>
-<td>召回掉 2%–3%</td>
+<td>原始向量载荷降至约 1/4，图与元数据另算</td>
+<td>召回损失需实测</td>
 </tr>
 <tr>
 <td>换 DiskANN 类索引</td>
@@ -8999,7 +8998,7 @@
 <p>这是最难排查的一类，常见原因按排查顺序：</p>
 <ol>
 <li><strong>Embedding 模型版本变了</strong>（API 静默升级，见第七章 7.4.2）；</li>
-<li><strong>新写入的数据没有建索引</strong>（增量数据在 flat 缓冲区里）；</li>
+<li><strong>新写入的数据尚未可见</strong>（确认写入、refresh/一致性与查询配置）；flat 缓冲区若参与搜索，未建 ANN 索引只影响速度，不一定漏召回；</li>
 <li><strong>软删除累积过多</strong>，有效候选被大量过滤掉；</li>
 <li><strong>过滤条件的选择性变高</strong>，触发了第八章 8.4 节的陷阱。</li>
 </ol>
@@ -9040,7 +9039,7 @@
 <h3 id="982">9.8.2 不讲遇到的问题<a class="headerlink" href="#982" title="Permanent link">&para;</a></h3>
 <p>如果不记录问题与处理过程，后续很难复盘容量和性能边界。</p>
 <h3 id="983">9.8.3 先调延迟后看召回<a class="headerlink" href="#983" title="Permanent link">&para;</a></h3>
-<p>召回是效果下限，必须先定住。</p>
+<p>明确业务证据覆盖与 ANN 近似召回的目标，再在质量、延迟与成本之间找可行配置。</p>
 <h3 id="984-flat">9.8.4 不跑 FLAT 基线<a class="headerlink" href="#984-flat" title="Permanent link">&para;</a></h3>
 <p>不知道 ANN 到底漏了多少，就无法判断参数是否合理。</p>
 <h3 id="985">9.8.5 忽略重建索引的峰值内存<a class="headerlink" href="#985" title="Permanent link">&para;</a></h3>
@@ -9056,13 +9055,14 @@
 <li>容量规划要同时算向量、索引结构、原文、元数据和<strong>重建时的峰值</strong>，最后再留出 1.5–2 倍冗余；</li>
 <li>调参顺序应当是<strong>先定召回率目标，再调延迟</strong>；先跑 FLAT 拿到基线，才能知道 ANN 漏了多少；</li>
 <li><code>ef_search</code> / <code>nprobe</code> 是生产环境里少数可以实时调整的检索旋钮，可用于高峰期降级；</li>
-<li>向量检索通常不是延迟和成本的大头，Rerank 和 LLM 生成更值得优先优化；</li>
+<li>根据 trace 与资源账单确定瓶颈；区分检索时延、首 Token 时延与完整答案时延；</li>
 <li>常见瓶颈包括内存不足、写入影响查询、P99 毛刺，以及召回率突然下降；</li>
 <li>监控不能只看性能，还要做固定评测集的质量回归，因为效果退化通常是静默发生的。</li>
 </ol>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/1603.09320">Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs</a></li>
+<li><a href="https://github.com/pgvector/pgvector">pgvector：精确基线、过滤与迭代扫描</a></li>
 <li><a href="https://arxiv.org/abs/2105.09613">FreshDiskANN: A Fast and Accurate Graph-Based ANN Index for Streaming Similarity Search</a></li>
 <li><a href="https://arxiv.org/abs/2205.13147">Matryoshka Representation Learning</a></li>
 <li><a href="https://arxiv.org/abs/2407.01219">Searching for Best Practices in Retrieval-Augmented Generation</a></li>
@@ -9089,7 +9089,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

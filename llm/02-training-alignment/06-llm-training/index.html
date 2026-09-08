@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="很多人第一次听说「大模型训练分三个阶段」会困惑：为什么不能一次训完？">
+        <meta name="description" content="解释自回归预训练、监督微调与偏好优化的目标、数据和损失差异，澄清三阶段流程的适用边界与能力来源。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第六章：大模型的三阶段训练流程">
-    <meta property="og:description" content="很多人第一次听说「大模型训练分三个阶段」会困惑：为什么不能一次训完？">
+    <meta property="og:description" content="解释自回归预训练、监督微调与偏好优化的目标、数据和损失差异，澄清三阶段流程的适用边界与能力来源。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第六章：大模型的三阶段训练流程">
-    <meta name="twitter:description" content="很多人第一次听说「大模型训练分三个阶段」会困惑：为什么不能一次训完？">
+    <meta name="twitter:description" content="解释自回归预训练、监督微调与偏好优化的目标、数据和损失差异，澄清三阶段流程的适用边界与能力来源。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第六章：大模型的三阶段训练流程","description":"很多人第一次听说「大模型训练分三个阶段」会困惑：为什么不能一次训完？","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第六章：大模型的三阶段训练流程","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第六章：大模型的三阶段训练流程","description":"解释自回归预训练、监督微调与偏好优化的目标、数据和损失差异，澄清三阶段流程的适用边界与能力来源。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第六章：大模型的三阶段训练流程","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"三阶段训练流程","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/llm/02-training-alignment/06-llm-training/"}]}</script>
     
@@ -1061,7 +1061,7 @@
         <li class="md-nav__item">
   <a href="#61" class="md-nav__link">
     <span class="md-ellipsis">
-      6.1 为什么训练要分阶段
+      6.1 为什么训练常被分成三个阶段
     </span>
   </a>
   
@@ -1070,17 +1070,17 @@
         <li class="md-nav__item">
   <a href="#62" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2 第一阶段：预训练，读万卷书
+      6.2 第一阶段：预训练
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6.2 第一阶段：预训练，读万卷书">
+    <nav class="md-nav" aria-label="6.2 第一阶段：预训练">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#621" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2.1 数据从哪来
+      6.2.1 数据量与数据处理
     </span>
   </a>
   
@@ -1098,16 +1098,16 @@
           <li class="md-nav__item">
   <a href="#623" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2.3 计算开销
+      6.2.3 计算开销怎么估
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#624" class="md-nav__link">
+  <a href="#624-base" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2.4 预训练之后的问题
+      6.2.4 Base 模型能不能回答问题
     </span>
   </a>
   
@@ -1121,44 +1121,35 @@
         <li class="md-nav__item">
   <a href="#63-sft" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3 第二阶段：SFT，从续写机器变对话机器
+      6.3 第二阶段：SFT
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6.3 第二阶段：SFT，从续写机器变对话机器">
+    <nav class="md-nav" aria-label="6.3 第二阶段：SFT">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#631" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.1 续写机器是什么样
+      6.3.1 从示范中学习条件分布
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#632-sft" class="md-nav__link">
+  <a href="#632" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.2 SFT 怎么做
+      6.3.2 数据质量不是一个固定条数
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#633" class="md-nav__link">
+  <a href="#633-loss" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.3 质量远比数量重要
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#634" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.3.4 多样性同样关键
+      6.3.3 为什么 loss 下降，产品表现却可能退步
     </span>
   </a>
   
@@ -1172,44 +1163,35 @@
         <li class="md-nav__item">
   <a href="#64" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4 第三阶段：对齐，学会好好说话
+      6.4 第三阶段：偏好与奖励优化
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6.4 第三阶段：对齐，学会好好说话">
+    <nav class="md-nav" aria-label="6.4 第三阶段：偏好与奖励优化">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#641-sft" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4.1 SFT 没解决的问题
+      6.4.1 SFT 与偏好优化的边界
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#642-rlhf" class="md-nav__link">
+  <a href="#642-ppo-rlhf" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4.2 RLHF 的三步流程
+      6.4.2 经典 PPO-RLHF 流程
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#643-rlhf" class="md-nav__link">
+  <a href="#643-dpo" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4.3 RLHF 工程上很难
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#644-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.4.4 DPO：把对齐大幅简化
+      6.4.3 DPO 简化了哪一部分
     </span>
   </a>
   
@@ -1223,111 +1205,18 @@
         <li class="md-nav__item">
   <a href="#65" class="md-nav__link">
     <span class="md-ellipsis">
-      6.5 三阶段为什么缺一不可
+      6.5 三阶段不是能力的硬分区
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="6.5 三阶段为什么缺一不可">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#651" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.5.1 三个训练阶段的关系
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#652" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.5.2 产业视角：真正的护城河在哪
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#66" class="md-nav__link">
     <span class="md-ellipsis">
-      6.6 常见错误
+      6.6 进一步追问
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="6.6 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#661" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.1 只会背三个阶段的名字
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#662-sft" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.2 认为 SFT 换了训练算法
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#663-sft" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.3 认为 SFT 数据越多越好
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#664-llama-2-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.4 说「Llama 2 是 DPO 训的」
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#665-hacking" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.5 不知道奖励 Hacking
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#666" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.6 认为对齐能补预训练的短板
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#667" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.7 忽略数据清洗的成本
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -8573,7 +8462,7 @@
         <li class="md-nav__item">
   <a href="#61" class="md-nav__link">
     <span class="md-ellipsis">
-      6.1 为什么训练要分阶段
+      6.1 为什么训练常被分成三个阶段
     </span>
   </a>
   
@@ -8582,17 +8471,17 @@
         <li class="md-nav__item">
   <a href="#62" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2 第一阶段：预训练，读万卷书
+      6.2 第一阶段：预训练
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6.2 第一阶段：预训练，读万卷书">
+    <nav class="md-nav" aria-label="6.2 第一阶段：预训练">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#621" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2.1 数据从哪来
+      6.2.1 数据量与数据处理
     </span>
   </a>
   
@@ -8610,16 +8499,16 @@
           <li class="md-nav__item">
   <a href="#623" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2.3 计算开销
+      6.2.3 计算开销怎么估
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#624" class="md-nav__link">
+  <a href="#624-base" class="md-nav__link">
     <span class="md-ellipsis">
-      6.2.4 预训练之后的问题
+      6.2.4 Base 模型能不能回答问题
     </span>
   </a>
   
@@ -8633,44 +8522,35 @@
         <li class="md-nav__item">
   <a href="#63-sft" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3 第二阶段：SFT，从续写机器变对话机器
+      6.3 第二阶段：SFT
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6.3 第二阶段：SFT，从续写机器变对话机器">
+    <nav class="md-nav" aria-label="6.3 第二阶段：SFT">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#631" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.1 续写机器是什么样
+      6.3.1 从示范中学习条件分布
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#632-sft" class="md-nav__link">
+  <a href="#632" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.2 SFT 怎么做
+      6.3.2 数据质量不是一个固定条数
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#633" class="md-nav__link">
+  <a href="#633-loss" class="md-nav__link">
     <span class="md-ellipsis">
-      6.3.3 质量远比数量重要
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#634" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.3.4 多样性同样关键
+      6.3.3 为什么 loss 下降，产品表现却可能退步
     </span>
   </a>
   
@@ -8684,44 +8564,35 @@
         <li class="md-nav__item">
   <a href="#64" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4 第三阶段：对齐，学会好好说话
+      6.4 第三阶段：偏好与奖励优化
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6.4 第三阶段：对齐，学会好好说话">
+    <nav class="md-nav" aria-label="6.4 第三阶段：偏好与奖励优化">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#641-sft" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4.1 SFT 没解决的问题
+      6.4.1 SFT 与偏好优化的边界
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#642-rlhf" class="md-nav__link">
+  <a href="#642-ppo-rlhf" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4.2 RLHF 的三步流程
+      6.4.2 经典 PPO-RLHF 流程
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#643-rlhf" class="md-nav__link">
+  <a href="#643-dpo" class="md-nav__link">
     <span class="md-ellipsis">
-      6.4.3 RLHF 工程上很难
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#644-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.4.4 DPO：把对齐大幅简化
+      6.4.3 DPO 简化了哪一部分
     </span>
   </a>
   
@@ -8735,111 +8606,18 @@
         <li class="md-nav__item">
   <a href="#65" class="md-nav__link">
     <span class="md-ellipsis">
-      6.5 三阶段为什么缺一不可
+      6.5 三阶段不是能力的硬分区
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="6.5 三阶段为什么缺一不可">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#651" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.5.1 三个训练阶段的关系
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#652" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.5.2 产业视角：真正的护城河在哪
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#66" class="md-nav__link">
     <span class="md-ellipsis">
-      6.6 常见错误
+      6.6 进一步追问
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="6.6 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#661" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.1 只会背三个阶段的名字
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#662-sft" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.2 认为 SFT 换了训练算法
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#663-sft" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.3 认为 SFT 数据越多越好
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#664-llama-2-dpo" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.4 说「Llama 2 是 DPO 训的」
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#665-hacking" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.5 不知道奖励 Hacking
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#666" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.6 认为对齐能补预训练的短板
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#667" class="md-nav__link">
-    <span class="md-ellipsis">
-      6.6.7 忽略数据清洗的成本
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -8886,254 +8664,193 @@
 
 
 <h1 id="_1">第六章：大模型的三阶段训练流程<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="61">6.1 为什么训练要分阶段<a class="headerlink" href="#61" title="Permanent link">&para;</a></h2>
-<p>很多人第一次听说「大模型训练分三个阶段」会困惑：为什么不能一次训完？</p>
-<p>做个类比。培养一个能在公司独当一面的员工，至少要经过三件事：</p>
+<h2 id="61">6.1 为什么训练常被分成三个阶段<a class="headerlink" href="#61" title="Permanent link">&para;</a></h2>
+<p>“预训练 → SFT → 偏好优化”是理解聊天模型的常用框架，<strong>不是每个模型必须依次执行一次的固定流水线</strong>。SFT 本身也属于后训练（post-training），安全行为可以在多个阶段学习；实际系统常把监督学习、采样筛选与强化学习交替执行。</p>
 <table>
 <thead>
 <tr>
 <th>阶段</th>
-<th>员工类比</th>
-<th>解决的问题</th>
+<th>主要数据</th>
+<th>直接优化什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>预训练</strong></td>
-<td>从小学读到大学，掌握语言、数学、逻辑与各科常识</td>
-<td>有没有<strong>基础知识</strong></td>
+<td>预训练</td>
+<td>大规模文本、代码等序列</td>
+<td>数据分布下的 token 预测损失</td>
 </tr>
 <tr>
-<td><strong>SFT</strong></td>
-<td>进公司学流程：怎么写汇报邮件、怎么和客户对话</td>
-<td>会不会<strong>适配工作场景</strong></td>
+<td>SFT（监督微调）</td>
+<td>指令、上下文与示范回答</td>
+<td>给定上下文时复现示范回答</td>
 </tr>
 <tr>
-<td><strong>对齐</strong></td>
-<td>职业素养：该说什么、不该说什么、什么时候拒绝</td>
-<td>有没有<strong>价值观和分寸感</strong></td>
+<td>偏好或奖励优化</td>
+<td>比较标签、奖励模型或可验证反馈</td>
+<td>偏好一致性或任务奖励，通常限制策略偏移</td>
 </tr>
 </tbody>
 </table>
-<p><strong>每个阶段解决的是完全不同层面的问题</strong>，所以缺一不可。</p>
 <pre class="mermaid"><code>flowchart LR
-    RAW["原始模型&lt;br/&gt;随机初始化"] --&gt;|预训练&lt;br/&gt;万亿 token| BASE["Base 模型&lt;br/&gt;会续写，有知识"]
-    BASE --&gt;|SFT&lt;br/&gt;指令-回答对| SFT["Instruct 模型&lt;br/&gt;会按指令回答"]
-    SFT --&gt;|对齐&lt;br/&gt;偏好数据| CHAT["Chat 模型&lt;br/&gt;回答符合人类偏好"]
+    RAW["随机初始化"] --&gt;|预训练| BASE["Base 模型"]
+    BASE --&gt;|示范数据 SFT| SFT["指令模型"]
+    SFT --&gt;|偏好或奖励优化| CHAT["后训练模型"]
+    CHAT -.-&gt;|生成与筛选数据&lt;br/&gt;可继续迭代| SFT
 
     style BASE fill:#e8f0fe
     style SFT fill:#fff4e5
     style CHAT fill:#e6f4ea</code></pre>
-<h2 id="62">6.2 第一阶段：预训练，读万卷书<a class="headerlink" href="#62" title="Permanent link">&para;</a></h2>
-<p>预训练是大模型能力的根基，<strong>所有上层能力都从这里来</strong>。</p>
-<h3 id="621">6.2.1 数据从哪来<a class="headerlink" href="#621" title="Permanent link">&para;</a></h3>
-<p>规模大到夸张：</p>
+<p>这几个名字不是严格的产品类型：<code>Instruct</code>、<code>Chat</code> 后缀不能反推出模型使用了 PPO 还是 DPO。要查对应版本的技术报告。</p>
+<h2 id="62">6.2 第一阶段：预训练<a class="headerlink" href="#62" title="Permanent link">&para;</a></h2>
+<h3 id="621">6.2.1 数据量与数据处理<a class="headerlink" href="#621" title="Permanent link">&para;</a></h3>
+<p>以下是原始论文公开的<strong>训练 token 数</strong>，不等于去重后语料的独立 token 数，也不是把整个数据集读了多少遍：</p>
 <table>
 <thead>
 <tr>
-<th>模型</th>
-<th>预训练数据量</th>
+<th>模型及口径</th>
+<th>训练 token 数</th>
+<th>原始依据</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>GPT-3</td>
-<td>3000 亿 token</td>
+<td>3000 亿</td>
+<td>论文 §2.1、§2.2；不同来源按不同权重采样</td>
 </tr>
 <tr>
 <td>Llama 2</td>
-<td>2 万亿 token</td>
+<td>2 万亿</td>
+<td>论文 §2.1</td>
 </tr>
 <tr>
-<td>Llama 3</td>
-<td>15 万亿 token</td>
+<td>Llama 3 报告中的 405B 模型</td>
+<td>15.6 万亿</td>
+<td>2024 年技术报告 §3；不要混同所有后续版本</td>
 </tr>
 </tbody>
 </table>
-<p>来源可以理解成「能爬到的所有公开文本」：互联网网页（Common Crawl）、GitHub 代码、维基百科、扫描图书、学术论文、新闻。</p>
-<p><strong>但原始爬到的数据不能直接用</strong>，里面充满重复内容、机器生成的乱码、论坛灌水、广告页。预训练前要做大量清洗：去重、过滤低质量、识别语言、剔除有害信息。</p>
-<blockquote>
-<p>一个高质量训练集的清洗成本可能<strong>比模型训练本身还贵</strong>，这是大模型公司之间的核心竞争力之一。</p>
-</blockquote>
+<p>数据来源可能包括网页、书籍、论文、代码及许可数据，并不意味着“所有公开文本都可以任意抓取和训练”。需要核对来源授权、个人信息、重复内容、质量和语言分布。</p>
+<p>数据处理直接影响模型学什么：</p>
+<ul>
+<li><strong>去重</strong>减少重复网页的权重和记忆风险；精确去重不能代替近似去重。</li>
+<li><strong>质量过滤与混合采样</strong>在高质量内容和语言、领域覆盖之间取舍；过滤器也会引入偏差。</li>
+<li><strong>基准污染检查</strong>排查训练数据是否包含测试题及答案，避免把记忆当泛化。</li>
+<li><strong>数据版本与配比记录</strong>使训练和评估结果可追溯。</li>
+</ul>
+<p>清洗确实消耗工程、人力和计算资源，但没有可泛化的依据说它“一定比预训练更贵”。</p>
 <h3 id="622-token">6.2.2 训练目标：预测下一个 token<a class="headerlink" href="#622-token" title="Permanent link">&para;</a></h3>
-<p>这一点很反直觉。训练目标不是「回答正确率」也不是「写得通不通顺」，而是<strong>预测下一个 token</strong>（CLM，Causal Language Modeling）。</p>
+<p>这里讨论自回归语言模型。对长度为 <code>T</code> 的序列，常用平均负对数似然：</p>
 <div class="arithmatex">\[
-\mathcal{L} = -\sum_{t} \log P(x_t \mid x_1, \dots, x_{t-1})
+\mathcal{L}_{\mathrm{pre}} =
+-\frac{1}{T}\sum_{t=1}^{T}
+\log \pi_\theta(x_t \mid x_1,\ldots,x_{t-1})
 \]</div>
-<p>每条训练样本就是「给前 <span class="arithmatex">\(N\)</span> 个 token，预测第 <span class="arithmatex">\(N+1\)</span> 个」，对整个语料库反复做这件事。</p>
-<p><strong>就这么简单？</strong> 没错。但威力大到吓人——因为<strong>要在不同上下文里准确预测下一个词，模型必须真的理解语法、记住事实、会推理</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>要预测的内容</th>
-<th>被逼着学会的能力</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>「北京是中国的____」</td>
-<td>记住世界知识</td>
-</tr>
-<tr>
-<td>「如果 <span class="arithmatex">\(x=2\)</span>，那么 <span class="arithmatex">\(x^2=\)</span>____」</td>
-<td>算术推理</td>
-</tr>
-<tr>
-<td>一段代码的下一行</td>
-<td>编程逻辑</td>
-</tr>
-<tr>
-<td>一首诗的下一句</td>
-<td>韵律与意境</td>
-</tr>
-</tbody>
-</table>
-<p>目标虽然只是预测下一个 token，但数据规模足够大时，模型会把语法、事实、推理和代码模式一并学进去。这也是 <a href="../../01-foundations/01-what-is-llm/">第一章</a> 讲的「任务统一」为什么成立。</p>
-<h3 id="623">6.2.3 计算开销<a class="headerlink" href="#623" title="Permanent link">&para;</a></h3>
-<p>训练 GPT-3 据估算花了约 <span class="arithmatex">\(3.14 \times 10^{23}\)</span> 次浮点运算。</p>
-<p>用一张 A100 算需要<strong>约 36 万年</strong>。OpenAI 实际用了几百到几千张 GPU 并行训练几个月，算力成本上千万美元。</p>
-<p>这就是为什么早期只有少数巨头玩得起预训练。</p>
-<h3 id="624">6.2.4 预训练之后的问题<a class="headerlink" href="#624" title="Permanent link">&para;</a></h3>
-<p>模型有了一个塞满语言能力和世界知识的「大脑」，<strong>但它不会回答问题，只会续写</strong>。</p>
-<h2 id="63-sft">6.3 第二阶段：SFT，从续写机器变对话机器<a class="headerlink" href="#63-sft" title="Permanent link">&para;</a></h2>
-<h3 id="631">6.3.1 续写机器是什么样<a class="headerlink" href="#631" title="Permanent link">&para;</a></h3>
-<p>你问「天空为什么是蓝色的？」，Base 模型可能续写成：</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>天空为什么是蓝色的？这是个有趣的科学问题。今天天气不错，
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>让我们看看其他几个常见的自然现象问题……
+<p>训练时使用真实前缀（teacher forcing），通过 causal mask 防止位置 <code>t</code> 看到未来 token；一个前向传播可以并行计算多个位置的损失。推理时则要把模型自己生成的 token 接回上下文。</p>
+<p>为了降低预测损失，模型可能学习语法、事实关联、代码结构和某些推理规律，但<strong>低损失不保证事实正确、因果理解或推理可靠</strong>。模型也可能靠表面统计规律、记忆或数据泄漏得分。</p>
+<h3 id="623">6.2.3 计算开销怎么估<a class="headerlink" href="#623" title="Permanent link">&para;</a></h3>
+<p>对常规稠密 Transformer、忽略部分注意力和其他开销时，可用：</p>
+<div class="arithmatex">\[
+C \approx 6ND
+\]</div>
+<p>其中 <code>N</code> 是参数量，<code>D</code> 是实际处理的训练 token 数，<code>C</code> 的单位是 FLOPs。系数约 6 来自前向与反向计算的粗略核算，不是所有架构、序列长度下都成立的常数。</p>
+<p>以 GPT-3 175B 与 300B token 代入，可得约 <code>3.15 × 10²³ FLOPs</code>。这只是量级估算，<strong>不是 GPU 年数或美元成本</strong>。墙钟时间还需要有效吞吐、并行效率、通信、故障与重算信息；不能直接把峰值算力当持续训练吞吐。</p>
+<h3 id="624-base">6.2.4 Base 模型能不能回答问题<a class="headerlink" href="#624-base" title="Permanent link">&para;</a></h3>
+<p>能。GPT-3 就评估了无梯度更新的 zero-shot / few-shot 任务表现。问题不在于 Base 模型“完全不会回答”，而在于它的目标是续写训练分布中的文本，未必稳定服从当前用户指令、遵守角色边界或在正确位置结束。</p>
+<p>例如，问题后面既可能接答案，也可能接另一道题。具体输出取决于上下文、预训练分布和解码设置，不能用一段发散示例证明模型没有问答能力。</p>
+<h2 id="63-sft">6.3 第二阶段：SFT<a class="headerlink" href="#63-sft" title="Permanent link">&para;</a></h2>
+<h3 id="631">6.3.1 从示范中学习条件分布<a class="headerlink" href="#631" title="Permanent link">&para;</a></h3>
+<p>SFT 数据可以是单轮 <code>(指令, 回答)</code>，也可以是包含 system、user、assistant、工具消息的多轮序列：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>user: 请解释为什么天空通常呈蓝色。
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>assistant: 大气分子对较短波长的可见光散射更强……
 </span></code></pre></div>
-<p><strong>它一直在发散，根本没在回答你。</strong> 因为预训练语料里，一个问句后面接的经常就是更多问句。</p>
-<h3 id="632-sft">6.3.2 SFT 怎么做<a class="headerlink" href="#632-sft" title="Permanent link">&para;</a></h3>
-<p>训练数据格式变了，从「连续文本」变成 <strong>(指令, 期望回答) 对</strong>：</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>指令：请用简单易懂的语言解释为什么天空是蓝色的
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>回答：天空呈现蓝色是因为大气中的散射现象。太阳光包含所有颜色，
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>      当光进入大气层时，氮气和氧气分子会将短波长的蓝光散射到
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      各个方向，而长波长的红光穿透能力更强、散射较少。所以我们
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>      从任何方向看天空，都能看到散射来的蓝光。
-</span></code></pre></div>
-<p>模型在这种数据上继续训练，慢慢学会「<strong>看到这种格式我就该给一个完整答案，不要无限续写下去</strong>」。</p>
-<p>注意：<strong>训练算法本身没变</strong>，还是预测下一个 token，只是通常只在「回答」部分计算损失。变的是数据分布。</p>
-<h3 id="633">6.3.3 质量远比数量重要<a class="headerlink" href="#633" title="Permanent link">&para;</a></h3>
-<p>Llama 2 用了大约 100 万条 SFT 数据，但每条都是精心标注的。</p>
-<p>一个反直觉的结论（LIMA 等研究）：<strong>几千条高质量数据训出来的效果，比几十万条低质量数据要好。</strong></p>
-<p>所以工业界做 SFT 不会盲目堆数量，而是花大量人力打磨数据质量。</p>
-<h3 id="634">6.3.4 多样性同样关键<a class="headerlink" href="#634" title="Permanent link">&para;</a></h3>
-<p>不能只覆盖一种任务。一份合格的 SFT 数据集会涵盖问答、写作、代码、角色扮演、数学推理、翻译等各种场景。</p>
-<p><strong>覆盖面不够，模型在没见过的任务上就会明显拉胯。</strong></p>
-<h2 id="64">6.4 第三阶段：对齐，学会好好说话<a class="headerlink" href="#64" title="Permanent link">&para;</a></h2>
-<h3 id="641-sft">6.4.1 SFT 没解决的问题<a class="headerlink" href="#641-sft" title="Permanent link">&para;</a></h3>
-<p>同一个问题「怎么学好 Python」，有很多种「合格」的回答：简洁的、详细的、带代码的、纯文字的、承认不熟悉的、硬装专家胡说的。</p>
-<p><strong>SFT 只教会了模型「这种格式叫合格回答」，但没告诉它「哪种回答用户更喜欢」。</strong> 对齐就是补这一课。</p>
-<h3 id="642-rlhf">6.4.2 RLHF 的三步流程<a class="headerlink" href="#642-rlhf" title="Permanent link">&para;</a></h3>
-<p>RLHF（Reinforcement Learning from Human Feedback）由 OpenAI 在 InstructGPT 里首次系统引入。</p>
+<p>对输入 <code>x</code> 与示范回答 <code>y</code>，常见的 completion-only 损失为：</p>
+<div class="arithmatex">\[
+\mathcal{L}_{\mathrm{SFT}} =
+-\sum_{t=1}^{|y|}
+\log \pi_\theta(y_t \mid x,y_1,\ldots,y_{t-1})
+\]</div>
+<p>仍是自回归交叉熵；改变的是训练分布与 loss mask。Prompt token 通常不作为预测目标，<strong>但仍参与前向计算、作为回答的上下文</strong>。不同实现也可能对全序列或所有 assistant 轮次计损失，应检查实际配置。</p>
+<h3 id="632">6.3.2 数据质量不是一个固定条数<a class="headerlink" href="#632" title="Permanent link">&para;</a></h3>
+<p>Llama 2 论文 §3.1.1 报告收集 <strong>27,540 条 SFT 标注</strong>；模型卡中的“超过一百万条人工标注”指更广的微调数据，不能写成一百万条 SFT 示范。</p>
+<p>LIMA 在 65B LLaMA 上使用 <strong>1,000 条精心筛选的示范</strong>，在其评测条件下获得较强的指令跟随表现。这说明好的预训练基座可能用较少数据适配输出行为，<strong>不证明任意任务都只需千条，也不证明小数据总胜过大数据</strong>。</p>
+<p>判断数据是否足够，应看验证集学习曲线、任务覆盖、难例和标注一致性，而不是背一个数量门槛。</p>
+<h3 id="633-loss">6.3.3 为什么 loss 下降，产品表现却可能退步<a class="headerlink" href="#633-loss" title="Permanent link">&para;</a></h3>
+<ul>
+<li>模型可能更会复现训练集措辞，却没有改善任务成功率。</li>
+<li>大量同质长回答可能带来长度偏好；错误推理示范会被直接模仿。</li>
+<li>不一致的 chat template、结束符或工具调用格式，会造成训练与部署分布不一致。</li>
+<li>单一领域过采样可能损伤其他能力；训练集与验证集相似文本泄漏则会掩盖问题。</li>
+</ul>
+<p>因此应同时评估任务指标、格式合法率、事实性、安全拒绝与正常请求误拒绝，而不是只看训练 loss。</p>
+<h2 id="64">6.4 第三阶段：偏好与奖励优化<a class="headerlink" href="#64" title="Permanent link">&para;</a></h2>
+<h3 id="641-sft">6.4.1 SFT 与偏好优化的边界<a class="headerlink" href="#641-sft" title="Permanent link">&para;</a></h3>
+<p>SFT 可以直接学习高质量回答、拒绝行为和推理过程，并非“只学格式”。但只给一份示范，不会显式说明同一问题下两个候选回答为什么一个更好。</p>
+<p>偏好优化补充的是比较或奖励信号。人类偏好也不等于客观正确：标注员可能偏好更长、更自信的错误回答，必须区分帮助性、事实性、安全性等评估维度。</p>
+<h3 id="642-ppo-rlhf">6.4.2 经典 PPO-RLHF 流程<a class="headerlink" href="#642-ppo-rlhf" title="Permanent link">&para;</a></h3>
+<p>RLHF 早于 InstructGPT；2017 年《Deep Reinforcement Learning from Human Preferences》已研究从人类比较学习奖励。InstructGPT 是把这一思路用于指令语言模型的重要案例。</p>
 <pre class="mermaid"><code>flowchart TB
-    S1["① 收集偏好数据&lt;br/&gt;人类标注员对同一问题的&lt;br/&gt;多个回答排序：A 优于 B"]
-    S1 --&gt; S2["② 训练奖励模型 RM&lt;br/&gt;让它学会自动打分&lt;br/&gt;（代替人类，因为人工太慢太贵）"]
-    S2 --&gt; S3["③ 强化学习优化&lt;br/&gt;用 PPO 调整模型参数&lt;br/&gt;让生成的回答尽量得高分"]
+    S1["同一问题的回答比较"] --&gt; S2["训练奖励模型 RM"]
+    S2 --&gt; S3["策略在线生成回答&lt;br/&gt;奖励打分与 PPO 更新"]
+    REF["冻结参考策略"] -.-&gt;|KL 正则| S3
 
     style S3 fill:#e6f4ea</code></pre>
-<h3 id="643-rlhf">6.4.3 RLHF 工程上很难<a class="headerlink" href="#643-rlhf" title="Permanent link">&para;</a></h3>
+<p>典型实现涉及策略、参考、奖励与价值估计四种角色，不是四个模型都一起训练：策略和价值估计通常更新，参考和已训练奖励模型通常冻结。共享主干、模型大小和分阶段调度会改变实际显存。</p>
+<p>主要风险是奖励模型分布外失真、优化不稳定和 reward hacking。KL 正则限制相对参考策略的偏移，能降低过度优化风险，<strong>不能保证不钻奖励漏洞</strong>。</p>
+<h3 id="643-dpo">6.4.3 DPO 简化了哪一部分<a class="headerlink" href="#643-dpo" title="Permanent link">&para;</a></h3>
+<p>DPO 在 KL 正则化奖励最大化与 Bradley–Terry 偏好模型等假设下，用策略相对参考策略的对数概率比重参数化奖励，直接训练 <code>(问题, chosen, rejected)</code> 偏好对。</p>
+<p>标准离线 DPO 不需要单独训练奖励模型，也不需要训练循环中的在线生成和价值网络。它优化的是<strong>偏好对的相对 log-ratio 间隔</strong>，不保证每个 chosen 的绝对概率都上升。</p>
+<p>这个推导不意味着有限数据下 DPO 与 PPO 的训练轨迹、泛化或最终效果相同。详见 <a href="../11-dpo-vs-ppo/">第十一章</a>。</p>
+<h2 id="65">6.5 三阶段不是能力的硬分区<a class="headerlink" href="#65" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>难点</th>
-<th>说明</th>
+<th>情况</th>
+<th>应怎样理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>流程长</strong></td>
-<td>要同时维护策略模型、奖励模型、参考模型、Critic 好几个模型</td>
+<td>只有预训练</td>
+<td>可以提示或 few-shot 使用，但指令稳定性与行为控制需要评测</td>
 </tr>
 <tr>
-<td><strong>训练不稳定</strong></td>
-<td>PPO 对超参数敏感，容易崩</td>
+<td>预训练 + SFT</td>
+<td>可以形成有用的模型；是否增加偏好优化取决于剩余错误和收益</td>
 </tr>
 <tr>
-<td><strong>奖励 Hacking</strong></td>
-<td>模型学会<strong>讨好奖励模型而不是真的变好</strong>，比如疯狂堆字数、加免责声明</td>
+<td>从现有基座开始 SFT / RL</td>
+<td>是复用了前人的预训练，不是跳过了知识积累</td>
+</tr>
+<tr>
+<td>不经 SFT 直接 RL</td>
+<td>有公开实验，例如基于 DeepSeek-V3-Base 的 R1-Zero；并非从随机参数训练</td>
 </tr>
 </tbody>
 </table>
-<p>能稳定驾驭 RLHF 的团队在业界凤毛麟角。</p>
-<h3 id="644-dpo">6.4.4 DPO：把对齐大幅简化<a class="headerlink" href="#644-dpo" title="Permanent link">&para;</a></h3>
-<p>斯坦福提出的 DPO（Direct Preference Optimization）发现：<strong>RLHF 的优化目标可以用数学等价的方式改写成纯监督学习</strong>。</p>
-<p>不需要奖励模型，也不需要 PPO。直接拿 (问题, 好回答, 差回答) 三元组训练，让模型学会「好回答的相对概率要提升」。</p>
-<p>DPO 训练简单、稳定、容易实现，是很多开源 Instruct 模型的偏好对齐方案之一。</p>
-<blockquote>
-<p><strong>但别把所有模型都说成 DPO 训出来的。</strong> Llama 2-Chat 公开论文里的主线是 SFT + 拒绝采样 + PPO/RLHF，不是 DPO；Llama 3 系列则使用了更复杂的多阶段 post-training。说「DPO 是开源社区常见方案」没问题，说「Llama 2 是 DPO 训的」就不严谨了。</p>
-</blockquote>
-<p>两者的详细对比见 <a href="../11-dpo-vs-ppo/">第十一章</a>，更完整的 post-training 方法谱系见 <a href="../10-post-training/">第十章</a>。</p>
-<h2 id="65">6.5 三阶段为什么缺一不可<a class="headerlink" href="#65" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>缺哪一步</th>
-<th>后果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>只预训练，不 SFT</strong></td>
-<td>只会续写，问它问题它给你接着写文章。<strong>只能当智能补全工具，做不了对话产品</strong></td>
-</tr>
-<tr>
-<td><strong>预训练 + SFT，不对齐</strong></td>
-<td>会对话了但质量参差不齐：可能生成有害内容、歧视性言论，或者过于啰嗦、自信地胡说。<strong>上线后体验差，还可能招来监管麻烦</strong></td>
-</tr>
-<tr>
-<td><strong>跳过预训练，只做 SFT + 对齐</strong></td>
-<td>在「空壳」上优化。<strong>没有底层知识，给再多对话数据也学不出真正的智能</strong></td>
-</tr>
-</tbody>
-</table>
-<h3 id="651">6.5.1 三个训练阶段的关系<a class="headerlink" href="#651" title="Permanent link">&para;</a></h3>
-<p><strong>预训练定天花板，SFT 给格式，对齐给价值观。</strong></p>
-<p>SFT 和对齐都是<strong>在预训练划定的天花板内做优化</strong>，决定能不能把潜力发挥出来，但抬不高天花板。</p>
-<h3 id="652">6.5.2 产业视角：真正的护城河在哪<a class="headerlink" href="#652" title="Permanent link">&para;</a></h3>
-<p>理解了这一点，再看大模型公司之间的竞争就清楚了。</p>
-<p>OpenAI、Anthropic、DeepSeek 领先的最大护城河<strong>不是 SFT 或对齐技巧</strong>（这些公开材料都有，方法论相对透明），而是<strong>预训练阶段的「数据 + 算力 + 工程经验」</strong>。</p>
-<p>这些东西要么靠时间积累，要么靠真金白银，是后来者最难追赶的部分。</p>
-<h2 id="66">6.6 常见错误<a class="headerlink" href="#66" title="Permanent link">&para;</a></h2>
-<h3 id="661">6.6.1 只会背三个阶段的名字<a class="headerlink" href="#661" title="Permanent link">&para;</a></h3>
-<p>关键是讲清楚<strong>为什么缺一不可</strong>，以及每个阶段解决的是哪个层面的问题。</p>
-<h3 id="662-sft">6.6.2 认为 SFT 换了训练算法<a class="headerlink" href="#662-sft" title="Permanent link">&para;</a></h3>
-<p>没有。还是预测下一个 token，变的是<strong>数据分布</strong>（连续文本 → 指令-回答对）和损失计算范围。</p>
-<h3 id="663-sft">6.6.3 认为 SFT 数据越多越好<a class="headerlink" href="#663-sft" title="Permanent link">&para;</a></h3>
-<p>质量远比数量重要。几千条精心标注能赢几十万条粗糙数据。同时要保证任务多样性。</p>
-<h3 id="664-llama-2-dpo">6.6.4 说「Llama 2 是 DPO 训的」<a class="headerlink" href="#664-llama-2-dpo" title="Permanent link">&para;</a></h3>
-<p>Llama 2-Chat 主线是 SFT + 拒绝采样 + PPO。DPO 是开源社区的常见方案，但不能张冠李戴。</p>
-<h3 id="665-hacking">6.6.5 不知道奖励 Hacking<a class="headerlink" href="#665-hacking" title="Permanent link">&para;</a></h3>
-<p>这是 RLHF 最典型的工程陷阱：模型讨好奖励模型而不是真的变好。不提这一点说明没实际跑过。</p>
-<h3 id="666">6.6.6 认为对齐能补预训练的短板<a class="headerlink" href="#666" title="Permanent link">&para;</a></h3>
-<p>对齐只在天花板内优化。预训练没学到的知识，靠对齐补不回来。</p>
-<h3 id="667">6.6.7 忽略数据清洗的成本<a class="headerlink" href="#667" title="Permanent link">&para;</a></h3>
-<p>清洗成本可能比训练本身还贵，是核心竞争力之一。只说「爬了很多数据」是不够的。</p>
-<h2 id="67">6.7 本章总结<a class="headerlink" href="#67" title="Permanent link">&para;</a></h2>
+<p>“预训练定死天花板，后训练只能整理格式”过于绝对。后训练能学习新知识、工具使用和任务策略，也可能造成遗忘；其收益受基座能力、训练信号、探索和计算预算约束。公开结果通常难以把“新学会”与“更可靠地调用已有能力”完全分开。</p>
+<p>R1-Zero 与完整 R1 也不是同一路径：后者使用冷启动 SFT、推理 RL、筛选数据后的 SFT 和后续 RL。不要把实验消融当成最终产品流程。</p>
+<h2 id="66">6.6 进一步追问<a class="headerlink" href="#66" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>三阶段对应三个不同层面的问题</strong>：基础知识、场景适配、价值观分寸；</li>
-<li><strong>预训练规模惊人</strong>：GPT-3 3000 亿 token，Llama 3 15 万亿 token，算力成本上千万美元；</li>
-<li><strong>数据清洗可能比训练还贵</strong>，是大模型公司的核心竞争力；</li>
-<li><strong>训练目标只是「预测下一个 token」</strong>，但为了预测准，模型被逼着学会了事实、推理、代码和韵律；</li>
-<li><strong>Base 模型只会续写不会回答</strong>，SFT 通过 (指令, 回答) 对把它改造成对话机器；</li>
-<li><strong>SFT 质量远比数量重要</strong>，且必须覆盖多样任务；</li>
-<li><strong>对齐解决「哪种回答用户更喜欢」</strong>，RLHF 三步：偏好排序 → 训奖励模型 → PPO 优化；</li>
-<li><strong>RLHF 工程难点</strong>是流程长、不稳定、容易奖励 Hacking；</li>
-<li><strong>DPO 把对齐改写成纯监督学习</strong>，简单稳定，但不要张冠李戴到所有模型上；</li>
-<li><strong>预训练定天花板，SFT 给格式，对齐给价值观</strong>——真正的护城河在预训练。</li>
+<li><strong>为什么 SFT 后还会幻觉？</strong> 交叉熵奖励复现示范，不自带事实校验；示范、检索上下文和模型知识都可能出错。</li>
+<li><strong>偏好优化能代替数据质量吗？</strong> 不能。错误或有偏的奖励会被更强的优化放大。</li>
+<li><strong>训练成本如何比较？</strong> 区分预训练 FLOPs、标注、采样、奖励评估和多轮迭代成本；不能只比较反向传播步数。</li>
+<li><strong>怎样验证某阶段有用？</strong> 保持基座、测试集、解码预算一致，做 SFT / 偏好优化前后的消融，并检测通用能力回归。</li>
 </ol>
-<blockquote>
-<p>预训练决定模型上限，SFT 把能力整理成可用的回答格式，对齐再把输出拉回人类偏好的范围。</p>
-</blockquote>
+<h2 id="67">6.7 本章总结<a class="headerlink" href="#67" title="Permanent link">&para;</a></h2>
+<p>三阶段框架区分的是数据与优化信号，不是把知识、格式、价值观切成互不相交的盒子。解释训练流程时，至少说清楚：<strong>从哪个 checkpoint 开始、哪些 token 计损失、反馈来自哪里、哪些参数更新、如何验证收益与退化</strong>。</p>
 <h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners（GPT-3）</a></li>
-<li><a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions with human feedback（InstructGPT）</a></li>
-<li><a href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization: Your Language Model is Secretly a Reward Model</a></li>
-<li><a href="https://arxiv.org/abs/2307.09288">Llama 2: Open Foundation and Fine-Tuned Chat Models</a></li>
-<li><a href="https://arxiv.org/abs/2407.21783">The Llama 3 Herd of Models</a></li>
-<li><a href="https://arxiv.org/abs/2305.11206">LIMA: Less Is More for Alignment</a></li>
+<li><a href="https://arxiv.org/html/2005.14165v4">GPT-3，§2 与 few-shot 评估</a></li>
+<li><a href="https://arxiv.org/html/2307.09288v2">Llama 2，§2.1、§3.1.1 与模型卡</a></li>
+<li><a href="https://arxiv.org/html/2407.21783v3">The Llama 3 Herd of Models，§3、§4</a></li>
+<li><a href="https://arxiv.org/html/2203.15556v1">Chinchilla：训练计算量近似</a></li>
+<li><a href="https://arxiv.org/abs/2203.02155">InstructGPT</a></li>
+<li><a href="https://arxiv.org/abs/2305.11206">LIMA</a></li>
 <li><a href="https://arxiv.org/abs/1706.03741">Deep Reinforcement Learning from Human Preferences</a></li>
-<li><a href="https://arxiv.org/abs/2306.01116">The RefinedWeb Dataset for Falcon LLM</a></li>
+<li><a href="https://arxiv.org/html/2305.18290v3">DPO：奖励重参数化与偏好损失</a></li>
+<li><a href="https://arxiv.org/html/2501.12948v1">DeepSeek-R1，2025 年初版训练流程</a></li>
 </ul>
 
 
@@ -9157,7 +8874,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
   </span>
 
     

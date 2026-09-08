@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="这四行对应了 四种不同的鸿沟 ，而 Query 改写的各种方法，正是分别针对这四种鸿沟">
+        <meta name="description" content="解释指代消解、多查询扩展、HyDE、Step-back、查询分解和路由的适用条件，关注语义漂移、原查询兜底与证据边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十二章：Query 理解与改写">
-    <meta property="og:description" content="这四行对应了 四种不同的鸿沟 ，而 Query 改写的各种方法，正是分别针对这四种鸿沟">
+    <meta property="og:description" content="解释指代消解、多查询扩展、HyDE、Step-back、查询分解和路由的适用条件，关注语义漂移、原查询兜底与证据边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/12-query-rewriting/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十二章：Query 理解与改写">
-    <meta name="twitter:description" content="这四行对应了 四种不同的鸿沟 ，而 Query 改写的各种方法，正是分别针对这四种鸿沟">
+    <meta name="twitter:description" content="解释指代消解、多查询扩展、HyDE、Step-back、查询分解和路由的适用条件，关注语义漂移、原查询兜底与证据边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十二章：Query 理解与改写","description":"这四行对应了 四种不同的鸿沟 ，而 Query 改写的各种方法，正是分别针对这四种鸿沟","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/12-query-rewriting/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十二章：Query 理解与改写","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/12-query-rewriting/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十二章：Query 理解与改写","description":"解释指代消解、多查询扩展、HyDE、Step-back、查询分解和路由的适用条件，关注语义漂移、原查询兜底与证据边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/12-query-rewriting/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十二章：Query 理解与改写","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/12-query-rewriting/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Query 理解与改写","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/12-query-rewriting/"}]}</script>
     
@@ -8706,11 +8706,11 @@
 <p>这类方法适合处理口语化输入和术语不匹配，但改写一旦偏离原意，后续检索就会整体跑偏。所以<strong>要保留原始 Query 一起检索作为兜底</strong>（第十章 10.3.2）。</p>
 <h2 id="123">12.3 指代消解<a class="headerlink" href="#123" title="Permanent link">&para;</a></h2>
 <p>指代消解会结合对话历史，把省略和指代还原成完整问题。</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>用户：iPhone 17 有几个版本？
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>助手：有标准版、Pro 和 Pro Max。
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>用户：Pro 的价格呢？    ← 直接拿去检索必然失败
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>用户：示例产品 Atlas 有哪些版本？
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>助手：资料中列出了标准版和 Pro 版。
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>用户：Pro 的价格呢？    ← 未带上文时容易匹配到其他产品
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      ↓ 消解后
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      iPhone 17 Pro 的价格是多少？
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      Atlas Pro 的价格是多少？
 </span></code></pre></div>
 <p>这在多轮对话场景里通常是必需环节，而不是可选优化。很多「多轮对话下 RAG 效果突然变差」的问题，根源就在这里。</p>
 <p>实现时通常只传入最近若干轮历史，传太多反而会引入干扰。</p>
@@ -8733,13 +8733,13 @@
     EMB --&gt; SEARCH[检索真实文档]</code></pre>
 <p>它之所以有效，是因为向量检索本质上在比较两段文本的相似度，而<strong>问题和答案在语义空间里并不天然接近</strong>：问题是疑问句、通常很短；文档是陈述句、通常更长。</p>
 <p>用一个<strong>形式上更像文档的假想答案</strong>去检索，匹配的就变成「文档 vs 文档」而不是「问题 vs 文档」，<strong>在语义空间里的距离往往更近</strong>。</p>
-<p>这里的关键是：假想文档的内容不必正确。它不是用来回答问题的，而是用来<strong>提供检索信号</strong>。真正有用的是它的措辞、结构和术语分布。</p>
+<p>假想文档只提供检索信号，不能进入证据集合或被引用。HyDE 原论文在无相关性标签的检索设置中，用生成文档搭配无监督编码器；对已针对 Query—文档训练的双塔，收益不一定相同。假想实体、数值或结论虽不必作为事实成立，却可能把检索带偏，所以仍须保留原查询并做对照。</p>
 <p>代价是一次额外的 LLM 调用，延迟通常会增加几百毫秒。如果问题涉及模型几乎没有先验知识的领域（企业内部黑话、全新的产品名），生成的假想文档可能与真实文档差得很远，<strong>反而降低效果</strong>。</p>
 <h2 id="126-step-back">12.6 Step-back 提问<a class="headerlink" href="#126-step-back" title="Permanent link">&para;</a></h2>
 <p>Step-back 提问会先把具体问题<strong>抽象成一个更宽泛的问题</strong>，先检索背景知识，再回来回答原问题。</p>
 <p>「XX 型号电池在零下 20 度的续航衰减多少」
 → 先问「锂电池在低温下的性能特性是什么」</p>
-<p>有些具体问题在文档里并没有直接写出答案，但<strong>支撑推理的原理性内容是有的</strong>。这时先检索原理，再让模型基于原理推导，通常比硬查具体表述更有效。</p>
+<p>背景原理有助于解释影响因素，但不能仅凭“低温影响锂电池”推导某型号的确切衰减值。数值回答仍需对应型号、温度和测试条件的数据；缺少时应说明不能确定，而非把通用原理包装成产品事实。</p>
 <p>它适合需要推理而非直接查找的问题，也适合原理性内容较多的知识库。风险在于抽象过头后会召回大量无关的通用内容，所以<strong>通常要与原始 Query 一起检索并合并结果</strong>。</p>
 <h2 id="127">12.7 查询分解<a class="headerlink" href="#127" title="Permanent link">&para;</a></h2>
 <p>查询分解会把复合问题拆成多个子问题，分别检索，再综合结果。</p>
@@ -8868,6 +8868,7 @@
 <li><strong>再按需选一种改写方法</strong>，不要叠加多种，因为每种都会增加一次 LLM 调用；</li>
 <li><strong>始终保留原始 Query 一起检索</strong>。</li>
 </ol>
+<p>评估改写时不仅看整体 Hit@K，还要看新增命中与丢失命中的问题、实体/数字/否定词是否被改掉，以及多路增加的候选和 Token 成本。路由器只选择用户已有权限内的库，不能把生成的库名、部门或时间条件直接当作授权事实。</p>
 <h2 id="1210">12.10 常见错误<a class="headerlink" href="#1210" title="Permanent link">&para;</a></h2>
 <h3 id="12101">12.10.1 罗列方法但说不出各治什么问题<a class="headerlink" href="#12101" title="Permanent link">&para;</a></h3>
 <p>只罗列方法名而不建立「鸿沟 → 方法」的对应关系，通常无法判断何时该用哪一种。</p>
@@ -8888,8 +8889,8 @@
 <li><strong>Query 改写解决的是四种鸿沟</strong>：表述、指代、粒度、抽象层级——<strong>每种方法对应一种鸿沟</strong>；</li>
 <li><strong>指代消解在多轮对话中是必需项</strong>；</li>
 <li><strong>多 Query 扩展</strong>通过覆盖更大的语义邻域降低"表述不巧"导致的漏召；</li>
-<li><strong>HyDE 的做法</strong>：用形式上像文档的假想答案检索，把「问题 vs 文档」变成「文档 vs 文档」；<strong>内容不需要正确，只需要像</strong>；</li>
-<li><strong>Step-back</strong> 先检索原理再推导，适合答案没有被直接写出来的问题；</li>
+<li><strong>HyDE</strong> 用假想文档提供检索信号，假想内容不能作为证据，生成错误也可能损害召回；</li>
+<li><strong>Step-back</strong> 可补背景知识，但具体数值和业务事实仍需直接证据；</li>
 <li><strong>查询分解</strong>要区分并列（可并行）和多跳（必须串行）；</li>
 <li><strong>路由</strong>根据问题复杂度选择策略，避免简单问题用重策略；</li>
 <li><strong>始终保留原始 Query 兜底</strong>，不要叠加多种改写方法。</li>
@@ -8924,7 +8925,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

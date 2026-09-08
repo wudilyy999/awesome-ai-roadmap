@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="传统应用的隐私风险主要来自数据库访问控制。LLM 系统额外引入了两类传统应用没有的隐私风险： 模型权重本身可能&quot;记住&quot;了训练数据的片段 ，以及 对话记忆机制可能跨会话/跨用户泄漏信息 。这两类风险不通过访问控制就能生效，必须单独建模">
+        <meta name="description" content="区分训练数据记忆化、成员推断与应用记忆泄漏，解释差分隐私、数据留存、删除与跨境处理的边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第六章：隐私、PII 与记忆泄漏">
-    <meta property="og:description" content="传统应用的隐私风险主要来自数据库访问控制。LLM 系统额外引入了两类传统应用没有的隐私风险： 模型权重本身可能&quot;记住&quot;了训练数据的片段 ，以及 对话记忆机制可能跨会话/跨用户泄漏信息 。这两类风险不通过访问控制就能生效，必须单独建模">
+    <meta property="og:description" content="区分训练数据记忆化、成员推断与应用记忆泄漏，解释差分隐私、数据留存、删除与跨境处理的边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第六章：隐私、PII 与记忆泄漏">
-    <meta name="twitter:description" content="传统应用的隐私风险主要来自数据库访问控制。LLM 系统额外引入了两类传统应用没有的隐私风险： 模型权重本身可能&quot;记住&quot;了训练数据的片段 ，以及 对话记忆机制可能跨会话/跨用户泄漏信息 。这两类风险不通过访问控制就能生效，必须单独建模">
+    <meta name="twitter:description" content="区分训练数据记忆化、成员推断与应用记忆泄漏，解释差分隐私、数据留存、删除与跨境处理的边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第六章：隐私、PII 与记忆泄漏","description":"传统应用的隐私风险主要来自数据库访问控制。LLM 系统额外引入了两类传统应用没有的隐私风险： 模型权重本身可能\"记住\"了训练数据的片段 ，以及 对话记忆机制可能跨会话/跨用户泄漏信息 。这两类风险不通过访问控制就能生效，必须单独建模","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第六章：隐私、PII 与记忆泄漏","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第六章：隐私、PII 与记忆泄漏","description":"区分训练数据记忆化、成员推断与应用记忆泄漏，解释差分隐私、数据留存、删除与跨境处理的边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第六章：隐私、PII 与记忆泄漏","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"隐私、PII 与记忆泄漏","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/"}]}</script>
     
@@ -7930,7 +7930,7 @@
           <li class="md-nav__item">
   <a href="#661" class="md-nav__link">
     <span class="md-ellipsis">
-      6.6.1 认为参数量远大于数据量就不会记忆化
+      6.6.1 仅凭模型或数据规模判断隐私安全
     </span>
   </a>
   
@@ -8532,7 +8532,7 @@
           <li class="md-nav__item">
   <a href="#661" class="md-nav__link">
     <span class="md-ellipsis">
-      6.6.1 认为参数量远大于数据量就不会记忆化
+      6.6.1 仅凭模型或数据规模判断隐私安全
     </span>
   </a>
   
@@ -8614,7 +8614,7 @@
 
 <h1 id="pii">第六章：隐私、PII 与记忆泄漏<a class="headerlink" href="#pii" title="Permanent link">&para;</a></h1>
 <h2 id="61-ai">6.1 AI 系统的隐私攻击面比传统应用更宽<a class="headerlink" href="#61-ai" title="Permanent link">&para;</a></h2>
-<p>传统应用的隐私风险主要来自数据库访问控制。LLM 系统额外引入了两类传统应用没有的隐私风险：<strong>模型权重本身可能"记住"了训练数据的片段</strong>，以及<strong>对话记忆机制可能跨会话/跨用户泄漏信息</strong>。这两类风险不通过访问控制就能生效，必须单独建模。</p>
+<p>传统应用的隐私风险也包括日志、缓存和第三方处理。LLM 场景需区分：权重中的训练数据记忆化，以及应用存储中的会话、摘要和长期记忆。前者可能通过模型输出泄漏，后者往往就是检索授权、租户隔离或生命周期治理失败；不能说记忆泄漏与访问控制无关。</p>
 <pre class="mermaid"><code>flowchart TB
     P[AI 隐私风险] --&gt; P1[训练数据记忆化&lt;br/&gt;6.2]
     P --&gt; P2[推理阶段的 PII 处理&lt;br/&gt;6.3]
@@ -8622,7 +8622,7 @@
     P --&gt; P4[数据驻留与跨境合规&lt;br/&gt;6.5]</code></pre>
 <h2 id="62">6.2 训练数据记忆化与抽取攻击<a class="headerlink" href="#62" title="Permanent link">&para;</a></h2>
 <h3 id="621">6.2.1 为什么模型会"背下"训练数据<a class="headerlink" href="#621" title="Permanent link">&para;</a></h3>
-<p>大模型的参数量远超压缩训练数据本身所需的信息量，但在训练过程中，<strong>低频出现、格式独特或重复次数较多的样本</strong>（例如某个人的联系方式反复出现在爬取语料中、重复出现的代码片段、罕见但完整复述的文本段落）有更高概率被模型逐字记住，而不是被泛化。</p>
+<p>训练优化并不保证只学习可泛化的规律，也可能记住具体序列。相关研究发现，模型规模、重复曝光与提示前缀长度会影响可抽取程度；不能简单断言「参数量远超数据」或「所有低频样本更易被记住」。去重通常降低重复样本风险，但一次出现的敏感材料也不能因此被视为安全。</p>
 <h3 id="622-extraction-attack">6.2.2 抽取攻击（Extraction Attack）<a class="headerlink" href="#622-extraction-attack" title="Permanent link">&para;</a></h3>
 <p>攻击者不需要访问训练数据本身，只需要通过精心设计的 Prompt（例如让模型"续写"一段已知开头，或大量重复采样同一个前缀）就可能让模型输出训练数据中记忆化的原文，包括：</p>
 <ul>
@@ -8631,7 +8631,7 @@
 <li>版权内容的大段复现。</li>
 </ul>
 <h3 id="623-membership-inference-attack-mia">6.2.3 成员推断攻击（Membership Inference Attack, MIA）<a class="headerlink" href="#623-membership-inference-attack-mia" title="Permanent link">&para;</a></h3>
-<p>与抽取攻击不同，成员推断攻击不追求还原原文，而是判断"某条具体数据是否出现在训练集中"——例如判断某位患者的病历是否被用于训练了某个医疗模型。攻击者通常利用模型对"见过的数据"和"没见过的数据"在困惑度（perplexity）或置信度上的系统性差异来做判断。这类攻击本身就构成隐私泄漏（"是否使用了某人的数据"这件事本身可能是敏感信息），也是很多数据合规义务（如被遗忘权）绕不开的技术前提。</p>
+<p>成员推断不追求还原原文，而是判断某条数据是否在训练集中，例如某人的病历是否参与过训练。它可能利用损失、困惑度或置信度，但 API 未必提供这些观测量。推断结果是统计证据：需控制非成员样本的来源、时间和分布，否则低损失可能只意味着文本通用或重复，不能据一次得分认定训练成员身份。成员身份可能敏感，但完成成员推断不是履行删除义务的必要前置条件。</p>
 <h3 id="624">6.2.4 防御<a class="headerlink" href="#624" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8647,7 +8647,7 @@
 </tr>
 <tr>
 <td>差分隐私训练（DP-SGD 等）</td>
-<td>在训练过程中对梯度加噪，从数学上限制单条样本对最终模型的可辨识影响，代价是可能牺牲一定模型效果</td>
+<td>梯度裁剪、校准噪声和隐私会计共同提供特定相邻数据集定义下的保证；只加噪声不等于 DP</td>
 </tr>
 <tr>
 <td>去重</td>
@@ -8663,6 +8663,7 @@
 </tr>
 </tbody>
 </table>
+<p>DP 要报告 epsilon、delta、样本级还是用户级保护，以及训练步骤、采样与重复发布的组合预算。一个用户贡献多条记录时，样本级保证不能直接当作用户级保证。DP 限制个体参与带来的可辨识变化，并不阻止系统推断总体规律，也不替代推理时的授权。</p>
 <h2 id="63-pii">6.3 推理阶段的 PII 处理<a class="headerlink" href="#63-pii" title="Permanent link">&para;</a></h2>
 <p>即便模型本身没有记忆化问题，运行时上下文中依然会流经大量 PII：用户输入、检索到的文档、工具返回的记录。</p>
 <ul>
@@ -8704,6 +8705,7 @@
 </tbody>
 </table>
 <p><strong>防御要点</strong>：记忆存储的检索必须带用户/租户维度过滤，这与 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全</a> 强调的"权限过滤必须在检索阶段生效"是同一原则；写入长期记忆前应有敏感度分级，明确哪些内容不应被长期保留；提供用户可见、可控的记忆管理入口（查看、编辑、删除），这既是隐私最佳实践，也常常是合规义务的一部分。</p>
+<p>用户与租户 ID 应来自认证上下文，而非模型生成的参数；检索结果、缓存命中、摘要生成和占位符还原都需限制在同一授权范围。相同模型处理多个独立请求不会自动共享对话状态，发生串场时应查应用的会话、存储和批处理隔离。</p>
 <h2 id="65">6.5 数据驻留与跨境合规<a class="headerlink" href="#65" title="Permanent link">&para;</a></h2>
 <p>AI 应用往往涉及跨区域的模型服务、向量数据库和日志存储，数据驻留（data residency）问题因此变得复杂：</p>
 <table>
@@ -8728,7 +8730,7 @@
 </tr>
 <tr>
 <td>删除与被遗忘权的落地</td>
-<td>用户请求删除数据后，需要级联清除向量索引、缓存、日志、备份和已生成的摘要/记忆，这是 <a href="../../../rag/06-operations-security/20-rag-challenges-security/">RAG 安全上线检查清单</a> 中"合规删除流程覆盖索引、原文、缓存、日志、备份"的隐私侧对应要求</td>
+<td>追踪原文、索引、缓存、日志、备份和摘要的派生关系；依法保留的例外要隔离用途，备份设置到期删除及恢复后重放删除标记</td>
 </tr>
 <tr>
 <td>分级路由</td>
@@ -8737,9 +8739,11 @@
 </tbody>
 </table>
 <p>跨境合规没有一刀切的技术方案，先要<strong>明确数据分类和适用的监管要求（如 GDPR、区域性数据保护法规），再反推架构上需要满足的驻留和访问控制约束</strong>，并把这些约束写进供应商合同和内部数据流转策略。</p>
+<p>「不用于训练」「不留存」「数据驻留」是三个不同承诺。例如 OpenAI API 数据默认不用于训练（除主动选择分享），仍可能保留滥用监控日志和应用状态；Zero Data Retention 也有资格、端点和功能限制，必须查具体合同与配置。指定推理区域不自动解决日志、支持访问、备份及子处理者的跨境问题。</p>
+<p>GDPR 的目的限制、数据最小化、合法依据、删除权及其例外、向第三国传输分别需要判断；假名化的标识、Embedding 或可还原占位符不自动成为匿名数据。删除训练源文件不等于删除模型影响，应记录可执行措施、审计证据及剩余风险，由隐私与法律责任方判断适用义务。</p>
 <h2 id="66">6.6 常见错误<a class="headerlink" href="#66" title="Permanent link">&para;</a></h2>
-<h3 id="661">6.6.1 认为参数量远大于数据量就不会记忆化<a class="headerlink" href="#661" title="Permanent link">&para;</a></h3>
-<p>低频、格式独特或重复出现的样本仍有较高概率被逐字记住，去重和差分隐私是必要的基础手段，不能仅凭模型规模大就假设安全。</p>
+<h3 id="661">6.6.1 仅凭模型或数据规模判断隐私安全<a class="headerlink" href="#661" title="Permanent link">&para;</a></h3>
+<p>记忆化与曝光、模型、任务和可观察接口共同相关。去重、审计和满足条件的 DP 训练各有用途，不能把某一种措施写成所有应用都必须或都能采用的保证。</p>
 <h3 id="662">6.6.2 把机器遗忘当作确定性的合规保证<a class="headerlink" href="#662" title="Permanent link">&para;</a></h3>
 <p>现有机器遗忘方法效果因场景而异，不应作为满足"被遗忘权"的唯一技术保证，仍需要配合可验证的删除流程。</p>
 <h3 id="663">6.6.3 共享记忆库不做用户维度过滤<a class="headerlink" href="#663" title="Permanent link">&para;</a></h3>
@@ -8761,7 +8765,9 @@
 <li><a href="https://arxiv.org/abs/1610.05820">Membership Inference Attacks against Machine Learning Models</a></li>
 <li><a href="https://arxiv.org/abs/1607.00133">Deep Learning with Differential Privacy (DP-SGD)</a></li>
 <li><a href="https://genai.owasp.org/llmrisk/llm02-sensitive-information-disclosure/">OWASP LLM02:2025 Sensitive Information Disclosure</a></li>
-<li><a href="https://www.nist.gov/publications/generative-ai-profile">NIST AI 600-1: Generative AI Profile — Privacy risks</a></li>
+<li><a href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence">NIST AI 600-1: Generative AI Profile — Privacy risks</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/your-data">OpenAI: Data controls in the API platform</a></li>
+<li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng">GDPR 原文：第 5、6、17 条及第五章</a></li>
 </ul>
 
 
@@ -8785,7 +8791,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

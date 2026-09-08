@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Agent Reflection 更接近一套反馈驱动的控制机制，而不是抽象的“自省”">
+        <meta name="description" content="分析 Self-Refine、Reflexion、Critic 与 LATS 的反馈机制，区分自我评价和外部验证，设计有硬性验收与预算边界的修订循环。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十二章：Agent 的反思、验证与自我改进">
-    <meta property="og:description" content="Agent Reflection 更接近一套反馈驱动的控制机制，而不是抽象的“自省”">
+    <meta property="og:description" content="分析 Self-Refine、Reflexion、Critic 与 LATS 的反馈机制，区分自我评价和外部验证，设计有硬性验收与预算边界的修订循环。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/12-agent-reflection/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十二章：Agent 的反思、验证与自我改进">
-    <meta name="twitter:description" content="Agent Reflection 更接近一套反馈驱动的控制机制，而不是抽象的“自省”">
+    <meta name="twitter:description" content="分析 Self-Refine、Reflexion、Critic 与 LATS 的反馈机制，区分自我评价和外部验证，设计有硬性验收与预算边界的修订循环。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十二章：Agent 的反思、验证与自我改进","description":"Agent Reflection 更接近一套反馈驱动的控制机制，而不是抽象的“自省”","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/12-agent-reflection/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十二章：Agent 的反思、验证与自我改进","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/12-agent-reflection/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十二章：Agent 的反思、验证与自我改进","description":"分析 Self-Refine、Reflexion、Critic 与 LATS 的反馈机制，区分自我评价和外部验证，设计有硬性验收与预算边界的修订循环。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/12-agent-reflection/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十二章：Agent 的反思、验证与自我改进","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/12-agent-reflection/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"反思、验证与自我改进","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/02-reasoning-planning/12-agent-reflection/"}]}</script>
     
@@ -4078,11 +4078,11 @@
         <li class="md-nav__item">
   <a href="#1213-evaluate-refine" class="md-nav__link">
     <span class="md-ellipsis">
-      12.13 Evaluate 与 Refine 必须职责分离
+      12.13 区分 Evaluate 与 Refine 的职责
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="12.13 Evaluate 与 Refine 必须职责分离">
+    <nav class="md-nav" aria-label="12.13 区分 Evaluate 与 Refine 的职责">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4188,9 +4188,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#12161-2-3" class="md-nav__link">
+  <a href="#12161" class="md-nav__link">
     <span class="md-ellipsis">
-      12.16.1 最大轮数不是固定 2 到 3
+      12.16.1 如何确定最大轮数
     </span>
   </a>
   
@@ -9287,11 +9287,11 @@
         <li class="md-nav__item">
   <a href="#1213-evaluate-refine" class="md-nav__link">
     <span class="md-ellipsis">
-      12.13 Evaluate 与 Refine 必须职责分离
+      12.13 区分 Evaluate 与 Refine 的职责
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="12.13 Evaluate 与 Refine 必须职责分离">
+    <nav class="md-nav" aria-label="12.13 区分 Evaluate 与 Refine 的职责">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -9397,9 +9397,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#12161-2-3" class="md-nav__link">
+  <a href="#12161" class="md-nav__link">
     <span class="md-ellipsis">
-      12.16.1 最大轮数不是固定 2 到 3
+      12.16.1 如何确定最大轮数
     </span>
   </a>
   
@@ -9876,7 +9876,7 @@
     D --&gt;|否| F[Structured Feedback]
     F --&gt; R[Refine / Retry / Replan]
     R --&gt; G</code></pre>
-<p>反思要起作用，前提是系统拿到了新的反馈。反馈可以来自：</p>
+<p>反思需要足够有用的纠错信号，但不一定每轮都有新外部证据：重新对照明确标准也可能发现遗漏。反馈可以来自：</p>
 <ul>
 <li>Tool Result；</li>
 <li>编译器；</li>
@@ -9890,6 +9890,7 @@
 <li>LLM-as-a-Judge。</li>
 </ul>
 <p>如果没有新的证据或评价标准，让同一个模型重复生成可能只会得到另一个同样不可靠的答案。</p>
+<p>这里的 Reflection 是控制机制的统称，不是一种统一算法。Self-Refine、Reflexion 和训练过的自纠错模型分别改变当前候选、尝试间的上下文、模型参数；名称相似不意味着学习机制相同。</p>
 <h2 id="122">12.2 为什么需要反思<a class="headerlink" href="#122" title="Permanent link">&para;</a></h2>
 <h3 id="1221">12.2.1 发现生成阶段遗漏的问题<a class="headerlink" href="#1221" title="Permanent link">&para;</a></h3>
 <p>模型生成内容时主要关注“完成任务”，不一定同时覆盖：</p>
@@ -9953,7 +9954,7 @@
 </tr>
 <tr>
 <td>可能具有主观性</td>
-<td>越接近真实环境越客观</td>
+<td>只在检查标准及其覆盖范围内提供结论</td>
 </tr>
 <tr>
 <td>用于指导修订</td>
@@ -9987,6 +9988,7 @@
     DET --&gt;|无法完全验证| HUMAN[Human or Domain Review]
     HUMAN --&gt;|仍需辅助| JUDGE[LLM Judge]</code></pre>
 <p>语言模型评价适合处理难以完全形式化的质量维度，但不应替代可用的客观验证。</p>
+<p>上面不是无条件的证据排名。HTTP 200 可能只代表受理，真实系统也可能返回过期状态；编译通过不保证业务正确，生成测试也可能写错预期值。选择验证器时要说明它验证了什么、漏掉什么，以及失败时能否阻止交付。对不可逆动作，审批必须在执行前，事后反思不能补回缺失的授权。</p>
 <h2 id="125">12.5 反思的四种触发粒度<a class="headerlink" href="#125" title="Permanent link">&para;</a></h2>
 <p>除了步骤级和任务级，还可以加入里程碑级与跨任务 Consolidation。</p>
 <pre class="mermaid"><code>flowchart TB
@@ -10204,7 +10206,7 @@
     S --&gt;|Pass| DONE[Finish]
     S --&gt;|Budget Exhausted| PARTIAL[Report Incomplete]
     F --&gt; MW[Optional Memory Writer]</code></pre>
-<h2 id="1213-evaluate-refine">12.13 Evaluate 与 Refine 必须职责分离<a class="headerlink" href="#1213-evaluate-refine" title="Permanent link">&para;</a></h2>
+<h2 id="1213-evaluate-refine">12.13 区分 Evaluate 与 Refine 的职责<a class="headerlink" href="#1213-evaluate-refine" title="Permanent link">&para;</a></h2>
 <p>反思至少需要两个逻辑阶段：</p>
 <h3 id="12131-evaluate">12.13.1 Evaluate<a class="headerlink" href="#12131-evaluate" title="Permanent link">&para;</a></h3>
 <p>只负责：</p>
@@ -10277,6 +10279,7 @@
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nt">"next_action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"revise"</span>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">}</span>
 </span></code></pre></div>
+<p><code>score</code> 是教学占位值，不是校准后的正确概率；应定义评分尺度、Rubric 版本及证据范围。<code>PASS</code> 也只表示该 Critic 在职责范围内未发现问题，不能覆盖确定性测试失败、安全拒绝或审批缺失。</p>
 <p>允许的 Verdict 可以是：</p>
 <ul>
 <li><code>PASS</code>；</li>
@@ -10308,8 +10311,8 @@
 <p>不能依赖模型自己无限反思直到满意。</p>
 <p>停止条件包括：</p>
 <ul>
-<li>Verifier 返回 PASS；</li>
-<li>达到最低分数；</li>
+<li>所有必需的硬性验收通过，且所需质量检查通过；</li>
+<li>达到软质量阈值且没有未解决的硬性失败；</li>
 <li>达到最大轮数；</li>
 <li>Token 或费用预算耗尽；</li>
 <li>超时；</li>
@@ -10327,8 +10330,9 @@
 \Delta_r\le\epsilon
 \]</div>
 <p>可以判定优化已经停滞。</p>
-<h3 id="12161-2-3">12.16.1 最大轮数不是固定 2 到 3<a class="headerlink" href="#12161-2-3" title="Permanent link">&para;</a></h3>
-<p>一到三轮是很多低风险文本任务的常见默认范围，但不应写成普适规则。</p>
+<p>前提是各轮使用可比较的评分尺度，且分数差异大于 Judge 的随机波动。应保存候选与验证记录，不能简单交付“最后一版”：修订可能让原本正确的部分回归。阈值未达标或存在硬性失败时，停止表示未完成或转人工，而不是成功。</p>
+<h3 id="12161">12.16.1 如何确定最大轮数<a class="headerlink" href="#12161" title="Permanent link">&para;</a></h3>
+<p>没有适用于所有任务的默认最优轮数。可以选择少量轮次作为实验起点，但不能把“一到三轮”当作已有普遍收益的结论。</p>
 <p>轮数应根据：</p>
 <ul>
 <li>单轮成本；</li>
@@ -10390,6 +10394,7 @@ C_{verify,r}
 <li>可能产生表面修改。</li>
 </ul>
 <p>Self-Reflection 可以作为初筛，但不能当成客观验证。</p>
+<p>实验结论要带上范围：<a href="https://arxiv.org/abs/2310.01798">Huang 等人的研究</a>发现，当时所测模型在没有外部反馈的推理纠错中经常无收益甚至退化；这不是“模型永远无法自纠错”的定理。<a href="https://arxiv.org/abs/2409.12917">SCoRe</a>随后用多轮在线 RL 专门训练自纠错，测试时不要求外部纠错反馈。这与只给冻结模型加一句“检查一下”不同：训练阶段确实使用奖励并更新了参数。</p>
 <h2 id="1219-critic-agent">12.19 Critic Agent<a class="headerlink" href="#1219-critic-agent" title="Permanent link">&para;</a></h2>
 <p>Critic Agent 专门检查 Executor 的 Artifact 或轨迹。</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -10501,7 +10506,8 @@ C_{verify,r}
     R --&gt; V{Pass?}
     V --&gt;|否| F
     V --&gt;|是| OUT[Output]</code></pre>
-<p>它主要优化当前候选，不修改模型权重。</p>
+<p>Self-Refine 原方法使用同一 LLM 生成、反馈、修订，不要求额外训练或 RL，主要优化当前候选而非模型权重。原论文在七类任务上报告收益，但任务使用的评价标准、模型与停止方式不同，不能把其平均增益当作任意业务的普遍提升。</p>
+<p>它的自反馈可以发现风格、格式或显式约束问题，不保证补充缺失事实。没有外部反馈时也可能改善输出，但事实和逻辑纠错是否有效仍需独立测试。</p>
 <p>适合：</p>
 <ul>
 <li>文本质量优化；</li>
@@ -10510,7 +10516,7 @@ C_{verify,r}
 <li>低风险迭代。</li>
 </ul>
 <h2 id="1223-reflexion">12.23 Reflexion<a class="headerlink" href="#1223-reflexion" title="Permanent link">&para;</a></h2>
-<p>Reflexion 将环境反馈转化为自然语言反思，并保存在 Episodic Memory 中，供后续尝试使用。</p>
+<p>Reflexion 将任务反馈转化为自然语言反思，并保存在 Episodic Memory 中，供后续尝试使用。原论文允许标量或文本、外部或内部模拟的反馈；“Verbal Reinforcement Learning”指以语言记忆影响后续策略，不是通过梯度更新 Actor 权重。</p>
 <p>经典组件包括：</p>
 <ul>
 <li>Actor；</li>
@@ -10529,6 +10535,7 @@ C_{verify,r}
     MEM --&gt; A</code></pre>
 <h3 id="12231-reflexion">12.23.1 原始 Reflexion 的记忆范围<a class="headerlink" href="#12231-reflexion" title="Permanent link">&para;</a></h3>
 <p>原始方法重点是在同一任务的多次 Trial 之间保留 verbal reflection，从而让下一次尝试避免重复错误。</p>
+<p>试次可以重新初始化环境，而保留有界反思记忆。它不同于在同一答案上继续润色，也不同于自动获得跨任务长期技能。论文 HumanEval 的最终单候选 <code>pass@1</code> 包含生成测试与多次修订，不能理解为一次模型调用成功率；该论文 MBPP Python 上也出现退化，详见<a href="../04-agent-design-patterns/">第四章 §4.6.2：HumanEval 结果应如何解读</a>。</p>
 <p>它不要求：</p>
 <ul>
 <li>必须使用 Vector DB；</li>
@@ -10569,7 +10576,7 @@ C_{verify,r}
 <li>Value Evaluation；</li>
 <li>Reflection；</li>
 </ul>
-<p>结合在同一个搜索过程。</p>
+<p>结合在同一个基于 MCTS 的搜索过程。Selection 在探索与利用之间取舍，Expansion 生成动作，模拟／环境执行得到反馈，价值估计与回报再回传到树节点；这不是神经网络梯度回传，原方法不靠在线微调更新 LLM 参数。</p>
 <pre class="mermaid"><code>flowchart TB
     ROOT[Current State] --&gt; A[Action A]
     ROOT --&gt; B[Action B]
@@ -10605,6 +10612,7 @@ C_{verify,r}
 <li>Tool 执行。</li>
 </ul>
 <p>它可能远高于线性 ReAct 或简单 Reflection，不能用固定倍数概括。</p>
+<p>多分支比较隐含环境可重置、克隆或安全模拟的条件；从节点 B 回溯到节点 A 不会撤销真实外部写入。对不可逆操作，应先在隔离环境评价候选，再对获准方案执行一次，不能把真实支付或发信当成 rollout。</p>
 <h3 id="12243">12.24.3 工程定位<a class="headerlink" href="#12243" title="Permanent link">&para;</a></h3>
 <p>LATS 是重要的研究型架构，其思想可以用于：</p>
 <ul>
@@ -10613,7 +10621,7 @@ C_{verify,r}
 <li>可模拟环境；</li>
 <li>高价值决策辅助。</li>
 </ul>
-<p>但完整 MCTS + Reflection 通常不是普通生产请求的默认方案。生产系统更常采用受预算限制的 Beam Search、Best-of-N、Verifier 和局部重试。</p>
+<p>若单轮请求的延迟预算无法承担多分支执行，可以先比较受限 Beam Search、Best-of-N、Verifier 和局部重试。是否需要完整 MCTS + Reflection，应由同预算对照决定，而不是由架构名称决定。</p>
 <h2 id="1225">12.25 反思与规划的关系<a class="headerlink" href="#1225" title="Permanent link">&para;</a></h2>
 <p>Reflection 可以作用于不同对象：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -10637,6 +10645,7 @@ C_{verify,r}
     G --&gt; DET[Deterministic Checks]
     DET --&gt;|通过| C[Critic]
     DET --&gt;|失败| FIX[Direct Repair]
+    FIX --&gt; DET
     C --&gt; D{Verdict}
     D --&gt;|PASS| OUT[Output]
     D --&gt;|REVISE| R[Refiner]
@@ -10644,6 +10653,7 @@ C_{verify,r}
     D --&gt;|HUMAN| H[Human Review]
     R --&gt; DET
     P --&gt; G</code></pre>
+<p>图中修复与重规划都受同一个 Stop Controller 限制；修订后重新跑必需检查，不能因 Critic 返回 PASS 而跳过。发送、部署、付款等动作另设执行前准入门，不能只在事后进入这个质量循环。</p>
 <p>Workflow 负责：</p>
 <ul>
 <li>最大轮数；</li>
@@ -10721,11 +10731,13 @@ C_{verify,r}
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">},</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">"diagnosis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"函数在访问首元素前没有检查空列表"</span><span class="p">,</span>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">"recommended_action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"增加空输入分支并补充测试"</span><span class="p">,</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">"verified"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="nt">"applicability"</span><span class="p">:</span><span class="w"> </span><span class="s2">"functions that access the first list element"</span><span class="p">,</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="nt">"retention"</span><span class="p">:</span><span class="w"> </span><span class="s2">"task-local"</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">"verified"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="nt">"verification_needed"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"复现失败"</span><span class="p">,</span><span class="w"> </span><span class="s2">"确认修补后的目标测试与相关回归测试通过"</span><span class="p">],</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="nt">"applicability"</span><span class="p">:</span><span class="w"> </span><span class="s2">"functions that access the first list element"</span><span class="p">,</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="nt">"retention"</span><span class="p">:</span><span class="w"> </span><span class="s2">"task-local"</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">}</span>
 </span></code></pre></div>
+<p>错误消息本身只证明某次执行失败，不足以证明根因和修复建议成立。示例保持 <code>verified: false</code>；验证后应记录候选版本、测试版本和结果，由可信流程设置验证状态，而不是由生成反思的模型自行宣称已验证。</p>
 <p>关键字段：</p>
 <ul>
 <li>Scope；</li>
@@ -10819,8 +10831,9 @@ C_{verify,r}
 </tbody>
 </table>
 <p>评估时更该看反思是否以可接受成本提高最终任务成功率，并减少风险，而不是只统计 Critic 提了多少意见。</p>
+<p>特别要同时统计“错改对”和“对改错”。只在已知错误样本上测修复率，会掩盖 Critic 将正确结果误判并破坏的风险；实际系统没有 oracle 告诉它哪些答案需要修订。</p>
 <h2 id="1232-ab">12.32 A/B 评估<a class="headerlink" href="#1232-ab" title="Permanent link">&para;</a></h2>
-<p>至少比较：</p>
+<p>按待验证假设选择对照，不必一次运行全部组合：</p>
 <ol>
 <li>无 Reflection；</li>
 <li>Self-Reflection；</li>
@@ -10842,6 +10855,7 @@ C_{verify,r}
 <li>用户满意度。</li>
 </ul>
 <p>如果 Critic 只增加成本而没有稳定提升，就不应保留。</p>
+<p>增加等 Token、等工具调用或等时延预算的重采样／仅测试修复对照，才能分清收益来自反思内容还是更多尝试。修订循环使用开发测试，最终计分使用独立保留集；不能把隐藏测试答案或最终 Judge 的详细反馈泄漏给 Refiner。</p>
 <h2 id="1233">12.33 常见反模式<a class="headerlink" href="#1233" title="Permanent link">&para;</a></h2>
 <h3 id="12331">12.33.1 只说“请检查有没有问题”<a class="headerlink" href="#12331" title="Permanent link">&para;</a></h3>
 <p>缺少 Rubric，反馈容易流于表面。</p>
@@ -10850,7 +10864,7 @@ C_{verify,r}
 <h3 id="12333-refiner">12.33.3 Refiner 看不到原始任务<a class="headerlink" href="#12333-refiner" title="Permanent link">&para;</a></h3>
 <p>只根据批注修改，可能偏离用户目标。</p>
 <h3 id="12334">12.33.4 同一个模型反复重写<a class="headerlink" href="#12334" title="Permanent link">&para;</a></h3>
-<p>没有新证据，只产生文本变化。</p>
+<p>若既没有有效检查标准，也没有新证据，可能只产生文本变化；不能用“改过了”代替质量评估。</p>
 <h3 id="12335-critic">12.33.5 每个步骤都调用大型 Critic<a class="headerlink" href="#12335-critic" title="Permanent link">&para;</a></h3>
 <p>低风险步骤成本过高。</p>
 <h3 id="12336-critic-agent">12.33.6 Critic Agent 被假设为客观真相<a class="headerlink" href="#12336-critic-agent" title="Permanent link">&para;</a></h3>
@@ -10863,33 +10877,37 @@ C_{verify,r}
 <p>多个 Agent 讨论不能替代权威数据。</p>
 <h2 id="1234">12.34 推荐生产架构<a class="headerlink" href="#1234" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TB
-    TASK[Task] --&gt; EXEC[Executor]
+    TASK[Task] --&gt; BUDGET{仍有预算且可继续?}
+    BUDGET --&gt;|是| GATE{执行前权限与审批通过?}
+    BUDGET --&gt;|否| PARTIAL[Report Incomplete]
+    GATE --&gt;|是| EXEC[Executor]
+    GATE --&gt;|否| HUMAN[Human Review / 拒绝]
+    HUMAN --&gt;|重新获得授权| GATE
     EXEC --&gt; ART[Artifact + Trace]
 
     ART --&gt; DV[Deterministic Verifiers]
-    DV --&gt; RISK{高风险或检查失败?}
-
-    RISK --&gt;|否| NEED{需要主观质量评价?}
-    RISK --&gt;|是| CRITIC[Critic]
+    DV --&gt; HARD{必需检查通过?}
+    HARD --&gt;|否| FAILURE[记录硬性失败并生成修复反馈]
+    HARD --&gt;|是| NEED{需要主观质量评价?}
     NEED --&gt;|否| DONE[Finish]
-    NEED --&gt;|是| CRITIC
+    NEED --&gt;|是| CRITIC[Critic]
 
     CRITIC --&gt; VERDICT{Verdict}
     VERDICT --&gt;|PASS| DONE
     VERDICT --&gt;|REVISE| REFINE[Refiner]
     VERDICT --&gt;|REPLAN| PLAN[Replanner]
-    VERDICT --&gt;|BLOCKED| HUMAN[Human Review]
+    VERDICT --&gt;|BLOCKED| HUMAN
+    FAILURE --&gt; REFINE
 
-    REFINE --&gt; EXEC
-    PLAN --&gt; EXEC
-
-    CRITIC --&gt; STOP[Stop Controller]
-    STOP --&gt;|Budget Exhausted| PARTIAL[Report Incomplete]
+    REFINE --&gt; BUDGET
+    PLAN --&gt; BUDGET
 
     DONE --&gt; CONS{经验值得沉淀?}
     CONS --&gt;|否| END[End]
     CONS --&gt;|是| VALIDATE[Validate Reflection]
-    VALIDATE --&gt; MEMORY[Memory / Skill Candidate]</code></pre>
+    VALIDATE --&gt;|通过| MEMORY[Memory / Skill Candidate]
+    VALIDATE --&gt;|未证实| END</code></pre>
+<p>图中硬性失败没有通向 Critic PASS 的捷径。入口展示了整体准入检查，Runtime 还必须在每个模型／工具调用前检查剩余预算，包括 Critic、Refiner 和 Replanner；任何修改都要绑定新候选版本重新验收。这里的 Executor 消费当前候选或计划，不应在 Refiner 修改后无条件丢弃它重新生成。</p>
 <p>推荐原则：</p>
 <ol>
 <li>先使用确定性 Verifier；</li>
@@ -10931,6 +10949,8 @@ C_{verify,r}
 <li><a href="https://arxiv.org/abs/2310.04406">Language Agent Tree Search Unifies Reasoning, Acting, and Planning</a></li>
 <li><a href="https://arxiv.org/abs/2305.14325">Improving Factuality and Reasoning in Language Models through Multiagent Debate</a></li>
 <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic: Building Effective Agents</a></li>
+<li><a href="https://arxiv.org/abs/2310.01798">Large Language Models Cannot Self-Correct Reasoning Yet</a></li>
+<li><a href="https://arxiv.org/abs/2409.12917">Training Language Models to Self-Correct via Reinforcement Learning（SCoRe）</a></li>
 </ul>
 
 
@@ -10954,7 +10974,7 @@ C_{verify,r}
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

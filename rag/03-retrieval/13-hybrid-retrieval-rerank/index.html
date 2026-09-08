@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="这里说的「系统性」不是「偶尔漏几条」，而是 某一整类 Query 永远召不回来 。加大 Top-K、调高 ef search 都无济于事">
+        <meta name="description" content="说明 RRF 的排名贡献、窗口与平滑常数，比较 cross-encoder 和 listwise 重排，并讨论校准拒答、去重和版本选择。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十三章：多路召回、RRF 融合与 Rerank">
-    <meta property="og:description" content="这里说的「系统性」不是「偶尔漏几条」，而是 某一整类 Query 永远召不回来 。加大 Top-K、调高 ef search 都无济于事">
+    <meta property="og:description" content="说明 RRF 的排名贡献、窗口与平滑常数，比较 cross-encoder 和 listwise 重排，并讨论校准拒答、去重和版本选择。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/13-hybrid-retrieval-rerank/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十三章：多路召回、RRF 融合与 Rerank">
-    <meta name="twitter:description" content="这里说的「系统性」不是「偶尔漏几条」，而是 某一整类 Query 永远召不回来 。加大 Top-K、调高 ef search 都无济于事">
+    <meta name="twitter:description" content="说明 RRF 的排名贡献、窗口与平滑常数，比较 cross-encoder 和 listwise 重排，并讨论校准拒答、去重和版本选择。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十三章：多路召回、RRF 融合与 Rerank","description":"这里说的「系统性」不是「偶尔漏几条」，而是 某一整类 Query 永远召不回来 。加大 Top-K、调高 ef search 都无济于事","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/13-hybrid-retrieval-rerank/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十三章：多路召回、RRF 融合与 Rerank","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/13-hybrid-retrieval-rerank/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十三章：多路召回、RRF 融合与 Rerank","description":"说明 RRF 的排名贡献、窗口与平滑常数，比较 cross-encoder 和 listwise 重排，并讨论校准拒答、去重和版本选择。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/13-hybrid-retrieval-rerank/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十三章：多路召回、RRF 融合与 Rerank","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/13-hybrid-retrieval-rerank/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"多路召回、RRF 与 Rerank","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/rag/03-retrieval/13-hybrid-retrieval-rerank/"}]}</script>
     
@@ -4828,7 +4828,7 @@
         <li class="md-nav__item">
   <a href="#131" class="md-nav__link">
     <span class="md-ellipsis">
-      13.1 为什么必须多路召回
+      13.1 为什么考虑多路召回
     </span>
   </a>
   
@@ -4879,11 +4879,11 @@
         <li class="md-nav__item">
   <a href="#134-rerank" class="md-nav__link">
     <span class="md-ellipsis">
-      13.4 Rerank：整条链路性价比最高的一步
+      13.4 Rerank：在候选覆盖之后改善排序
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="13.4 Rerank：整条链路性价比最高的一步">
+    <nav class="md-nav" aria-label="13.4 Rerank：在候选覆盖之后改善排序">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8498,7 +8498,7 @@
         <li class="md-nav__item">
   <a href="#131" class="md-nav__link">
     <span class="md-ellipsis">
-      13.1 为什么必须多路召回
+      13.1 为什么考虑多路召回
     </span>
   </a>
   
@@ -8549,11 +8549,11 @@
         <li class="md-nav__item">
   <a href="#134-rerank" class="md-nav__link">
     <span class="md-ellipsis">
-      13.4 Rerank：整条链路性价比最高的一步
+      13.4 Rerank：在候选覆盖之后改善排序
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="13.4 Rerank：整条链路性价比最高的一步">
+    <nav class="md-nav" aria-label="13.4 Rerank：在候选覆盖之后改善排序">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -8736,7 +8736,7 @@
 
 
 <h1 id="rrf-rerank">第十三章：多路召回、RRF 融合与 Rerank<a class="headerlink" href="#rrf-rerank" title="Permanent link">&para;</a></h1>
-<h2 id="131">13.1 为什么必须多路召回<a class="headerlink" href="#131" title="Permanent link">&para;</a></h2>
+<h2 id="131">13.1 为什么考虑多路召回<a class="headerlink" href="#131" title="Permanent link">&para;</a></h2>
 <p>第十一章已经展开过理论依据，这里先压缩成一句话：</p>
 <blockquote>
 <p><strong>稠密检索和稀疏检索的失败模式是互补的，任何单路都存在无法通过调参消除的系统性盲区。</strong></p>
@@ -8759,7 +8759,7 @@
 </tr>
 </tbody>
 </table>
-<p>这里说的「系统性」不是「偶尔漏几条」，而是<strong>某一整类 Query 永远召不回来</strong>。加大 Top-K、调高 <code>ef_search</code> 都无济于事。</p>
+<p>这些是常见弱项，不是某类 Query 永远不可能召回。提高 K 有时能补覆盖，但增加成本；提高 <code>ef_search</code> 主要减少 ANN 近似误差，不能保证修复表示本身的相关性排序。</p>
 <h2 id="132">13.2 分数没法直接比较<a class="headerlink" href="#132" title="Permanent link">&para;</a></h2>
 <p>多路召回的第一个技术问题是<strong>融合</strong>。</p>
 <table>
@@ -8774,7 +8774,7 @@
 <tr>
 <td>向量检索</td>
 <td>余弦相似度</td>
-<td>0 到 1（且分布集中在高位）</td>
+<td>−1 到 1；产品可能返回变换后的分数</td>
 </tr>
 <tr>
 <td>BM25</td>
@@ -8794,7 +8794,7 @@
 <div class="arithmatex">\[
 \mathrm{RRF}(d) = \sum_{r \in R} \frac{1}{k + \mathrm{rank}_r(d)}
 \]</div>
-<p>其中 <span class="arithmatex">\(R\)</span> 是所有召回路，<span class="arithmatex">\(\mathrm{rank}_r(d)\)</span> 是文档 <span class="arithmatex">\(d\)</span> 在第 <span class="arithmatex">\(r\)</span> 路结果中的排名，<span class="arithmatex">\(k\)</span> 是平滑常数，<strong>常用值为 60</strong>。</p>
+<p>其中 <span class="arithmatex">\(R\)</span> 是召回路集合，排名从 1 开始；未出现在某路候选窗口中的文档，该路贡献为 0。<span class="arithmatex">\(k\)</span> 是平滑常数，常用起点为 60，<strong>不是最终 Top-K</strong>。融合前确保每路同一 ID 只出现一次，再累加跨路贡献。</p>
 <h3 id="1331">13.3.1 为什么它管用<a class="headerlink" href="#1331" title="Permanent link">&para;</a></h3>
 <p>排名本身没有量纲，第 1 名就是第 1 名，不管原始分数是 0.92 还是 34.7，这让 RRF 能直接绕开不同分数体系不可比的问题。</p>
 <p><span class="arithmatex">\(k\)</span> 则起到削峰作用。当 <span class="arithmatex">\(k = 60\)</span> 时：</p>
@@ -8824,7 +8824,7 @@
 <blockquote>
 <p><strong>RRF 天然偏好「多路共识」而非「单路极端自信」。</strong> 因为单路的高分可能来自该路特有的偏见，而多路都认可的结果通常更可靠。</p>
 </blockquote>
-<p><span class="arithmatex">\(k=60\)</span> 这个默认值在各种数据集上都表现稳健，因此 RRF 基本不需要额外训练或复杂调参。</p>
+<p><span class="arithmatex">\(k=60\)</span> 来自原论文的经验设置，RRF 无需训练，但每路候选窗口、权重、平滑常数和融合后截断仍要调。多个高度相似的 Query 扩展结果并非独立证据，可能重复放大某一路偏见。</p>
 <h3 id="1332">13.3.2 它的局限<a class="headerlink" href="#1332" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>丢弃了分数的绝对信息</strong>：一个相似度 0.95 和一个 0.5 的结果，只要排名相同，贡献就相同；</li>
@@ -8832,9 +8832,9 @@
 <li><strong>不同路的可信度无法直接表达</strong>（可通过给每路加权部分缓解）。</li>
 </ul>
 <p>RRF 是混合检索中广泛采用、值得先建立的<strong>强基线</strong>，因为它鲁棒且少调参；它不是所有语料的“事实标准”。若有带标签的业务数据，应将 RRF 与归一化加权、学习排序或单路检索一起比较，再按效果、延迟和可维护性选择。</p>
-<h2 id="134-rerank">13.4 Rerank：整条链路性价比最高的一步<a class="headerlink" href="#134-rerank" title="Permanent link">&para;</a></h2>
+<h2 id="134-rerank">13.4 Rerank：在候选覆盖之后改善排序<a class="headerlink" href="#134-rerank" title="Permanent link">&para;</a></h2>
 <h3 id="1341">13.4.1 为什么需要它<a class="headerlink" href="#1341" title="Permanent link">&para;</a></h3>
-<p>粗排用的是双塔模型，Query 和文档<strong>从未见面</strong>，只能比较两个独立编码的向量。这决定了它在细粒度上一定不够准（第六章 6.3.3）。</p>
+<p>典型稠密粗排把 Query 与文档独立编码，再比较两个压缩表示，在线没有跨文本注意力。因此可以尝试重排补足细粒度交互，但不意味着双塔在每个任务上一定更差（第六章 6.3.3）。</p>
 <p>Rerank 用 cross-encoder：<strong>把 Query 和候选文档拼在一起</strong>送进模型，让注意力机制在两者之间充分交互，输出一个相关性分数。</p>
 <pre class="mermaid"><code>flowchart LR
     subgraph 粗排
@@ -8877,17 +8877,17 @@
 </tr>
 <tr>
 <td>LLM listwise</td>
-<td>用大模型对候选列表整体排序</td>
-<td>秒级</td>
-<td><strong>高 5–20 倍</strong></td>
-<td>效果最好但多数场景不划算</td>
+<td>用大模型对候选列表排序</td>
+<td>取决于输入、输出和模型</td>
+<td>通常较高，须测算</td>
+<td>可建模候选间关系，也会有位置偏置和排序遗漏</td>
 </tr>
 </tbody>
 </table>
 <p><strong>LLM listwise 的额外价值</strong>在于它一次看到所有候选，能做<strong>相对比较</strong>和去冗余（识别出「这两条说的是同一件事」），而 cross-encoder 是<strong>逐条独立打分</strong>的，看不到候选之间的关系。</p>
-<p><strong>但 5–20 倍的成本差距意味着：除非有明确证据表明标准 cross-encoder 不够用，否则不要上。</strong></p>
+<p>表中延迟是量级示意，不能跨硬件和服务直接比较。Listwise 输入超预算时还需滑动窗口或分组排序，应检查候选 ID 是否遗漏、重复，以及候选顺序扰动是否改变结果。</p>
 <h3 id="1343">13.4.3 工程要点<a class="headerlink" href="#1343" title="Permanent link">&para;</a></h3>
-<p>候选数是延迟的主要驱动因素。Rerank 的耗时与候选数近似线性。从 100 降到 50，延迟几乎减半。<strong>建议实测不同候选数下的效果曲线，找到收益开始平缓的拐点。</strong></p>
+<p>候选数与长度共同决定计算量；批处理、padding 和排队使墙钟延迟不一定线性。普通全注意力编码器还受单对输入长度的平方项影响。应在不同候选数与长度下测覆盖、排序、吞吐和尾延迟，而非预设从 100 减到 50 就快一倍。</p>
 <p>同时要有经校准的拒答策略。</p>
 <blockquote>
 <p><strong>Rerank 之后不得无条件取 Top-K；但也不能把一个固定绝对分数当作所有 Query 的通用阈值。</strong></p>
@@ -8935,7 +8935,7 @@
 </tr>
 <tr>
 <td>同一文档的新旧版本</td>
-<td><strong>保留最新版本</strong>，并在上下文中标注时间</td>
+<td>按查询时刻、生效区间和适用范围选择；历史查询保留对应旧版，对比查询可保留两版</td>
 </tr>
 </tbody>
 </table>
@@ -8952,7 +8952,7 @@
 <h3 id="1375-query">13.7.5 用固定裸分阈值跨 Query 比较<a class="headerlink" href="#1375-query" title="Permanent link">&para;</a></h3>
 <p>分数分布因 Query、模型和语料而异。应在业务评测集上校准可回归的置信度/拒答策略，并在变更后重校准。</p>
 <h3 id="1376-llm-listwise-rerank">13.7.6 默认上 LLM listwise rerank<a class="headerlink" href="#1376-llm-listwise-rerank" title="Permanent link">&para;</a></h3>
-<p>成本高 5–20 倍，多数场景不划算。</p>
+<p>计算量、调用方式、位置偏置与输入窗口都需要验证，不应预设它一定最准或固定贵多少倍。</p>
 <h3 id="1377">13.7.7 忘记去重，尤其是新旧版本<a class="headerlink" href="#1377" title="Permanent link">&para;</a></h3>
 <p>矛盾的上下文会直接导致错误答案。</p>
 <h3 id="1378-rerank">13.7.8 没有 Rerank 的降级路径<a class="headerlink" href="#1378-rerank" title="Permanent link">&para;</a></h3>
@@ -8961,10 +8961,10 @@
 <ol>
 <li><strong>单路召回存在无法通过调参消除的系统性盲区</strong>，这是多路召回的根本理由；</li>
 <li><strong>不同召回路的分数量纲不同</strong>，直接加权需要归一化，而归一化本身不稳定；</li>
-<li><strong>RRF 只用排名不用分数</strong>，规避量纲问题、零调参，且 <span class="arithmatex">\(k=60\)</span> 的削峰效应让它<strong>天然偏好多路共识</strong>；</li>
+<li><strong>RRF 只用排名不用分数</strong>，无需训练但仍需设置窗口与权重；平滑常数不等于 Top-K；</li>
 <li><strong>RRF 的局限</strong>：丢弃分数绝对信息、无法表达“某路整体不靠谱”；它是常用强基线，不能替代业务实测；</li>
-<li><strong>Rerank 是整条链路性价比最高的单点优化</strong>，因为 cross-encoder 让 Query 和文档充分交互；</li>
-<li><strong>标准 cross-encoder 是甜点</strong>（100–400ms），LLM listwise 效果最好但贵 5–20 倍；</li>
+<li><strong>Rerank 可改善候选排序</strong>，但找不回候选集外的证据；</li>
+<li><strong>Cross-encoder 与 listwise 应在相同候选与预算下比较</strong>，不预设最优模型或固定成本倍数；</li>
 <li><strong>必须采用经评测集校准的置信度/拒答策略并允许返回空</strong>，不能用固定裸分一刀切；</li>
 <li><strong>去重要覆盖多路重复、父块重复、内容冗余和新旧版本</strong>，其中新旧版本冲突后果最严重。</li>
 </ol>
@@ -8998,7 +8998,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

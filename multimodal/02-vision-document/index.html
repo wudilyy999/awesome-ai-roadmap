@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="覆盖视觉语言模型的能力谱系、视觉 Grounding、OCR/Document AI 与 Computer Use，即&quot;模型如何看懂图像与界面，并把理解落到可验证的坐标或结构化输出上&quot;">
+        <meta name="description" content="组织视觉定位、文档结构抽取与 GUI 操作三章，强调坐标协议、证据验证、字段正确性及任务完成状态。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="多模态 · 视觉与文档智能">
-    <meta property="og:description" content="覆盖视觉语言模型的能力谱系、视觉 Grounding、OCR/Document AI 与 Computer Use，即&quot;模型如何看懂图像与界面，并把理解落到可验证的坐标或结构化输出上&quot;">
+    <meta property="og:description" content="组织视觉定位、文档结构抽取与 GUI 操作三章，强调坐标协议、证据验证、字段正确性及任务完成状态。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/02-vision-document/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="多模态 · 视觉与文档智能">
-    <meta name="twitter:description" content="覆盖视觉语言模型的能力谱系、视觉 Grounding、OCR/Document AI 与 Computer Use，即&quot;模型如何看懂图像与界面，并把理解落到可验证的坐标或结构化输出上&quot;">
+    <meta name="twitter:description" content="组织视觉定位、文档结构抽取与 GUI 操作三章，强调坐标协议、证据验证、字段正确性及任务完成状态。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"多模态 · 视觉与文档智能","description":"覆盖视觉语言模型的能力谱系、视觉 Grounding、OCR/Document AI 与 Computer Use，即\"模型如何看懂图像与界面，并把理解落到可验证的坐标或结构化输出上\"","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/02-vision-document/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"多模态 · 视觉与文档智能","description":"组织视觉定位、文档结构抽取与 GUI 操作三章，强调坐标协议、证据验证、字段正确性及任务完成状态。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/02-vision-document/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/02-vision-document/"}]}</script>
     
@@ -8288,7 +8288,8 @@
 <pre class="mermaid"><code>flowchart LR
     G[视觉语言模型与&lt;br/&gt;视觉 Grounding] --&gt; O[OCR 与 Document AI]
     G --&gt; C[Computer Use 与 GUI Agent]</code></pre>
-<p>视觉 Grounding 提供的"语言指代 → 坐标"能力是后两章的共同基础：OCR/Document AI 把它用于版面与表格结构定位，Computer Use 把它用于界面元素点击定位。</p>
+<p>三章共享空间表示与定位评测问题，但 OCR 不必依赖语言指代表达，Document AI 也不一定输出框。第二章建立坐标和定位概念，第三章进一步处理文字、版面与字段关系，第四章把定位放进有状态的执行循环。</p>
+<p>可沿一条失败链复习：坐标是否映射回正确页面 → 字段或元素是否识别正确 → 结构关系是否成立 → 操作后状态是否符合目标。单图 VQA 高分不能替代其中任何一项验证。</p>
 <p>返回 <a href="../">多模态相关知识点</a>。</p>
 
 
@@ -8312,7 +8313,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 17:30:27 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
   </span>
 
     

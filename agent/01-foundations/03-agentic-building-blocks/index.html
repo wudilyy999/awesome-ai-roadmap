@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Tools、Skills、Agents、Workflows 和 AGENTS.md 经常同时出现在 Agent 产品中，但它们解决的是不同层次的问题">
+        <meta name="description" content="区分工具、Agent Skills 开放格式、Agent 控制循环、工作流与仓库指令，说明它们如何组合及各自的权限边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第三章：Tools、Skills、Agents、Workflows 与 AGENTS.md">
-    <meta property="og:description" content="Tools、Skills、Agents、Workflows 和 AGENTS.md 经常同时出现在 Agent 产品中，但它们解决的是不同层次的问题">
+    <meta property="og:description" content="区分工具、Agent Skills 开放格式、Agent 控制循环、工作流与仓库指令，说明它们如何组合及各自的权限边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第三章：Tools、Skills、Agents、Workflows 与 AGENTS.md">
-    <meta name="twitter:description" content="Tools、Skills、Agents、Workflows 和 AGENTS.md 经常同时出现在 Agent 产品中，但它们解决的是不同层次的问题">
+    <meta name="twitter:description" content="区分工具、Agent Skills 开放格式、Agent 控制循环、工作流与仓库指令，说明它们如何组合及各自的权限边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：Tools、Skills、Agents、Workflows 与 AGENTS.md","description":"Tools、Skills、Agents、Workflows 和 AGENTS.md 经常同时出现在 Agent 产品中，但它们解决的是不同层次的问题","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：Tools、Skills、Agents、Workflows 与 AGENTS.md","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：Tools、Skills、Agents、Workflows 与 AGENTS.md","description":"区分工具、Agent Skills 开放格式、Agent 控制循环、工作流与仓库指令，说明它们如何组合及各自的权限边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：Tools、Skills、Agents、Workflows 与 AGENTS.md","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Agentic Building Blocks","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/01-foundations/03-agentic-building-blocks/"}]}</script>
     
@@ -9069,8 +9069,8 @@
 <tr>
 <td>Skill</td>
 <td>“这类任务应该怎样完成？”</td>
-<td style="text-align: right;">可通过 Tool 或脚本执行</td>
-<td style="text-align: right;">有限，由 Agent 决定是否采用</td>
+<td style="text-align: right;">可包含需宿主执行的脚本</td>
+<td style="text-align: right;">格式本身没有自主决策权</td>
 <td><code>SKILL.md</code>、脚本、参考资料</td>
 </tr>
 <tr>
@@ -9123,6 +9123,7 @@
 <li>整个任务何时结束。</li>
 </ul>
 <p>这些决策由 Agent、Workflow 或上层业务代码负责。</p>
+<p>这里描述的是调用接口的职责，不限制工具内部实现。一个 Tool 可以封装整套工作流甚至另一个 Agent；“最小可执行能力”是相对调用者而言，不代表内部必须只有一步。</p>
 <h3 id="332-tool">3.3.2 Tool 不只是“普通函数加说明书”<a class="headerlink" href="#332-tool" title="Permanent link">&para;</a></h3>
 <p>将 Tool 理解为“附带 Schema 的函数”适合入门，但不够完整。Tool 的执行端可以是：</p>
 <ul>
@@ -9248,7 +9249,7 @@
 <li>规定输出格式和质量标准。</li>
 </ul>
 <h3 id="352-agent-skills">3.5.2 Agent Skills 标准结构<a class="headerlink" href="#352-agent-skills" title="Permanent link">&para;</a></h3>
-<p>Agent Skills 是一种开放格式。一个 Skill 至少是一个包含 <code>SKILL.md</code> 的目录：</p>
+<p>Agent Skills 是一种开放的文件格式，不是远程调用或消息传输协议。本节以 2026-09-08 查阅的<a href="https://agentskills.io/specification">官方规范</a>为准，不从日期推定版本号。一个 Skill 至少是一个包含 <code>SKILL.md</code> 的目录：</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>code-review/
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── SKILL.md
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── scripts/
@@ -9306,10 +9307,11 @@
 <tr>
 <td><code>allowed-tools</code></td>
 <td style="text-align: right;">否</td>
-<td>可预授权的工具，仍属于实验能力</td>
+<td>空格分隔的预批准工具声明；实验字段，支持方式取决于宿主</td>
 </tr>
 </tbody>
 </table>
+<p><code>name</code> 必须与目录名一致；<code>description</code> 同时描述做什么和何时使用。<code>metadata.version</code> 即便存在，也是包作者的元数据，不是 Agent Skills 协议版本。加载 Skill 不能提升用户权限，脚本和外部引用仍须经过来源审查、权限检查与执行隔离。</p>
 <h3 id="353">3.5.3 渐进式披露<a class="headerlink" href="#353" title="Permanent link">&para;</a></h3>
 <p>Skill 的重要设计原则是 Progressive Disclosure：</p>
 <ol>
@@ -9358,7 +9360,7 @@
 </table>
 <p>Skill 本身不一定拥有独立决策权。它更像一个可复用的“操作手册 + 资源包”，最终仍由 Agent 决定何时加载，并由 Runtime 执行其中需要的 Tools 或脚本。</p>
 <h2 id="36-agentsmd-agent">3.6 AGENTS.md：写给编码 Agent 的仓库说明<a class="headerlink" href="#36-agentsmd-agent" title="Permanent link">&para;</a></h2>
-<p>用户提到的 <code>agent.md</code>，当前开放格式使用的是全大写、复数形式：</p>
+<p>这个开放格式使用全大写、复数形式的文件名：</p>
 <blockquote>
 <p><strong><code>AGENTS.md</code></strong></p>
 </blockquote>
@@ -9635,7 +9637,7 @@ n_{t+1}=f(s_t, r_t)
 </table>
 <p>Agent 和 Workflow 不是互斥关系。一个 Workflow 节点可以运行 Agent，一个 Agent 也可以调用预定义 Workflow 作为高层 Tool。</p>
 <h2 id="311-agentic-workflow">3.11 Agentic Workflow：生产系统的常见选择<a class="headerlink" href="#311-agentic-workflow" title="Permanent link">&para;</a></h2>
-<p>生产系统通常采用 Agentic Workflow：</p>
+<p>当业务主流程明确、局部路径需要探索时，可以采用 Agentic Workflow：</p>
 <blockquote>
 <p><strong>用 Workflow 固定主流程、权限和验收边界，在确实需要灵活判断的位置嵌入 Agent。</strong></p>
 </blockquote>
@@ -9649,7 +9651,9 @@ n_{t+1}=f(s_t, r_t)
     GEN --&gt; EVAL[质量与安全评估]
     EVAL --&gt;|通过| OUT[返回结果]
     EVAL --&gt;|不通过| FIX[受限优化]
-    FIX --&gt; EVAL</code></pre>
+    FIX --&gt; LIMIT{仍有预算且有进展?}
+    LIMIT --&gt;|是| EVAL
+    LIMIT --&gt;|否| STOP[报告未完成或转人工]</code></pre>
 <p>这种架构的优势是：</p>
 <ul>
 <li>主流程可控；</li>
@@ -9912,7 +9916,7 @@ n_{t+1}=f(s_t, r_t)
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

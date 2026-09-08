@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="第一章 说过， description 是模型判断的唯一依据。但在实际项目里，工具定义的影响远不止「模型选得准不准」这一件事——它同时决定了">
+        <meta name="description" content="设计工具描述、strict JSON Schema 和返回值，控制工具发现与上下文成本，并建立业务校验及回归测试。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第三章：工具定义与 Schema 工程">
-    <meta property="og:description" content="第一章 说过， description 是模型判断的唯一依据。但在实际项目里，工具定义的影响远不止「模型选得准不准」这一件事——它同时决定了">
+    <meta property="og:description" content="设计工具描述、strict JSON Schema 和返回值，控制工具发现与上下文成本，并建立业务校验及回归测试。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/03-tool-schema-design/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第三章：工具定义与 Schema 工程">
-    <meta name="twitter:description" content="第一章 说过， description 是模型判断的唯一依据。但在实际项目里，工具定义的影响远不止「模型选得准不准」这一件事——它同时决定了">
+    <meta name="twitter:description" content="设计工具描述、strict JSON Schema 和返回值，控制工具发现与上下文成本，并建立业务校验及回归测试。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：工具定义与 Schema 工程","description":"第一章 说过， description 是模型判断的唯一依据。但在实际项目里，工具定义的影响远不止「模型选得准不准」这一件事——它同时决定了","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/03-tool-schema-design/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：工具定义与 Schema 工程","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/03-tool-schema-design/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第三章：工具定义与 Schema 工程","description":"设计工具描述、strict JSON Schema 和返回值，控制工具发现与上下文成本，并建立业务校验及回归测试。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/03-tool-schema-design/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第三章：工具定义与 Schema 工程","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/03-tool-schema-design/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"工具定义与 Schema 工程","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/01-function-calling/03-tool-schema-design/"}]}</script>
     
@@ -2693,6 +2693,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="3.3.3 required 要诚实">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strict" class="md-nav__link">
+    <span class="md-ellipsis">
+      strict 的具体约束
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2764,7 +2779,7 @@
           <li class="md-nav__item">
   <a href="#351" class="md-nav__link">
     <span class="md-ellipsis">
-      3.5.1 工具定义每次请求都要全量传
+      3.5.1 工具发现、模型可见性与计费分开算
     </span>
   </a>
   
@@ -8671,6 +8686,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="3.3.3 required 要诚实">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strict" class="md-nav__link">
+    <span class="md-ellipsis">
+      strict 的具体约束
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -8742,7 +8772,7 @@
           <li class="md-nav__item">
   <a href="#351" class="md-nav__link">
     <span class="md-ellipsis">
-      3.5.1 工具定义每次请求都要全量传
+      3.5.1 工具发现、模型可见性与计费分开算
     </span>
   </a>
   
@@ -8920,7 +8950,7 @@
 
 <h1 id="schema">第三章：工具定义与 Schema 工程<a class="headerlink" href="#schema" title="Permanent link">&para;</a></h1>
 <h2 id="31">3.1 为什么值得单独开一章<a class="headerlink" href="#31" title="Permanent link">&para;</a></h2>
-<p><a href="../01-function-calling/">第一章</a> 说过，<code>description</code> 是模型判断的唯一依据。但在实际项目里，工具定义的影响远不止「模型选得准不准」这一件事——它同时决定了：</p>
+<p><a href="../01-function-calling/">第一章</a> 说明了工具名、描述、Schema 与上下文共同影响模型选择。工具定义还影响：</p>
 <ul>
 <li>模型选错工具的概率；</li>
 <li>参数填错的概率；</li>
@@ -8934,7 +8964,7 @@
 </blockquote>
 <h2 id="32">3.2 工具描述的写法<a class="headerlink" href="#32" title="Permanent link">&para;</a></h2>
 <h3 id="321">3.2.1 写清楚能力边界，而不只是能力<a class="headerlink" href="#321" title="Permanent link">&para;</a></h3>
-<p>人写 API 文档的习惯是描述「能做什么」。但对模型来说，<strong>「不能做什么」的信息量更大</strong>——它决定了模型什么时候该放弃调用。</p>
+<p>描述应同时说明能力、返回内容、输入前提和不支持的范围。下面展示预期的路由差异，不是对模型行为的保证。</p>
 <table>
 <thead>
 <tr>
@@ -8970,16 +9000,18 @@
 <p>命名约定尽量在整个工具库里保持一致：<code>get_*</code> 是按主键精确取，<code>search_*</code> 是模糊查多条，<code>list_*</code> 是无条件枚举，<code>create_/update_/delete_*</code> 是有副作用的写操作。这套一致性本身就是给模型的隐式提示。</p>
 <h3 id="323">3.2.3 在描述里给出使用示例<a class="headerlink" href="#323" title="Permanent link">&para;</a></h3>
 <p>对语义复杂的工具，直接在 <code>description</code> 里塞一两个调用示例，效果往往比反复措辞更好：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="s2">"description"</span><span class="p">:</span> <span class="p">(</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="s2">"description"</span><span class="p">:</span> <span class="p">(</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="s2">"执行 SQL 查询并返回结果。只支持 SELECT，不支持写操作。</span><span class="se">\n</span><span class="s2">"</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="s2">"示例：查询昨天订单数 -&gt; "</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s2">"SELECT COUNT(*) FROM orders WHERE created_at &gt;= CURRENT_DATE - 1"</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">)</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s2">"SELECT COUNT(*) FROM orders WHERE created_at &gt;= CURRENT_DATE - 1 "</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s2">"AND created_at &lt; CURRENT_DATE"</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">)}</span>
 </span></code></pre></div>
 <p>它相当于把 few-shot 示例塞进了工具定义里。代价是 token，收益是参数准确率，值不值得取决于这个工具被调用的频率和出错的成本。</p>
+<p>上例采用 PostgreSQL 日期语法，以数据库会话时区为准，并假定已限制为当前租户。描述中的“只支持 SELECT”不是安全措施：还需只读凭据、查询限制和对象级权限，不能只靠关键字过滤 SQL。</p>
 <h2 id="33">3.3 参数设计<a class="headerlink" href="#33" title="Permanent link">&para;</a></h2>
 <h3 id="331">3.3.1 扁平优于嵌套<a class="headerlink" href="#331" title="Permanent link">&para;</a></h3>
-<p>模型填深层嵌套结构的错误率明显更高，而且错误往往是「结构对了但层级放错了」这种难排查的类型：</p>
+<p>不必要的深层嵌套会增加填写与验证复杂度。若扁平字段能清楚表达语义，可优先采用；错误率是否更低仍需目标模型评测：</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 差：三层嵌套</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span><span class="s2">"filter"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"conditions"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"gte"</span><span class="p">:</span> <span class="s2">"2026-01-01"</span><span class="p">}}}}</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
@@ -8989,17 +9021,26 @@
 <p>如果内部接口确实需要复杂结构，正确做法是<strong>在宿主侧做转换</strong>，而不是把复杂度暴露给模型。工具 Schema 是给模型看的接口，不是内部数据结构的镜像。</p>
 <h3 id="332-enum">3.3.2 能用 enum 就不用自由文本<a class="headerlink" href="#332-enum" title="Permanent link">&para;</a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 差：模型可能填 "已完成"、"completed"、"DONE"、"finish"</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="s2">"status"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"订单状态"</span><span class="p">}</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"订单状态"</span><span class="p">}}</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 好</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s2">"status"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"enum"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"pending"</span><span class="p">,</span> <span class="s2">"paid"</span><span class="p">,</span> <span class="s2">"shipped"</span><span class="p">,</span> <span class="s2">"completed"</span><span class="p">,</span> <span class="s2">"cancelled"</span><span class="p">]}</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"enum"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"pending"</span><span class="p">,</span> <span class="s2">"paid"</span><span class="p">,</span> <span class="s2">"shipped"</span><span class="p">,</span> <span class="s2">"completed"</span><span class="p">,</span> <span class="s2">"cancelled"</span><span class="p">]}}</span>
 </span></code></pre></div>
-<p>除了减少错误，<code>enum</code> 还有个机制上的好处：主流推理框架会把 Schema 编译成约束解码的语法，在<strong>采样阶段</strong>就屏蔽非法 token。非法值不是「生成后被拒」，而是根本生成不出来。</p>
+<p>支持 strict 或结构化输出的运行时可利用 Schema 做约束解码；仅提供 <code>enum</code> 不代表该路径已启用。即使格式有效，<code>cancelled</code> 与 <code>completed</code> 仍可能被选错，业务状态需单独校验。</p>
 <h3 id="333-required">3.3.3 required 要诚实<a class="headerlink" href="#333-required" title="Permanent link">&para;</a></h3>
-<p>把所有参数都标成 <code>required</code>，模型遇到信息不全时会<strong>编造</strong>一个值填进去。把该必填的标成可选，模型又会漏填导致查询范围失控。</p>
-<p>正确做法是让 <code>required</code> 反映真实约束，并在描述里写清缺省行为：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="s2">"limit"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"返回条数，默认 20，最大 100"</span><span class="p">}</span>
+<p>一般 JSON Schema 用 <code>required</code> 区分必需字段；OpenAI strict 模式则要求所有 <code>properties</code> 都列入 <code>required</code>，业务可选字段用可空类型表达。信息不足时应先澄清，不能用“格式必填”迫使模型猜测业务值。</p>
+<p>非 strict 示例可在描述中说明缺省行为，但实际默认值和范围由服务端实现：</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="s2">"limit"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"返回条数，默认 20，最大 100"</span><span class="p">}}</span>
 </span></code></pre></div>
+<h4 id="strict">strict 的具体约束<a class="headerlink" href="#strict" title="Permanent link">&para;</a></h4>
+<p>以 <a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI Function Calling 指南</a>为准（2026-09-08 核查）：</p>
+<ul>
+<li>显式设 <code>strict: true</code>；每层 object 都设置 <code>additionalProperties: false</code>，每个属性都在 <code>required</code> 中。</li>
+<li>可选值可写成 <code>{"type":["string","null"],"enum":["paid","shipped",null]}</code>；<code>enum</code> 也必须允许 <code>null</code>。字段出现但值为空，与字段缺失不是一回事。</li>
+<li>只支持 JSON Schema 子集，拒绝、输出截断和 API 错误也必须处理。Schema 校验不能替代授权、日期先后关系、余额或对象归属检查。</li>
+<li>省略 <code>strict</code> 时，Chat Completions 默认非严格；Responses 尝试归一化为严格模式，不兼容时可能回退为 best effort。依赖稳定行为应显式指定，而不是赌默认值。</li>
+<li>流式参数需要按调用 ID 聚合至完成后再解析、校验和执行；收到半段合法 JSON 也不能提前触发写操作。</li>
+</ul>
 <h3 id="334">3.3.4 日期与时间是重灾区<a class="headerlink" href="#334" title="Permanent link">&para;</a></h3>
 <p>模型没有可靠的「今天是几号」的概念。两种解法：</p>
 <ul>
@@ -9012,34 +9053,36 @@
 <h3 id="341">3.4.1 返回值也是给模型看的<a class="headerlink" href="#341" title="Permanent link">&para;</a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># 差：把 ORM 对象整个序列化，30 个字段模型只用得到 3 个</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"uuid"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"created_at"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"updated_at"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a> <span class="s2">"deleted_at"</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span> <span class="s2">"tenant_id"</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">"shard_key"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a> <span class="s2">"deleted_at"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"tenant_id"</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">"shard_key"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">}</span>
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
 </span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># 好：只返回模型需要的</span>
 </span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">{</span><span class="s2">"order_id"</span><span class="p">:</span> <span class="s2">"A1001"</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"shipped"</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">:</span> <span class="mf">299.0</span><span class="p">,</span>
 </span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a> <span class="s2">"eta"</span><span class="p">:</span> <span class="s2">"2026-09-02"</span><span class="p">}</span>
 </span></code></pre></div>
-<p>工具返回值会<strong>原样进入上下文</strong>，并在后续每一轮里被重复计费。一个返回 5KB 冗余 JSON 的工具，在十轮对话里就吃掉了 50KB 的上下文预算。</p>
+<p>宿主决定哪些返回值进入模型上下文。若持续回传历史，冗余内容会反复作为输入；但单轮上下文长度与多轮累计输入计费不是同一件事，字节数也不是 token 数。可用分页、摘要、资源引用和缓存降低开销，同时保留完整结果的可追溯位置。</p>
 <h3 id="342">3.4.2 大结果要截断并告知<a class="headerlink" href="#342" title="Permanent link">&para;</a></h3>
-<p>返回 500 条记录不如返回前 20 条加一句提示：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="s2">"items"</span><span class="p">:</span> <span class="p">[</span><span class="o">..</span><span class="mf">.20</span> <span class="n">条</span><span class="o">...</span><span class="p">],</span>
+<p>大结果可以分页返回，并明确还有多少内容未展示。下面假设 <code>page_items</code> 是已取得的前 20 条订单摘要，总数 517 已由查询确认：</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="s2">"items"</span><span class="p">:</span> <span class="n">page_items</span><span class="p">,</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a> <span class="s2">"total"</span><span class="p">:</span> <span class="mi">517</span><span class="p">,</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a> <span class="s2">"note"</span><span class="p">:</span> <span class="s2">"结果过多，仅返回前 20 条。请缩小时间范围或增加筛选条件后重试。"</span><span class="p">}</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a> <span class="s2">"returned_count"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a> <span class="s2">"has_more"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a> <span class="s2">"note"</span><span class="p">:</span> <span class="s2">"结果过多，仅返回前 20 条。请缩小时间范围或增加筛选条件后重试。"</span><span class="p">}</span>
 </span></code></pre></div>
-<p>关键是那句 <code>note</code>。它不只是截断，而是<strong>告诉模型该怎么办</strong>。没有它，模型会以为总共就 20 条，直接基于不完整数据下结论。</p>
+<p><code>has_more</code>、返回数和 <code>note</code> 让下游知道结果尚不完整，以及如何继续查询。拿不到准确总数时应明确未知，不能把已返回数量当成总数；汇总整批订单的金额或数量，通常应交给数据库聚合，而不是只对这一页计算。</p>
 <h3 id="343">3.4.3 错误必须结构化<a class="headerlink" href="#343" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 差：抛异常中断整个流程</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 预期业务错误若未被适配层处理，可能中断整个流程</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"city not found"</span><span class="p">)</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># 好：以工具结果的形式回填</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># 对可纠正的业务错误，可转成结构化工具结果</span>
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"city_not_found"</span><span class="p">,</span>
 </span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"未找到城市「广洲」"</span><span class="p">,</span>
 </span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a> <span class="s2">"hint"</span><span class="p">:</span> <span class="s2">"可能的正确拼写：广州。请确认后重试。"</span><span class="p">}</span>
 </span></code></pre></div>
-<p>结构化错误让模型有机会自己纠正重试。直接抛异常等于放弃了模型的自我修复能力。<code>hint</code> 字段是关键——它把「出错了」变成了「出错了，这样改」。</p>
-<p>不过要设<strong>重试上限</strong>。模型有时会陷入「同样的错误参数反复重试」的循环，宿主侧应该记录同一工具的连续失败次数，超过两三次就中断并向上抛。</p>
+<p>结构化错误让模型有机会修正参数，但不要求底层函数停止使用异常。适配层可以将已知业务异常转换为有限、脱敏的错误码与提示；非预期异常应显式上报，不能宽泛捕获后伪装成可继续的成功结果。<code>hint</code> 提供下一步建议，不授予额外权限。</p>
+<p>设定<strong>重试次数与总时间预算</strong>，检测重复参数错误。鉴权或策略拒绝通常应停止，网络超时需区分未提交、已提交和结果未知；写操作只有具备幂等或可核对状态时才可自动重试。</p>
 <h2 id="35">3.5 工具数量与上下文成本<a class="headerlink" href="#35" title="Permanent link">&para;</a></h2>
-<h3 id="351">3.5.1 工具定义每次请求都要全量传<a class="headerlink" href="#351" title="Permanent link">&para;</a></h3>
-<p>这里经常被低估的，是工具 Schema 的固定开销。工具 Schema 不会被「记住」，每一轮请求都要完整传一遍：</p>
+<h3 id="351">3.5.1 工具发现、模型可见性与计费分开算<a class="headerlink" href="#351" title="Permanent link">&para;</a></h3>
+<p>在每轮全量传入工具定义的实现里，Schema 会占用上下文并计入输入。下面是假设每个定义平均 150 token 的算术例子，不是实测，也不代表所有 API 必须如此：</p>
 <table>
 <thead>
 <tr>
@@ -9066,20 +9109,20 @@
 </tr>
 </tbody>
 </table>
-<p>一个挂了 100 个工具的 Agent，在还没开始干活时就烧掉了 15K token，而且<strong>每一轮都烧一次</strong>。十轮对话就是 150K。</p>
+<p>此假设下 100 个工具每轮增加 15,000 输入 token，十轮累计 150,000；单轮窗口并未因此变成 150,000。前缀缓存可能降低输入费用或预填充开销，工具搜索/延迟加载则改变实际注入数量。</p>
 <h3 id="352">3.5.2 工具变多，准确率会下降<a class="headerlink" href="#352" title="Permanent link">&para;</a></h3>
 <p>除了成本，选择准确率也会掉。功能相近的工具（<code>search_docs</code> vs <code>search_wiki</code> vs <code>search_kb</code>）尤其容易混淆。</p>
 <p>主流解法是<strong>动态工具筛选</strong>：</p>
 <pre class="mermaid"><code>flowchart LR
     Q[用户请求] --&gt; R["路由层&lt;br/&gt;轻量分类 或 向量检索"]
-    POOL[("工具库&lt;br/&gt;100+ 工具")] --&gt; R
-    R --&gt; SEL["筛出 5-10 个相关工具"]
+    POOL[("工具库")] --&gt; R
+    R --&gt; SEL["按任务筛选&lt;br/&gt;数量由评测确定"]
     SEL --&gt; M[模型]
     M --&gt; CALL[tool_calls]</code></pre>
-<p>路由层可以是向量检索（把工具描述做成 Embedding，用 query 去召回）、规则分类，或者一次廉价小模型调用。相比直接把 100 个工具全塞进去，这一次额外调用几乎总是划算的。</p>
+<p>路由可用规则、检索或模型。图中候选数只是示意；先做权限过滤，再评测召回漏失与额外时延。检索把必要工具漏掉时，再强的主模型也无法调用它。</p>
 <h3 id="353-prompt">3.5.3 把工具定义放在 Prompt 最前面<a class="headerlink" href="#353-prompt" title="Permanent link">&para;</a></h3>
 <p>工具 Schema 常是多轮对话中较稳定的部分。将稳定内容放在前面可提高支持前缀缓存的提供方/运行时的命中机会，但是否命中、计费和 TTL 以具体服务为准。</p>
-<p>顺序上的通行原则是：<strong>固定内容在前，动态内容在后</strong>。工具定义 → System Prompt → 历史对话 → 当前问题。详见 LLM 主题的 <a href="../../../llm/03-inference-serving/14-kv-cache/">KV Cache 与 Prompt Caching</a> 章节。</p>
+<p>原则是尽量稳定可缓存前缀；工具与消息的底层序列化顺序由提供方控制，不是手动调整字段顺序即可改变。详见 <a href="../../../llm/03-inference-serving/14-kv-cache/">KV Cache 与 Prompt Caching</a>。</p>
 <h2 id="36">3.6 工具粒度：粗一点还是细一点<a class="headerlink" href="#36" title="Permanent link">&para;</a></h2>
 <p>这是设计工具库时的核心取舍。</p>
 <table>
@@ -9107,56 +9150,61 @@
 <td>少</td>
 </tr>
 <tr>
-<td>出错概率</td>
-<td>高（每一步都可能选错）</td>
-<td>低</td>
+<td>出错风险</td>
+<td>多步选择与组合可能出错</td>
+<td>少轮次，但参数、结果或业务事务可能更复杂</td>
 </tr>
 <tr>
 <td>上下文消耗</td>
-<td>高（多轮累积）</td>
-<td>低</td>
+<td>多轮累积</td>
+<td>可能少轮次，也可能返回大量无关数据</td>
 </tr>
 </tbody>
 </table>
 <p>实践中的判断标准是：<strong>看这几个操作是不是几乎总是一起出现</strong>。如果模型每次查用户都要接着查订单和地址，那就该合并成一个工具；如果三者独立使用的场景各占三分之一，就该拆开。</p>
 <p>一个常见的错误是把内部微服务的接口边界直接照搬成工具边界。内部服务的拆分依据是团队职责和数据归属，跟「模型该怎么用」没有关系。</p>
 <h2 id="37">3.7 一个完整的工具定义模板<a class="headerlink" href="#37" title="Permanent link">&para;</a></h2>
+<p>下面使用 Chat Completions 的函数包装格式，显式关闭 strict 以演示可省略字段。迁移到 Responses 需调整外层字段；启用 strict 需按 3.3.3 改写可空参数。</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"function"</span><span class="p">,</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="s2">"function"</span><span class="p">:</span> <span class="p">{</span>
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"search_orders"</span><span class="p">,</span>                      <span class="c1"># 动词_对象，语义自解释</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        <span class="s2">"description"</span><span class="p">:</span> <span class="p">(</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            <span class="s2">"按时间范围和状态搜索订单，返回订单摘要列表。"</span>      <span class="c1"># 做什么</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="s2">"每条包含订单号、状态、金额、下单时间。"</span>            <span class="c1"># 返回什么</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            <span class="s2">"最多返回 50 条，超出时需要缩小范围。"</span>              <span class="c1"># 限制</span>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>            <span class="s2">"不支持按商品名搜索；若需按订单号精确查询，"</span>        <span class="c1"># 边界</span>
-</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>            <span class="s2">"请改用 get_order_by_id。"</span>                       <span class="c1"># 替代方案</span>
-</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="p">),</span>
-</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="s2">"parameters"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
-</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>            <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>                <span class="s2">"start_date"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
-</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"起始日期，格式 YYYY-MM-DD，如 2026-08-01"</span>
-</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>                <span class="p">},</span>
-</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>                <span class="s2">"end_date"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
-</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"结束日期，格式 YYYY-MM-DD，含当天"</span>
-</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>                <span class="p">},</span>
-</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>                <span class="s2">"status"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
-</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>                    <span class="s2">"enum"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"pending"</span><span class="p">,</span> <span class="s2">"paid"</span><span class="p">,</span> <span class="s2">"shipped"</span><span class="p">,</span> <span class="s2">"completed"</span><span class="p">,</span> <span class="s2">"cancelled"</span><span class="p">],</span>
-</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"订单状态筛选，不传则返回所有状态"</span>
-</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>                <span class="p">},</span>
-</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>                <span class="s2">"limit"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
-</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"返回条数，默认 20，最大 50"</span>
-</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>                <span class="p">}</span>
-</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>            <span class="p">},</span>
-</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>            <span class="s2">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"start_date"</span><span class="p">,</span> <span class="s2">"end_date"</span><span class="p">]</span>     <span class="c1"># 只标真正必需的</span>
-</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>        <span class="p">}</span>
-</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>    <span class="p">}</span>
-</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="p">}</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        <span class="s2">"strict"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="s2">"description"</span><span class="p">:</span> <span class="p">(</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="s2">"按时间范围和状态搜索订单，返回订单摘要列表。"</span>      <span class="c1"># 做什么</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            <span class="s2">"每条包含订单号、状态、金额、下单时间。"</span>            <span class="c1"># 返回什么</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>            <span class="s2">"最多返回 50 条，超出时需要缩小范围。"</span>              <span class="c1"># 限制</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>            <span class="s2">"不支持按商品名搜索；若需按订单号精确查询，"</span>        <span class="c1"># 边界</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>            <span class="s2">"请改用 get_order_by_id。"</span>                       <span class="c1"># 替代方案</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="p">),</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>        <span class="s2">"parameters"</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>            <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>                <span class="s2">"start_date"</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"起始日期，格式 YYYY-MM-DD，如 2026-08-01"</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>                <span class="p">},</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>                <span class="s2">"end_date"</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"结束日期，格式 YYYY-MM-DD，含当天"</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>                <span class="p">},</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>                <span class="s2">"status"</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>                    <span class="s2">"enum"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"pending"</span><span class="p">,</span> <span class="s2">"paid"</span><span class="p">,</span> <span class="s2">"shipped"</span><span class="p">,</span> <span class="s2">"completed"</span><span class="p">,</span> <span class="s2">"cancelled"</span><span class="p">],</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"订单状态筛选，不传则返回所有状态"</span>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>                <span class="p">},</span>
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>                <span class="s2">"limit"</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>                    <span class="s2">"minimum"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>                    <span class="s2">"maximum"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>                    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"返回条数，默认 20，最大 50"</span>
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>                <span class="p">}</span>
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>            <span class="p">},</span>
+</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>            <span class="s2">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"start_date"</span><span class="p">,</span> <span class="s2">"end_date"</span><span class="p">],</span>
+</span><span id="__span-9-37"><a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>            <span class="s2">"additionalProperties"</span><span class="p">:</span> <span class="kc">False</span>
+</span><span id="__span-9-38"><a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a>        <span class="p">}</span>
+</span><span id="__span-9-39"><a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a>    <span class="p">}</span>
+</span><span id="__span-9-40"><a id="__codelineno-9-40" name="__codelineno-9-40" href="#__codelineno-9-40"></a><span class="p">}</span>
 </span></code></pre></div>
 <h2 id="38">3.8 工具定义要做回归测试<a class="headerlink" href="#38" title="Permanent link">&para;</a></h2>
 <p>工具描述改一个字，模型行为就可能变。这意味着它需要和代码一样被测试。</p>
@@ -9197,21 +9245,21 @@
 <h3 id="393-orm">3.9.3 把 ORM 对象整个返回给模型<a class="headerlink" href="#393-orm" title="Permanent link">&para;</a></h3>
 <p>冗余字段会持续占用上下文并被重复计费。返回值应该按「模型需要什么」裁剪，而不是按「数据库里有什么」。</p>
 <h3 id="394">3.9.4 大结果只截断不提示<a class="headerlink" href="#394" title="Permanent link">&para;</a></h3>
-<p>模型会把前 20 条当成全部，得出错误结论。截断必须伴随 <code>total</code> 和处理建议。</p>
+<p>模型可能误把前 20 条当全部。返回 <code>has_more</code>、分页游标或明确截断说明；只有实际可计算总数时才返回 <code>total</code>，不要编造计数。</p>
 <h3 id="395">3.9.5 用异常代替结构化错误<a class="headerlink" href="#395" title="Permanent link">&para;</a></h3>
 <p>抛异常中断流程，等于放弃模型的自我纠错能力。但也要记得设重试上限，防止死循环。</p>
 <h3 id="396">3.9.6 注册几十个工具不做筛选<a class="headerlink" href="#396" title="Permanent link">&para;</a></h3>
-<p>既烧 token 又降准确率。超过 15–20 个工具就该考虑动态筛选。</p>
+<p>工具多时评估动态筛选或延迟加载。OpenAI 文档建议初始可用工具少于 20 个，但明确是软建议，不是协议上限或性能拐点。</p>
 <h3 id="397">3.9.7 改了工具描述不回归<a class="headerlink" href="#397" title="Permanent link">&para;</a></h3>
 <p>这是最隐蔽的一类。工具描述的改动不会触发任何编译错误或类型检查，问题只会在线上以「模型偶尔选错工具」的形式出现。</p>
 <h2 id="310">3.10 本章总结<a class="headerlink" href="#310" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>工具定义是 Prompt 的一部分</strong>，很多「模型不行」的问题实际是工具定义不行；</li>
-<li><strong>描述要写清边界和替代方案</strong>，「不支持什么」比「支持什么」信息量更大；</li>
-<li><strong>参数扁平化、多用 enum、required 要诚实</strong>，日期时间尽量用相对枚举收进代码；</li>
+<li><strong>描述要写清能力、边界和替代方案</strong>，通过正反例检验是否改善选择；</li>
+<li><strong>减少无意义嵌套，有限取值用 enum</strong>；strict 要求属性全部 required，业务可选项用 nullable；</li>
 <li><strong>返回值按模型需求裁剪</strong>，大结果要截断并给出处理建议；</li>
 <li><strong>错误必须结构化并带 hint</strong>，同时设重试上限防死循环；</li>
-<li><strong>工具定义每轮全量传，成本随数量线性增长</strong>，超过 15–20 个应做动态筛选；</li>
+<li><strong>区分工具发现与注入</strong>，按实际 token、缓存和路由召回评估成本；</li>
 <li><strong>工具粒度按「是否总是一起用」判断</strong>，不要照搬内部微服务边界；</li>
 <li><strong>工具定义需要回归测试</strong>，用例集里必须包含「不该调工具」的场景。</li>
 </ol>
@@ -9219,7 +9267,8 @@
 <ul>
 <li><a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Anthropic: Writing Effective Tools for Agents</a></li>
 <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic: Building Effective Agents</a></li>
-<li><a href="https://platform.openai.com/docs/guides/function-calling">OpenAI: Function Calling 指南</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI: Function Calling 指南</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/structured-outputs">OpenAI: Structured Outputs 支持的 Schema</a></li>
 <li><a href="https://json-schema.org/">JSON Schema 规范</a></li>
 <li><a href="https://gorilla.cs.berkeley.edu/leaderboard.html">Berkeley Function Calling Leaderboard</a></li>
 </ul>
@@ -9245,7 +9294,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:15:19 CST">2026-09-08</span>
   </span>
 
     

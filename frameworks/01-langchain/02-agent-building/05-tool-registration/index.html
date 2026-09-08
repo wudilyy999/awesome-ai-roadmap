@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="模型看不到 Python 函数的源码，因此注册工具时，LangChain 会先把函数转换成一份 模型能够理解的说明">
+        <meta name="description" content="区分模型可见工具 Schema 与可信 Runtime 注入，说明参数校验、异步执行、状态更新和重试幂等的边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第五章：Tool 注册与工具契约">
-    <meta property="og:description" content="模型看不到 Python 函数的源码，因此注册工具时，LangChain 会先把函数转换成一份 模型能够理解的说明">
+    <meta property="og:description" content="区分模型可见工具 Schema 与可信 Runtime 注入，说明参数校验、异步执行、状态更新和重试幂等的边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/05-tool-registration/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第五章：Tool 注册与工具契约">
-    <meta name="twitter:description" content="模型看不到 Python 函数的源码，因此注册工具时，LangChain 会先把函数转换成一份 模型能够理解的说明">
+    <meta name="twitter:description" content="区分模型可见工具 Schema 与可信 Runtime 注入，说明参数校验、异步执行、状态更新和重试幂等的边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：Tool 注册与工具契约","description":"模型看不到 Python 函数的源码，因此注册工具时，LangChain 会先把函数转换成一份 模型能够理解的说明","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/05-tool-registration/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：Tool 注册与工具契约","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/05-tool-registration/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第五章：Tool 注册与工具契约","description":"区分模型可见工具 Schema 与可信 Runtime 注入，说明参数校验、异步执行、状态更新和重试幂等的边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/05-tool-registration/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第五章：Tool 注册与工具契约","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/05-tool-registration/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Tool 注册与工具契约","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/02-agent-building/05-tool-registration/"}]}</script>
     
@@ -8909,7 +8909,7 @@
 <p>模型厂商提供的 <strong>Web Search、代码执行器等服务端工具</strong>，有时会使用厂商约定的字典配置。</p>
 <p>这类工具属于特定 Provider 的能力。使用时应单独查看对应集成文档，<strong>不要把它当作通用 Python Tool 的主要定义方式</strong>。</p>
 <h2 id="53-tool">5.3 优先使用 <code>@tool</code> 的原因<a class="headerlink" href="#53-tool" title="Permanent link">&para;</a></h2>
-<p><code>@tool</code> 能从<strong>函数签名和 docstring 自动推导 Schema</strong>，也允许通过 Pydantic 显式描述复杂参数。</p>
+<p><code>@tool</code> 默认从<strong>函数签名推导参数 Schema</strong>、把 docstring 用作工具描述；逐参数的 docstring 解析需显式启用 <code>parse_docstring=True</code> 并遵循支持的格式。复杂约束可通过 Pydantic 显式声明，不能假设自然语言描述就会成为运行时校验器。</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langchain.agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_agent</span>
@@ -8955,7 +8955,7 @@
 <li>同时管理<strong>同步、异步、tags、metadata 和回调</strong>。</li>
 </ul>
 <blockquote>
-<p><strong>它已经变成了一个有生命周期的组件</strong>，此时才值得承担更多样板代码。</p>
+<p><strong>它已经变成了需要定制执行行为的组件</strong>，此时才值得承担更多样板代码。<code>BaseTool</code> 不会自动关闭数据库连接或实现连接池生命周期；资源仍应由应用的依赖注入、启动和关闭流程管理。</p>
 </blockquote>
 <h2 id="55">5.5 可信参数如何注入<a class="headerlink" href="#55" title="Permanent link">&para;</a></h2>
 <p><strong>假设「查询我的账户余额」工具需要用户 ID。</strong></p>
@@ -9066,6 +9066,7 @@
 </span></code></pre></div>
 <p><code>context_schema=UserContext</code> 是让框架知道 Context 类型的接线；没有它，<code>ToolRuntime[UserContext]</code> 只是工具函数的类型标注。模型只能看到 <code>locale</code>，看不到 <code>runtime</code>、身份或 Store namespace。</p>
 <p>可信身份边界在 Agent 外部：认证层验证凭证、查出服务端权限后才构造 <code>UserContext</code>。不要从用户消息、模型输出、工具参数或浏览器传入的 <code>user_id</code> 创建它；工具服务还应对该身份重新执行授权。<code>runtime.state</code> 是当前线程的业务状态，不应用来伪造身份；<code>runtime.store</code> 也不是访问控制系统。</p>
+<p>工具返回字符串或字典时，通常会作为工具结果交给模型，不会把字典里的任意字段自动合并进 Agent State。需要更新自定义状态时，应使用 <code>Command(update=...)</code>，并按工具消息协议补齐对应 <code>tool_call_id</code> 的 <code>ToolMessage</code>。不要直接修改 <code>runtime.state</code> 中的共享列表：并行工具、reducer 和检查点要求状态更新经过运行时提交。</p>
 <h2 id="56">5.6 异步工具怎么处理<a class="headerlink" href="#56" title="Permanent link">&para;</a></h2>
 <p>搜索、数据库和远程 API 通常是 <strong>I/O 密集型</strong>。底层客户端支持异步时，工具也应使用原生 <code>async def</code>，并通过 Agent 的 <code>ainvoke</code> 或异步流式接口调用。</p>
 <blockquote>
@@ -9119,6 +9120,7 @@
     style P2 fill:#fff3cd</code></pre>
 <h3 id="581">5.8.1 工具数量不是越多越好<a class="headerlink" href="#581" title="Permanent link">&para;</a></h3>
 <p>一次性向模型暴露大量相似工具，会增加选择错误和参数混淆的概率。更合理的做法是<strong>根据用户权限和当前任务动态缩小工具集合</strong>（可用 Middleware 实现，见 <a href="../04-build-agent/">第四章</a>）。</p>
+<p>工具 Schema 本身也占输入 Token。工具裁剪应同时测「目标工具是否仍在候选集」和「候选集内选择是否正确」，否则节省 Token 的代价可能是根本无法完成任务。两次参数相同的调用也不一定是重复业务动作：<code>tool_call_id</code> 用于关联模型消息，支付或发信的幂等键应绑定业务请求，不能只靠模型生成的调用 ID。</p>
 <h2 id="59">5.9 常见错误<a class="headerlink" href="#59" title="Permanent link">&para;</a></h2>
 <h3 id="591">5.9.1 把工具描述当成普通注释<a class="headerlink" href="#591" title="Permanent link">&para;</a></h3>
 <p><strong>它是模型与业务代码之间的调用合同</strong>，描述模糊模型就会选错。</p>
@@ -9145,7 +9147,7 @@
 <li><strong>Tool = 模型可见的调用合同 + 运行时可执行函数</strong>，name / description / args_schema 给模型看，executor 给应用跑；</li>
 <li><strong>四种定义方式是一条复杂度递增的路径</strong>：普通函数 → <code>@tool</code> → <code>StructuredTool</code> → <code>BaseTool</code>；</li>
 <li><strong><code>@tool</code> 是大多数业务工具的首选</strong>，Pydantic 字段描述与枚举既指导模型也拦截非法输入；</li>
-<li><strong><code>StructuredTool</code> 解决运行时组装</strong>（改名、同步异步合一），<strong><code>BaseTool</code> 解决组件生命周期</strong>；</li>
+<li><strong><code>StructuredTool</code> 解决运行时组装</strong>（改名、同步异步合一），<strong><code>BaseTool</code> 提供完整执行定制</strong>；资源生命周期仍由应用管理；</li>
 <li><strong>参数必须二分</strong>：任务参数由模型生成，<strong>可信参数由运行时注入</strong>；</li>
 <li><strong>ToolRuntime 三作用域</strong>：<code>context_schema</code> 定义并接入可信的调用上下文，context（调用上下文）、state（会话状态）、store（跨会话长期）各司其职；</li>
 <li><strong>异步要真异步</strong>，底层客户端、工具、调用链三者一致；</li>
@@ -9185,7 +9187,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

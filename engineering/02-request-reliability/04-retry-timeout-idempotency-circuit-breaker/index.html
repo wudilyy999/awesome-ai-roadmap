@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="LLM 调用具备几个和普通微服务调用不同的特征: 耗时长(几秒到几十秒)、费用高(重试一次就是一次完整的 token 账单)、非幂等的副作用少见但一旦发生代价很大(如已经触发了一次下游工具调用) 。这些特征让「重试、超时、幂等、熔断」这套经典分布式系统模式在 LLM 场景下需要重新校准参数,而不是直接套用默认值">
+        <meta name="description" content="区分可重试错误与结果未知，设计共享超时预算、动作级幂等、熔断和舱壁隔离。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第四章：重试、超时、幂等与熔断">
-    <meta property="og:description" content="LLM 调用具备几个和普通微服务调用不同的特征: 耗时长(几秒到几十秒)、费用高(重试一次就是一次完整的 token 账单)、非幂等的副作用少见但一旦发生代价很大(如已经触发了一次下游工具调用) 。这些特征让「重试、超时、幂等、熔断」这套经典分布式系统模式在 LLM 场景下需要重新校准参数,而不是直接套用默认值">
+    <meta property="og:description" content="区分可重试错误与结果未知，设计共享超时预算、动作级幂等、熔断和舱壁隔离。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第四章：重试、超时、幂等与熔断">
-    <meta name="twitter:description" content="LLM 调用具备几个和普通微服务调用不同的特征: 耗时长(几秒到几十秒)、费用高(重试一次就是一次完整的 token 账单)、非幂等的副作用少见但一旦发生代价很大(如已经触发了一次下游工具调用) 。这些特征让「重试、超时、幂等、熔断」这套经典分布式系统模式在 LLM 场景下需要重新校准参数,而不是直接套用默认值">
+    <meta name="twitter:description" content="区分可重试错误与结果未知，设计共享超时预算、动作级幂等、熔断和舱壁隔离。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第四章：重试、超时、幂等与熔断","description":"LLM 调用具备几个和普通微服务调用不同的特征: 耗时长(几秒到几十秒)、费用高(重试一次就是一次完整的 token 账单)、非幂等的副作用少见但一旦发生代价很大(如已经触发了一次下游工具调用) 。这些特征让「重试、超时、幂等、熔断」这套经典分布式系统模式在 LLM 场景下需要重新校准参数,而不是直接套用默认值","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第四章：重试、超时、幂等与熔断","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第四章：重试、超时、幂等与熔断","description":"区分可重试错误与结果未知，设计共享超时预算、动作级幂等、熔断和舱壁隔离。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第四章：重试、超时、幂等与熔断","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"重试、超时、幂等与熔断","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/"}]}</script>
     
@@ -8587,8 +8587,9 @@
 
 <h1 id="_1">第四章：重试、超时、幂等与熔断<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="41-llm-api">4.1 为什么 LLM 调用的可靠性模式不能直接照搬传统 API<a class="headerlink" href="#41-llm-api" title="Permanent link">&para;</a></h2>
-<p>LLM 调用具备几个和普通微服务调用不同的特征:<strong>耗时长(几秒到几十秒)、费用高(重试一次就是一次完整的 token 账单)、非幂等的副作用少见但一旦发生代价很大(如已经触发了一次下游工具调用)</strong>。这些特征让「重试、超时、幂等、熔断」这套经典分布式系统模式在 LLM 场景下需要重新校准参数,而不是直接套用默认值。</p>
+<p>LLM 生成常有较长且不稳定的时延，重复尝试可能再次计费，具体取决于失败发生的阶段和供应商规则。纯生成不会自动产生订单等业务副作用，但应用执行工具、或调用托管工具后，超时可能意味着「已经执行，只是结果未送达」。因此要分别设计生成重试和业务动作重试。</p>
 <h2 id="42">4.2 重试:指数退避 + 抖动,但要分清错误类型<a class="headerlink" href="#42" title="Permanent link">&para;</a></h2>
+<p>下面只演示退避逻辑；<code>ApiError</code> 是供应商适配层的异常类型，生产实现还需统一总时限、识别额度耗尽，并处理 <code>Retry-After</code>。</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -8616,9 +8617,9 @@
 </thead>
 <tbody>
 <tr>
-<td>429 限流、5xx</td>
-<td>是</td>
-<td>大概率是瞬时问题</td>
+<td>瞬时限流、部分 5xx</td>
+<td>有预算时</td>
+<td>尊重 <code>Retry-After</code>，指数退避并设上限；账户额度耗尽等持久错误应停止重试</td>
 </tr>
 <tr>
 <td>400 参数错误、401 鉴权失败</td>
@@ -8627,8 +8628,8 @@
 </tr>
 <tr>
 <td>内容安全拦截</td>
-<td>视情况</td>
-<td>换供应商可能规避误伤(见第 3 章),原地重试通常无效</td>
+<td>不自动重试</td>
+<td>按统一政策拒绝或复核，不通过换供应商绕过拦截</td>
 </tr>
 <tr>
 <td>输出解析失败(见第 5 章)</td>
@@ -8637,13 +8638,11 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>抖动(jitter)不是可选项。</strong> 如果大量客户端在完全相同的延迟后同时重试,会形成新的流量尖峰,这是分布式系统里经典的「重试风暴」。</p>
-</blockquote>
+<p>网关、SDK、业务层不要各自独立重试。例如三层各最多尝试 3 次，最坏可能放大为 27 次下游调用。指定重试责任层，并让排队、退避、主调用和回退共同消耗同一个 deadline；超时后向下游传播取消，但取消不保证已发生的动作撤销。</p>
 <h2 id="43">4.3 超时:要设置的不是一个值,而是一个预算<a class="headerlink" href="#43" title="Permanent link">&para;</a></h2>
 <p>一次 LLM 调用的耗时和输出长度强相关,固定超时容易在长输出场景下误杀正常请求。更稳健的做法是设置<strong>分层超时预算</strong>:</p>
 <pre class="mermaid"><code>flowchart LR
-    A["连接超时:2s&lt;br/&gt;能否建立到网关的连接"] --&gt; B["首字节超时:10s&lt;br/&gt;模型开始返回内容前最多等多久"]
+    A["连接超时:2s&lt;br/&gt;示例预算"] --&gt; B["首 token 超时:10s&lt;br/&gt;等待首个有效内容 token"]
     B --&gt; C["总耗时超时:60s&lt;br/&gt;整个流式响应的硬上限"]</code></pre>
 <table>
 <thead>
@@ -8660,9 +8659,9 @@
 <td>网络层面是否可达</td>
 </tr>
 <tr>
-<td>首字节超时(TTFT 上限)</td>
-<td>5–15 秒</td>
-<td>模型是否卡在排队或推理没有响应,和用户感知的「有没有反应」直接相关</td>
+<td>首 token 超时</td>
+<td>示例为 5–15 秒</td>
+<td>首个有效内容 token 的等待时间；HTTP 首字节、响应头或心跳不等于首 token</td>
 </tr>
 <tr>
 <td>总耗时超时</td>
@@ -8671,24 +8670,19 @@
 </tr>
 </tbody>
 </table>
-<p>流式返回(streaming)场景下,首字节超时比总耗时超时更重要——<strong>只要模型开始吐字,用户体验就是「在响应」,即使总耗时长一些也能接受</strong>;反之首字节迟迟不来,用户会认为系统卡死了。</p>
+<p>表中数值仅用于展示层级，应由任务长度、负载实测与 SLO 决定。流式场景还需要 token 间空闲超时，防止首 token 后一直停顿；首响应、完成时间和取消后的资源释放都重要，不能靠不断发心跳维持表面可用。</p>
 <h2 id="44">4.4 幂等:防止重试引发重复副作用<a class="headerlink" href="#44" title="Permanent link">&para;</a></h2>
 <p>如果一次 LLM 调用之后跟着一个有副作用的动作(发邮件、下单、调用外部工具),简单重试可能导致该动作被执行两次。解决方案是<strong>幂等键(idempotency key)</strong>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_order_via_agent</span><span class="p">(</span><span class="n">request_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">idempotency_key</span> <span class="o">=</span> <span class="n">request_payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"idempotency_key"</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="c1"># 幂等键必须由调用方在首次请求时生成并跨重试保持不变,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="c1"># 而不是每次重试都重新生成</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="k">return</span> <span class="n">call_downstream_api</span><span class="p">(</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="n">payload</span><span class="o">=</span><span class="n">request_payload</span><span class="p">,</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Idempotency-Key"</span><span class="p">:</span> <span class="n">idempotency_key</span><span class="p">},</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_order_via_agent</span><span class="p">(</span><span class="n">request_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">idempotency_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">idempotency_key</span><span class="p">:</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"创建订单需要持久化的动作级幂等键"</span><span class="p">)</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">return</span> <span class="n">call_downstream_api</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="n">payload</span><span class="o">=</span><span class="n">request_payload</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Idempotency-Key"</span><span class="p">:</span> <span class="n">idempotency_key</span><span class="p">},</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="p">)</span>
 </span></code></pre></div>
-<p>幂等键需要<strong>在最外层生成一次,并贯穿整条重试链路</strong>——包括网关重试、Agent 内部的工具调用重试。下游服务(支付、下单类 API)收到相同幂等键的重复请求时,直接返回第一次的结果而不重复执行。</p>
-<blockquote>
-<p>幂等键方案并非 LLMOps 首创,Stripe 等支付 API 早已用它解决类似问题,LLM 场景的特殊之处在于<strong>幂等键必须覆盖到 Agent 多轮工具调用的每一层,而不只是最外层 HTTP 请求</strong>,否则一次「模型决定重试某个工具调用」也会引发重复副作用。</p>
-</blockquote>
+<p>调用方应在首次执行前生成并持久化动作 ID，同一逻辑动作的重试复用该 ID；同一任务中的「创建订单」和「发送邮件」必须使用不同键。服务端还需要按租户隔离键空间、校验参数摘要、原子登记执行状态并保存结果。只有请求头、没有服务端去重实现，并不能提供幂等保证。</p>
+<p>Stripe 的文档明确区分执行开始前的失败、首次执行结果与键的保留期：保存的结果可能包括 <code>500</code>，键过期后再次使用也可能重新执行。结果未知时先查询动作状态或对账，不能更换键盲目重放。跨服务动作还可能需要 outbox、补偿或人工处理，不能宣称一个键实现端到端 exactly-once。</p>
 <h2 id="45">4.5 熔断:防止对已经过载的服务继续加压<a class="headerlink" href="#45" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>stateDiagram-v2
     [*] --&gt; Closed
@@ -8739,8 +8733,8 @@
 <ol>
 <li><strong>LLM 调用的可靠性模式要重新校准参数</strong>:耗时长、成本高、部分场景非幂等,不能直接照搬默认配置;</li>
 <li><strong>重试要区分错误类型</strong>,只对瞬时性错误重试,且必须带抖动的指数退避;</li>
-<li><strong>超时应该是分层预算</strong>:连接超时、首字节超时、总耗时超时分别设置,流式场景首字节超时更重要;</li>
-<li><strong>幂等键必须贯穿整条重试链路</strong>,包括 Agent 内部的多轮工具调用,而不只是最外层请求;</li>
+<li><strong>超时是共享预算</strong>：连接、首 token、流中停顿和总时限分别约束，覆盖排队与回退;</li>
+<li><strong>同一动作的重试复用幂等键，不同动作分键</strong>，并依赖服务端原子去重和结果查询;</li>
 <li><strong>熔断器防止对已过载的服务继续加压</strong>,配合回退链路使用;</li>
 <li><strong>舱壁隔离防止故障在不同任务类型之间传染</strong>,不同优先级任务应有独立资源池。</li>
 </ol>
@@ -8774,7 +8768,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

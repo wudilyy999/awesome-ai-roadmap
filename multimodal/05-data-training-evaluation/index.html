@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="覆盖多模态模型训练数据的收集与对齐工程，以及投产前需要专门验证的评测污染、图像/生成内容特有的安全风险与推理服务架构问题">
+        <meta name="description" content="多模态数据与上线验证索引，涵盖过滤偏差、事实对齐、基准泄漏、内容溯源和媒体编码及语言缓存的复用条件。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="多模态 · 训练数据、评测与服务">
-    <meta property="og:description" content="覆盖多模态模型训练数据的收集与对齐工程，以及投产前需要专门验证的评测污染、图像/生成内容特有的安全风险与推理服务架构问题">
+    <meta property="og:description" content="多模态数据与上线验证索引，涵盖过滤偏差、事实对齐、基准泄漏、内容溯源和媒体编码及语言缓存的复用条件。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/05-data-training-evaluation/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="多模态 · 训练数据、评测与服务">
-    <meta name="twitter:description" content="覆盖多模态模型训练数据的收集与对齐工程，以及投产前需要专门验证的评测污染、图像/生成内容特有的安全风险与推理服务架构问题">
+    <meta name="twitter:description" content="多模态数据与上线验证索引，涵盖过滤偏差、事实对齐、基准泄漏、内容溯源和媒体编码及语言缓存的复用条件。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"多模态 · 训练数据、评测与服务","description":"覆盖多模态模型训练数据的收集与对齐工程，以及投产前需要专门验证的评测污染、图像/生成内容特有的安全风险与推理服务架构问题","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/05-data-training-evaluation/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"多模态 · 训练数据、评测与服务","description":"多模态数据与上线验证索引，涵盖过滤偏差、事实对齐、基准泄漏、内容溯源和媒体编码及语言缓存的复用条件。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/05-data-training-evaluation/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/multimodal/05-data-training-evaluation/"}]}</script>
     
@@ -8286,7 +8286,8 @@
 <h2 id="_3">模块内关系<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
     D[多模态训练数据与对齐] --&gt; E[多模态评测、安全与推理服务]</code></pre>
-<p>第九章讨论"用什么数据训练出什么能力"，第十章讨论"训练完成后如何验证这些能力是否真实、是否安全、能否稳定服务"，两者共同构成模型从训练到投产的收尾环节。通用的多模态训练/推理/评测/安全概览见 <a href="../../llm/06-multimodal/23-multimodal-models/">LLM · 多模态模型</a>。</p>
+<p>第九章讨论数据如何提供或遗漏训练信号，第十章讨论能力、风险与服务成本如何验证。它们不是训练完成后才补做的收尾：数据划分、去污染、权限和资源预算需要在数据采集与系统设计时确定。</p>
+<p>关键区分包括：相似度不等于配对正确率，发布日期不等于无污染，内容凭证不等于事实真实，媒体特征缓存不等于任意上下文 KV 复用。通用框架见 <a href="../../llm/06-multimodal/23-multimodal-models/">LLM · 多模态模型</a>。</p>
 <p>返回 <a href="../">多模态相关知识点</a>。</p>
 
 
@@ -8310,7 +8311,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 17:30:27 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
   </span>
 
     

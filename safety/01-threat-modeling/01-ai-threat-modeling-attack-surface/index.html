@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="传统应用安全假设「代码是可信的执行体，数据是待校验的输入」。LLM 系统打破了这个假设： 模型的输入（Prompt、检索内容、工具返回值、图片）和输出（文本、工具调用参数、代码）共享同一条通道，指令与数据之间没有结构边界 。这不是某个具体漏洞，而是架构性的根问题——第二章到第八章讨论的几乎所有攻击，最终都能追溯到…">
+        <meta name="description" content="按资产、信任边界与攻击者能力建立 AI 威胁模型，区分 MITRE ATLAS、NIST AI RMF 和 OWASP 风险清单的用途。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第一章：AI 系统威胁建模与攻击面全景">
-    <meta property="og:description" content="传统应用安全假设「代码是可信的执行体，数据是待校验的输入」。LLM 系统打破了这个假设： 模型的输入（Prompt、检索内容、工具返回值、图片）和输出（文本、工具调用参数、代码）共享同一条通道，指令与数据之间没有结构边界 。这不是某个具体漏洞，而是架构性的根问题——第二章到第八章讨论的几乎所有攻击，最终都能追溯到…">
+    <meta property="og:description" content="按资产、信任边界与攻击者能力建立 AI 威胁模型，区分 MITRE ATLAS、NIST AI RMF 和 OWASP 风险清单的用途。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第一章：AI 系统威胁建模与攻击面全景">
-    <meta name="twitter:description" content="传统应用安全假设「代码是可信的执行体，数据是待校验的输入」。LLM 系统打破了这个假设： 模型的输入（Prompt、检索内容、工具返回值、图片）和输出（文本、工具调用参数、代码）共享同一条通道，指令与数据之间没有结构边界 。这不是某个具体漏洞，而是架构性的根问题——第二章到第八章讨论的几乎所有攻击，最终都能追溯到…">
+    <meta name="twitter:description" content="按资产、信任边界与攻击者能力建立 AI 威胁模型，区分 MITRE ATLAS、NIST AI RMF 和 OWASP 风险清单的用途。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第一章：AI 系统威胁建模与攻击面全景","description":"传统应用安全假设「代码是可信的执行体，数据是待校验的输入」。LLM 系统打破了这个假设： 模型的输入（Prompt、检索内容、工具返回值、图片）和输出（文本、工具调用参数、代码）共享同一条通道，指令与数据之间没有结构边界 。这不是某个具体漏洞，而是架构性的根问题——第二章到第八章讨论的几乎所有攻击，最终都能追溯到…","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第一章：AI 系统威胁建模与攻击面全景","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第一章：AI 系统威胁建模与攻击面全景","description":"按资产、信任边界与攻击者能力建立 AI 威胁模型，区分 MITRE ATLAS、NIST AI RMF 和 OWASP 风险清单的用途。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第一章：AI 系统威胁建模与攻击面全景","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"AI 威胁建模与攻击面","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/"}]}</script>
     
@@ -8614,9 +8614,9 @@
 
 <h1 id="ai">第一章：AI 系统威胁建模与攻击面全景<a class="headerlink" href="#ai" title="Permanent link">&para;</a></h1>
 <h2 id="11-ai">1.1 为什么 AI 安全需要单独的威胁模型<a class="headerlink" href="#11-ai" title="Permanent link">&para;</a></h2>
-<p>传统应用安全假设「代码是可信的执行体，数据是待校验的输入」。LLM 系统打破了这个假设：<strong>模型的输入（Prompt、检索内容、工具返回值、图片）和输出（文本、工具调用参数、代码）共享同一条通道，指令与数据之间没有结构边界</strong>。这不是某个具体漏洞，而是架构性的根问题——第二章到第八章讨论的几乎所有攻击，最终都能追溯到这一点。</p>
+<p>LLM 接口通常有 system、user、tool 等角色结构，但模型仍可能把低信任内容理解为应服从的指令，<strong>角色标签不是确定性的安全边界</strong>。这是提示注入的重要根因，却不能解释全部 AI 风险：数据投毒改变训练材料，反序列化风险来自加载器，越权来自身份与资源授权，各有独立机制。传统应用同样不能默认代码及供应链可信。</p>
 <pre class="mermaid"><code>flowchart TB
-    T[传统应用安全] --&gt; T1[代码路径固定&lt;br/&gt;数据流向可枚举]
+    T[传统应用安全] --&gt; T1[代码与依赖审查&lt;br/&gt;数据流和权限边界分析]
     A[AI 系统安全] --&gt; A1[模型行为由权重和上下文共同决定&lt;br/&gt;无法穷举所有输入到输出的映射]
     A --&gt; A2[指令与数据同道传输&lt;br/&gt;见第2章]
     A --&gt; A3[系统包含训练、微调、检索、&lt;br/&gt;工具、多 Agent 协作等新阶段]</code></pre>
@@ -8673,11 +8673,12 @@
 <h2 id="13">1.3 三个主流威胁建模框架<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
 <p>生产环境通常需要同时使用三类框架：一类给出攻击者视角的战术知识库，一类给出组织级风险治理流程，一类给出漏洞分类清单。三者互补而非互斥。</p>
 <h3 id="131-mitre-atlas">1.3.1 MITRE ATLAS：攻击者战术与技术知识库<a class="headerlink" href="#131-mitre-atlas" title="Permanent link">&para;</a></h3>
-<p>MITRE ATLAS（Adversarial Threat Landscape for Artificial-Intelligence Systems）仿照 ATT&amp;CK 的战术-技术矩阵，记录真实发生过的 AI 攻击案例，覆盖侦察、资源开发、初始访问、ML 供应链攻击、模型逃避、数据投毒、模型窃取、外泄等战术阶段。它的价值在于<strong>用真实案例校准「这个威胁是否值得投入资源防御」</strong>，而不是空想式的攻击树。做威胁建模时，可以按 ATLAS 矩阵逐格检查系统是否暴露对应技术面。</p>
+<p>MITRE ATLAS（Adversarial Threat Landscape for Artificial-Intelligence Systems）以战术、技术和案例描述 AI 攻击，既包含现实事件，也包含研究或红队演示。引用时应注明案例性质与攻击前提；某技术被收录不代表已在所有生产系统中被利用。它适合帮助团队检查可能路径，而非替代本系统的可达性和影响分析。</p>
 <h3 id="132-nist-ai-rmf">1.3.2 NIST AI RMF：治理生命周期<a class="headerlink" href="#132-nist-ai-rmf" title="Permanent link">&para;</a></h3>
-<p>NIST AI Risk Management Framework 定义了 <strong>Govern、Map、Measure、Manage</strong> 四个循环功能：Govern 建立问责与制度，Map 识别场景中的风险来源，Measure 用指标量化风险，Manage 决定缓解、转移或接受。RMF 不关心具体攻击技术，而是回答「谁负责、什么时候评估、评估不通过怎么办」——这是第十章治理章节的直接依据。生成式 AI 场景可结合 NIST 的 Generative AI Profile 补充具体风险清单（如幻觉、内容真实性、CBRN 滥用等）。</p>
+<p>NIST AI RMF 1.0 是自愿使用的风险管理框架，不是法律或产品安全认证。<strong>Govern、Map、Measure、Manage</strong> 分别涉及问责制度、场景风险识别、风险测量和处置，Govern 贯穿其他功能，并非一次性的线性流程。生成式 AI 可结合 2024 年发布的 NIST AI 600-1 Generative AI Profile。NIST 官网说明 RMF 正在修订，不应据此把尚未发布的后续版本当作既定标准。</p>
 <h3 id="133-owasp-top-10">1.3.3 OWASP Top 10：漏洞分类与速查<a class="headerlink" href="#133-owasp-top-10" title="Permanent link">&para;</a></h3>
-<p>OWASP 维护两份互补清单：<strong>LLM Applications Top 10</strong>（面向单模型应用，如 LLM01 Prompt Injection、LLM02 Sensitive Information Disclosure、LLM03 Supply Chain、LLM04 Data and Model Poisoning、LLM05 Improper Output Handling、LLM06 Excessive Agency、LLM07 System Prompt Leakage、LLM08 Vector and Embedding Weaknesses、LLM09 Misinformation、LLM10 Unbounded Consumption）和 <strong>Agentic AI / Multi-Agentic System Top 10</strong>（面向自主 Agent，覆盖工具滥用、身份冒充、级联失控、人机协同失效等）。两份清单的粒度接近 CWE，适合作为代码评审和安全测试的检查项。</p>
+<p><strong>OWASP Top 10 for LLM Applications 2025</strong> 不限于单模型架构：LLM01 Prompt Injection、LLM02 Sensitive Information Disclosure、LLM03 Supply Chain、LLM04 Data and Model Poisoning、LLM05 Improper Output Handling、LLM06 Excessive Agency、LLM07 System Prompt Leakage、LLM08 Vector and Embedding Weaknesses、LLM09 Misinformation、LLM10 Unbounded Consumption。</p>
+<p>另有 <strong>Top 10 for Agentic Applications 2026</strong>，聚焦自主 Agent 的工具、身份、委托和级联风险。它与 Agentic AI Threats and Mitigations 指南不是同一份文档。Top 10 是风险清单，不是与 CWE 逐项等价的弱点分类，也不是认证标准。</p>
 <p>三者分工不同：ATLAS 描述攻击者的战术与技术，RMF 管理组织风险，OWASP 提供应用实现层的漏洞检查项。</p>
 <pre class="mermaid"><code>flowchart LR
     ATLAS["MITRE ATLAS&lt;br/&gt;攻击者战术/技术"] --&gt;|校准威胁优先级| MODEL[本组织威胁模型]
@@ -8776,7 +8777,7 @@
 <tr>
 <td>L0 匿名用户</td>
 <td>仅能通过公开接口发送 Prompt</td>
-<td>越狱、间接注入投放</td>
+<td>直接注入、越狱；间接注入还需第三方内容投放路径</td>
 </tr>
 <tr>
 <td>L1 认证用户</td>
@@ -8805,7 +8806,8 @@
 </tr>
 </tbody>
 </table>
-<p>多数生产系统的第一优先级应放在 L0-L2（因为攻击面最大、门槛最低），L3-L5 需要结合具体业务的暴露程度决定投入。</p>
+<p>L0–L5 是本章的讨论标签，不是行业标准或严格递增的权限等级；算力、内部权限和内容控制是不同维度。投入应根据资产价值、可达性、损害与现有控制排序，不能统一认定匿名用户风险最高。</p>
+<p>例如只读客服助手与可退款 Agent 都会读取不可信文档，但后者多了资金动作、委托身份和重放风险。应写出「文档 → 模型 → 退款参数 → 授权服务」的数据流，验证授权服务能否独立检查用户、订单、金额和审批，再把攻击分类映射成具体控制。</p>
 <h2 id="16">1.6 本主题的定位与交叉引用约定<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
 <p>本仓库已经在 Agent、Tools、RAG 三个应用主题中，针对具体架构给出了防御细节：</p>
 <ul>
@@ -8826,7 +8828,7 @@
 <h3 id="172">1.7.2 把威胁建模做成一次性文档<a class="headerlink" href="#172" title="Permanent link">&para;</a></h3>
 <p>模型、Prompt、工具集和依赖库都在持续变化，威胁模型需要随每次架构变更或依赖升级重新评审，而不是上线前写一次就归档。</p>
 <h3 id="173">1.7.3 忽略攻击者能力分级<a class="headerlink" href="#173" title="Permanent link">&para;</a></h3>
-<p>不区分「匿名用户」和「内部人员」会导致防御资源错配——把大量精力投入防内部威胁，却对最容易触发的匿名越狱和间接注入疏于防范。</p>
+<p>不区分攻击者控制哪些数据、能否调用工具、是否拥有内部凭据，会导致资源错配；不能只凭「内网」或「匿名」标签判断风险。</p>
 <h3 id="174">1.7.4 认为威胁模型是安全团队的事<a class="headerlink" href="#174" title="Permanent link">&para;</a></h3>
 <p>模型行为、Prompt 结构、工具授权范围的决定权在产品和工程团队手里，威胁建模必须让这些团队参与，而不是安全团队闭门产出一份文档。</p>
 <h2 id="18">1.8 本章总结<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
@@ -8834,16 +8836,17 @@
 <li>AI 系统的威胁建模需要额外回答「模型行为从哪来、运行时什么内容会进入决策链路、输出能触发什么」三个问题；</li>
 <li><strong>MITRE ATLAS</strong> 给出攻击者战术技术知识库，<strong>NIST AI RMF</strong> 给出 Govern/Map/Measure/Manage 治理流程，<strong>OWASP LLM/Agentic Top 10</strong> 给出漏洞检查清单，三者互补；</li>
 <li>攻击面应沿「训练/微调 → 分发 → 运行时输入/检索/工具调用/执行 → 输出 → 治理」的生命周期铺开，而不是零散罗列；</li>
-<li>攻击者能力应分级（匿名用户到内部人员），防御投入应优先覆盖门槛最低、暴露面最大的等级；</li>
+<li>攻击者能力要按实际控制面描述，优先级结合可达性与损害，不按固定标签机械排序；</li>
 <li><code>docs/safety/</code> 负责跨层框架、标准映射和第2-10章覆盖的补充环节，Agent/Tools/RAG 已有的架构级防御细节通过交叉引用复用，不重复展开。</li>
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://atlas.mitre.org/">MITRE ATLAS</a></li>
 <li><a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI Risk Management Framework (AI RMF 1.0)</a></li>
-<li><a href="https://www.nist.gov/publications/generative-ai-profile">NIST Generative AI Profile (NIST AI 600-1)</a></li>
+<li><a href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence">NIST Generative AI Profile (NIST AI 600-1)</a></li>
 <li><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for Large Language Model Applications</a></li>
 <li><a href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/">OWASP Agentic AI Threats and Mitigations</a></li>
+<li><a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/">OWASP Top 10 for Agentic Applications 2026</a></li>
 <li><a href="https://www.nist.gov/publications/adversarial-machine-learning-taxonomy-and-terminology-attacks-and-mitigations">NIST AI 100-2 E2025: Adversarial Machine Learning Taxonomy</a></li>
 </ul>
 
@@ -8868,7 +8871,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

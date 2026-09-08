@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="传统 CI/CD 的&quot;测试&quot;阶段是确定性断言,LLM 应用的流水线在这一阶段替换成第 7 章的离线评测门禁,发布阶段则需要比传统蓝绿部署更谨慎的灰度策略——因为质量退化不像应用崩溃那样会立刻报错,而是悄悄发生">
+        <meta name="description" content="将离线评测加入现有 CI，隔离影子流量的副作用，设计有统计口径和完整回滚边界的灰度与 A/B 实验。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十章：LLM CI/CD 与灰度、Canary、A/B 发布">
-    <meta property="og:description" content="传统 CI/CD 的&quot;测试&quot;阶段是确定性断言,LLM 应用的流水线在这一阶段替换成第 7 章的离线评测门禁,发布阶段则需要比传统蓝绿部署更谨慎的灰度策略——因为质量退化不像应用崩溃那样会立刻报错,而是悄悄发生">
+    <meta property="og:description" content="将离线评测加入现有 CI，隔离影子流量的副作用，设计有统计口径和完整回滚边界的灰度与 A/B 实验。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/10-llm-cicd-canary-ab/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十章：LLM CI/CD 与灰度、Canary、A/B 发布">
-    <meta name="twitter:description" content="传统 CI/CD 的&quot;测试&quot;阶段是确定性断言,LLM 应用的流水线在这一阶段替换成第 7 章的离线评测门禁,发布阶段则需要比传统蓝绿部署更谨慎的灰度策略——因为质量退化不像应用崩溃那样会立刻报错,而是悄悄发生">
+    <meta name="twitter:description" content="将离线评测加入现有 CI，隔离影子流量的副作用，设计有统计口径和完整回滚边界的灰度与 A/B 实验。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：LLM CI/CD 与灰度、Canary、A/B 发布","description":"传统 CI/CD 的\"测试\"阶段是确定性断言,LLM 应用的流水线在这一阶段替换成第 7 章的离线评测门禁,发布阶段则需要比传统蓝绿部署更谨慎的灰度策略——因为质量退化不像应用崩溃那样会立刻报错,而是悄悄发生","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/10-llm-cicd-canary-ab/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：LLM CI/CD 与灰度、Canary、A/B 发布","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/10-llm-cicd-canary-ab/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十章：LLM CI/CD 与灰度、Canary、A/B 发布","description":"将离线评测加入现有 CI，隔离影子流量的副作用，设计有统计口径和完整回滚边界的灰度与 A/B 实验。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/10-llm-cicd-canary-ab/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十章：LLM CI/CD 与灰度、Canary、A/B 发布","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/10-llm-cicd-canary-ab/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"LLM CI/CD 与灰度发布","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/05-release-pipeline/10-llm-cicd-canary-ab/"}]}</script>
     
@@ -8581,7 +8581,7 @@
 
 <h1 id="llm-cicd-canaryab">第十章：LLM CI/CD 与灰度、Canary、A/B 发布<a class="headerlink" href="#llm-cicd-canaryab" title="Permanent link">&para;</a></h1>
 <h2 id="101-llm-cicd">10.1 LLM CI/CD 流水线长什么样<a class="headerlink" href="#101-llm-cicd" title="Permanent link">&para;</a></h2>
-<p>传统 CI/CD 的"测试"阶段是确定性断言,LLM 应用的流水线在这一阶段替换成<a href="../../04-evaluation-observability/07-offline-eval-eval-driven-development/">第 7 章</a>的离线评测门禁,发布阶段则需要比传统蓝绿部署更谨慎的灰度策略——因为质量退化不像应用崩溃那样会立刻报错,而是悄悄发生。</p>
+<p>LLM CI/CD 在单元测试、集成测试、授权和契约测试之外，<strong>新增</strong><a href="../../04-evaluation-observability/07-offline-eval-eval-driven-development/">离线评测门禁</a>，不是替换这些测试。质量退化可能不触发异常，因此发布还需观察业务质量信号，不能只看进程存活。</p>
 <pre class="mermaid"><code>flowchart LR
     A["提交 Prompt/模型/路由变更"] --&gt; B["自动化离线评测&lt;br/&gt;(黄金测试集 + 切片门禁)"]
     B --&gt;|不通过| A
@@ -8604,23 +8604,25 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="n">async_run</span><span class="p">(</span><span class="n">shadow_pipeline</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>    <span class="c1"># 异步执行,结果只记录不返回</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="k">return</span> <span class="n">response</span>
 </span></code></pre></div>
-<p>Shadow 测试的价值在于<strong>用真实流量分布验证新版本,而不承担任何用户体验风险</strong>,是离线评测(固定测试集)和线上灰度(真实承接流量)之间的中间地带。局限是它只能对比"输出内容",无法验证端到端的用户交互体验(如多轮追问)。</p>
+<p>Shadow 不把候选回答发给用户，但并非零风险：重复调用会增加费用、争用配额，也可能把数据送往新的处理方。上例的 <code>shadow_pipeline</code> 必须使用只读副本、录制回放或模拟工具，<strong>禁止真实写操作与重复通知</strong>，并隔离队列、限流和日志。它能比较相同输入下的结果，却不能直接测量候选回答引发的后续用户行为。</p>
 <h2 id="103">10.3 灰度发布:按比例放量,而不是一步切换<a class="headerlink" href="#103" title="Permanent link">&para;</a></h2>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">rollout_plan</span><span class="p">:</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">canary</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">traffic_percent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">duration_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">guard_metrics</span><span class="p">:</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">error_rate_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">contract_violation_rate_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">p99_latency_ms_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">guard_metrics</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;guards</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">error_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">contract_violation_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">p99_latency_ms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ramp_25</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">traffic_percent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">duration_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">traffic_percent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">guard_metrics</span><span class="p">:</span><span class="w"> </span><span class="nv">*guards</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">traffic_percent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="nt">guard_metrics</span><span class="p">:</span><span class="w"> </span><span class="nv">*guards</span>
 </span></code></pre></div>
-<p>每一阶段都设置<strong>护栏指标(guard metrics)</strong>,这些指标来自<a href="../../04-evaluation-observability/08-online-observability-tracing/">第 8 章</a>的可观测性聚合数据。任意护栏指标越界,自动暂停放量或回滚到上一阶段,而不是等人工发现问题。</p>
+<p>数值和时长仅为示例，不是推荐阈值。每一阶段都设置<strong>护栏指标(guard metrics)</strong>,这些指标来自<a href="../../04-evaluation-observability/08-online-observability-tracing/">第 8 章</a>的可观测性聚合数据。任意护栏指标越界,自动暂停放量或回滚到上一阶段,而不是等人工发现问题。</p>
 <h2 id="104-ab">10.4 A/B 测试:回答"哪个版本更好",而不只是"新版本有没有崩"<a class="headerlink" href="#104-ab" title="Permanent link">&para;</a></h2>
 <p>灰度发布关注的是"新版本是否安全",A/B 测试关注的是"两个版本哪个业务效果更好",两者可以结合但目的不同:</p>
 <table>
@@ -8655,46 +8657,60 @@
 </tbody>
 </table>
 <h3 id="1041-ab">10.4.1 A/B 测试对样本量和统计显著性有明确要求<a class="headerlink" href="#1041-ab" title="Permanent link">&para;</a></h3>
-<p>LLM 输出的业务指标(如用户满意度)方差通常比传统 A/B 测试(如按钮点击率)更大,需要更大的样本量才能得出有统计意义的结论。<strong>没有做显著性检验就下结论"新版本更好",是最容易踩的坑</strong>——观察到的差异很可能只是噪声。</p>
+<p>样本量取决于基线、方差、最小可检测效应和统计功效，不能因「用了 LLM」就断言方差更大。先明确主指标和随机化单位；多轮场景按用户或租户稳定分组，避免同一用户来回切版本。检查分流比例异常（SRM）、曝光丢失和跨组污染，并覆盖业务周期与反馈延迟。</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">is_significant</span><span class="p">(</span><span class="n">control_scores</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">treatment_scores</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">_</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">control_scores</span><span class="p">,</span> <span class="n">treatment_scores</span><span class="p">)</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="k">return</span> <span class="n">p_value</span> <span class="o">&lt;</span> <span class="n">alpha</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">compare_user_scores</span><span class="p">(</span><span class="n">control_scores</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">treatment_scores</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="c1"># 两组独立、每用户一个汇总分数、样本量充足的连续指标示例</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">control_scores</span><span class="p">,</span> <span class="n">treatment_scores</span><span class="p">,</span> <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">statistic</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">pvalue</span>
 </span></code></pre></div>
+<p>这是 Welch t 检验的局部示例，不是自动上线函数；空样本、缺失值和检验前提需要先检查。二元任务完成率、重尾成本、用户内相关数据各有相应方法。报告提升幅度与置信区间，区分统计显著与业务有用；不应每天重复看固定样本检验并在首次显著时停止。可预先固定样本量与时长，或使用事先选定的序贯检验；多指标、多版本比较需要控制误报。</p>
 <h2 id="105">10.5 回滚要快且要有明确触发条件<a class="headerlink" href="#105" title="Permanent link">&para;</a></h2>
 <p>回滚不应该依赖人工盯着仪表盘做判断,应该把 10.3 节的护栏指标接入自动化回滚:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_rollout_health</span><span class="p">(</span><span class="n">current_metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">guard_metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">for</span> <span class="n">metric_name</span><span class="p">,</span> <span class="n">max_value</span> <span class="ow">in</span> <span class="n">guard_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="k">if</span> <span class="n">current_metrics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_value</span><span class="p">:</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>            <span class="n">trigger_rollback</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s2"> 超过阈值"</span><span class="p">)</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">return</span> <span class="kc">True</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">isfinite</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_rollout_health</span><span class="p">(</span><span class="n">current_metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">guard_metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">guard_metrics</span><span class="p">:</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="n">pause_rollout</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s2">"未配置护栏"</span><span class="p">)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="k">for</span> <span class="n">metric_name</span><span class="p">,</span> <span class="n">max_value</span> <span class="ow">in</span> <span class="n">guard_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="k">if</span> <span class="n">metric_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_metrics</span><span class="p">:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>            <span class="n">pause_rollout</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"缺少指标 </span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">current_metrics</span><span class="p">[</span><span class="n">metric_name</span><span class="p">])</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">max_value</span><span class="p">):</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>            <span class="n">pause_rollout</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"指标或阈值无效: </span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="k">if</span> <span class="n">current_metrics</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_value</span><span class="p">:</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>            <span class="n">trigger_rollback</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s2"> 超过阈值"</span><span class="p">)</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="k">return</span> <span class="kc">True</span>
 </span></code></pre></div>
-<p>回滚目标应该是<a href="../09-prompt-model-data-versioning/">第 9 章</a>版本注册表里"上一个已知良好版本"的完整快照——Prompt、模型快照、路由策略三者一起回滚,而不是只回滚其中一项,否则可能出现版本组合不一致导致的新问题。</p>
+<p>示例配置的值都是上界，键与指标同名；真实发布系统还需检查数据类型、窗口、分母和采集新鲜度，不能把缺失或过期指标当作正常。回滚按<a href="../09-prompt-model-data-versioning/">第 9 章</a>的已验证组合恢复 Prompt、模型、路由、工具和兼容的数据版本。正在执行的任务需要版本粘性或排空；已发邮件、已扣款等副作用不会被配置回滚撤销。安全补丁、删除标记和权限撤销不能跟着回滚失效。</p>
 <h2 id="106">10.6 常见错误<a class="headerlink" href="#106" title="Permanent link">&para;</a></h2>
 <h3 id="1061">10.6.1 评测通过就直接全量发布<a class="headerlink" href="#1061" title="Permanent link">&para;</a></h3>
-<p>离线评测无法覆盖生产环境全部输入分布,必须经过 Shadow 测试和灰度放量的验证,才能全量。</p>
+<p>离线评测无法覆盖全部生产分布，应按风险选择影子测试、受控试点或灰度。无法隔离写操作时不要机械复制生产请求做 Shadow。</p>
 <h3 id="1062">10.6.2 灰度阶段不设护栏指标,靠人工盯着看<a class="headerlink" href="#1062" title="Permanent link">&para;</a></h3>
 <p>人工监控响应慢且容易疏漏,护栏指标应该接入自动化的暂停/回滚机制。</p>
 <h3 id="1063-ab">10.6.3 把灰度发布和 A/B 测试混为一谈<a class="headerlink" href="#1063-ab" title="Permanent link">&para;</a></h3>
 <p>灰度发布关注"安全性",A/B 测试关注"业务效果哪个更优",两者的流量策略和判断依据都不同,不能用同一套流程处理。</p>
 <h3 id="1064-ab">10.6.4 A/B 测试样本量不足就下结论<a class="headerlink" href="#1064-ab" title="Permanent link">&para;</a></h3>
-<p>LLM 业务指标方差大,没做统计显著性检验就宣布"新版本更好",很可能被噪声误导。</p>
+<p>低流量或高方差指标可能需要较长观察；只运行一小时或只看 p 值，无法证明收益稳定，也不能证明「没有显著退化」就是安全。</p>
 <h3 id="1065-prompt">10.6.5 回滚只回滚模型,不回滚配套的 Prompt 和路由策略<a class="headerlink" href="#1065-prompt" title="Permanent link">&para;</a></h3>
 <p>三者应作为一个整体版本快照一起回滚,否则可能出现新旧配置不匹配引发的次生问题。</p>
 <h2 id="107">10.7 本章总结<a class="headerlink" href="#107" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>LLM CI/CD 用评测门禁替代传统的确定性测试断言</strong>,发布环节需要比传统应用更谨慎的灰度策略;</li>
-<li><strong>Shadow 测试用真实流量验证新版本,但不影响用户</strong>,是离线评测和线上灰度之间的中间地带;</li>
+<li><strong>LLM CI/CD 在传统测试之外增加评测门禁</strong>，不取消确定性的契约、授权和状态机测试;</li>
+<li><strong>Shadow 不返回候选结果，但仍需隔离副作用、资源与数据流向</strong>;</li>
 <li><strong>灰度发布按比例递增放量,每阶段设自动化护栏指标</strong>,越界自动暂停或回滚;</li>
-<li><strong>A/B 测试和灰度发布目的不同</strong>:前者比较业务效果,后者验证安全性,需要统计显著性支撑结论;</li>
+<li><strong>A/B 测试和灰度发布目的不同</strong>：前者估计业务效果差异，后者控制放量风险；分别约定实验方法与发布门禁，不把 p 值当成上线许可;</li>
 <li><strong>回滚要快且自动化</strong>,回滚目标是版本注册表里的完整版本快照,而非单一组件。</li>
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://martinfowler.com/bliki/CanaryRelease.html">Martin Fowler: CanaryRelease</a></li>
 <li><a href="https://sre.google/workbook/canarying-releases/">Google SRE Workbook: Canarying Releases</a></li>
+<li><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_ind.html">SciPy: ttest_ind，独立样本与 Welch 检验前提</a></li>
 <li><a href="https://martinfowler.com/articles/cd4ml.html">Martin Fowler: Continuous Delivery for Machine Learning</a></li>
 <li><a href="https://spinnaker.io/docs/guides/user/canary/">Spinnaker: Canary Analysis</a></li>
 <li><a href="https://www.optimizely.com/optimization-glossary/statistical-significance/">Optimizely: Statistical significance in A/B testing</a></li>
@@ -8721,7 +8737,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:07:59 CST">2026-09-08</span>
   </span>
 
     

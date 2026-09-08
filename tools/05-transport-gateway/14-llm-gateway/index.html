@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="网关就是 坐在应用和各模型 API 之间的中间人 。应用只认识网关，不直接对接多个厂商">
+        <meta name="description" content="解释 LLM 网关的模型适配、限流、成本与缓存治理，以及跨厂商故障转移、流式重试和密钥安全边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第十四章：LLM 网关">
-    <meta property="og:description" content="网关就是 坐在应用和各模型 API 之间的中间人 。应用只认识网关，不直接对接多个厂商">
+    <meta property="og:description" content="解释 LLM 网关的模型适配、限流、成本与缓存治理，以及跨厂商故障转移、流式重试和密钥安全边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/14-llm-gateway/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第十四章：LLM 网关">
-    <meta name="twitter:description" content="网关就是 坐在应用和各模型 API 之间的中间人 。应用只认识网关，不直接对接多个厂商">
+    <meta name="twitter:description" content="解释 LLM 网关的模型适配、限流、成本与缓存治理，以及跨厂商故障转移、流式重试和密钥安全边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十四章：LLM 网关","description":"网关就是 坐在应用和各模型 API 之间的中间人 。应用只认识网关，不直接对接多个厂商","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/14-llm-gateway/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十四章：LLM 网关","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/14-llm-gateway/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第十四章：LLM 网关","description":"解释 LLM 网关的模型适配、限流、成本与缓存治理，以及跨厂商故障转移、流式重试和密钥安全边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/14-llm-gateway/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第十四章：LLM 网关","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/14-llm-gateway/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"LLM 网关","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/tools/05-transport-gateway/14-llm-gateway/"}]}</script>
     
@@ -3285,6 +3285,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="14.3.2 负载均衡与故障转移">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      流式与工具调用不能透明重试到底
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -3443,7 +3458,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       参考资料
     </span>
@@ -8650,6 +8665,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="14.3.2 负载均衡与故障转移">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      流式与工具调用不能透明重试到底
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -8808,7 +8838,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       参考资料
     </span>
@@ -8870,16 +8900,16 @@
 <p>一个稍具规模的 AI 产品同时用多个模型是常态：主流程用高端模型，成本敏感任务用小模型，代码任务换一家，向量化又是另一个模型。每家的 SDK、鉴权方式、参数格式都有差异。不做网关，这些差异会<strong>渗透到每个业务服务里</strong>。</p>
 <h3 id="1421-api-key">14.2.1 API Key 散落<a class="headerlink" href="#1421-api-key" title="Permanent link">&para;</a></h3>
 <p>Key 散在各服务的配置文件里，任何一处泄露都是安全事故。</p>
-<p>一个真实的场景：某工程师离职，他存在本地开发机或内部文档里的 Key 没及时清理，两周后被扫到，拿去跑批量请求——<strong>几千美元的账单是一个晚上就能烧出来的</strong>。</p>
+<p>例如，长期 Key 被复制到开发机或文档后，人员离岗并不会自动使其失效。应集中管理、限制用途和预算，并支持轮换与撤销；这里是风险示例，不是某次生产事故记录。</p>
 <h3 id="1422">14.2.2 重复劳动且版本不一<a class="headerlink" href="#1422" title="Permanent link">&para;</a></h3>
-<p>每个服务各写一套重试和限流逻辑。同一个逻辑（比如「429 要指数退避重试」）A 服务写对了、B 服务写错了，出问题时要先花半小时搞清楚是哪个服务的重试逻辑在作怪。</p>
+<p>每个服务各写重试和限流，容易出现策略不一致，甚至 SDK、业务层、网关三层叠加重试，放大上游压力。</p>
 <h3 id="1423">14.2.3 成本黑箱<a class="headerlink" href="#1423" title="Permanent link">&para;</a></h3>
-<p>想知道这个月花了多少钱、哪个团队用得最多？没法统计，因为各服务各记各的。月底财务问「这笔三万美元的账单分摊给哪个业务线」，你只能两手一摊。</p>
+<p>若各服务日志没有统一模型、用量与租户标签，就难以分摊成本。集中观测可以统一口径，也需和供应商账单对账。</p>
 <h3 id="1424">14.2.4 换模型要改代码<a class="headerlink" href="#1424" title="Permanent link">&para;</a></h3>
 <p>想把某个任务从 A 模型换成 B 模型？改代码、测试、发版。A/B 测试模型效果？再来一遍。</p>
 <h3 id="1425">14.2.5 配额无法管控<a class="headerlink" href="#1425" title="Permanent link">&para;</a></h3>
-<p>周五下班前某工程师无意中跑了个死循环脚本，一晚上吃光下周的 token 预算，周一用户打开产品全是 429。</p>
-<p><strong>这种事一年只要发生一次，你就会明白配额管理不能指望各服务自觉。</strong></p>
+<p>失控批处理可能耗尽共享的上游 RPM/TPM、并发额度或支出预算。这几种限制不同，不能把“本地预算用完”和“供应商限流”混作一个错误。</p>
+<p>预算需要服务端强制执行，而不是只靠调用方自律。</p>
 <h3 id="1426">14.2.6 根本原因是同一个<a class="headerlink" href="#1426" title="Permanent link">&para;</a></h3>
 <p>这几个痛点看起来分散，其实都指向同一个问题：</p>
 <blockquote>
@@ -8889,23 +8919,27 @@
 <h2 id="143">14.3 网关的七项核心能力<a class="headerlink" href="#143" title="Permanent link">&para;</a></h2>
 <h3 id="1431">14.3.1 多模型统一接口<a class="headerlink" href="#1431" title="Permanent link">&para;</a></h3>
 <p>大多数 LLM 网关对外暴露一个 <strong>OpenAI 兼容接口</strong>。业务代码就像调 OpenAI 一样调它：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 接入网关只改两处</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://llm-gateway.internal/v1"</span><span class="p">,</span>  <span class="c1"># 改成网关地址</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">api_key</span><span class="o">=</span><span class="s2">"sk-virtual-team-order-xxx"</span><span class="p">,</span>          <span class="c1"># 网关分配的虚拟 Key</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># 其余代码一行不动</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">"chat-default"</span><span class="p">,</span>       <span class="c1"># 逻辑模型名，不是厂商模型名</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># 仅适用于网关支持这一 API 子集的情况</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://llm-gateway.internal/v1"</span><span class="p">,</span>  <span class="c1"># 改成网关地址</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">api_key</span><span class="o">=</span><span class="s2">"sk-virtual-team-order-xxx"</span><span class="p">,</span>          <span class="c1"># 网关分配的虚拟 Key</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># 逻辑模型与参数仍需做兼容性测试</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">"chat-default"</span><span class="p">,</span>       <span class="c1"># 逻辑模型名，不是厂商模型名</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">)</span>
 </span></code></pre></div>
 <p>注意 <code>model</code> 传的是<strong>逻辑名</strong>（<code>chat-default</code>），网关根据路由配置决定实际打到哪家。</p>
 <p>这样一来，业务层看到的始终只是逻辑模型名。做 A/B 测试、成本优化或模型替换时，通常不用改业务代码。</p>
+<p>“OpenAI 兼容”必须落到能力矩阵：Chat Completions/Responses、流式事件、工具调用 ID、strict Schema 子集、reasoning 状态、多模态、usage 与错误格式。不能静默丢弃不支持的字段；应拒绝、显式降级或路由到兼容部署。HTTP 200 不证明工具语义被完整保留。</p>
 <h3 id="1432">14.3.2 负载均衡与故障转移<a class="headerlink" href="#1432" title="Permanent link">&para;</a></h3>
 <p>模型 API 不是 100% 可靠：会偶发 503，某地区节点会超时，高峰期会被限流。</p>
 <p>网关可以给同一个逻辑模型名配多条路由：</p>
+<p>以下是路由概念伪配置，不是某个网关可直接加载的 YAML；模型名也是示例，不代表当前推荐型号。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">model_list</span><span class="p">:</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat-default</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
@@ -8921,12 +8955,17 @@
 </span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 </span></code></pre></div>
 <p>主路由连续失败达到阈值时自动切到备用路由，业务代码通常不需要跟着改。</p>
-<blockquote>
-<p>注意跨厂商兜底有个前提：两个模型的能力和输出风格要足够接近，否则故障转移会带来质量抖动。工程上更稳的做法是同一模型的多个部署（如 OpenAI + Azure OpenAI）优先，跨厂商作为最后一层。</p>
-</blockquote>
+<p>故障转移不仅要比较输出质量，还要匹配模型快照、接口功能、数据地域、保留政策、工具授权和上下文容量。同名模型在不同平台也可能有 API 或安全策略差异。</p>
+<h4 id="_1">流式与工具调用不能透明重试到底<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li>未向用户或执行器交付内容前，可在预算内重试可恢复错误；遵循 <code>Retry-After</code>、退避与抖动，区分短时限流、配额耗尽和不可重试的参数错误。</li>
+<li>已交付流式片段后，不应把另一家模型的续写直接拼接上去。要显式结束失败的响应，或按产品定义重启并告知用户，保留 attempt ID。</li>
+<li>已执行工具尤其是写操作后，换模型不能重放整段调用链。先核对业务状态、幂等键和调用 ID；网关重试模型请求并不等于工具执行具备 exactly-once。</li>
+<li>传播取消、限制最大尝试次数和总 deadline，避免每层独立重试导致指数放大。熔断应区分故障的部署、模型和限流主体。</li>
+</ul>
 <h3 id="1433">14.3.3 限流与配额<a class="headerlink" href="#1433" title="Permanent link">&para;</a></h3>
-<p>给每个团队的虚拟 Key 设独立的 token 日预算：研发团队每天 100 万，产品团队每天 50 万。</p>
-<p>某个团队超配额时，<strong>只有该 Key 的请求返回 429，其他团队完全不受影响</strong>。这就把 14.2.5 那个「死循环脚本吃光全公司预算」的事故封在了单个 Key 里。</p>
+<p>可按团队虚拟 Key 设置预算，同时区分请求频率、token 速率、并发、日支出与单任务上限。输出用量事前未知时，可先预留上界、结束后结算，异常断流再对账。</p>
+<p>本地 Key 超预算可以独立拒绝，但若多个团队共享上游组织配额、连接池或计算资源，仍会相互影响。需要分层限流、公平调度和必要的资源预留，不能承诺完全隔离。</p>
 <h3 id="1434">14.3.4 成本追踪与可观测性<a class="headerlink" href="#1434" title="Permanent link">&para;</a></h3>
 <p>网关集中记录每次调用的 token 用量、响应时间、错误率，这让你能回答：</p>
 <ul>
@@ -8934,8 +8973,8 @@
 <li>研发团队和产品团队各用了多少？</li>
 <li>各模型的 P95 响应时间分别是多少？</li>
 </ul>
-<p>有了这些数据，<strong>成本优化才有依据</strong>——比如发现某个接口消耗了 40% 的 token，但实际上可以用便宜得多的模型替代。</p>
-<p>网关通常可直接对接 Langfuse、Prometheus 等监控系统，<strong>不需要在业务代码里手动埋点</strong>。</p>
+<p>再区分首 token 延迟、输出间隔、总时长、重试次数和最终成功率；token 还应分输入、缓存输入、输出和 reasoning 等提供方计费项。模型价格表与计算版本也要记录。</p>
+<p>网关可采集模型调用指标，但不知道工具执行是否真正成功、答案是否解决业务问题。Agent 层仍需 trace 关联和业务指标；日志默认最小化，不应无条件保存全部 prompt 或工具结果。</p>
 <h3 id="1435-prompt">14.3.5 Prompt 安全与内容过滤<a class="headerlink" href="#1435-prompt" title="Permanent link">&para;</a></h3>
 <p>在网关层统一做输入输出校验：</p>
 <table>
@@ -8960,27 +8999,27 @@
 </tr>
 </tbody>
 </table>
-<p>集中做的好处是<strong>安全策略统一更新，任何接入点自动获得保护</strong>——「有一个服务漏了检测」这种事不会再发生。</p>
+<p>统一入口便于策略更新，但注入检测有漏报、PII 过滤有误报，绕过网关的流量也不受保护。对象级授权、工具执行沙箱及业务审批仍在实际执行边界落实；流式内容在审核前已交付时无法撤回，要明确缓冲与延迟取舍。</p>
 <h3 id="1436">14.3.6 语义缓存<a class="headerlink" href="#1436" title="Permanent link">&para;</a></h3>
 <p>这类能力最能体现 LLM 网关和普通 API 网关的区别。</p>
-<p><strong>普通 HTTP 缓存是精确匹配</strong>，请求一字不差才命中。但 LLM 的问题有大量语义相近的变体：</p>
+<p>HTTP 缓存按缓存键、方法及 <code>Vary</code> 等规则工作，不是逐字比较整个请求。LLM 应用也可对规范化请求做精确缓存；语义缓存额外使用相似度检索候选答案：</p>
 <blockquote>
 <p>「北京今天热吗」/「北京现在天气怎样」/「今天北京气温多少」</p>
 </blockquote>
-<p>三个问题本质上是同一个需求，精确匹配全部 miss，每次都要打底层模型——三次完整的 LLM 调用费用。</p>
+<p>这些问题看似接近，但城市、时间、用户偏好或数据版本不同就未必可复用。语义相似只是候选条件，不能单独决定命中。</p>
 <pre class="mermaid"><code>flowchart TB
     Q[收到新问题] --&gt; E[问题向量化 embedding]
     E --&gt; S[在向量库里做相似度搜索]
-    S --&gt; H{"最高相似度&lt;br/&gt;超过阈值?"}
-    H --&gt;|是| HIT["直接返回历史答案&lt;br/&gt;完全跳过 LLM 调用"]
+    S --&gt; H{"权限、时间与版本一致&lt;br/&gt;且语义校验通过?"}
+    H --&gt;|是| HIT["返回历史答案&lt;br/&gt;跳过答案生成"]
     H --&gt;|否| MISS[调用 LLM]
-    MISS --&gt; W["把「问题向量 + 回答」&lt;br/&gt;写入缓存"]
+    MISS --&gt; W["按可缓存策略写入&lt;br/&gt;问题、答案、权限与版本元数据"]
     W --&gt; R[返回]
 
     style HIT fill:#e6f4ea
     style MISS fill:#fef7e0</code></pre>
 <p><strong>两个关键工程细节：</strong></p>
-<p><strong>一是相似度阈值</strong>，这是最重要的调参点：</p>
+<p><strong>一是误命中风险</strong>，不应照抄其他系统的阈值：</p>
 <table>
 <thead>
 <tr>
@@ -8990,30 +9029,31 @@
 </thead>
 <tbody>
 <tr>
-<td>太高（0.99）</td>
-<td>基本只有一模一样的问题才命中，缓存形同虚设</td>
+<td>阈值过严</td>
+<td>召回下降，额外 embedding/检索成本可能不值得</td>
 </tr>
 <tr>
-<td>太低（0.7）</td>
-<td>「北京今天热吗」命中「上海今天热吗」的答案，答非所问</td>
+<td>阈值过宽</td>
+<td>实体、否定词、时间范围不同的问题可能误命中</td>
 </tr>
 <tr>
-<td><strong>0.85–0.95</strong></td>
-<td>通常的调试区间，具体看场景和用户提问多样性</td>
+<td>校准方法</td>
+<td>固定 embedding 模型与距离定义，用正反例评估错误答案复用率、命中率及收益</td>
 </tr>
 </tbody>
 </table>
 <p><strong>二是缓存有效期</strong>，不同内容差别极大：</p>
 <ul>
-<li>天气、股价这类实时信息：几分钟，过期必须重查；</li>
-<li>产品 FAQ、技术文档：几天甚至更长都没问题。</li>
+<li>实时信息应按数据源时效和业务要求失效，强实时查询可直接绕过；</li>
+<li>FAQ/技术文档也要绑定文档版本、ACL 和更新事件，不能只设长 TTL 就不再验证。</li>
 </ul>
+<p>缓存键或分区还应覆盖租户、用户权限、模型及 prompt 版本、工具定义、语言和检索数据版本。带副作用的请求不能因文本相似而跳过或重放。命中缓存仍有 embedding、检索、验证与存储成本。</p>
 <p><strong>适用场景</strong>：高频重复问答（如客服机器人），命中率可以很高，省下的费用可观。<strong>需要个性化或强实时性的问答要在网关层识别出来直接绕过缓存。</strong></p>
 <blockquote>
 <p>语义缓存和 <a href="../../../llm/03-inference-serving/14-kv-cache/">Prompt Caching</a> 不是一回事：前者是「跳过整次调用」，后者是「调用照做但复用已计算的 KV」。</p>
 </blockquote>
 <h3 id="1437-api-key">14.3.7 API Key 集中管理<a class="headerlink" href="#1437-api-key" title="Permanent link">&para;</a></h3>
-<p>业务服务拿到的是网关分配的<strong>虚拟 Key</strong>，根本接触不到真实密钥。</p>
+<p>集中托管模式下，业务服务使用网关分配的<strong>虚拟 Key</strong>，不接触提供方密钥；BYOK 或 passthrough 模式则有不同的密钥路径，需明确禁用或治理。</p>
 <p>好处不只是防泄漏：虚拟 Key 天然就是配额、成本归属、权限控制的载体——你可以按团队、按项目、按环境发不同的 Key，随时吊销单个 Key 而不影响其他人。</p>
 <h2 id="144">14.4 常见网关框架<a class="headerlink" href="#144" title="Permanent link">&para;</a></h2>
 <table>
@@ -9027,13 +9067,13 @@
 <tbody>
 <tr>
 <td><strong>LiteLLM</strong></td>
-<td>开源，Python</td>
-<td>支持上百个模型，OpenAI 兼容接口，社区最活跃，功能最全</td>
+<td>开源核心，Python；另有企业能力</td>
+<td>统一模型接口与代理治理，需核查具体 provider 与版本支持</td>
 </tr>
 <tr>
 <td><strong>Bifrost</strong></td>
-<td>开源，Rust</td>
-<td>主打高性能低延迟，适合对吞吐要求高的场景</td>
+<td>开源核心，Go；另有企业能力</td>
+<td>提供模型网关与治理功能；不能把项目自报 benchmark 当通用延迟结论</td>
 </tr>
 <tr>
 <td><strong>Portkey</strong></td>
@@ -9069,7 +9109,7 @@
 <li><strong>国产模型为主</strong> → One API 系</li>
 <li><strong>不想自运维</strong> → Portkey 等托管方案</li>
 </ul>
-<p>不管选哪个，<strong>网关是整条链路上的单点</strong>，务必做好这几件事：多副本部署、健康检查、锁定依赖版本并关注上游安全公告（开源网关是典型的供应链攻击目标，因为它手里握着所有真实 API Key）。</p>
+<p>网关是逻辑集中入口，是否形成单点取决于部署。多副本还要处理限流计数、预算一致性、共享缓存和连接排空；密钥尽量使用凭据服务或 workload identity，固定依赖与插件版本并关注上游安全公告。产品表不是功能或性能排名，商业能力与许可证需按实际版本核查。</p>
 <h2 id="145">14.5 网关不是万能的<a class="headerlink" href="#145" title="Permanent link">&para;</a></h2>
 <p>有几件事网关做不了或不该做：</p>
 <table>
@@ -9086,7 +9126,7 @@
 </tr>
 <tr>
 <td>复杂的 Agent 编排</td>
-<td>网关是无状态转发层，多轮状态管理不是它的职责</td>
+<td>任务状态与副作用恢复应由任务系统管理；网关本身也可能保存预算、缓存及会话状态</td>
 </tr>
 <tr>
 <td>RAG 检索</td>
@@ -9095,7 +9135,7 @@
 </tbody>
 </table>
 <p>网关的边界应该是<strong>横切关注点</strong>：认证、路由、限流、观测、缓存、安全。一旦开始往里塞业务逻辑，它就从「基础设施」退化成了「另一个需要跟着业务发版的服务」。</p>
-<p>另外，<strong>网关会增加一跳延迟</strong>（通常几毫秒到几十毫秒）。对绝大多数 LLM 调用（动辄数百毫秒到数秒）这可以忽略，但对延迟极度敏感的场景要实测评估。</p>
+<p>网关增加网络、鉴权、过滤、日志和可能的 embedding 开销。分别压测空代理、启用治理与缓存的路径，报告负载、并发、报文大小和 p50/p95/p99；不脱离条件给固定毫秒数或宣称可忽略。</p>
 <h2 id="146">14.6 常见错误<a class="headerlink" href="#146" title="Permanent link">&para;</a></h2>
 <h3 id="1461-llm-nginx">14.6.1 把 LLM 网关等同于 Nginx 反向代理<a class="headerlink" href="#1461-llm-nginx" title="Permanent link">&para;</a></h3>
 <p>Nginx 能转发流量，但<strong>不理解 token、不理解模型语义、不理解 prompt</strong>。按 token 计费的配额、语义缓存、prompt 注入检测、成本归属——这些都需要理解 LLM 语义才能做。</p>
@@ -9113,22 +9153,22 @@
 <p>Prompt 模板、Agent 编排、RAG 检索都不该进网关。网关只管横切关注点。</p>
 <h2 id="147">14.7 本章总结<a class="headerlink" href="#147" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>网关是应用与模型 API 之间的中间人</strong>，集中拦截所有流量，所以能统一处理横切关注点；</li>
+<li><strong>网关可治理经过它的模型 API 流量</strong>，需防止旁路请求绕过配额与审计；</li>
 <li><strong>五个痛点源自同一个原因</strong>：没有集中管理的地方——Key 散落、重复造轮子、成本黑箱、换模型要改代码、配额失控；</li>
-<li><strong>它不等于 Nginx</strong>：Nginx 不理解 token、不理解 prompt、不理解模型语义；</li>
+<li><strong>普通反向代理不自动具备模型语义适配</strong>，需要额外实现 token、工具、推理和费用处理；</li>
 <li><strong>七项核心能力</strong>：统一接口、故障转移、配额限流、成本追踪、安全过滤、语义缓存、Key 集中管理；</li>
-<li><strong>语义缓存是最有代表性的能力</strong>，用向量相似度替代精确匹配，阈值通常调在 0.85–0.95；</li>
-<li><strong>语义缓存要区分内容类型</strong>：实时信息短 TTL 或绕过，稳定知识可长期缓存；</li>
-<li><strong>网关是单点</strong>，要多副本、锁版本、关注安全公告——它握着所有真实 Key；</li>
+<li><strong>语义缓存先校验权限与语义条件</strong>，相似度阈值依 embedding 和工作负载校准；</li>
+<li><strong>缓存需时间、数据与权限失效机制</strong>，不是稳定内容就永久可信；</li>
+<li><strong>网关是集中入口而非必然单点</strong>，需多副本、状态一致性和凭据隔离；</li>
 <li><strong>边界是横切关注点</strong>，业务 prompt、Agent 编排、RAG 检索不该进网关。</li>
 </ol>
-<blockquote>
-<p><strong>可以把它理解成一个懂模型语义的统一入口：请求当然会从这里转发，但更大的价值在于把 Key 管理、配额、成本、安全、缓存这些重复问题集中治理。</strong></p>
-</blockquote>
-<h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_2">参考资料<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.litellm.ai/">LiteLLM 文档</a></li>
 <li><a href="https://github.com/BerriAI/litellm">LiteLLM GitHub</a></li>
+<li><a href="https://github.com/maximhq/bifrost">Bifrost 官方仓库（Go 实现）</a></li>
+<li><a href="https://docs.litellm.ai/docs/proxy/reliability">LiteLLM 重试与故障转移</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc9111">RFC 9111：HTTP 缓存</a></li>
 <li><a href="https://github.com/Portkey-AI/gateway">Portkey AI Gateway</a></li>
 <li><a href="https://konghq.com/products/kong-ai-gateway">Kong AI Gateway</a></li>
 <li><a href="https://aigateway.envoyproxy.io/">Envoy AI Gateway</a></li>
@@ -9157,7 +9197,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="本模块用一章建立 Forward Deployed Engineering 的完整工作模型">
+        <meta name="description" content="FDE 基础与交付方法索引：从面试中的问题建模、Eval、权限与生产责任，读到公开案例和虚构订单异常助手的完整推演。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="FDE · 基础与交付方法">
-    <meta property="og:description" content="本模块用一章建立 Forward Deployed Engineering 的完整工作模型">
+    <meta property="og:description" content="FDE 基础与交付方法索引：从面试中的问题建模、Eval、权限与生产责任，读到公开案例和虚构订单异常助手的完整推演。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/01-foundations/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="FDE · 基础与交付方法">
-    <meta name="twitter:description" content="本模块用一章建立 Forward Deployed Engineering 的完整工作模型">
+    <meta name="twitter:description" content="FDE 基础与交付方法索引：从面试中的问题建模、Eval、权限与生产责任，读到公开案例和虚构订单异常助手的完整推演。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"FDE · 基础与交付方法","description":"本模块用一章建立 Forward Deployed Engineering 的完整工作模型","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/01-foundations/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"FDE · 基础与交付方法","description":"FDE 基础与交付方法索引：从面试中的问题建模、Eval、权限与生产责任，读到公开案例和虚构订单异常助手的完整推演。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/01-foundations/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/01-foundations/"}]}</script>
     
@@ -8231,6 +8231,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      面试准备怎么读
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8256,11 +8265,15 @@
 
 
 <h1 id="fde">FDE · 基础与交付方法<a class="headerlink" href="#fde" title="Permanent link">&para;</a></h1>
-<p>本模块用一章建立 Forward Deployed Engineering 的完整工作模型。</p>
+<p>本模块用一章讨论 Forward Deployed Engineering 的工作方式。读完后应能拿一个具体需求，解释从接手到交付的判断，而不是只列技术栈。</p>
 <h2 id="_1">章节目录<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="01-forward-deployed-engineering/">第一章：Forward Deployed Engineering：从业务问题到可复用生产系统</a></li>
 </ol>
+<h2 id="_2">面试准备怎么读<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>先读 1.3—1.7 节，练习把客户的一句话还原成任务、证据、权限和退出条件。再看 1.10 节的公开实践：哪些是原文披露，哪些只是厂商目标，哪些本轮未能重新读取。</p>
+<p>1.11 节是<strong>虚构的工业备件订单异常助手</strong>，从模糊需求推演到样例对话、验收账本、失败路径、灰度回滚与收益测算，不需要搭建应用。公司、数据和数字均是假设或编写的模拟材料，不代表 Polo Li 的真实经历；模拟面试时应主动说明这一点。最后用 1.12 节的追问检查自己的取舍是否站得住。</p>
+<p>原创文档与图示：Polo Li，采用 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>。</p>
 <p>返回 <a href="../">FDE 主题</a>。</p>
 
 
@@ -8284,7 +8297,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 10:01:35 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 10:55:31 CST">2026-09-08</span>
   </span>
 
     

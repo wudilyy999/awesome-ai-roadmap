@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="前五个模块分别讲了六个框架各自的抽象。本模块改成横向比较： 不再只看「这个框架能做什么」，而是看这些框架在状态、持久化、工具契约、评测、可观测性五个技术维度上的取舍，以及这些取舍会在多大程度上形成 lock-in 。这是本主题的收尾模块，也适合在做选型或评估迁移成本时回看">
+        <meta name="description" content="按状态、恢复、工具契约和评测遥测比较框架，以副作用测试、状态排空和可回滚灰度迁移降低锁定成本。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="框架与编排 · 框架选型与可移植架构">
-    <meta property="og:description" content="前五个模块分别讲了六个框架各自的抽象。本模块改成横向比较： 不再只看「这个框架能做什么」，而是看这些框架在状态、持久化、工具契约、评测、可观测性五个技术维度上的取舍，以及这些取舍会在多大程度上形成 lock-in 。这是本主题的收尾模块，也适合在做选型或评估迁移成本时回看">
+    <meta property="og:description" content="按状态、恢复、工具契约和评测遥测比较框架，以副作用测试、状态排空和可回滚灰度迁移降低锁定成本。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/06-selection-portability/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="框架与编排 · 框架选型与可移植架构">
-    <meta name="twitter:description" content="前五个模块分别讲了六个框架各自的抽象。本模块改成横向比较： 不再只看「这个框架能做什么」，而是看这些框架在状态、持久化、工具契约、评测、可观测性五个技术维度上的取舍，以及这些取舍会在多大程度上形成 lock-in 。这是本主题的收尾模块，也适合在做选型或评估迁移成本时回看">
+    <meta name="twitter:description" content="按状态、恢复、工具契约和评测遥测比较框架，以副作用测试、状态排空和可回滚灰度迁移降低锁定成本。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · 框架选型与可移植架构","description":"前五个模块分别讲了六个框架各自的抽象。本模块改成横向比较： 不再只看「这个框架能做什么」，而是看这些框架在状态、持久化、工具契约、评测、可观测性五个技术维度上的取舍，以及这些取舍会在多大程度上形成 lock-in 。这是本主题的收尾模块，也适合在做选型或评估迁移成本时回看","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/06-selection-portability/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · 框架选型与可移植架构","description":"按状态、恢复、工具契约和评测遥测比较框架，以副作用测试、状态排空和可回滚灰度迁移降低锁定成本。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/06-selection-portability/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/06-selection-portability/"}]}</script>
     
@@ -8289,7 +8289,8 @@
 
 
 <h1 id="_1">框架与编排 · 框架选型与可移植架构<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>前五个模块分别讲了六个框架各自的抽象。本模块改成横向比较：<strong>不再只看「这个框架能做什么」，而是看这些框架在状态、持久化、工具契约、评测、可观测性五个技术维度上的取舍，以及这些取舍会在多大程度上形成 lock-in</strong>。这是本主题的收尾模块，也适合在做选型或评估迁移成本时回看。</p>
+<p>前面模块介绍各框架抽象，本模块改为横向比较四组问题：状态归属、持久化与恢复、工具执行契约、评测与可观测性。评测和观测在最后一组分别讨论；不按产品标签给出「最好/最成熟」排名，而是核对哪些约束会形成迁移成本。</p>
+<p>对照表已纳入 <a href="https://learn.microsoft.com/en-us/agent-framework/overview/">MAF 的后继关系</a>、AutoGen 维护模式和 PydanticAI 持久执行集成。它们影响候选范围，但无法替代应用自己的故障恢复与成本测试。</p>
 <h2 id="_2">章节<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="22-cross-framework-technical-taxonomy/">第二十二章：跨框架技术解构：状态、持久化、工具契约与可观测性</a></li>
@@ -8297,16 +8298,17 @@
 </ol>
 <h2 id="_3">模块关系<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
-    A["第二十二章&lt;br/&gt;五维技术解构"] --&gt; B["识别每个框架的&lt;br/&gt;Lock-in 风险来源"]
+    A["第二十二章&lt;br/&gt;四组工程维度"] --&gt; B["识别每个框架的&lt;br/&gt;Lock-in 风险来源"]
     B --&gt; C["第二十三章&lt;br/&gt;可移植架构设计"]
     C --&gt; D["迁移策略：&lt;br/&gt;strangler-fig / 契约测试 / 双运行"]</code></pre>
 <h2 id="_4">阅读建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>正在选型，还没有动手写代码</strong>：先读第二十二章的五维对照表，明确项目最看重哪几个维度，再看第二十三章的决策流程图；</li>
+<li><strong>正在选型，还没有动手写代码</strong>：先读第二十二章对照表，明确关键约束，再用统一故障场景验证第二十三章的候选选择；</li>
 <li><strong>已经用了某个框架，担心被锁死</strong>：直接看第二十三章的 lock-in 识别清单和适配器架构；</li>
 <li><strong>需要把现有系统从一个框架迁移到另一个框架</strong>：看第二十三章 23.4 节的迁移策略部分。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8329,7 +8331,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

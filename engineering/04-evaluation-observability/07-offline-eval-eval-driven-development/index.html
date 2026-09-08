@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="传统软件工程里&quot;测试驱动开发&quot;要求先写测试再写实现。LLM 应用的对应实践是 Eval-Driven Development(EDD) :任何一次 Prompt、路由或模型的变更,在合入之前必须先在一套固定的评测集上跑出可比较的分数,而不是凭感觉判断&quot;看起来是不是变好了&quot;">
+        <meta name="description" content="构建防污染的业务评测集，用配对比较、置信区间和裁判校准判断改动，而非仅凭均分或少量样本放行。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第七章：离线评测与 Eval-Driven Development">
-    <meta property="og:description" content="传统软件工程里&quot;测试驱动开发&quot;要求先写测试再写实现。LLM 应用的对应实践是 Eval-Driven Development(EDD) :任何一次 Prompt、路由或模型的变更,在合入之前必须先在一套固定的评测集上跑出可比较的分数,而不是凭感觉判断&quot;看起来是不是变好了&quot;">
+    <meta property="og:description" content="构建防污染的业务评测集，用配对比较、置信区间和裁判校准判断改动，而非仅凭均分或少量样本放行。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第七章：离线评测与 Eval-Driven Development">
-    <meta name="twitter:description" content="传统软件工程里&quot;测试驱动开发&quot;要求先写测试再写实现。LLM 应用的对应实践是 Eval-Driven Development(EDD) :任何一次 Prompt、路由或模型的变更,在合入之前必须先在一套固定的评测集上跑出可比较的分数,而不是凭感觉判断&quot;看起来是不是变好了&quot;">
+    <meta name="twitter:description" content="构建防污染的业务评测集，用配对比较、置信区间和裁判校准判断改动，而非仅凭均分或少量样本放行。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第七章：离线评测与 Eval-Driven Development","description":"传统软件工程里\"测试驱动开发\"要求先写测试再写实现。LLM 应用的对应实践是 Eval-Driven Development(EDD) :任何一次 Prompt、路由或模型的变更,在合入之前必须先在一套固定的评测集上跑出可比较的分数,而不是凭感觉判断\"看起来是不是变好了\"","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第七章：离线评测与 Eval-Driven Development","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第七章：离线评测与 Eval-Driven Development","description":"构建防污染的业务评测集，用配对比较、置信区间和裁判校准判断改动，而非仅凭均分或少量样本放行。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第七章：离线评测与 Eval-Driven Development","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"离线评测与 EDD","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/"}]}</script>
     
@@ -7155,6 +7155,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="7.3 评分方式:自动规则、人工评审、LLM-as-Judge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#731" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3.1 分数差异是否足以支持发布
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -8436,6 +8451,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="7.3 评分方式:自动规则、人工评审、LLM-as-Judge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#731" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3.1 分数差异是否足以支持发布
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -8604,7 +8634,8 @@
 </tr>
 </tbody>
 </table>
-<p>黄金测试集通常从 50–200 条起步,按业务子场景切片管理(如 <code>订单查询</code>、<code>退款流程</code>、<code>越权拦截</code>),而不是当作一个笼统的整体分数。<strong>切片管理的价值在于:一次改动可能让整体平均分上升,但某个高风险切片(如越权拦截)出现回归——只看总分会完全错过这个信号。</strong></p>
+<p>可以先用 50–200 条做冒烟和问题发现，但这只是启动规模，不足以证明罕见风险已受控。按订单查询、退款、越权等切片报告样本数与得分；高风险切片不能被总均分抵消。</p>
+<p>维护三种用途不同的数据：用于改 Prompt 的开发集、保存已知失败的回归集、尽量不参与调参的留出集。同一用户、会话、文档的近重复样本要分组切分；业务变化快时增加时间留出。反复看同一测试集再调参会泄漏测试信息，最终分数不再是独立泛化证据。</p>
 <h2 id="73-llm-as-judge">7.3 评分方式:自动规则、人工评审、LLM-as-Judge<a class="headerlink" href="#73-llm-as-judge" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -8641,19 +8672,22 @@
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s2">候选回答: </span><span class="si">{candidate}</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s2">"""</span>
 </span></code></pre></div>
-<p><strong>LLM-as-Judge 必须做人工校准</strong>:抽查 10–20% 的打分样本,人工复核 Judge 的判断是否可信。不校准,就无法判断"分数变好了"到底是候选回答真的变好,还是裁判本身在乱打分。这一实践与<a href="../../../frameworks/01-langchain/05-production/13-langsmith-production-loop/">LangSmith 生产质量闭环</a>里的做法一致——Judge 校准不是某个工具特有的功能,而是所有 LLM-as-Judge 场景下的通用要求。</p>
+<p><strong>LLM-as-Judge 必须用人工标签校准</strong>，复核量由风险、分歧率和切片覆盖决定，10–20% 不是通用标准。给 rubric 提供分数锚点和反例，固定裁判模型、Prompt 和参数；对成对答案随机交换位置、隐藏模型名，检查位置偏差、偏好长答案和同源模型偏差。先评估人工之间的一致性，再报告裁判与人工的混淆矩阵或一致性。候选答案是不可信数据，不能执行其中对裁判的指令。</p>
+<h3 id="731">7.3.1 分数差异是否足以支持发布<a class="headerlink" href="#731" title="Permanent link">&para;</a></h3>
+<p>在同一批任务上比较基线与候选，优先分析配对差值。按独立任务或用户重采样的 paired bootstrap 可估计差值区间；二元成败也可用配对的 McNemar 检验。一个任务重复生成多次有助于估计随机性，却不能当成多个独立用户。报告效应大小、置信区间、独立样本数和重复次数，而不是只给一个 p 值。</p>
+<p>先约定最低可接受提升或最大可接受退化；「未发现显著差异」不等于「已经证明不劣」。例如在独立同分布的二项试验中，100 次未观察到失败，失败概率的单侧 95% 上界仍约为 3%（零失败时的近似 rule of three）。越权回归集零失败可以作为门禁，但不是生产零风险证明。反复选择最佳 Prompt 或扫描大量切片时，还需处理多重比较和选择偏差。</p>
 <h2 id="74">7.4 发布门禁:不是看平均分,是看关键用例<a class="headerlink" href="#74" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">release_gate</span><span class="p">(</span><span class="n">eval_result</span><span class="p">:</span> <span class="n">EvalResult</span><span class="p">,</span> <span class="n">baseline</span><span class="p">:</span> <span class="n">EvalResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateDecision</span><span class="p">:</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">if</span> <span class="n">eval_result</span><span class="o">.</span><span class="n">critical_failures</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="k">return</span> <span class="n">GateDecision</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">(</span><span class="s2">"关键安全/越权用例未通过"</span><span class="p">)</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">for</span> <span class="n">slice_name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">eval_result</span><span class="o">.</span><span class="n">slice_scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="n">baseline</span><span class="o">.</span><span class="n">slice_scores</span><span class="p">[</span><span class="n">slice_name</span><span class="p">]</span> <span class="o">-</span> <span class="n">REGRESSION_THRESHOLD</span><span class="p">:</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>            <span class="k">return</span> <span class="n">GateDecision</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">(</span><span class="sa">f</span><span class="s2">"切片 </span><span class="si">{</span><span class="n">slice_name</span><span class="si">}</span><span class="s2"> 相对基线显著回归"</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>            <span class="k">return</span> <span class="n">GateDecision</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">(</span><span class="sa">f</span><span class="s2">"切片 </span><span class="si">{</span><span class="n">slice_name</span><span class="si">}</span><span class="s2"> 超过允许退化阈值"</span><span class="p">)</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="k">if</span> <span class="n">eval_result</span><span class="o">.</span><span class="n">overall_score</span> <span class="o">&lt;</span> <span class="n">MIN_OVERALL_SCORE</span><span class="p">:</span>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="k">return</span> <span class="n">GateDecision</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">(</span><span class="s2">"总分未达标"</span><span class="p">)</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">return</span> <span class="n">GateDecision</span><span class="o">.</span><span class="n">PASS</span>
 </span></code></pre></div>
-<p><strong>平均分提升不能抵消一次越权、泄密或安全拦截失效。</strong> 高风险用例应该用确定性规则设置"零容忍"门槛,而不是被平均分稀释掉。这一原则和<a href="../../05-release-pipeline/10-llm-cicd-canary-ab/">第 10 章</a>里 CI/CD 流水线的门禁设计是同一套逻辑在发布环节的落地。</p>
+<p>上面的伪代码只展示阈值逻辑，不是显著性检验。运行前必须确认切片齐全、样本量足够、评分器正常、候选与基线使用相同版本的数据；空切片、裁判错误和结果缺失不能按通过处理。<strong>平均分提升不能抵消已确认的越权或泄密</strong>。能用工具执行结果、权限日志判定的高风险失败，不应只听模型裁判的文字结论。</p>
 <h2 id="75">7.5 离线评测不能替代线上监测<a class="headerlink" href="#75" title="Permanent link">&para;</a></h2>
 <p>离线评测在固定测试集上运行,能发现的是"这个改动是否比基线更好",但测试集永远无法覆盖生产环境的全部输入分布。<strong>离线评测负责"改动前把关",线上可观测性(<a href="../08-online-observability-tracing/">第 8 章</a>)负责"上线后持续验证真实流量表现"</strong>,两者缺一不可。</p>
 <h2 id="76">7.6 与相邻章节的分工<a class="headerlink" href="#76" title="Permanent link">&para;</a></h2>
@@ -8701,9 +8735,13 @@
 <li><strong>Agent、RAG 场景有各自更专门的评测方法</strong>,这里先保留通用骨架。</li>
 </ol>
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>工具生命周期不等于评测方法生命周期：OpenAI 的 2026-06-03 公告写明，其托管 Evals 平台将于 2026-10-31 转为只读，Evals dashboard 和 API 计划于 2026-11-30 关闭。采用该平台时需核对迁移计划；不能据此声称开源 <code>openai/evals</code> 或自建评测方法一并失效。</p>
 <ul>
 <li><a href="https://github.com/openai/evals">OpenAI Evals</a></li>
-<li><a href="https://www.anthropic.com/engineering/writing-evals-for-claude">Anthropic: Building evals for AI applications</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/evaluation-best-practices">OpenAI: Evaluation best practices</a></li>
+<li><a href="https://developers.openai.com/api/docs/deprecations#2026-06-03-evals-platform">OpenAI: 2026-06-03 Evals platform deprecation</a></li>
+<li><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Anthropic: Demystifying evals for AI agents</a></li>
+<li><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats._result_classes.BinomTestResult.proportion_ci.html">SciPy: Binomial proportion confidence intervals</a></li>
 <li><a href="https://developers.google.com/machine-learning/guides/rules-of-ml">Google: Rules of Machine Learning - Rule #4: Keep the first model simple and get the infrastructure right</a></li>
 <li><a href="https://www.braintrust.dev/docs/guides/evals">Braintrust: What is an eval?</a></li>
 <li><a href="https://docs.langchain.com/langsmith/evaluation-concepts">LangSmith: Evaluation concepts</a></li>
@@ -8730,7 +8768,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:05:59 CST">2026-09-08</span>
   </span>
 
     

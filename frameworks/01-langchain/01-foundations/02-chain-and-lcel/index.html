@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="以最简单的商品评价分类为例。完整过程 不是只调用一次模型 ，而是">
+        <meta name="description" content="理解 Runnable 与 LCEL 的组合、并行和流式语义，以及重试范围、并发预算和旧式 Chain 迁移的取舍。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="第二章：Chain 的设计理念与 LCEL">
-    <meta property="og:description" content="以最简单的商品评价分类为例。完整过程 不是只调用一次模型 ，而是">
+    <meta property="og:description" content="理解 Runnable 与 LCEL 的组合、并行和流式语义，以及重试范围、并发预算和旧式 Chain 迁移的取舍。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/02-chain-and-lcel/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="第二章：Chain 的设计理念与 LCEL">
-    <meta name="twitter:description" content="以最简单的商品评价分类为例。完整过程 不是只调用一次模型 ，而是">
+    <meta name="twitter:description" content="理解 Runnable 与 LCEL 的组合、并行和流式语义，以及重试范围、并发预算和旧式 Chain 迁移的取舍。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：Chain 的设计理念与 LCEL","description":"以最简单的商品评价分类为例。完整过程 不是只调用一次模型 ，而是","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/02-chain-and-lcel/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：Chain 的设计理念与 LCEL","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/02-chain-and-lcel/"},"datePublished":"2026-08-31","dateModified":"2026-09-01"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：Chain 的设计理念与 LCEL","description":"理解 Runnable 与 LCEL 的组合、并行和流式语义，以及重试范围、并发预算和旧式 Chain 迁移的取舍。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/02-chain-and-lcel/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：Chain 的设计理念与 LCEL","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/02-chain-and-lcel/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"Chain 与 LCEL","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/01-langchain/01-foundations/02-chain-and-lcel/"}]}</script>
     
@@ -9099,20 +9099,22 @@
 <p>比如同一篇文章，既要生成摘要又要给出标题——两个任务互不依赖，没必要先后等待：</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.runnables</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunnableParallel</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">summary_chain</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">"用两句话总结这篇文章：</span><span class="se">\n</span><span class="si">{article}</span><span class="s2">"</span><span class="p">)</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="o">|</span> <span class="n">model</span> <span class="o">|</span> <span class="n">parser</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">)</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">title_chain</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">"为这篇文章起一个简洁标题：</span><span class="se">\n</span><span class="si">{article}</span><span class="s2">"</span><span class="p">)</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="o">|</span> <span class="n">model</span> <span class="o">|</span> <span class="n">parser</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">)</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># 两个分支接收相同的输入字典，分别执行不同任务</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">chain</span> <span class="o">=</span> <span class="n">RunnableParallel</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="n">summary_chain</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title_chain</span><span class="p">)</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">result</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">"article"</span><span class="p">:</span> <span class="s2">"这里放待处理的文章正文"</span><span class="p">})</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">])</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">summary_chain</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">"用两句话总结这篇文章：</span><span class="se">\n</span><span class="si">{article}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="o">|</span> <span class="n">model</span> <span class="o">|</span> <span class="n">parser</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">title_chain</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">"为这篇文章起一个简洁标题：</span><span class="se">\n</span><span class="si">{article}</span><span class="s2">"</span><span class="p">)</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="o">|</span> <span class="n">model</span> <span class="o">|</span> <span class="n">parser</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">)</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1"># 两个分支接收相同的输入字典，分别执行不同任务</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">chain</span> <span class="o">=</span> <span class="n">RunnableParallel</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="n">summary_chain</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title_chain</span><span class="p">)</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">result</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">"article"</span><span class="p">:</span> <span class="s2">"这里放待处理的文章正文"</span><span class="p">})</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">])</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -9133,6 +9135,8 @@
 </tbody>
 </table>
 <p>在 LCEL 里，字典也可以在组合上下文中被自动转换为 <code>RunnableParallel</code>。显式写出类名时，执行模型会更直观。</p>
+<p>并行不等于免费加速：两个分支串行耗时近似相加，并行的理想耗时接近较慢分支加调度开销，但 Token 和调用费用仍需相加。用 <code>config={"max_concurrency": 4}</code> 控制适用 Runnable 的并发只是局部限制，还要协调模型服务的配额与重试。默认 <code>batch</code> 通常是客户端并发，不等于供应商的离线 Batch API，也不承诺批量折扣。</p>
+<p>重试范围也会改变成本和语义：给整条链加 <code>with_retry</code> 可能重复已成功的检索或外部写入；只想重试模型调用时，应把重试附着在模型这个 Runnable。失败分支是否允许降级，需要业务明确规定，不能用空字符串伪装成成功。</p>
 <h2 id="26">2.6 为什么统一协议能不断扩展<a class="headerlink" href="#26" title="Permanent link">&para;</a></h2>
 <p>统一协议的价值不只在「方便串起来」，还在于它让流程可以逐步扩展：</p>
 <pre class="mermaid"><code>flowchart TB
@@ -9173,7 +9177,7 @@
     style C fill:#e6f4ea
     style A fill:#e8f0fe
     style G fill:#fff3cd</code></pre>
-<p>开发前就知道下一步去哪时，优先 Chain；运行时要由模型决定下一步时，考虑 Agent；流程需要显式状态图和恢复能力时，考虑 LangGraph。</p>
+<p>固定、短小的数据流通常先用 Chain；运行时要由模型决定下一步时，考虑 Agent。图中「步骤已知」也不是排除 LangGraph 的条件：确定性的长流程同样可能需要持久化、人工等待和恢复边界，此时可直接选择 LangGraph。</p>
 <p>LangGraph 不是为了取代每一条简单 Chain，而是处理 Chain 难以清楚表达的长时、有状态工作流。</p>
 <h2 id="29">2.9 常见错误<a class="headerlink" href="#29" title="Permanent link">&para;</a></h2>
 <h3 id="291-chain-llm">2.9.1 把 Chain 缩小成「一次 LLM 调用」<a class="headerlink" href="#291-chain-llm" title="Permanent link">&para;</a></h3>
@@ -9211,8 +9215,8 @@
 <h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain 官方文档</a></li>
-<li><a href="https://python.langchain.com/docs/concepts/lcel/">LangChain Expression Language（LCEL）</a></li>
-<li><a href="https://python.langchain.com/docs/concepts/runnables/">Runnable 接口概念文档</a></li>
+<li><a href="https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence">RunnableSequence：LCEL 组合、批处理与流式语义</a></li>
+<li><a href="https://reference.langchain.com/python/langchain-core/runnables/base/Runnable">Runnable API</a></li>
 <li><a href="https://reference.langchain.com/python/langchain-core/runnables/">langchain-core Runnables API 参考</a></li>
 <li><a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">LangChain v1 迁移指南</a></li>
 <li><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph 官方文档</a></li>
@@ -9239,7 +9243,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

@@ -81,7 +81,7 @@
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"主题导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/agent/"}]}</script>
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI Agent 和普通聊天机器人有什么区别？","acceptedAnswer":{"@type":"Answer","text":"普通聊天机器人主要生成回复；Agent 把模型放入持续控制循环，由模型根据目标决定下一步，并通过工具读取状态或改变外部系统。能否可靠执行任务还取决于 Harness、权限和评测，而不只是模型能力。"}},{"@type":"Question","name":"Agent Framework 和 Agent Harness 是一回事吗？","acceptedAnswer":{"@type":"Answer","text":"不是。Framework 提供开发时的 API、组件和编排抽象，Harness 是真正驱动循环、装配上下文、执行工具、保存状态并处理失败的运行时。框架可以提供 Harness 能力，但这些能力仍需配置和部署。"}},{"@type":"Question","name":"什么时候需要 Multi-Agent？","acceptedAnswer":{"@type":"Answer","text":"当任务需要明确的权限隔离、独立上下文、并行工作或不同专业角色时，Multi-Agent 才可能带来收益。若一个 Agent 加工具和结构化工作流就能完成任务，拆成多个 Agent 往往只会增加通信和调试成本。"}}]}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI Agent 和普通聊天机器人有什么区别？","acceptedAnswer":{"@type":"Answer","text":"普通聊天机器人主要生成回复；Agent 把模型放入持续控制循环，由模型根据目标决定下一步，并通过工具读取状态或改变外部系统。能否可靠执行任务还取决于 Harness、权限和评测，而不只是模型能力。"}},{"@type":"Question","name":"Agent Framework 和 Agent Harness 是一回事吗？","acceptedAnswer":{"@type":"Answer","text":"不是同一个视角。Framework 描述开发 API、组件和编排抽象，Harness 描述驱动循环、装配上下文、执行工具、保存状态并处理失败的运行时职责。一个框架产品可以同时提供完整 Harness；具体能力仍需配置和部署，“框架只管开发、不含运行时”也不准确。"}},{"@type":"Question","name":"什么时候需要 Multi-Agent？","acceptedAnswer":{"@type":"Answer","text":"当任务需要明确的权限隔离、独立上下文、并行工作或不同专业角色时，Multi-Agent 才可能带来收益。若一个 Agent 加工具和结构化工作流就能完成任务，拆成多个 Agent 往往只会增加通信和调试成本。"}}]}</script>
     
   
 
@@ -8367,7 +8367,7 @@
 <h3 id="ai-agent">AI Agent 和普通聊天机器人有什么区别？<a class="headerlink" href="#ai-agent" title="Permanent link">&para;</a></h3>
 <p>普通聊天机器人主要生成回复；Agent 把模型放入持续控制循环，由模型根据目标决定下一步，并通过工具读取状态或改变外部系统。能否可靠执行任务还取决于 Harness、权限和评测，而不只是模型能力。</p>
 <h3 id="agent-framework-agent-harness">Agent Framework 和 Agent Harness 是一回事吗？<a class="headerlink" href="#agent-framework-agent-harness" title="Permanent link">&para;</a></h3>
-<p>不是。Framework 提供开发时的 API、组件和编排抽象，Harness 是真正驱动循环、装配上下文、执行工具、保存状态并处理失败的运行时。框架可以提供 Harness 能力，但这些能力仍需配置和部署。</p>
+<p>不是同一个视角。Framework 描述开发 API、组件和编排抽象，Harness 描述驱动循环、装配上下文、执行工具、保存状态并处理失败的运行时职责。一个框架产品可以同时提供完整 Harness；具体能力仍需配置和部署，“框架只管开发、不含运行时”也不准确。</p>
 <h3 id="multi-agent">什么时候需要 Multi-Agent？<a class="headerlink" href="#multi-agent" title="Permanent link">&para;</a></h3>
 <p>当任务需要明确的权限隔离、独立上下文、并行工作或不同专业角色时，Multi-Agent 才可能带来收益。若一个 Agent 加工具和结构化工作流就能完成任务，拆成多个 Agent 往往只会增加通信和调试成本。</p>
 <p>返回<a href="../">文档主题索引</a>。</p>
@@ -8393,7 +8393,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月2日 10:34:55 CST">2026-09-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
   </span>
 
     

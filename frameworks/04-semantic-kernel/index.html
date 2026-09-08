@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="前面三个模块默认站在 Python 生态看问题。Semantic Kernel 则从一开始就强调 多语言、企业优先 ：同一套核心抽象覆盖 C 、Python、Java，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关注的是这些能力如何影响治理、合规和可移植性判断">
+        <meta name="description" content="梳理 Semantic Kernel 的 Kernel、Plugin 和实验性编排能力，并区分独立 Microsoft Agent Framework 的后继关系与迁移边界。">
       
       
         <meta name="author" content="Polo Li">
@@ -67,17 +67,17 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
     <meta property="og:title" content="框架与编排 · Semantic Kernel 企业级编排">
-    <meta property="og:description" content="前面三个模块默认站在 Python 生态看问题。Semantic Kernel 则从一开始就强调 多语言、企业优先 ：同一套核心抽象覆盖 C 、Python、Java，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关注的是这些能力如何影响治理、合规和可移植性判断">
+    <meta property="og:description" content="梳理 Semantic Kernel 的 Kernel、Plugin 和实验性编排能力，并区分独立 Microsoft Agent Framework 的后继关系与迁移边界。">
     <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="框架与编排 · Semantic Kernel 企业级编排">
-    <meta name="twitter:description" content="前面三个模块默认站在 Python 生态看问题。Semantic Kernel 则从一开始就强调 多语言、企业优先 ：同一套核心抽象覆盖 C 、Python、Java，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关注的是这些能力如何影响治理、合规和可移植性判断">
+    <meta name="twitter:description" content="梳理 Semantic Kernel 的 Kernel、Plugin 和实验性编排能力，并区分独立 Microsoft Agent Framework 的后继关系与迁移边界。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · Semantic Kernel 企业级编排","description":"前面三个模块默认站在 Python 生态看问题。Semantic Kernel 则从一开始就强调 多语言、企业优先 ：同一套核心抽象覆盖 C 、Python、Java，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关注的是这些能力如何影响治理、合规和可移植性判断","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"框架与编排 · Semantic Kernel 企业级编排","description":"梳理 Semantic Kernel 的 Kernel、Plugin 和实验性编排能力，并区分独立 Microsoft Agent Framework 的后继关系与迁移边界。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/04-semantic-kernel/"}]}</script>
     
@@ -8289,7 +8289,8 @@
 
 
 <h1 id="semantic-kernel">框架与编排 · Semantic Kernel 企业级编排<a class="headerlink" href="#semantic-kernel" title="Permanent link">&para;</a></h1>
-<p>前面三个模块默认站在 Python 生态看问题。Semantic Kernel 则从一开始就强调<strong>多语言、企业优先</strong>：同一套核心抽象覆盖 C#、Python、Java，并把「1.0 之后不做破坏性变更」写进了版本承诺。本模块关注的是这些能力如何影响治理、合规和可移植性判断。</p>
+<p>本模块保留 Semantic Kernel（SK）的核心概念，帮助维护已有系统。<strong>截至 2026-09-08，官方仓库已将独立 Microsoft Agent Framework（MAF）列为后继，并说明 MAF 1.0 为生产可用发布。</strong> SK 旧文档里的 “Agent Framework” 指包内抽象，不等于 MAF。</p>
+<p>SK Process 与 Agent Orchestration 相关概览仍标为实验性，不能用核心包 1.x 版本给所有功能作稳定性保证；语言 SDK 和集成包也不完全对等。第十九章结合 <a href="https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel/">官方迁移指南</a> 与支持公告讨论存量维护和新项目选型。</p>
 <h2 id="_1">章节<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="18-kernel-plugin-planner/">第十八章：Semantic Kernel 的核心抽象：Kernel、Plugin 与 Planner</a></li>
@@ -8297,17 +8298,20 @@
 </ol>
 <h2 id="_2">模块关系<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
-    K["Kernel&lt;br/&gt;依赖注入容器 + 服务注册"] --&gt; P["Plugin&lt;br/&gt;Semantic Function + Native Function"]
-    P --&gt; PL["Planner&lt;br/&gt;Function Calling 自动编排"]
-    PL --&gt; PF["Process Framework&lt;br/&gt;业务流程状态机"]
-    PL --&gt; AF["Agent Framework&lt;br/&gt;多智能体协作"]</code></pre>
+    K["Kernel&lt;br/&gt;服务管理 + 调用链"] --&gt; P["Plugin&lt;br/&gt;Prompt / Native 函数"]
+    P --&gt; PL["自动函数调用"]
+    PL --&gt; PF["SK Process&lt;br/&gt;实验性流程"]
+    PL --&gt; AF["SK Agent Orchestration&lt;br/&gt;实验性协作"]
+    PF -.核对迁移.-&gt; M["独立 MAF&lt;br/&gt;Agents / Workflows"]
+    AF -.官方迁移指南.-&gt; M</code></pre>
 <h2 id="_3">阅读建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li>如果来自 .NET 或其他企业技术栈，可先看第十八章，理解 Kernel 作为依赖注入容器的定位；</li>
+<li>如果来自 .NET 或其他企业技术栈，可先看第十八章，理解 Kernel 调用链、transient 建议与可变 Plugin 的请求隔离；</li>
 <li>如果主要想和 LangGraph、AutoGen 对比编排模型，可直接看第十九章 19.3 节；</li>
 <li>如果重点在企业采购或合规风险，两章的「常见错误」和「本章总结」都包含治理与 lock-in 判断，适合配合 <a href="../06-selection-portability/">框架选型与可移植架构</a> 一起读。</li>
 </ul>
 <p>返回 <a href="../">AI 框架与编排 相关知识点</a>。</p>
+<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
 
 
 
@@ -8330,7 +8334,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月1日 14:22:39 CST">2026-09-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
   </span>
 
     

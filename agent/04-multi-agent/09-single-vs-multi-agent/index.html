@@ -10693,7 +10693,7 @@ P_{system}=P(S_1)\prod_{i=2}^{n}P(S_i\mid S_1,\ldots,S_{i-1})
 <p>若再假设步骤独立，才可把条件概率换成各步骤的边际成功率 <code>pᵢ</code>，得到 <code>P_system = ∏pᵢ</code>。若 <code>pᵢ</code> 本来就是“此前均成功条件下”的通过率，乘积不需要独立假设，但不能拿孤立测试通过率代替它。</p>
 <p>例如，假设五个必需步骤相互独立且各自成功率为 95%，整体成功率约为：</p>
 <div class="arithmatex">\[
-P_{system}\approx 0.95^5\approx 77.4\%
+P_{system}\approx 0.95^5\approx 0.774
 \]</div>
 <p>95% 是假设值，不是实测数据。实际步骤通常相关，验证、冗余和修复也会改变路径。因此这个计算只说明：</p>
 <blockquote>
@@ -10706,12 +10706,9 @@ P_{system}\approx 0.95^5\approx 77.4\%
 <div class="arithmatex">\[
 T_{multi}=
 T_{critical}
-+
-T_{coord}
-+
-T_{merge}
-+
-T_{retry}
++T_{coord}
++T_{merge}
++T_{retry}
 \]</div>
 <p>其中：</p>
 <ul>
@@ -11094,7 +11091,7 @@ R_{coord}=\frac{C_{coord}}{C_{total}}
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:11:00 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:28:35 CST">2026-09-08</span>
   </span>
 
     

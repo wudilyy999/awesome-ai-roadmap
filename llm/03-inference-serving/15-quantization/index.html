@@ -9112,17 +9112,17 @@
 <p><strong>如何在最小的精度损失下，把高精度数压到低精度数？</strong></p>
 </blockquote>
 <h2 id="152">15.2 核心机制：连续到离散的映射<a class="headerlink" href="#152" title="Permanent link">&para;</a></h2>
-<p>量化应先明确整数范围。以<strong>非对称 4-bit 无符号量化</strong>为例，<span class="arithmatex">\(q_{\min}=0\)</span>、<span class="arithmatex">\(q_{\max}=15\)</span>，对校准范围 <span class="arithmatex">\([x_{\min},x_{\max}]\)</span>：</p>
+<p>量化应先明确整数范围。以<strong>非对称 4-bit 无符号量化</strong>为例， <span class="arithmatex">\(q_{\min}=0\)</span>、 <span class="arithmatex">\(q_{\max}=15\)</span>，对校准范围 <span class="arithmatex">\([x_{\min},x_{\max}]\)</span>：</p>
 <div class="arithmatex">\[
 s = \frac{x_{\max}-x_{\min}}{q_{\max}-q_{\min}},\qquad
-z = \mathrm{clip}\!\left(q_{\min}-\mathrm{round}\!\left(\frac{x_{\min}}s\right),q_{\min},q_{\max}\right)
+z = \mathrm{clip}\left(q_{\min}-\mathrm{round}\left(\frac{x_{\min}}s\right),q_{\min},q_{\max}\right)
 \]</div>
 <div class="arithmatex">\[
-q=\mathrm{clip}\!\left(\mathrm{round}\!\left(\frac{x}{s}\right)+z,q_{\min},q_{\max}\right),\qquad
+q=\mathrm{clip}\left(\mathrm{round}\left(\frac{x}{s}\right)+z,q_{\min},q_{\max}\right),\qquad
 \hat{x}=s(q-z)
 \]</div>
-<p>若范围为 <span class="arithmatex">\([-2.5,2.5]\)</span>，采用 ties-to-even 舍入，则 <span class="arithmatex">\(s=5/15=1/3\)</span>、<span class="arithmatex">\(z=8\)</span>。对 <span class="arithmatex">\(x=0.7\)</span>，得到 q=10，反量化值为 2/3，约 0.667，绝对误差约 0.033。计算时不应先把 scale 截短到 0.333。</p>
-<p>常见的<strong>对称有符号 INT4</strong>则取 <span class="arithmatex">\(q\in[-8,7]\)</span>，通常令 <span class="arithmatex">\(s=\max(|x_{\min}|,|x_{\max}|)/7\)</span>、<span class="arithmatex">\(q=\mathrm{clip}(\mathrm{round}(x/s),-8,7)\)</span>、<span class="arithmatex">\(\hat{x}=sq\)</span>。具体范围、分组粒度和舍入规则由格式与 kernel 决定。</p>
+<p>若范围为 <span class="arithmatex">\([-2.5,2.5]\)</span>，采用 ties-to-even 舍入，则 <span class="arithmatex">\(s=5/15=1/3\)</span>、 <span class="arithmatex">\(z=8\)</span>。对 <span class="arithmatex">\(x=0.7\)</span>，得到 q=10，反量化值为 2/3，约 0.667，绝对误差约 0.033。计算时不应先把 scale 截短到 0.333。</p>
+<p>常见的<strong>对称有符号 INT4</strong>则取 <span class="arithmatex">\(q\in[-8,7]\)</span>，通常令 <span class="arithmatex">\(s=\max(|x_{\min}|,|x_{\max}|)/7\)</span>、 <span class="arithmatex">\(q=\mathrm{clip}(\mathrm{round}(x/s),-8,7)\)</span>、 <span class="arithmatex">\(\hat{x}=sq\)</span>。具体范围、分组粒度和舍入规则由格式与 kernel 决定。</p>
 <p><strong>不同算法的差别在于</strong>：怎么算 scale 和 zero_point、怎么处理 outlier、怎么补偿量化误差。</p>
 <p>上述非对称公式假设非零范围且需要让零可表示；实践通常把 0 纳入校准范围。退化的常量范围须单独处理，不能让 scale 为零。量化误差有两类：范围内的舍入误差，以及超出范围后被截断的 clipping 误差。缩小范围能细化刻度，却可能增加截断误差。</p>
 <h3 id="1521">15.2.1 对称与非对称<a class="headerlink" href="#1521" title="Permanent link">&para;</a></h3>
@@ -9265,7 +9265,7 @@ q=\mathrm{clip}\!\left(\mathrm{round}\!\left(\frac{x}{s}\right)+z,q_{\min},q_{\m
 <p>直接逐元素 round-to-nearest（RTN）不考虑输入通道相关性，相同大小的权重误差可能产生很不相同的输出误差。</p>
 <p>GPTQ 逐层近似最小化校准集上的输出重构误差：</p>
 <div class="arithmatex">\[
-\min_{\widehat W}\left\|WX-\widehat WX\right\|_F^2
+\min_{\widehat W}\left\Vert WX-\widehat WX\right\Vert_F^2
 \]</div>
 <p>其中量化后的权重必须受目标量化网格约束，否则直接取原权重即可使误差为零。X 是当前线性层的校准输入。该二次目标的 Hessian 与 <code>XXᵀ</code> 有关，不是对完整语言模型训练损失计算精确 Hessian。量化一列后，用二阶信息修正<strong>同一层剩余未量化的权重</strong>，通常配合阻尼和分块更新以提高稳定性与效率。</p>
 <h3 id="1541">15.4.1 流程<a class="headerlink" href="#1541" title="Permanent link">&para;</a></h3>
@@ -9504,7 +9504,7 @@ WX=(WS)(S^{-1}X)
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:28:35 CST">2026-09-08</span>
   </span>
 
     

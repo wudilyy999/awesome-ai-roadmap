@@ -8794,7 +8794,7 @@
 <div class="arithmatex">\[
 \mathrm{RRF}(d) = \sum_{r \in R} \frac{1}{k + \mathrm{rank}_r(d)}
 \]</div>
-<p>其中 <span class="arithmatex">\(R\)</span> 是召回路集合，排名从 1 开始；未出现在某路候选窗口中的文档，该路贡献为 0。<span class="arithmatex">\(k\)</span> 是平滑常数，常用起点为 60，<strong>不是最终 Top-K</strong>。融合前确保每路同一 ID 只出现一次，再累加跨路贡献。</p>
+<p>其中 <span class="arithmatex">\(R\)</span> 是召回路集合，排名从 1 开始；未出现在某路候选窗口中的文档，该路贡献为 0。 <span class="arithmatex">\(k\)</span> 是平滑常数，常用起点为 60，<strong>不是最终 Top-K</strong>。融合前确保每路同一 ID 只出现一次，再累加跨路贡献。</p>
 <h3 id="1331">13.3.1 为什么它管用<a class="headerlink" href="#1331" title="Permanent link">&para;</a></h3>
 <p>排名本身没有量纲，第 1 名就是第 1 名，不管原始分数是 0.92 还是 34.7，这让 RRF 能直接绕开不同分数体系不可比的问题。</p>
 <p><span class="arithmatex">\(k\)</span> 则起到削峰作用。当 <span class="arithmatex">\(k = 60\)</span> 时：</p>
@@ -8998,7 +8998,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:28:35 CST">2026-09-08</span>
   </span>
 
     

@@ -8582,7 +8582,7 @@
 <p>投影拼接架构先用编码器 <span class="arithmatex">\(E_v\)</span> 提取视觉特征，再用连接器 <span class="arithmatex">\(C\)</span> 映射到语言模型的隐藏维度，与文本嵌入共同送入语言模型。LLaVA 使用线性层或 MLP；初代 Qwen-VL 的连接器则包含基于可学习查询的交叉注意力压缩，不能把两者都简化成 MLP：</p>
 <div class="arithmatex">\[
 z=E_v(x_{\mathrm{img}}),\qquad h=C(z),\qquad
-u=[h;\,\mathrm{Embed}(x_t)]
+u=[h;\mathrm{Embed}(x_t)]
 \]</div>
 <p>这里的 <code>u</code> 是视觉与文本的输入嵌入序列。对于自回归文本输出，条件分布还需包含已生成前缀：</p>
 <div class="arithmatex">\[
@@ -8595,10 +8595,10 @@ p_\theta(y\mid x_{\mathrm{img}},x_t)
 <h2 id="13-cross-attention-fusion">1.3 Cross-Attention Fusion：不占用文本上下文的读取方式<a class="headerlink" href="#13-cross-attention-fusion" title="Permanent link">&para;</a></h2>
 <p>Flamingo 提出的架构把语言模型本身冻结，在其内部插入新的 <strong>gated cross-attention</strong> 层：语言 token 作为 Query，通过交叉注意力从视觉特征中按需读取信息，而不是把视觉 token 拼接进输入序列。</p>
 <div class="arithmatex">\[
-\mathrm{Attn}(Q,K,V)=\mathrm{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right)V,\qquad
+\mathrm{Attn}(Q,K,V)=\mathrm{softmax}\left(\frac{QK^{\top}}{\sqrt{d_k}}\right)V,\qquad
 Q=W_qh_t,\ K=W_kz,\ V=W_vz
 \]</div>
-<p>其中 <span class="arithmatex">\(h_t\)</span> 是语言模型隐藏状态，<span class="arithmatex">\(z\)</span> 是视觉特征。新增残差分支用可学习的 <span class="arithmatex">\(\tanh(\alpha)\)</span> 门控，<span class="arithmatex">\(\alpha\)</span> 初始化为零，因此初始时不改变原有语言模型的计算输出；这有助于稳定训练，但不保证训练后语言能力完全不变。交叉层插入频率和图文因果掩码同样属于架构设计，不能默认每层、每个词都能看到全部图像。</p>
+<p>其中 <span class="arithmatex">\(h_t\)</span> 是语言模型隐藏状态， <span class="arithmatex">\(z\)</span> 是视觉特征。新增残差分支用可学习的 <span class="arithmatex">\(\tanh(\alpha)\)</span> 门控， <span class="arithmatex">\(\alpha\)</span> 初始化为零，因此初始时不改变原有语言模型的计算输出；这有助于稳定训练，但不保证训练后语言能力完全不变。交叉层插入频率和图文因果掩码同样属于架构设计，不能默认每层、每个词都能看到全部图像。</p>
 <p>Flamingo 用 <strong>Perceiver Resampler</strong> 将每个图像或视频输入的视觉特征压缩为固定数量的 latent，原论文设置为 64 个。这是具体模型的超参数，不是所有 Resampler 的规定。其可学习查询反复读取视觉特征；下式只示意交叉注意力与残差，省略了归一化、前馈层等实现细节：</p>
 <div class="arithmatex">\[
 \ell^{(i+1)}=\mathrm{CrossAttn}(\ell^{(i)},z)+\ell^{(i)}
@@ -8606,7 +8606,7 @@ Q=W_qh_t,\ K=W_kz,\ V=W_vz
 <p>固定 latent 控制了<strong>每个媒体输入</strong>交给语言侧的表示长度，而不是让整个请求成本恒定：多张图像仍可能对应多组 latent，视觉编码和 Resampler 读取原始特征的成本仍随分辨率、帧数增长。压缩还可能损失小物体、密集文字与短暂事件。</p>
 <h2 id="14-early-fusion-token">1.4 Early Fusion：统一 Token 化架构<a class="headerlink" href="#14-early-fusion-token" title="Permanent link">&para;</a></h2>
 <p>与只把视觉作为条件的架构不同，Chameleon 式 Early Fusion 把图像离散化为符号序列，与文本一起用同一个 Transformer 和自回归目标建模。这里只讨论离散生成路线；更广义的早期融合不要求所有模态都必须离散化。</p>
-<p>离散化通常基于 VQ-VAE / VQGAN 一类向量量化方法：编码器把图像映射到连续特征，再从一个学习到的 codebook <span class="arithmatex">\(\{e_k\}_{k=1}^{K}\)</span> 中找最近邻，把每个位置替换成离散编码索引：</p>
+<p>离散化通常基于 VQ-VAE / VQGAN 一类向量量化方法：编码器把图像映射到连续特征，再从一个学习到的 codebook <span class="arithmatex">\(\lbrace e_k\rbrace_{k=1}^{K}\)</span> 中找最近邻，把每个位置替换成离散编码索引：</p>
 <div class="arithmatex">\[
 z_q=e_k,\quad k=\arg\min_j\lVert z_e-e_j\rVert_2
 \]</div>
@@ -8618,7 +8618,7 @@ z_q=e_k,\quad k=\arg\min_j\lVert z_e-e_j\rVert_2
 <div class="arithmatex">\[
 \mathcal{L}=-\frac{1}{N}\sum_{i=1}^{N}\log\frac{\exp(\mathrm{sim}(v_i,t_i)/\tau)}{\sum_{j=1}^{N}\exp(\mathrm{sim}(v_i,t_j)/\tau)}
 \]</div>
-<p>上式只是图像到文本方向的 InfoNCE；原始 CLIP 对图像到文本、文本到图像两个方向取平均。<span class="arithmatex">\(\mathrm{sim}\)</span> 为归一化向量点积，<span class="arithmatex">\(\tau\)</span> 为温度。批内其余配对被视作负样本，但两张图都对应同一句合理描述时会出现假负例。SigLIP 改用逐图文对的 sigmoid 二分类损失，包含相似度缩放和偏置，不需要批内 softmax 全局归一化；这改变了分布式通信与正负样本配比的设计空间，不等于批次无限扩大就持续获益。</p>
+<p>上式只是图像到文本方向的 InfoNCE；原始 CLIP 对图像到文本、文本到图像两个方向取平均。 <span class="arithmatex">\(\mathrm{sim}\)</span> 为归一化向量点积， <span class="arithmatex">\(\tau\)</span> 为温度。批内其余配对被视作负样本，但两张图都对应同一句合理描述时会出现假负例。SigLIP 改用逐图文对的 sigmoid 二分类损失，包含相似度缩放和偏置，不需要批内 softmax 全局归一化；这改变了分布式通信与正负样本配比的设计空间，不等于批次无限扩大就持续获益。</p>
 <p>ImageBind 研究图像、文本、音频、深度、热成像、IMU 六种模态，以图像为桥建立配对训练，展示了未直接配对模态之间的迁移能力。这是特定数据和任务上的实验结果，不是“分别对齐图像就保证任意模态两两可靠匹配”的定理，细粒度关系和域外数据仍需验证。这类 embedding 可用于检索，若接入生成系统仍需要另一个生成器；应用见 <a href="../../../rag/04-advanced/21-multimodal-rag/">RAG · 多模态 RAG</a>。</p>
 <h2 id="16">1.6 架构对比与选型<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
 <table>
@@ -8716,7 +8716,7 @@ z_q=e_k,\quad k=\arg\min_j\lVert z_e-e_j\rVert_2
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:28:35 CST">2026-09-08</span>
   </span>
 
     

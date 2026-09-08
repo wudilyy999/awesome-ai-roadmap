@@ -8547,7 +8547,7 @@
 <h2 id="41">4.1 为什么要给模型位置信息<a class="headerlink" href="#41" title="Permanent link">&para;</a></h2>
 <p>没有位置特征、且所有位置都可见的 Self-Attention 具有<strong>置换等变性</strong>。若 <code>P</code> 表示重排输入位置：</p>
 <div class="arithmatex">\[
-\mathrm{Attention}(PX)=P\,\mathrm{Attention}(X)
+\mathrm{Attention}(PX)=P\mathrm{Attention}(X)
 \]</div>
 <p>它不是「重排后输出完全一样」，而是输出随输入同样重排。对于相同 token，模型不能仅靠这种对称的交互，区分「我打你」与「你打我」的语序关系。</p>
 <p>这个结论有前提：因果掩码、局部窗口等已经打破完全对称性，可以引入顺序信息。因此「不加位置编码就绝不可能建模顺序」过强，但主流 decoder 通常仍显式编码位置或距离。</p>
@@ -8565,16 +8565,15 @@ PE_{(pos,2i+1)}=\cos\left(\frac{pos}{10000^{2i/d}}\right)
 <p>不能说绝对编码「完全没有相对位置归纳偏置」。对任意固定偏移 <code>k</code>，由三角恒等式可知：</p>
 <div class="arithmatex">\[
 \begin{pmatrix}
-\sin((m+k)\theta)\\
+\sin((m+k)\theta)\cr
 \cos((m+k)\theta)
-\end{pmatrix}
-=
+\end{pmatrix}=
 \begin{pmatrix}
-\cos(k\theta)&amp;\sin(k\theta)\\
+\cos(k\theta)&amp;\sin(k\theta)\cr
 -\sin(k\theta)&amp;\cos(k\theta)
 \end{pmatrix}
 \begin{pmatrix}
-\sin(m\theta)\\
+\sin(m\theta)\cr
 \cos(m\theta)
 \end{pmatrix}
 \]</div>
@@ -8586,7 +8585,7 @@ PE_{(pos,2i+1)}=\cos\left(\frac{pos}{10000^{2i/d}}\right)
 <div class="arithmatex">\[
 R(m\theta)=
 \begin{pmatrix}
-\cos(m\theta)&amp;-\sin(m\theta)\\
+\cos(m\theta)&amp;-\sin(m\theta)\cr
 \sin(m\theta)&amp;\cos(m\theta)
 \end{pmatrix}
 \]</div>
@@ -8726,7 +8725,7 @@ s_{ij}^{(h)}=\frac{q_i\cdot k_j}{\sqrt{d_k}}-a_h(i-j)
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:28:35 CST">2026-09-08</span>
   </span>
 
     

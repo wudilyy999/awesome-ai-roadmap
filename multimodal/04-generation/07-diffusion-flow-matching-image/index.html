@@ -8555,11 +8555,11 @@
 <h2 id="72">7.2 扩散模型：加噪与去噪<a class="headerlink" href="#72" title="Permanent link">&para;</a></h2>
 <p>DDPM（Denoising Diffusion Probabilistic Models）定义了一个固定的<strong>前向加噪过程</strong>：从真实数据 <span class="arithmatex">\(x_0\)</span> 出发，经过 <span class="arithmatex">\(T\)</span> 步逐渐加入高斯噪声，最终得到近似纯噪声的 <span class="arithmatex">\(x_T\)</span>：</p>
 <div class="arithmatex">\[
-q(x_t\mid x_{t-1})=\mathcal{N}\!\left(x_t;\sqrt{1-\beta_t}\,x_{t-1},\ \beta_t I\right)
+q(x_t\mid x_{t-1})=\mathcal{N}\left(x_t;\sqrt{1-\beta_t}x_{t-1},\ \beta_t I\right)
 \]</div>
 <p>其中 <span class="arithmatex">\(\beta_t\)</span> 是噪声调度系数。令 <span class="arithmatex">\(\bar\alpha_t=\prod_{s=1}^{t}(1-\beta_s)\)</span>，可以直接采样任意时刻的带噪样本，无需训练时逐步跑完整条链：</p>
 <div class="arithmatex">\[
-x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\epsilon,\qquad
+x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\qquad
 \epsilon\sim\mathcal{N}(0,I)
 \]</div>
 <p>简化噪声预测损失让网络预测这里的<strong>累计噪声</strong> <span class="arithmatex">\(\epsilon\)</span>，不是某一步刚加入的独立噪声：</p>
@@ -8590,7 +8590,7 @@ w\left[\epsilon_\theta(x_t,t,c)-\epsilon_\theta(x_t,t,\varnothing)\right]
 <div class="arithmatex">\[
 \frac{dx_t}{dt}=v_\theta(x_t,t)
 \]</div>
-<p>以噪声 <span class="arithmatex">\(z\)</span> 和数据 <span class="arithmatex">\(x\)</span> 的线性条件路径为例，这一节用 <span class="arithmatex">\(t=0\)</span> 表示噪声、<span class="arithmatex">\(t=1\)</span> 表示数据，时间方向与前面的 DDPM 记号相反：</p>
+<p>以噪声 <span class="arithmatex">\(z\)</span> 和数据 <span class="arithmatex">\(x\)</span> 的线性条件路径为例，这一节用 <span class="arithmatex">\(t=0\)</span> 表示噪声、 <span class="arithmatex">\(t=1\)</span> 表示数据，时间方向与前面的 DDPM 记号相反：</p>
 <div class="arithmatex">\[
 x_t=(1-t)z+tx,\qquad
 \mathcal{L}_{\mathrm{CFM}}=
@@ -8713,7 +8713,7 @@ x_t=(1-t)z+tx,\qquad
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:10:16 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:28:35 CST">2026-09-08</span>
   </span>
 
     

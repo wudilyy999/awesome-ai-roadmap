@@ -6,34 +6,34 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
+        <meta name="description" content="FDE 现场交付经验：怎样处理需求变化、追踪待确认问题、保留 PoC 结论，并让项目在换人之后仍能继续。">
       
       
         <meta name="author" content="Polo Li">
       
       
-        <link rel="canonical" href="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/">
+        <link rel="canonical" href="https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/">
       
       
-        <link rel="prev" href="../20-autogen-and-crewai/">
+        <link rel="prev" href="../01-foundations/01-forward-deployed-engineering/">
       
       
-        <link rel="next" href="../../06-selection-portability/">
+        <link rel="next" href="02-delivery-lessons/">
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
     
     
       
-        <title>PydanticAI 与选型矩阵 - Awesome AI Roadmap</title>
+        <title>模块导览 - Awesome AI Roadmap</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.e53b48f4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -52,9 +52,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -64,22 +64,22 @@
   
   
     <meta property="og:locale" content="zh_CN">
-    <meta property="og:type" content="article">
+    <meta property="og:type" content="website">
     <meta property="og:site_name" content="Awesome AI Roadmap">
-    <meta property="og:title" content="第二十一章：PydanticAI 的类型安全范式与三者适用边界">
-    <meta property="og:description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
-    <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/">
+    <meta property="og:title" content="FDE · 现场经验与踩坑">
+    <meta property="og:description" content="FDE 现场交付经验：怎样处理需求变化、追踪待确认问题、保留 PoC 结论，并让项目在换人之后仍能继续。">
+    <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="第二十一章：PydanticAI 的类型安全范式与三者适用边界">
-    <meta name="twitter:description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
+    <meta name="twitter:title" content="FDE · 现场经验与踩坑">
+    <meta name="twitter:description" content="FDE 现场交付经验：怎样处理需求变化、追踪待确认问题、保留 PoC 结论，并让项目在换人之后仍能继续。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","description":"介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"FDE · 现场经验与踩坑","description":"FDE 现场交付经验：怎样处理需求变化、追踪待确认问题、保留 PoC 结论，并让项目在换人之后仍能继续。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"}}</script>
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"PydanticAI 与选型矩阵","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"}]}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"模块导览","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/"}]}</script>
     
   
 
@@ -102,7 +102,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pydanticai" class="md-skip">
+        <a href="#fde" class="md-skip">
           跳转至
         </a>
       
@@ -116,7 +116,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../../.." title="Awesome AI Roadmap" class="md-header__button md-logo" aria-label="Awesome AI Roadmap" data-md-component="logo">
+    <a href="../.." title="Awesome AI Roadmap" class="md-header__button md-logo" aria-label="Awesome AI Roadmap" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -136,7 +136,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PydanticAI 与选型矩阵
+              模块导览
             
           </span>
         </div>
@@ -254,7 +254,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -275,7 +275,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../about/" class="md-tabs__link">
+        <a href="../../about/" class="md-tabs__link">
           
   
   
@@ -297,7 +297,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../llm/" class="md-tabs__link">
+        <a href="../../llm/" class="md-tabs__link">
           
   
   
@@ -319,7 +319,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../multimodal/" class="md-tabs__link">
+        <a href="../../multimodal/" class="md-tabs__link">
           
   
   
@@ -341,7 +341,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../tools/" class="md-tabs__link">
+        <a href="../../tools/" class="md-tabs__link">
           
   
   
@@ -363,7 +363,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../agent/" class="md-tabs__link">
+        <a href="../../agent/" class="md-tabs__link">
           
   
   
@@ -385,7 +385,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../rag/" class="md-tabs__link">
+        <a href="../../rag/" class="md-tabs__link">
           
   
   
@@ -403,13 +403,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../frameworks/" class="md-tabs__link">
           
   
   
@@ -431,7 +429,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../engineering/" class="md-tabs__link">
+        <a href="../../engineering/" class="md-tabs__link">
           
   
   
@@ -453,7 +451,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../safety/" class="md-tabs__link">
+        <a href="../../safety/" class="md-tabs__link">
           
   
   
@@ -471,11 +469,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../fde/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -511,7 +511,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Awesome AI Roadmap" class="md-nav__button md-logo" aria-label="Awesome AI Roadmap" data-md-component="logo">
+    <a href="../.." title="Awesome AI Roadmap" class="md-nav__button md-logo" aria-label="Awesome AI Roadmap" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -541,7 +541,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -612,7 +612,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../about/" class="md-nav__link">
+      <a href="../../about/" class="md-nav__link">
         
   
   
@@ -635,7 +635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../editorial-policy/" class="md-nav__link">
+      <a href="../../editorial-policy/" class="md-nav__link">
         
   
   
@@ -700,7 +700,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/" class="md-nav__link ">
+            <a href="../../llm/" class="md-nav__link ">
               
   
   
@@ -768,7 +768,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/01-foundations/" class="md-nav__link ">
+            <a href="../../llm/01-foundations/" class="md-nav__link ">
               
   
   
@@ -803,7 +803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/01-foundations/01-what-is-llm/" class="md-nav__link">
+      <a href="../../llm/01-foundations/01-what-is-llm/" class="md-nav__link">
         
   
   
@@ -826,7 +826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/01-foundations/02-transformer-architecture/" class="md-nav__link">
+      <a href="../../llm/01-foundations/02-transformer-architecture/" class="md-nav__link">
         
   
   
@@ -849,7 +849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/01-foundations/03-attention-variants/" class="md-nav__link">
+      <a href="../../llm/01-foundations/03-attention-variants/" class="md-nav__link">
         
   
   
@@ -872,7 +872,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/01-foundations/04-position-encoding/" class="md-nav__link">
+      <a href="../../llm/01-foundations/04-position-encoding/" class="md-nav__link">
         
   
   
@@ -895,7 +895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/01-foundations/05-tokenizer/" class="md-nav__link">
+      <a href="../../llm/01-foundations/05-tokenizer/" class="md-nav__link">
         
   
   
@@ -961,7 +961,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/02-training-alignment/" class="md-nav__link ">
+            <a href="../../llm/02-training-alignment/" class="md-nav__link ">
               
   
   
@@ -996,7 +996,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/02-training-alignment/06-llm-training/" class="md-nav__link">
+      <a href="../../llm/02-training-alignment/06-llm-training/" class="md-nav__link">
         
   
   
@@ -1019,7 +1019,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/02-training-alignment/07-scaling-law-emergence/" class="md-nav__link">
+      <a href="../../llm/02-training-alignment/07-scaling-law-emergence/" class="md-nav__link">
         
   
   
@@ -1042,7 +1042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/02-training-alignment/08-finetuning/" class="md-nav__link">
+      <a href="../../llm/02-training-alignment/08-finetuning/" class="md-nav__link">
         
   
   
@@ -1065,7 +1065,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/02-training-alignment/09-lora/" class="md-nav__link">
+      <a href="../../llm/02-training-alignment/09-lora/" class="md-nav__link">
         
   
   
@@ -1088,7 +1088,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/02-training-alignment/10-post-training/" class="md-nav__link">
+      <a href="../../llm/02-training-alignment/10-post-training/" class="md-nav__link">
         
   
   
@@ -1111,7 +1111,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/02-training-alignment/11-dpo-vs-ppo/" class="md-nav__link">
+      <a href="../../llm/02-training-alignment/11-dpo-vs-ppo/" class="md-nav__link">
         
   
   
@@ -1177,7 +1177,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/03-inference-serving/" class="md-nav__link ">
+            <a href="../../llm/03-inference-serving/" class="md-nav__link ">
               
   
   
@@ -1212,7 +1212,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/03-inference-serving/12-decoding-strategies/" class="md-nav__link">
+      <a href="../../llm/03-inference-serving/12-decoding-strategies/" class="md-nav__link">
         
   
   
@@ -1235,7 +1235,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/03-inference-serving/13-temperature-top-p-top-k/" class="md-nav__link">
+      <a href="../../llm/03-inference-serving/13-temperature-top-p-top-k/" class="md-nav__link">
         
   
   
@@ -1258,7 +1258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/03-inference-serving/14-kv-cache/" class="md-nav__link">
+      <a href="../../llm/03-inference-serving/14-kv-cache/" class="md-nav__link">
         
   
   
@@ -1281,7 +1281,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/03-inference-serving/15-quantization/" class="md-nav__link">
+      <a href="../../llm/03-inference-serving/15-quantization/" class="md-nav__link">
         
   
   
@@ -1304,7 +1304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/03-inference-serving/19-moe/" class="md-nav__link">
+      <a href="../../llm/03-inference-serving/19-moe/" class="md-nav__link">
         
   
   
@@ -1327,7 +1327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/03-inference-serving/20-deployment-frameworks/" class="md-nav__link">
+      <a href="../../llm/03-inference-serving/20-deployment-frameworks/" class="md-nav__link">
         
   
   
@@ -1387,7 +1387,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/04-prompt-reliability/" class="md-nav__link ">
+            <a href="../../llm/04-prompt-reliability/" class="md-nav__link ">
               
   
   
@@ -1422,7 +1422,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/04-prompt-reliability/16-prompt-engineering/" class="md-nav__link">
+      <a href="../../llm/04-prompt-reliability/16-prompt-engineering/" class="md-nav__link">
         
   
   
@@ -1445,7 +1445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/04-prompt-reliability/17-cot/" class="md-nav__link">
+      <a href="../../llm/04-prompt-reliability/17-cot/" class="md-nav__link">
         
   
   
@@ -1468,7 +1468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/04-prompt-reliability/18-hallucination/" class="md-nav__link">
+      <a href="../../llm/04-prompt-reliability/18-hallucination/" class="md-nav__link">
         
   
   
@@ -1526,7 +1526,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/05-evaluation-selection/" class="md-nav__link ">
+            <a href="../../llm/05-evaluation-selection/" class="md-nav__link ">
               
   
   
@@ -1561,7 +1561,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/05-evaluation-selection/21-evaluation-metrics/" class="md-nav__link">
+      <a href="../../llm/05-evaluation-selection/21-evaluation-metrics/" class="md-nav__link">
         
   
   
@@ -1584,7 +1584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/05-evaluation-selection/22-model-selection/" class="md-nav__link">
+      <a href="../../llm/05-evaluation-selection/22-model-selection/" class="md-nav__link">
         
   
   
@@ -1640,7 +1640,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../llm/06-multimodal/" class="md-nav__link ">
+            <a href="../../llm/06-multimodal/" class="md-nav__link ">
               
   
   
@@ -1675,7 +1675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../llm/06-multimodal/23-multimodal-models/" class="md-nav__link">
+      <a href="../../llm/06-multimodal/23-multimodal-models/" class="md-nav__link">
         
   
   
@@ -1746,7 +1746,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../multimodal/" class="md-nav__link ">
+            <a href="../../multimodal/" class="md-nav__link ">
               
   
   
@@ -1806,7 +1806,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../multimodal/01-foundations/" class="md-nav__link ">
+            <a href="../../multimodal/01-foundations/" class="md-nav__link ">
               
   
   
@@ -1841,7 +1841,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/01-foundations/01-multimodal-fusion-architecture/" class="md-nav__link">
+      <a href="../../multimodal/01-foundations/01-multimodal-fusion-architecture/" class="md-nav__link">
         
   
   
@@ -1901,7 +1901,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../multimodal/02-vision-document/" class="md-nav__link ">
+            <a href="../../multimodal/02-vision-document/" class="md-nav__link ">
               
   
   
@@ -1936,7 +1936,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/02-vision-document/02-vlm-grounding/" class="md-nav__link">
+      <a href="../../multimodal/02-vision-document/02-vlm-grounding/" class="md-nav__link">
         
   
   
@@ -1959,7 +1959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/02-vision-document/03-ocr-document-ai/" class="md-nav__link">
+      <a href="../../multimodal/02-vision-document/03-ocr-document-ai/" class="md-nav__link">
         
   
   
@@ -1982,7 +1982,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/02-vision-document/04-computer-use/" class="md-nav__link">
+      <a href="../../multimodal/02-vision-document/04-computer-use/" class="md-nav__link">
         
   
   
@@ -2040,7 +2040,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../multimodal/03-speech-audio/" class="md-nav__link ">
+            <a href="../../multimodal/03-speech-audio/" class="md-nav__link ">
               
   
   
@@ -2075,7 +2075,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/03-speech-audio/05-asr-tts-audio-lm/" class="md-nav__link">
+      <a href="../../multimodal/03-speech-audio/05-asr-tts-audio-lm/" class="md-nav__link">
         
   
   
@@ -2098,7 +2098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/03-speech-audio/06-realtime-duplex-voice/" class="md-nav__link">
+      <a href="../../multimodal/03-speech-audio/06-realtime-duplex-voice/" class="md-nav__link">
         
   
   
@@ -2156,7 +2156,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../multimodal/04-generation/" class="md-nav__link ">
+            <a href="../../multimodal/04-generation/" class="md-nav__link ">
               
   
   
@@ -2191,7 +2191,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/04-generation/07-diffusion-flow-matching-image/" class="md-nav__link">
+      <a href="../../multimodal/04-generation/07-diffusion-flow-matching-image/" class="md-nav__link">
         
   
   
@@ -2214,7 +2214,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/04-generation/08-video-generation/" class="md-nav__link">
+      <a href="../../multimodal/04-generation/08-video-generation/" class="md-nav__link">
         
   
   
@@ -2272,7 +2272,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../multimodal/05-data-training-evaluation/" class="md-nav__link ">
+            <a href="../../multimodal/05-data-training-evaluation/" class="md-nav__link ">
               
   
   
@@ -2307,7 +2307,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/05-data-training-evaluation/09-multimodal-data-alignment/" class="md-nav__link">
+      <a href="../../multimodal/05-data-training-evaluation/09-multimodal-data-alignment/" class="md-nav__link">
         
   
   
@@ -2330,7 +2330,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../multimodal/05-data-training-evaluation/10-evaluation-safety-serving/" class="md-nav__link">
+      <a href="../../multimodal/05-data-training-evaluation/10-evaluation-safety-serving/" class="md-nav__link">
         
   
   
@@ -2401,7 +2401,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../tools/" class="md-nav__link ">
+            <a href="../../tools/" class="md-nav__link ">
               
   
   
@@ -2467,7 +2467,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../tools/01-function-calling/" class="md-nav__link ">
+            <a href="../../tools/01-function-calling/" class="md-nav__link ">
               
   
   
@@ -2502,7 +2502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/01-function-calling/01-function-calling/" class="md-nav__link">
+      <a href="../../tools/01-function-calling/01-function-calling/" class="md-nav__link">
         
   
   
@@ -2525,7 +2525,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/01-function-calling/02-tool-learning/" class="md-nav__link">
+      <a href="../../tools/01-function-calling/02-tool-learning/" class="md-nav__link">
         
   
   
@@ -2548,7 +2548,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/01-function-calling/03-tool-schema-design/" class="md-nav__link">
+      <a href="../../tools/01-function-calling/03-tool-schema-design/" class="md-nav__link">
         
   
   
@@ -2571,7 +2571,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/01-function-calling/07-reasoning-models-and-tools/" class="md-nav__link">
+      <a href="../../tools/01-function-calling/07-reasoning-models-and-tools/" class="md-nav__link">
         
   
   
@@ -2635,7 +2635,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../tools/02-mcp/" class="md-nav__link ">
+            <a href="../../tools/02-mcp/" class="md-nav__link ">
               
   
   
@@ -2670,7 +2670,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/02-mcp/04-what-is-mcp/" class="md-nav__link">
+      <a href="../../tools/02-mcp/04-what-is-mcp/" class="md-nav__link">
         
   
   
@@ -2693,7 +2693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/02-mcp/05-mcp-components/" class="md-nav__link">
+      <a href="../../tools/02-mcp/05-mcp-components/" class="md-nav__link">
         
   
   
@@ -2716,7 +2716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/02-mcp/06-mcp-vs-function-calling/" class="md-nav__link">
+      <a href="../../tools/02-mcp/06-mcp-vs-function-calling/" class="md-nav__link">
         
   
   
@@ -2739,7 +2739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/02-mcp/12-mcp-transport/" class="md-nav__link">
+      <a href="../../tools/02-mcp/12-mcp-transport/" class="md-nav__link">
         
   
   
@@ -2762,7 +2762,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/02-mcp/15-tool-protocol-security/" class="md-nav__link">
+      <a href="../../tools/02-mcp/15-tool-protocol-security/" class="md-nav__link">
         
   
   
@@ -2822,7 +2822,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../tools/03-skills/" class="md-nav__link ">
+            <a href="../../tools/03-skills/" class="md-nav__link ">
               
   
   
@@ -2857,7 +2857,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/03-skills/08-what-is-skill/" class="md-nav__link">
+      <a href="../../tools/03-skills/08-what-is-skill/" class="md-nav__link">
         
   
   
@@ -2880,7 +2880,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/03-skills/09-skill-vs-mcp/" class="md-nav__link">
+      <a href="../../tools/03-skills/09-skill-vs-mcp/" class="md-nav__link">
         
   
   
@@ -2903,7 +2903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/03-skills/10-fc-skill-mcp/" class="md-nav__link">
+      <a href="../../tools/03-skills/10-fc-skill-mcp/" class="md-nav__link">
         
   
   
@@ -2959,7 +2959,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../tools/04-agent-communication/" class="md-nav__link ">
+            <a href="../../tools/04-agent-communication/" class="md-nav__link ">
               
   
   
@@ -2994,7 +2994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/04-agent-communication/11-a2a-protocol/" class="md-nav__link">
+      <a href="../../tools/04-agent-communication/11-a2a-protocol/" class="md-nav__link">
         
   
   
@@ -3052,7 +3052,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../tools/05-transport-gateway/" class="md-nav__link ">
+            <a href="../../tools/05-transport-gateway/" class="md-nav__link ">
               
   
   
@@ -3087,7 +3087,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/05-transport-gateway/13-sse-websocket-webrtc/" class="md-nav__link">
+      <a href="../../tools/05-transport-gateway/13-sse-websocket-webrtc/" class="md-nav__link">
         
   
   
@@ -3110,7 +3110,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/05-transport-gateway/14-llm-gateway/" class="md-nav__link">
+      <a href="../../tools/05-transport-gateway/14-llm-gateway/" class="md-nav__link">
         
   
   
@@ -3183,7 +3183,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/" class="md-nav__link ">
+            <a href="../../agent/" class="md-nav__link ">
               
   
   
@@ -3247,7 +3247,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/01-foundations/" class="md-nav__link ">
+            <a href="../../agent/01-foundations/" class="md-nav__link ">
               
   
   
@@ -3282,7 +3282,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/01-foundations/01-agent-foundations/" class="md-nav__link">
+      <a href="../../agent/01-foundations/01-agent-foundations/" class="md-nav__link">
         
   
   
@@ -3305,7 +3305,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/01-foundations/02-agent-architecture/" class="md-nav__link">
+      <a href="../../agent/01-foundations/02-agent-architecture/" class="md-nav__link">
         
   
   
@@ -3328,7 +3328,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/01-foundations/03-agentic-building-blocks/" class="md-nav__link">
+      <a href="../../agent/01-foundations/03-agentic-building-blocks/" class="md-nav__link">
         
   
   
@@ -3398,7 +3398,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/02-runtime-harness/" class="md-nav__link ">
+            <a href="../../agent/02-runtime-harness/" class="md-nav__link ">
               
   
   
@@ -3433,7 +3433,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/16-harness-definition-and-boundaries/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/16-harness-definition-and-boundaries/" class="md-nav__link">
         
   
   
@@ -3456,7 +3456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/17-agent-loop-and-runtime-state-machine/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/17-agent-loop-and-runtime-state-machine/" class="md-nav__link">
         
   
   
@@ -3479,7 +3479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/18-context-engineering-assembly/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/18-context-engineering-assembly/" class="md-nav__link">
         
   
   
@@ -3502,7 +3502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/19-tool-registry-and-execution-pipeline/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/19-tool-registry-and-execution-pipeline/" class="md-nav__link">
         
   
   
@@ -3525,7 +3525,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/20-permissions-sandbox-isolation/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/20-permissions-sandbox-isolation/" class="md-nav__link">
         
   
   
@@ -3548,7 +3548,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/21-checkpoint-persistence-recovery/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/21-checkpoint-persistence-recovery/" class="md-nav__link">
         
   
   
@@ -3571,7 +3571,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/22-human-in-the-loop-and-interruption/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/22-human-in-the-loop-and-interruption/" class="md-nav__link">
         
   
   
@@ -3594,7 +3594,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-runtime-harness/23-tracing-evaluation-cost-and-coding-agent-case-study/" class="md-nav__link">
+      <a href="../../agent/02-runtime-harness/23-tracing-evaluation-cost-and-coding-agent-case-study/" class="md-nav__link">
         
   
   
@@ -3658,7 +3658,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/02-reasoning-planning/" class="md-nav__link ">
+            <a href="../../agent/02-reasoning-planning/" class="md-nav__link ">
               
   
   
@@ -3693,7 +3693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-reasoning-planning/04-agent-design-patterns/" class="md-nav__link">
+      <a href="../../agent/02-reasoning-planning/04-agent-design-patterns/" class="md-nav__link">
         
   
   
@@ -3716,7 +3716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-reasoning-planning/05-agent-reasoning-methods/" class="md-nav__link">
+      <a href="../../agent/02-reasoning-planning/05-agent-reasoning-methods/" class="md-nav__link">
         
   
   
@@ -3739,7 +3739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-reasoning-planning/06-task-decomposition/" class="md-nav__link">
+      <a href="../../agent/02-reasoning-planning/06-task-decomposition/" class="md-nav__link">
         
   
   
@@ -3762,7 +3762,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-reasoning-planning/11-llm-agent-planning/" class="md-nav__link">
+      <a href="../../agent/02-reasoning-planning/11-llm-agent-planning/" class="md-nav__link">
         
   
   
@@ -3785,7 +3785,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/02-reasoning-planning/12-agent-reflection/" class="md-nav__link">
+      <a href="../../agent/02-reasoning-planning/12-agent-reflection/" class="md-nav__link">
         
   
   
@@ -3845,7 +3845,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/03-memory-context/" class="md-nav__link ">
+            <a href="../../agent/03-memory-context/" class="md-nav__link ">
               
   
   
@@ -3880,7 +3880,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/03-memory-context/07-agent-memory/" class="md-nav__link">
+      <a href="../../agent/03-memory-context/07-agent-memory/" class="md-nav__link">
         
   
   
@@ -3903,7 +3903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/03-memory-context/08-agent-memory-implementation/" class="md-nav__link">
+      <a href="../../agent/03-memory-context/08-agent-memory-implementation/" class="md-nav__link">
         
   
   
@@ -3926,7 +3926,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/03-memory-context/10-agent-memory-compression/" class="md-nav__link">
+      <a href="../../agent/03-memory-context/10-agent-memory-compression/" class="md-nav__link">
         
   
   
@@ -3984,7 +3984,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/04-multi-agent/" class="md-nav__link ">
+            <a href="../../agent/04-multi-agent/" class="md-nav__link ">
               
   
   
@@ -4019,7 +4019,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/04-multi-agent/09-single-vs-multi-agent/" class="md-nav__link">
+      <a href="../../agent/04-multi-agent/09-single-vs-multi-agent/" class="md-nav__link">
         
   
   
@@ -4042,7 +4042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/04-multi-agent/13-multi-agent-coordination/" class="md-nav__link">
+      <a href="../../agent/04-multi-agent/13-multi-agent-coordination/" class="md-nav__link">
         
   
   
@@ -4100,7 +4100,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../agent/05-production/" class="md-nav__link ">
+            <a href="../../agent/05-production/" class="md-nav__link ">
               
   
   
@@ -4135,7 +4135,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/05-production/14-agent-evaluation/" class="md-nav__link">
+      <a href="../../agent/05-production/14-agent-evaluation/" class="md-nav__link">
         
   
   
@@ -4158,7 +4158,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../agent/05-production/15-agent-security/" class="md-nav__link">
+      <a href="../../agent/05-production/15-agent-security/" class="md-nav__link">
         
   
   
@@ -4231,7 +4231,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/" class="md-nav__link ">
+            <a href="../../rag/" class="md-nav__link ">
               
   
   
@@ -4293,7 +4293,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/01-foundations/" class="md-nav__link ">
+            <a href="../../rag/01-foundations/" class="md-nav__link ">
               
   
   
@@ -4328,7 +4328,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/01-foundations/01-what-is-rag/" class="md-nav__link">
+      <a href="../../rag/01-foundations/01-what-is-rag/" class="md-nav__link">
         
   
   
@@ -4351,7 +4351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/01-foundations/02-rag-finetune-longcontext/" class="md-nav__link">
+      <a href="../../rag/01-foundations/02-rag-finetune-longcontext/" class="md-nav__link">
         
   
   
@@ -4419,7 +4419,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/02-ingestion-indexing/" class="md-nav__link ">
+            <a href="../../rag/02-ingestion-indexing/" class="md-nav__link ">
               
   
   
@@ -4454,7 +4454,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/03-document-parsing/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/03-document-parsing/" class="md-nav__link">
         
   
   
@@ -4477,7 +4477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/04-chunking-strategy/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/04-chunking-strategy/" class="md-nav__link">
         
   
   
@@ -4500,7 +4500,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/05-semantic-truncation/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/05-semantic-truncation/" class="md-nav__link">
         
   
   
@@ -4523,7 +4523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/06-embedding-principles/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/06-embedding-principles/" class="md-nav__link">
         
   
   
@@ -4546,7 +4546,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/07-embedding-selection/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/07-embedding-selection/" class="md-nav__link">
         
   
   
@@ -4569,7 +4569,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/08-vector-database/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/08-vector-database/" class="md-nav__link">
         
   
   
@@ -4592,7 +4592,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/02-ingestion-indexing/09-vectordb-production/" class="md-nav__link">
+      <a href="../../rag/02-ingestion-indexing/09-vectordb-production/" class="md-nav__link">
         
   
   
@@ -4656,7 +4656,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/03-retrieval/" class="md-nav__link ">
+            <a href="../../rag/03-retrieval/" class="md-nav__link ">
               
   
   
@@ -4691,7 +4691,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/03-retrieval/10-online-pipeline/" class="md-nav__link">
+      <a href="../../rag/03-retrieval/10-online-pipeline/" class="md-nav__link">
         
   
   
@@ -4714,7 +4714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/03-retrieval/11-retrieval-paradigms/" class="md-nav__link">
+      <a href="../../rag/03-retrieval/11-retrieval-paradigms/" class="md-nav__link">
         
   
   
@@ -4737,7 +4737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/03-retrieval/12-query-rewriting/" class="md-nav__link">
+      <a href="../../rag/03-retrieval/12-query-rewriting/" class="md-nav__link">
         
   
   
@@ -4760,7 +4760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/03-retrieval/13-hybrid-retrieval-rerank/" class="md-nav__link">
+      <a href="../../rag/03-retrieval/13-hybrid-retrieval-rerank/" class="md-nav__link">
         
   
   
@@ -4783,7 +4783,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/03-retrieval/14-retrieval-optimization/" class="md-nav__link">
+      <a href="../../rag/03-retrieval/14-retrieval-optimization/" class="md-nav__link">
         
   
   
@@ -4843,7 +4843,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/04-advanced/" class="md-nav__link ">
+            <a href="../../rag/04-advanced/" class="md-nav__link ">
               
   
   
@@ -4878,7 +4878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/04-advanced/15-advanced-rag-paradigms/" class="md-nav__link">
+      <a href="../../rag/04-advanced/15-advanced-rag-paradigms/" class="md-nav__link">
         
   
   
@@ -4901,7 +4901,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/04-advanced/16-graphrag/" class="md-nav__link">
+      <a href="../../rag/04-advanced/16-graphrag/" class="md-nav__link">
         
   
   
@@ -4924,7 +4924,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/04-advanced/21-multimodal-rag/" class="md-nav__link">
+      <a href="../../rag/04-advanced/21-multimodal-rag/" class="md-nav__link">
         
   
   
@@ -4982,7 +4982,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/05-generation-evaluation/" class="md-nav__link ">
+            <a href="../../rag/05-generation-evaluation/" class="md-nav__link ">
               
   
   
@@ -5017,7 +5017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/05-generation-evaluation/17-generation-hallucination/" class="md-nav__link">
+      <a href="../../rag/05-generation-evaluation/17-generation-hallucination/" class="md-nav__link">
         
   
   
@@ -5040,7 +5040,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/05-generation-evaluation/18-rag-evaluation/" class="md-nav__link">
+      <a href="../../rag/05-generation-evaluation/18-rag-evaluation/" class="md-nav__link">
         
   
   
@@ -5098,7 +5098,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../rag/06-operations-security/" class="md-nav__link ">
+            <a href="../../rag/06-operations-security/" class="md-nav__link ">
               
   
   
@@ -5133,7 +5133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/06-operations-security/19-dynamic-update/" class="md-nav__link">
+      <a href="../../rag/06-operations-security/19-dynamic-update/" class="md-nav__link">
         
   
   
@@ -5156,7 +5156,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rag/06-operations-security/20-rag-challenges-security/" class="md-nav__link">
+      <a href="../../rag/06-operations-security/20-rag-challenges-security/" class="md-nav__link">
         
   
   
@@ -5191,8 +5191,6 @@
       
   
   
-    
-  
   
   
     
@@ -5218,23 +5216,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../" class="md-nav__link ">
+            <a href="../../frameworks/" class="md-nav__link ">
               
   
   
@@ -5247,13 +5242,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             框架与编排
@@ -5291,13 +5286,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -5305,7 +5297,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/" class="md-nav__link ">
+            <a href="../../frameworks/01-langchain/" class="md-nav__link ">
               
   
   
@@ -5318,7 +5310,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -5369,7 +5361,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/01-foundations/" class="md-nav__link ">
+            <a href="../../frameworks/01-langchain/01-foundations/" class="md-nav__link ">
               
   
   
@@ -5404,7 +5396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/01-foundations/01-agent-frameworks/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/01-foundations/01-agent-frameworks/" class="md-nav__link">
         
   
   
@@ -5427,7 +5419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/01-foundations/02-chain-and-lcel/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/01-foundations/02-chain-and-lcel/" class="md-nav__link">
         
   
   
@@ -5450,7 +5442,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/01-foundations/03-langchain-architecture/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/01-foundations/03-langchain-architecture/" class="md-nav__link">
         
   
   
@@ -5510,7 +5502,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/02-agent-building/" class="md-nav__link ">
+            <a href="../../frameworks/01-langchain/02-agent-building/" class="md-nav__link ">
               
   
   
@@ -5545,7 +5537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/02-agent-building/04-build-agent/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/02-agent-building/04-build-agent/" class="md-nav__link">
         
   
   
@@ -5568,7 +5560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/02-agent-building/05-tool-registration/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/02-agent-building/05-tool-registration/" class="md-nav__link">
         
   
   
@@ -5591,7 +5583,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/02-agent-building/06-memory/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/02-agent-building/06-memory/" class="md-nav__link">
         
   
   
@@ -5651,7 +5643,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/03-ecosystem/" class="md-nav__link ">
+            <a href="../../frameworks/01-langchain/03-ecosystem/" class="md-nav__link ">
               
   
   
@@ -5686,7 +5678,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/03-ecosystem/07-langchain-vs-llamaindex/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/03-ecosystem/07-langchain-vs-llamaindex/" class="md-nav__link">
         
   
   
@@ -5709,7 +5701,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/03-ecosystem/08-langchain4j/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/03-ecosystem/08-langchain4j/" class="md-nav__link">
         
   
   
@@ -5732,7 +5724,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/03-ecosystem/11-version-evolution/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/03-ecosystem/11-version-evolution/" class="md-nav__link">
         
   
   
@@ -5790,7 +5782,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/04-langgraph/" class="md-nav__link ">
+            <a href="../../frameworks/01-langchain/04-langgraph/" class="md-nav__link ">
               
   
   
@@ -5825,7 +5817,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/04-langgraph/09-langchain-vs-langgraph/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/" class="md-nav__link">
         
   
   
@@ -5848,7 +5840,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/04-langgraph/10-langgraph-advantages/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/04-langgraph/10-langgraph-advantages/" class="md-nav__link">
         
   
   
@@ -5906,7 +5898,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/05-production/" class="md-nav__link ">
+            <a href="../../frameworks/01-langchain/05-production/" class="md-nav__link ">
               
   
   
@@ -5941,7 +5933,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/05-production/12-deep-research/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/05-production/12-deep-research/" class="md-nav__link">
         
   
   
@@ -5964,7 +5956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/05-production/13-langsmith-production-loop/" class="md-nav__link">
+      <a href="../../frameworks/01-langchain/05-production/13-langsmith-production-loop/" class="md-nav__link">
         
   
   
@@ -6019,13 +6011,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6033,7 +6022,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../02-llamaindex/" class="md-nav__link ">
+            <a href="../../frameworks/02-llamaindex/" class="md-nav__link ">
               
   
   
@@ -6046,7 +6035,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6068,7 +6057,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-llamaindex/14-data-index-abstractions/" class="md-nav__link">
+      <a href="../../frameworks/02-llamaindex/14-data-index-abstractions/" class="md-nav__link">
         
   
   
@@ -6091,7 +6080,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-llamaindex/15-query-engine-workflows/" class="md-nav__link">
+      <a href="../../frameworks/02-llamaindex/15-query-engine-workflows/" class="md-nav__link">
         
   
   
@@ -6138,13 +6127,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6152,7 +6138,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../03-dspy/" class="md-nav__link ">
+            <a href="../../frameworks/03-dspy/" class="md-nav__link ">
               
   
   
@@ -6165,7 +6151,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6187,7 +6173,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-dspy/16-declarative-programming-model/" class="md-nav__link">
+      <a href="../../frameworks/03-dspy/16-declarative-programming-model/" class="md-nav__link">
         
   
   
@@ -6210,7 +6196,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-dspy/17-compiler-and-optimizers/" class="md-nav__link">
+      <a href="../../frameworks/03-dspy/17-compiler-and-optimizers/" class="md-nav__link">
         
   
   
@@ -6257,13 +6243,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6271,7 +6254,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../04-semantic-kernel/" class="md-nav__link ">
+            <a href="../../frameworks/04-semantic-kernel/" class="md-nav__link ">
               
   
   
@@ -6284,7 +6267,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6306,7 +6289,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-semantic-kernel/18-kernel-plugin-planner/" class="md-nav__link">
+      <a href="../../frameworks/04-semantic-kernel/18-kernel-plugin-planner/" class="md-nav__link">
         
   
   
@@ -6329,7 +6312,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-semantic-kernel/19-process-and-agent-framework/" class="md-nav__link">
+      <a href="../../frameworks/04-semantic-kernel/19-process-and-agent-framework/" class="md-nav__link">
         
   
   
@@ -6357,8 +6340,6 @@
                 
   
   
-    
-  
   
   
     
@@ -6378,21 +6359,18 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_6" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../frameworks/05-lightweight-agent-frameworks/" class="md-nav__link ">
               
   
   
@@ -6405,13 +6383,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_6" id="__nav_8_6_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_6" id="__nav_8_6_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8_6">
             <span class="md-nav__icon md-icon"></span>
             轻量级 Agent 框架
@@ -6427,7 +6405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../20-autogen-and-crewai/" class="md-nav__link">
+      <a href="../../frameworks/05-lightweight-agent-frameworks/20-autogen-and-crewai/" class="md-nav__link">
         
   
   
@@ -6447,32 +6425,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    PydanticAI 与选型矩阵
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/" class="md-nav__link">
         
   
   
@@ -6483,131 +6439,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#211" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.1 第三种路线：把「协作」问题换成「正确性」问题
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#212-agentoutput_type" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.2 核心设计：Agent、output_type 与依赖注入
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#213" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.3 类型安全带来的工程收益
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#214-autogencrewaipydanticai" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#215" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5 常见错误
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="21.5 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#2151" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.1 认为类型校验能替代模型能力评测
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2152" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.2 把依赖注入当作可选的代码风格
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2153" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.3 只看决策矩阵的单一维度就下结论
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2154" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.4 把角色化框架的「团队隐喻」当作技术架构本身
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#216" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.6 本章总结
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      参考资料
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -6644,13 +6475,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6658,7 +6486,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../06-selection-portability/" class="md-nav__link ">
+            <a href="../../frameworks/06-selection-portability/" class="md-nav__link ">
               
   
   
@@ -6671,7 +6499,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_7" id="__nav_8_7_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_7" id="__nav_8_7_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6693,7 +6521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/" class="md-nav__link">
+      <a href="../../frameworks/06-selection-portability/22-cross-framework-technical-taxonomy/" class="md-nav__link">
         
   
   
@@ -6716,7 +6544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-selection-portability/23-lockin-and-portable-architecture/" class="md-nav__link">
+      <a href="../../frameworks/06-selection-portability/23-lockin-and-portable-architecture/" class="md-nav__link">
         
   
   
@@ -6789,7 +6617,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/" class="md-nav__link ">
+            <a href="../../engineering/" class="md-nav__link ">
               
   
   
@@ -6851,7 +6679,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/01-foundations/" class="md-nav__link ">
+            <a href="../../engineering/01-foundations/" class="md-nav__link ">
               
   
   
@@ -6886,7 +6714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/01-foundations/01-llmops-vs-mlops-devops/" class="md-nav__link">
+      <a href="../../engineering/01-foundations/01-llmops-vs-mlops-devops/" class="md-nav__link">
         
   
   
@@ -6909,7 +6737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/01-foundations/02-production-architecture-overview/" class="md-nav__link">
+      <a href="../../engineering/01-foundations/02-production-architecture-overview/" class="md-nav__link">
         
   
   
@@ -6967,7 +6795,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/02-request-reliability/" class="md-nav__link ">
+            <a href="../../engineering/02-request-reliability/" class="md-nav__link ">
               
   
   
@@ -7002,7 +6830,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/02-request-reliability/03-model-gateway-routing-fallback/" class="md-nav__link">
+      <a href="../../engineering/02-request-reliability/03-model-gateway-routing-fallback/" class="md-nav__link">
         
   
   
@@ -7025,7 +6853,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/" class="md-nav__link">
+      <a href="../../engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/" class="md-nav__link">
         
   
   
@@ -7083,7 +6911,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/03-output-safety/" class="md-nav__link ">
+            <a href="../../engineering/03-output-safety/" class="md-nav__link ">
               
   
   
@@ -7118,7 +6946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/03-output-safety/05-structured-output-contracts/" class="md-nav__link">
+      <a href="../../engineering/03-output-safety/05-structured-output-contracts/" class="md-nav__link">
         
   
   
@@ -7141,7 +6969,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/03-output-safety/06-guardrails-degradation/" class="md-nav__link">
+      <a href="../../engineering/03-output-safety/06-guardrails-degradation/" class="md-nav__link">
         
   
   
@@ -7199,7 +7027,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/04-evaluation-observability/" class="md-nav__link ">
+            <a href="../../engineering/04-evaluation-observability/" class="md-nav__link ">
               
   
   
@@ -7234,7 +7062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/" class="md-nav__link">
+      <a href="../../engineering/04-evaluation-observability/07-offline-eval-eval-driven-development/" class="md-nav__link">
         
   
   
@@ -7257,7 +7085,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/04-evaluation-observability/08-online-observability-tracing/" class="md-nav__link">
+      <a href="../../engineering/04-evaluation-observability/08-online-observability-tracing/" class="md-nav__link">
         
   
   
@@ -7315,7 +7143,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/05-release-pipeline/" class="md-nav__link ">
+            <a href="../../engineering/05-release-pipeline/" class="md-nav__link ">
               
   
   
@@ -7350,7 +7178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/05-release-pipeline/09-prompt-model-data-versioning/" class="md-nav__link">
+      <a href="../../engineering/05-release-pipeline/09-prompt-model-data-versioning/" class="md-nav__link">
         
   
   
@@ -7373,7 +7201,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/05-release-pipeline/10-llm-cicd-canary-ab/" class="md-nav__link">
+      <a href="../../engineering/05-release-pipeline/10-llm-cicd-canary-ab/" class="md-nav__link">
         
   
   
@@ -7433,7 +7261,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../engineering/06-performance-operations/" class="md-nav__link ">
+            <a href="../../engineering/06-performance-operations/" class="md-nav__link ">
               
   
   
@@ -7468,7 +7296,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/06-performance-operations/11-caching-batching-throughput-cost/" class="md-nav__link">
+      <a href="../../engineering/06-performance-operations/11-caching-batching-throughput-cost/" class="md-nav__link">
         
   
   
@@ -7491,7 +7319,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/06-performance-operations/12-slo-capacity-incident-response/" class="md-nav__link">
+      <a href="../../engineering/06-performance-operations/12-slo-capacity-incident-response/" class="md-nav__link">
         
   
   
@@ -7514,7 +7342,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../engineering/06-performance-operations/13-feedback-loop-data-flywheel/" class="md-nav__link">
+      <a href="../../engineering/06-performance-operations/13-feedback-loop-data-flywheel/" class="md-nav__link">
         
   
   
@@ -7585,7 +7413,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../safety/" class="md-nav__link ">
+            <a href="../../safety/" class="md-nav__link ">
               
   
   
@@ -7645,7 +7473,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../safety/01-threat-modeling/" class="md-nav__link ">
+            <a href="../../safety/01-threat-modeling/" class="md-nav__link ">
               
   
   
@@ -7680,7 +7508,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/" class="md-nav__link">
+      <a href="../../safety/01-threat-modeling/01-ai-threat-modeling-attack-surface/" class="md-nav__link">
         
   
   
@@ -7738,7 +7566,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../safety/02-prompt-content-attacks/" class="md-nav__link ">
+            <a href="../../safety/02-prompt-content-attacks/" class="md-nav__link ">
               
   
   
@@ -7773,7 +7601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/02-prompt-content-attacks/02-prompt-injection-jailbreak-system-prompt-leakage/" class="md-nav__link">
+      <a href="../../safety/02-prompt-content-attacks/02-prompt-injection-jailbreak-system-prompt-leakage/" class="md-nav__link">
         
   
   
@@ -7796,7 +7624,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/" class="md-nav__link">
+      <a href="../../safety/02-prompt-content-attacks/03-output-handling-secret-exfiltration/" class="md-nav__link">
         
   
   
@@ -7856,7 +7684,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../safety/03-data-model-supply-chain/" class="md-nav__link ">
+            <a href="../../safety/03-data-model-supply-chain/" class="md-nav__link ">
               
   
   
@@ -7891,7 +7719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/" class="md-nav__link">
+      <a href="../../safety/03-data-model-supply-chain/04-training-finetuning-rag-poisoning/" class="md-nav__link">
         
   
   
@@ -7914,7 +7742,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/03-data-model-supply-chain/05-model-supply-chain-serialization-risks/" class="md-nav__link">
+      <a href="../../safety/03-data-model-supply-chain/05-model-supply-chain-serialization-risks/" class="md-nav__link">
         
   
   
@@ -7937,7 +7765,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/" class="md-nav__link">
+      <a href="../../safety/03-data-model-supply-chain/06-privacy-pii-memory-leakage/" class="md-nav__link">
         
   
   
@@ -7995,7 +7823,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../safety/04-agent-execution-isolation/" class="md-nav__link ">
+            <a href="../../safety/04-agent-execution-isolation/" class="md-nav__link ">
               
   
   
@@ -8030,7 +7858,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/" class="md-nav__link">
+      <a href="../../safety/04-agent-execution-isolation/07-agent-tool-mcp-a2a-least-privilege-identity/" class="md-nav__link">
         
   
   
@@ -8053,7 +7881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/04-agent-execution-isolation/08-code-execution-browser-computer-use-sandboxing/" class="md-nav__link">
+      <a href="../../safety/04-agent-execution-isolation/08-code-execution-browser-computer-use-sandboxing/" class="md-nav__link">
         
   
   
@@ -8111,7 +7939,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../safety/05-assurance-governance/" class="md-nav__link ">
+            <a href="../../safety/05-assurance-governance/" class="md-nav__link ">
               
   
   
@@ -8146,7 +7974,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/" class="md-nav__link">
+      <a href="../../safety/05-assurance-governance/09-security-evaluation-red-teaming-continuous-assurance/" class="md-nav__link">
         
   
   
@@ -8169,7 +7997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../safety/05-assurance-governance/10-ai-governance-risk-classification-audit-provenance/" class="md-nav__link">
+      <a href="../../safety/05-assurance-governance/10-ai-governance-risk-classification-audit-provenance/" class="md-nav__link">
         
   
   
@@ -8204,6 +8032,8 @@
       
   
   
+    
+  
   
   
     
@@ -8221,20 +8051,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../fde/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -8247,13 +8080,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_11">
             <span class="md-nav__icon md-icon"></span>
             FDE
@@ -8283,10 +8116,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -8294,7 +8130,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../fde/01-foundations/" class="md-nav__link ">
+            <a href="../01-foundations/" class="md-nav__link ">
               
   
   
@@ -8307,7 +8143,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_11_2" id="__nav_11_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_11_2" id="__nav_11_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -8329,7 +8165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../fde/01-foundations/01-forward-deployed-engineering/" class="md-nav__link">
+      <a href="../01-foundations/01-forward-deployed-engineering/" class="md-nav__link">
         
   
   
@@ -8357,6 +8193,8 @@
                 
   
   
+    
+  
   
   
     
@@ -8374,18 +8212,21 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../fde/02-field-practice/" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   
@@ -8398,13 +8239,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_11_3" id="__nav_11_3_label" tabindex="0">
+              <label class="md-nav__link md-nav__link--active" for="__nav_11_3" id="__nav_11_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_11_3">
             <span class="md-nav__icon md-icon"></span>
             现场经验与踩坑
@@ -8420,7 +8261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../fde/02-field-practice/02-delivery-lessons/" class="md-nav__link">
+      <a href="02-delivery-lessons/" class="md-nav__link">
         
   
   
@@ -8478,105 +8319,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#211" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.1 第三种路线：把「协作」问题换成「正确性」问题
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#212-agentoutput_type" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.2 核心设计：Agent、output_type 与依赖注入
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#213" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.3 类型安全带来的工程收益
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#214-autogencrewaipydanticai" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#215" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5 常见错误
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="21.5 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#2151" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.1 认为类型校验能替代模型能力评测
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2152" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.2 把依赖注入当作可选的代码风格
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2153" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.3 只看决策矩阵的单一维度就下结论
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2154" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.4 把角色化框架的「团队隐喻」当作技术架构本身
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#216" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.6 本章总结
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      参考资料
+      章节目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      怎么读
     </span>
   </a>
   
@@ -8598,7 +8352,7 @@
 
 
   
-    <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap/edit/main/docs/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap/edit/main/docs/fde/02-field-practice/README.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -8606,157 +8360,16 @@
   
 
 
-<h1 id="pydanticai">第二十一章：PydanticAI 的类型安全范式与三者适用边界<a class="headerlink" href="#pydanticai" title="Permanent link">&para;</a></h1>
-<h2 id="211">21.1 第三种路线：把「协作」问题换成「正确性」问题<a class="headerlink" href="#211" title="Permanent link">&para;</a></h2>
-<p>PydanticAI 以 Python 类型、工具和依赖注入组织 Agent，但不只支持无状态的单 Agent 调用：它也支持会话历史、多 Agent 组合和持久执行集成。本章从单个 Agent 的可测试边界切入，再看这些能力如何扩展。</p>
-<p>这里的类型安全包括静态检查与运行时校验，不代表自然语言输入或模型推断自动获得事实正确性。</p>
-<h2 id="212-agentoutput_type">21.2 核心设计：<code>Agent</code>、<code>output_type</code> 与依赖注入<a class="headerlink" href="#212-agentoutput_type" title="Permanent link">&para;</a></h2>
-<p>PydanticAI 的 <code>Agent</code> 对象接受一个 <code>output_type</code>（通常是 Pydantic <code>BaseModel</code>），运行结果会被自动校验并转换成对应类型，而不是返回一段需要自己解析的原始字符串：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">RunContext</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">Sentiment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">label</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"positive"</span><span class="p">,</span> <span class="s2">"negative"</span><span class="p">,</span> <span class="s2">"neutral"</span><span class="p">]</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nd">@dataclass</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">ReviewDeps</span><span class="p">:</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">reviews</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYDANTIC_AI_MODEL"</span><span class="p">],</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">deps_type</span><span class="o">=</span><span class="n">ReviewDeps</span><span class="p">,</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">output_type</span><span class="o">=</span><span class="n">Sentiment</span><span class="p">,</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">)</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nd">@agent</span><span class="o">.</span><span class="n">tool</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="k">def</span><span class="w"> </span><span class="nf">recent_reviews</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">RunContext</span><span class="p">[</span><span class="n">ReviewDeps</span><span class="p">],</span> <span class="n">product</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="sd">"""获取某个产品的近期评论片段。"""</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">return</span> <span class="n">ctx</span><span class="o">.</span><span class="n">deps</span><span class="o">.</span><span class="n">reviews</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="p">[])</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="s2">"请根据近期评论评价产品 keyboard。"</span><span class="p">,</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">deps</span><span class="o">=</span><span class="n">ReviewDeps</span><span class="p">(</span><span class="n">reviews</span><span class="o">=</span><span class="p">{</span><span class="s2">"keyboard"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"按键手感很好"</span><span class="p">,</span> <span class="s2">"声音有点大"</span><span class="p">]}),</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="p">)</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
-</span></code></pre></div>
-<p>先设置 <code>PYDANTIC_AI_MODEL</code> 为官方支持且账户可用的 <code>provider:model</code> 标识，并配置凭据；不要把 CLI 模型别名当成供应商 API 模型名。这里用内存数据演示可替换依赖，生产可改成带请求身份的只读服务。已有异步事件循环中应 <code>await agent.run(...)</code>，不要调用 <code>run_sync()</code>。</p>
-<p>这里有两个工程上直接相关的点：</p>
+<h1 id="fde">FDE · 现场经验与踩坑<a class="headerlink" href="#fde" title="Permanent link">&para;</a></h1>
+<p>这一模块讨论客户项目里容易被忽略的事：开会时都说同意，做完却没人验收；PoC 明明跑通了，换个人接手又得从头排查；项目文档很多，偏偏找不到当初为什么这样决定。</p>
+<h2 id="_1">章节目录<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong><code>@agent.tool</code> 装饰的函数签名和 docstring 直接生成工具 Schema</strong>——这和 <a href="../../../tools/">Tools 主题</a> 中 Function Calling 的 Schema 设计原则完全一致，PydanticAI 没有发明新协议，只是让 Schema 生成过程和 Python 类型注解无缝衔接；</li>
-<li><strong><code>RunContext</code> 是依赖注入的入口</strong>——工具函数通过 <code>ctx.deps</code> 访问运行时注入的依赖（数据库连接、当前用户身份等），这些依赖在测试时可以被替换成 mock 对象，不需要真的连接外部系统就能验证 Agent 的调用逻辑。</li>
+<li><a href="02-delivery-lessons/">第二章：FDE 项目踩坑与交付经验</a></li>
 </ol>
-<h2 id="213">21.3 类型安全带来的工程收益<a class="headerlink" href="#213" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-    A["模型输出的原始文本"] --&gt; B{"output_type 校验"}
-    B --&gt;|"通过"| C["强类型对象&lt;br/&gt;可直接用于业务逻辑"]
-    B --&gt;|"不通过且有预算"| D["反馈校验错误并重试"]
-    D --&gt; B
-    B --&gt;|"预算耗尽"| E["失败返回 / 应用回退"]</code></pre>
-<p>当输出不满足约束时，框架可以将校验错误反馈给模型并有限重试；预算耗尽仍会失败，需要应用处理。工具输出、供应商原生结构化输出、提示式输出有不同支持条件，不能假定所有模型都执行同一种严格 JSON Schema 约束。静态类型工具能检查调用代码，不会验证外部事实。</p>
-<p>可用 output validator 检查跨字段业务约束，并以 <code>ModelRetry</code> 请求修正；如果证据本身不足，则应拒答而非无限重试。重试同样增加 token、延迟，不能绕过单请求预算。</p>
-<h2 id="214-autogencrewaipydanticai">21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界<a class="headerlink" href="#214-autogencrewaipydanticai" title="Permanent link">&para;</a></h2>
-<p>把本模块两章和前几个模块放在一起，可以按六个工程维度画出一张对照表（更完整的跨全部框架对照见 <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/">框架选型与可移植架构 · 第二十二章</a>）：</p>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>AutoGen</th>
-<th>CrewAI</th>
-<th>PydanticAI</th>
-<th>Semantic Kernel</th>
-<th>LangGraph</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>核心抽象</strong></td>
-<td>Core 消息 / AgentChat Team</td>
-<td>Agent、Task、Crew、Flow</td>
-<td>类型化 Agent 与依赖</td>
-<td>Kernel、Plugin、Process / Agent</td>
-<td>状态图</td>
-</tr>
-<tr>
-<td><strong>状态模型</strong></td>
-<td>Agent 内部状态及 Team 消息</td>
-<td>Task 输出、记忆与 Flow state</td>
-<td>Run、消息历史、依赖；三者职责不同</td>
-<td>按具体 Agent/Process 建模</td>
-<td>状态通道与 reducer</td>
-</tr>
-<tr>
-<td><strong>恢复入口</strong></td>
-<td><code>save_state</code> / <code>load_state</code>，应用管理存储</td>
-<td>Flow 持久化，不等于内部每次调用检查点</td>
-<td>官方 durable execution 集成，如 Temporal、DBOS、Prefect</td>
-<td>核对实验功能及运行时，不笼统承诺</td>
-<td>checkpointer，仍需持久后端</td>
-</tr>
-<tr>
-<td><strong>工具契约</strong></td>
-<td>AgentChat 工具与 Core 消息分层</td>
-<td>Tool / 参数 Schema</td>
-<td>类型注解、Pydantic、业务 validator</td>
-<td>KernelFunction 与 Plugin</td>
-<td>Tool Schema 与工具执行</td>
-</tr>
-<tr>
-<td><strong>观测接入</strong></td>
-<td>Core 有遥测，需配置导出</td>
-<td>Flow/Crew 追踪与可观测性集成</td>
-<td>Logfire / OpenTelemetry</td>
-<td>OpenTelemetry / Application Insights</td>
-<td>LangSmith / 其他集成</td>
-</tr>
-<tr>
-<td><strong>迁移负担</strong></td>
-<td>消息、Team 策略；维护模式需评估 MAF</td>
-<td>Task 上下文、Flow 状态和运行服务</td>
-<td>消息格式、重试/工具语义、持久执行后端</td>
-<td>Plugin、Filter、线程及 MAF 迁移</td>
-<td>reducer、检查点与中断语义</td>
-</tr>
-</tbody>
-</table>
-<p>这是核对清单，不是「最严格/最成熟/最低锁定」排名。新 .NET/Python 项目应另外评估 <a href="../../04-semantic-kernel/19-process-and-agent-framework/">MAF</a>，不要默认选处于维护模式的 AutoGen 或 SK 实验 Process。PydanticAI 的持久执行也需要部署相应引擎，运维负担并未因为提供集成而消失。</p>
-<p>已有会话可通过 <code>message_history</code> 传给下一次 run；这与依赖注入不同，也不等于崩溃恢复。恢复长任务时要按 Temporal、DBOS 等后端的语义划定可重放步骤，避免把数据库连接或授权令牌作为历史数据持久保存。</p>
-<h2 id="215">21.5 常见错误<a class="headerlink" href="#215" title="Permanent link">&para;</a></h2>
-<h3 id="2151">21.5.1 认为类型校验能替代模型能力评测<a class="headerlink" href="#2151" title="Permanent link">&para;</a></h3>
-<p><code>output_type</code> 校验能保证「格式正确」，不能保证「内容正确」——一个格式完全合法但语义错误的 <code>Sentiment</code> 对象照样能通过校验，仍然需要独立的评测流程判断内容质量。</p>
-<h3 id="2152">21.5.2 把依赖注入当作可选的代码风格<a class="headerlink" href="#2152" title="Permanent link">&para;</a></h3>
-<p><code>RunContext</code> 是一种方便的可测试边界，并非唯一方法；普通函数参数或服务适配器也能隔离依赖。关键是不要把用户身份与全局可变连接耦合，让测试可以替换外部服务。</p>
-<h3 id="2153">21.5.3 只看决策矩阵的单一维度就下结论<a class="headerlink" href="#2153" title="Permanent link">&para;</a></h3>
-<p>Python 类型容易复用，不代表会话格式、工具重试与持久运行时可以零成本迁移。应按具体集成评估，而不是把 PydanticAI 一概归为「无状态、恢复全自建」。</p>
-<h3 id="2154">21.5.4 把角色化框架的「团队隐喻」当作技术架构本身<a class="headerlink" href="#2154" title="Permanent link">&para;</a></h3>
-<p>CrewAI 的 <code>role</code>/<code>goal</code>/<code>backstory</code> 是 Prompt 工程的组织方式，不代表底层有类似人类团队的组织架构或权限体系，不能替代真实的权限与审批设计。</p>
-<p>类型系统相关的追问应落到失败样本：合法的 <code>score=0.9</code> 能否证明评论积极？能否通过 validator 检测相互矛盾字段？若校验期间查询订单状态发生变化，结果该按哪个版本提交？前两项由评测和业务校验覆盖，最后一项需要业务事务或版本检查，不能靠 Pydantic 类型解决。</p>
-<h2 id="216">21.6 本章总结<a class="headerlink" href="#216" title="Permanent link">&para;</a></h2>
-<ol>
-<li><strong>PydanticAI 把「Agent 开发」重新定义为「类型安全的函数调用」</strong>：<code>output_type</code> 保证输出可被自动校验并重试，<code>RunContext</code> 提供可测试的依赖注入入口；</li>
-<li><strong>类型注解帮助生成工具 Schema</strong>，供应商支持的 Schema 子集、输出模式和校验语义仍需核对；</li>
-<li><strong>类型校验解决的是「格式正确性」，不是「内容正确性」</strong>，仍然需要独立的评测体系判断语义质量；</li>
-<li><strong>AutoGen、CrewAI、PydanticAI 在状态模型、持久化、工具契约、可观测性和 lock-in 风险上呈现出明显不同的取舍</strong>，没有一个框架在全部维度上都最优；</li>
-<li><strong>框架选型应该先明确项目最看重的两三个维度</strong>，再对照决策矩阵找最匹配的框架，而不是寻找一个「全能」选项。</li>
-</ol>
-<p>如果说 AutoGen 和 CrewAI 主要回答「多个 Agent 怎么协作」，那么 PydanticAI 处理的是另一层问题：单个 Agent 的输入输出能否获得和普通 Python 函数类似的类型安全保障。三者对应的是不同优化方向，而不是同一赛道上的直接替代关系。</p>
-<h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://ai.pydantic.dev/">PydanticAI 官方文档</a></li>
-<li><a href="https://pydantic.dev/docs/ai/core-concepts/agent/">PydanticAI: Agents 核心概念</a></li>
-<li><a href="https://ai.pydantic.dev/tools/">PydanticAI: Function Tools</a></li>
-<li><a href="https://ai.pydantic.dev/dependencies/">PydanticAI: Dependencies 依赖注入</a></li>
-<li><a href="https://microsoft.github.io/autogen/stable/">AutoGen 官方文档</a></li>
-<li><a href="https://docs.crewai.com/">CrewAI 官方文档</a></li>
-<li><a href="https://pydantic.dev/docs/ai/core-concepts/output/">PydanticAI: 输出模式与校验</a></li>
-<li><a href="https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/">PydanticAI: Durable Execution</a></li>
-<li><a href="https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html">AutoGen: State</a></li>
-</ul>
-<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
+<h2 id="_2">怎么读<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>第一章介绍从需求到上线的完整过程。第二章结合 FDEOps、FDEstack、OpenFDE 和 Applied AI Field Guide 的公开做法，把需求变更、项目记录和交接几个问题讲得更具体。可以对照自己正在做的项目，看看下一步究竟缺代码、缺信息，还是缺一个明确的决定。</p>
+<p>原创文档与图示：Polo Li，采用 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>。</p>
+<p>返回 <a href="../">FDE 主题</a>。</p>
 
 
 
@@ -8779,7 +8392,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月10日 13:49:20 CST">2026-09-10</span>
   </span>
 
     
@@ -8789,7 +8402,7 @@
     <span class="md-icon" title="创建日期">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 17:30:27 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月10日 13:49:20 CST">2026-09-10</span>
   </span>
 
     
@@ -8824,7 +8437,7 @@
       <nav class="md-footer__inner md-grid" aria-label="页脚" >
         
           
-          <a href="../20-autogen-and-crewai/" class="md-footer__link md-footer__link--prev" aria-label="上一页: AutoGen 与 CrewAI">
+          <a href="../01-foundations/01-forward-deployed-engineering/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 从业务问题到可复用生产系统">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -8834,20 +8447,20 @@
                 上一页
               </span>
               <div class="md-ellipsis">
-                AutoGen 与 CrewAI
+                从业务问题到可复用生产系统
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../06-selection-portability/" class="md-footer__link md-footer__link--next" aria-label="下一页: 模块导览">
+          <a href="02-delivery-lessons/" class="md-footer__link md-footer__link--next" aria-label="下一页: FDE 项目踩坑与交付经验">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                模块导览
+                FDE 项目踩坑与交付经验
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -8900,12 +8513,12 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.action.edit", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
-        <script src="../../../javascripts/mathjax.js"></script>
+        <script src="../../javascripts/mathjax.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       

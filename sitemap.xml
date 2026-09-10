@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/about/</loc>
@@ -214,15 +214,23 @@
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/01-foundations/</loc>
-         <lastmod>2026-09-08</lastmod>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/01-foundations/01-forward-deployed-engineering/</loc>
          <lastmod>2026-09-08</lastmod>
+    </url>
+    <url>
+         <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/</loc>
+         <lastmod>2026-09-10</lastmod>
+    </url>
+    <url>
+         <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/02-delivery-lessons/</loc>
+         <lastmod>2026-09-10</lastmod>
     </url>
     <url>
          <loc>https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/</loc>

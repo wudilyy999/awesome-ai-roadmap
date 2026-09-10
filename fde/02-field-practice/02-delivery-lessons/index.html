@@ -6,19 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
+        <meta name="description" content="从四个开源项目整理 FDE 交付中的常见问题：需求改了谁确认、未知问题怎样追、PoC 留下什么、项目记忆如何更新，以及客户如何验收和接手。">
       
       
         <meta name="author" content="Polo Li">
       
       
-        <link rel="canonical" href="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/">
+        <link rel="canonical" href="https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/02-delivery-lessons/">
       
       
-        <link rel="prev" href="../20-autogen-and-crewai/">
+        <link rel="prev" href="../">
       
-      
-        <link rel="next" href="../../06-selection-portability/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -26,7 +24,7 @@
     
     
       
-        <title>PydanticAI 与选型矩阵 - Awesome AI Roadmap</title>
+        <title>FDE 项目踩坑与交付经验 - Awesome AI Roadmap</title>
       
     
     
@@ -66,20 +64,20 @@
     <meta property="og:locale" content="zh_CN">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Awesome AI Roadmap">
-    <meta property="og:title" content="第二十一章：PydanticAI 的类型安全范式与三者适用边界">
-    <meta property="og:description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
-    <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/">
+    <meta property="og:title" content="第二章：FDE 项目踩坑与交付经验">
+    <meta property="og:description" content="从四个开源项目整理 FDE 交付中的常见问题：需求改了谁确认、未知问题怎样追、PoC 留下什么、项目记忆如何更新，以及客户如何验收和接手。">
+    <meta property="og:url" content="https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/02-delivery-lessons/">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="第二十一章：PydanticAI 的类型安全范式与三者适用边界">
-    <meta name="twitter:description" content="介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。">
+    <meta name="twitter:title" content="第二章：FDE 项目踩坑与交付经验">
+    <meta name="twitter:description" content="从四个开源项目整理 FDE 交付中的常见问题：需求改了谁确认、未知问题怎样追、PoC 留下什么、项目记忆如何更新，以及客户如何验收和接手。">
     
       <meta name="google-site-verification" content="Tbgg-w7R1iywQ8r0Mp868731_XNo6up5vWyclB5GVBw">
     
     
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","description":"介绍 PydanticAI 的类型化输出、依赖注入、有限重试和持久执行集成，以实际状态与恢复要求比较 Agent 框架。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二十一章：PydanticAI 的类型安全范式与三者适用边界","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"},"datePublished":"2026-08-31","dateModified":"2026-09-08"}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","name":"第二章：FDE 项目踩坑与交付经验","description":"从四个开源项目整理 FDE 交付中的常见问题：需求改了谁确认、未知问题怎样追、PoC 留下什么、项目记忆如何更新，以及客户如何验收和接手。","inLanguage":"zh-CN","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/02-delivery-lessons/","author":{"@type":"Person","name":"Polo Li","url":"https://github.com/zongyangbigpolo"},"isPartOf":{"@type":"WebSite","name":"Awesome AI Roadmap","url":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},"headline":"第二章：FDE 项目踩坑与交付经验","mainEntityOfPage":{"@type":"WebPage","@id":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/02-delivery-lessons/"},"datePublished":"2026-09-10","dateModified":"2026-09-10"}</script>
     
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"PydanticAI 与选型矩阵","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/"}]}</script>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Awesome AI Roadmap","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/"},{"@type":"ListItem","position":2,"name":"FDE 项目踩坑与交付经验","item":"https://zongyangbigpolo.github.io/awesome-ai-roadmap/fde/02-field-practice/02-delivery-lessons/"}]}</script>
     
   
 
@@ -102,7 +100,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pydanticai" class="md-skip">
+        <a href="#fde" class="md-skip">
           跳转至
         </a>
       
@@ -136,7 +134,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PydanticAI 与选型矩阵
+              FDE 项目踩坑与交付经验
             
           </span>
         </div>
@@ -403,13 +401,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../../frameworks/" class="md-tabs__link">
           
   
   
@@ -471,11 +467,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../fde/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
           
   
   
@@ -5191,8 +5189,6 @@
       
   
   
-    
-  
   
   
     
@@ -5218,23 +5214,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../" class="md-nav__link ">
+            <a href="../../../frameworks/" class="md-nav__link ">
               
   
   
@@ -5247,13 +5240,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             框架与编排
@@ -5291,13 +5284,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -5305,7 +5295,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/" class="md-nav__link ">
+            <a href="../../../frameworks/01-langchain/" class="md-nav__link ">
               
   
   
@@ -5318,7 +5308,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -5369,7 +5359,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/01-foundations/" class="md-nav__link ">
+            <a href="../../../frameworks/01-langchain/01-foundations/" class="md-nav__link ">
               
   
   
@@ -5404,7 +5394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/01-foundations/01-agent-frameworks/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/01-foundations/01-agent-frameworks/" class="md-nav__link">
         
   
   
@@ -5427,7 +5417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/01-foundations/02-chain-and-lcel/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/01-foundations/02-chain-and-lcel/" class="md-nav__link">
         
   
   
@@ -5450,7 +5440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/01-foundations/03-langchain-architecture/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/01-foundations/03-langchain-architecture/" class="md-nav__link">
         
   
   
@@ -5510,7 +5500,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/02-agent-building/" class="md-nav__link ">
+            <a href="../../../frameworks/01-langchain/02-agent-building/" class="md-nav__link ">
               
   
   
@@ -5545,7 +5535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/02-agent-building/04-build-agent/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/02-agent-building/04-build-agent/" class="md-nav__link">
         
   
   
@@ -5568,7 +5558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/02-agent-building/05-tool-registration/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/02-agent-building/05-tool-registration/" class="md-nav__link">
         
   
   
@@ -5591,7 +5581,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/02-agent-building/06-memory/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/02-agent-building/06-memory/" class="md-nav__link">
         
   
   
@@ -5651,7 +5641,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/03-ecosystem/" class="md-nav__link ">
+            <a href="../../../frameworks/01-langchain/03-ecosystem/" class="md-nav__link ">
               
   
   
@@ -5686,7 +5676,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/03-ecosystem/07-langchain-vs-llamaindex/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/03-ecosystem/07-langchain-vs-llamaindex/" class="md-nav__link">
         
   
   
@@ -5709,7 +5699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/03-ecosystem/08-langchain4j/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/03-ecosystem/08-langchain4j/" class="md-nav__link">
         
   
   
@@ -5732,7 +5722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/03-ecosystem/11-version-evolution/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/03-ecosystem/11-version-evolution/" class="md-nav__link">
         
   
   
@@ -5790,7 +5780,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/04-langgraph/" class="md-nav__link ">
+            <a href="../../../frameworks/01-langchain/04-langgraph/" class="md-nav__link ">
               
   
   
@@ -5825,7 +5815,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/04-langgraph/09-langchain-vs-langgraph/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/04-langgraph/09-langchain-vs-langgraph/" class="md-nav__link">
         
   
   
@@ -5848,7 +5838,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/04-langgraph/10-langgraph-advantages/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/04-langgraph/10-langgraph-advantages/" class="md-nav__link">
         
   
   
@@ -5906,7 +5896,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../01-langchain/05-production/" class="md-nav__link ">
+            <a href="../../../frameworks/01-langchain/05-production/" class="md-nav__link ">
               
   
   
@@ -5941,7 +5931,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/05-production/12-deep-research/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/05-production/12-deep-research/" class="md-nav__link">
         
   
   
@@ -5964,7 +5954,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-langchain/05-production/13-langsmith-production-loop/" class="md-nav__link">
+      <a href="../../../frameworks/01-langchain/05-production/13-langsmith-production-loop/" class="md-nav__link">
         
   
   
@@ -6019,13 +6009,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6033,7 +6020,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../02-llamaindex/" class="md-nav__link ">
+            <a href="../../../frameworks/02-llamaindex/" class="md-nav__link ">
               
   
   
@@ -6046,7 +6033,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6068,7 +6055,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-llamaindex/14-data-index-abstractions/" class="md-nav__link">
+      <a href="../../../frameworks/02-llamaindex/14-data-index-abstractions/" class="md-nav__link">
         
   
   
@@ -6091,7 +6078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../02-llamaindex/15-query-engine-workflows/" class="md-nav__link">
+      <a href="../../../frameworks/02-llamaindex/15-query-engine-workflows/" class="md-nav__link">
         
   
   
@@ -6138,13 +6125,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6152,7 +6136,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../03-dspy/" class="md-nav__link ">
+            <a href="../../../frameworks/03-dspy/" class="md-nav__link ">
               
   
   
@@ -6165,7 +6149,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6187,7 +6171,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-dspy/16-declarative-programming-model/" class="md-nav__link">
+      <a href="../../../frameworks/03-dspy/16-declarative-programming-model/" class="md-nav__link">
         
   
   
@@ -6210,7 +6194,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../03-dspy/17-compiler-and-optimizers/" class="md-nav__link">
+      <a href="../../../frameworks/03-dspy/17-compiler-and-optimizers/" class="md-nav__link">
         
   
   
@@ -6257,13 +6241,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6271,7 +6252,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../04-semantic-kernel/" class="md-nav__link ">
+            <a href="../../../frameworks/04-semantic-kernel/" class="md-nav__link ">
               
   
   
@@ -6284,7 +6265,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6306,7 +6287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-semantic-kernel/18-kernel-plugin-planner/" class="md-nav__link">
+      <a href="../../../frameworks/04-semantic-kernel/18-kernel-plugin-planner/" class="md-nav__link">
         
   
   
@@ -6329,7 +6310,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-semantic-kernel/19-process-and-agent-framework/" class="md-nav__link">
+      <a href="../../../frameworks/04-semantic-kernel/19-process-and-agent-framework/" class="md-nav__link">
         
   
   
@@ -6357,8 +6338,6 @@
                 
   
   
-    
-  
   
   
     
@@ -6378,21 +6357,18 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_6" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../frameworks/05-lightweight-agent-frameworks/" class="md-nav__link ">
               
   
   
@@ -6405,13 +6381,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_6" id="__nav_8_6_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_6" id="__nav_8_6_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8_6">
             <span class="md-nav__icon md-icon"></span>
             轻量级 Agent 框架
@@ -6427,7 +6403,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../20-autogen-and-crewai/" class="md-nav__link">
+      <a href="../../../frameworks/05-lightweight-agent-frameworks/20-autogen-and-crewai/" class="md-nav__link">
         
   
   
@@ -6447,32 +6423,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    PydanticAI 与选型矩阵
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix/" class="md-nav__link">
         
   
   
@@ -6483,131 +6437,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#211" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.1 第三种路线：把「协作」问题换成「正确性」问题
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#212-agentoutput_type" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.2 核心设计：Agent、output_type 与依赖注入
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#213" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.3 类型安全带来的工程收益
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#214-autogencrewaipydanticai" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#215" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5 常见错误
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="21.5 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#2151" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.1 认为类型校验能替代模型能力评测
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2152" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.2 把依赖注入当作可选的代码风格
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2153" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.3 只看决策矩阵的单一维度就下结论
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2154" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.4 把角色化框架的「团队隐喻」当作技术架构本身
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#216" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.6 本章总结
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      参考资料
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -6644,13 +6473,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -6658,7 +6484,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../06-selection-portability/" class="md-nav__link ">
+            <a href="../../../frameworks/06-selection-portability/" class="md-nav__link ">
               
   
   
@@ -6671,7 +6497,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_8_7" id="__nav_8_7_label" tabindex="">
+              <label class="md-nav__link " for="__nav_8_7" id="__nav_8_7_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -6693,7 +6519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/" class="md-nav__link">
+      <a href="../../../frameworks/06-selection-portability/22-cross-framework-technical-taxonomy/" class="md-nav__link">
         
   
   
@@ -6716,7 +6542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-selection-portability/23-lockin-and-portable-architecture/" class="md-nav__link">
+      <a href="../../../frameworks/06-selection-portability/23-lockin-and-portable-architecture/" class="md-nav__link">
         
   
   
@@ -8204,6 +8030,8 @@
       
   
   
+    
+  
   
   
     
@@ -8221,20 +8049,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../fde/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   
@@ -8247,13 +8078,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_11">
             <span class="md-nav__icon md-icon"></span>
             FDE
@@ -8283,10 +8114,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -8294,7 +8128,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../fde/01-foundations/" class="md-nav__link ">
+            <a href="../../01-foundations/" class="md-nav__link ">
               
   
   
@@ -8307,7 +8141,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_11_2" id="__nav_11_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_11_2" id="__nav_11_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -8329,7 +8163,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../fde/01-foundations/01-forward-deployed-engineering/" class="md-nav__link">
+      <a href="../../01-foundations/01-forward-deployed-engineering/" class="md-nav__link">
         
   
   
@@ -8357,6 +8191,8 @@
                 
   
   
+    
+  
   
   
     
@@ -8374,18 +8210,21 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../fde/02-field-practice/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -8398,13 +8237,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_11_3" id="__nav_11_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_11_3" id="__nav_11_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_11_3">
             <span class="md-nav__icon md-icon"></span>
             现场经验与踩坑
@@ -8417,10 +8256,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../fde/02-field-practice/02-delivery-lessons/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    FDE 项目踩坑与交付经验
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -8431,6 +8292,98 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 到了现场才发现，原来的需求不能照做
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 “等客户确认”不能永远挂在任务栏
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-poc" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3 PoC 跑通以后，别只留下代码
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4 项目记忆不是把会议纪要全塞给模型
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.5 测试过了，谁说这次交付完成了
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.6 交接时，换一个人处理故障
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.7 第二个客户来了，不要复制第一个客户的全部做法
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.8 来源与继续阅读
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -8478,105 +8431,72 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#211" class="md-nav__link">
+  <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
-      21.1 第三种路线：把「协作」问题换成「正确性」问题
+      2.1 到了现场才发现，原来的需求不能照做
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#212-agentoutput_type" class="md-nav__link">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
-      21.2 核心设计：Agent、output_type 与依赖注入
+      2.2 “等客户确认”不能永远挂在任务栏
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#213" class="md-nav__link">
+  <a href="#23-poc" class="md-nav__link">
     <span class="md-ellipsis">
-      21.3 类型安全带来的工程收益
+      2.3 PoC 跑通以后，别只留下代码
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#214-autogencrewaipydanticai" class="md-nav__link">
+  <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
-      21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界
+      2.4 项目记忆不是把会议纪要全塞给模型
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#215" class="md-nav__link">
+  <a href="#25" class="md-nav__link">
     <span class="md-ellipsis">
-      21.5 常见错误
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="21.5 常见错误">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#2151" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.1 认为类型校验能替代模型能力评测
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2152" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.2 把依赖注入当作可选的代码风格
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2153" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.3 只看决策矩阵的单一维度就下结论
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2154" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.5.4 把角色化框架的「团队隐喻」当作技术架构本身
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#216" class="md-nav__link">
-    <span class="md-ellipsis">
-      21.6 本章总结
+      2.5 测试过了，谁说这次交付完成了
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#26" class="md-nav__link">
     <span class="md-ellipsis">
-      参考资料
+      2.6 交接时，换一个人处理故障
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.7 第二个客户来了，不要复制第一个客户的全部做法
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.8 来源与继续阅读
     </span>
   </a>
   
@@ -8598,7 +8518,7 @@
 
 
   
-    <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap/edit/main/docs/frameworks/05-lightweight-agent-frameworks/21-pydanticai-and-decision-matrix.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/zongyangbigpolo/awesome-ai-roadmap/edit/main/docs/fde/02-field-practice/02-delivery-lessons.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -8606,157 +8526,256 @@
   
 
 
-<h1 id="pydanticai">第二十一章：PydanticAI 的类型安全范式与三者适用边界<a class="headerlink" href="#pydanticai" title="Permanent link">&para;</a></h1>
-<h2 id="211">21.1 第三种路线：把「协作」问题换成「正确性」问题<a class="headerlink" href="#211" title="Permanent link">&para;</a></h2>
-<p>PydanticAI 以 Python 类型、工具和依赖注入组织 Agent，但不只支持无状态的单 Agent 调用：它也支持会话历史、多 Agent 组合和持久执行集成。本章从单个 Agent 的可测试边界切入，再看这些能力如何扩展。</p>
-<p>这里的类型安全包括静态检查与运行时校验，不代表自然语言输入或模型推断自动获得事实正确性。</p>
-<h2 id="212-agentoutput_type">21.2 核心设计：<code>Agent</code>、<code>output_type</code> 与依赖注入<a class="headerlink" href="#212-agentoutput_type" title="Permanent link">&para;</a></h2>
-<p>PydanticAI 的 <code>Agent</code> 对象接受一个 <code>output_type</code>（通常是 Pydantic <code>BaseModel</code>），运行结果会被自动校验并转换成对应类型，而不是返回一段需要自己解析的原始字符串：</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">RunContext</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">Sentiment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">label</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"positive"</span><span class="p">,</span> <span class="s2">"negative"</span><span class="p">,</span> <span class="s2">"neutral"</span><span class="p">]</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nd">@dataclass</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">ReviewDeps</span><span class="p">:</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">reviews</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYDANTIC_AI_MODEL"</span><span class="p">],</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">deps_type</span><span class="o">=</span><span class="n">ReviewDeps</span><span class="p">,</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">output_type</span><span class="o">=</span><span class="n">Sentiment</span><span class="p">,</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">)</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nd">@agent</span><span class="o">.</span><span class="n">tool</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="k">def</span><span class="w"> </span><span class="nf">recent_reviews</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">RunContext</span><span class="p">[</span><span class="n">ReviewDeps</span><span class="p">],</span> <span class="n">product</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="sd">"""获取某个产品的近期评论片段。"""</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">return</span> <span class="n">ctx</span><span class="o">.</span><span class="n">deps</span><span class="o">.</span><span class="n">reviews</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="p">[])</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="s2">"请根据近期评论评价产品 keyboard。"</span><span class="p">,</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">deps</span><span class="o">=</span><span class="n">ReviewDeps</span><span class="p">(</span><span class="n">reviews</span><span class="o">=</span><span class="p">{</span><span class="s2">"keyboard"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"按键手感很好"</span><span class="p">,</span> <span class="s2">"声音有点大"</span><span class="p">]}),</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="p">)</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
-</span></code></pre></div>
-<p>先设置 <code>PYDANTIC_AI_MODEL</code> 为官方支持且账户可用的 <code>provider:model</code> 标识，并配置凭据；不要把 CLI 模型别名当成供应商 API 模型名。这里用内存数据演示可替换依赖，生产可改成带请求身份的只读服务。已有异步事件循环中应 <code>await agent.run(...)</code>，不要调用 <code>run_sync()</code>。</p>
-<p>这里有两个工程上直接相关的点：</p>
-<ol>
-<li><strong><code>@agent.tool</code> 装饰的函数签名和 docstring 直接生成工具 Schema</strong>——这和 <a href="../../../tools/">Tools 主题</a> 中 Function Calling 的 Schema 设计原则完全一致，PydanticAI 没有发明新协议，只是让 Schema 生成过程和 Python 类型注解无缝衔接；</li>
-<li><strong><code>RunContext</code> 是依赖注入的入口</strong>——工具函数通过 <code>ctx.deps</code> 访问运行时注入的依赖（数据库连接、当前用户身份等），这些依赖在测试时可以被替换成 mock 对象，不需要真的连接外部系统就能验证 Agent 的调用逻辑。</li>
-</ol>
-<h2 id="213">21.3 类型安全带来的工程收益<a class="headerlink" href="#213" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-    A["模型输出的原始文本"] --&gt; B{"output_type 校验"}
-    B --&gt;|"通过"| C["强类型对象&lt;br/&gt;可直接用于业务逻辑"]
-    B --&gt;|"不通过且有预算"| D["反馈校验错误并重试"]
-    D --&gt; B
-    B --&gt;|"预算耗尽"| E["失败返回 / 应用回退"]</code></pre>
-<p>当输出不满足约束时，框架可以将校验错误反馈给模型并有限重试；预算耗尽仍会失败，需要应用处理。工具输出、供应商原生结构化输出、提示式输出有不同支持条件，不能假定所有模型都执行同一种严格 JSON Schema 约束。静态类型工具能检查调用代码，不会验证外部事实。</p>
-<p>可用 output validator 检查跨字段业务约束，并以 <code>ModelRetry</code> 请求修正；如果证据本身不足，则应拒答而非无限重试。重试同样增加 token、延迟，不能绕过单请求预算。</p>
-<h2 id="214-autogencrewaipydanticai">21.4 决策矩阵：AutoGen、CrewAI、PydanticAI 与本主题其他框架的适用边界<a class="headerlink" href="#214-autogencrewaipydanticai" title="Permanent link">&para;</a></h2>
-<p>把本模块两章和前几个模块放在一起，可以按六个工程维度画出一张对照表（更完整的跨全部框架对照见 <a href="../../06-selection-portability/22-cross-framework-technical-taxonomy/">框架选型与可移植架构 · 第二十二章</a>）：</p>
+<h1 id="fde">第二章：FDE 项目踩坑与交付经验<a class="headerlink" href="#fde" title="Permanent link">&para;</a></h1>
+<p>有些客户项目，代码并没有特别难写，却迟迟交不出去。客户以为买的是自动处理，工程师做的是辅助审核；测试已经通过，业务负责人却说还不能用；原开发者一走，接手的人连为什么禁用某个功能都不知道。</p>
+<p>本章从 FDEOps、FDEstack、OpenFDE 和 Applied AI Field Guide 四个公开项目中，整理值得借鉴的做法。下面沿用<a href="../../01-foundations/01-forward-deployed-engineering/">第一章</a>的虚构订单助手举例，重点看事情怎么处理，不要求安装这些工具。</p>
+<h2 id="21">2.1 到了现场才发现，原来的需求不能照做<a class="headerlink" href="#21" title="Permanent link">&para;</a></h2>
+<p>Applied AI Field Guide 的<a href="https://github.com/davidahmann/applied-ai-field-guide/blob/6b557eb74ae1cc8dd82ab8048991c8fa54ce6a02/examples/invoice-exception/engagement/field-evidence.md">发票异常教学案例</a>从一个冲突开始：原来的承诺是自动处理并入账，现场流程和政策却要求指定人员先审批。项目因此改成准备建议和待审内容，把审批、入账留给有权操作的人。</p>
+<p>值得学的不是“遇到风险就加个人工审核”，而是<strong>发现原需求做不了以后，怎样和客户重新约定</strong>。不能把原来的要求悄悄改掉，也不能以为给项目出钱的人就一定有权放宽业务政策。</p>
+<p>换到订单助手里，运营负责人原本要自动回邮件。工程师观察客服工作后，提出先做草稿。此时客户很可能问：</p>
+<blockquote>
+<p>“我原来想减少人工处理，现在每封还要人看，这一期到底解决了什么？”</p>
+</blockquote>
+<p>回答需要回到实际工作：先确认时间主要花在查订单、找政策，还是编辑和发送。若查证占了大部分，草稿仍可能值得做；若主要成本就在审核，方案就要重新评估，不能靠换个功能名称把这件事带过去。</p>
+<p>这次讨论最好留下一份短记录：</p>
 <table>
 <thead>
 <tr>
-<th>维度</th>
-<th>AutoGen</th>
-<th>CrewAI</th>
-<th>PydanticAI</th>
-<th>Semantic Kernel</th>
-<th>LangGraph</th>
+<th>要说清楚的事</th>
+<th>订单助手里的例子</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>核心抽象</strong></td>
-<td>Core 消息 / AgentChat Team</td>
-<td>Agent、Task、Crew、Flow</td>
-<td>类型化 Agent 与依赖</td>
-<td>Kernel、Plugin、Process / Agent</td>
-<td>状态图</td>
+<td>原来约定什么</td>
+<td>查询异常并自动回复客户</td>
 </tr>
 <tr>
-<td><strong>状态模型</strong></td>
-<td>Agent 内部状态及 Team 消息</td>
-<td>Task 输出、记忆与 Flow state</td>
-<td>Run、消息历史、依赖；三者职责不同</td>
-<td>按具体 Agent/Process 建模</td>
-<td>状态通道与 reducer</td>
+<td>为什么需要调整</td>
+<td>采购到货不是客户送达，交期仍需仓库确认</td>
 </tr>
 <tr>
-<td><strong>恢复入口</strong></td>
-<td><code>save_state</code> / <code>load_state</code>，应用管理存储</td>
-<td>Flow 持久化，不等于内部每次调用检查点</td>
-<td>官方 durable execution 集成，如 Temporal、DBOS、Prefect</td>
-<td>核对实验功能及运行时，不笼统承诺</td>
-<td>checkpointer，仍需持久后端</td>
+<td>本期准备做到哪里</td>
+<td>汇总订单事实、给出来源、起草回复，由客服发送</td>
 </tr>
 <tr>
-<td><strong>工具契约</strong></td>
-<td>AgentChat 工具与 Core 消息分层</td>
-<td>Tool / 参数 Schema</td>
-<td>类型注解、Pydantic、业务 validator</td>
-<td>KernelFunction 与 Plugin</td>
-<td>Tool Schema 与工具执行</td>
+<td>对收益有什么影响</td>
+<td>先测查证和编辑是否省时，不把人工审核时间算没</td>
 </tr>
 <tr>
-<td><strong>观测接入</strong></td>
-<td>Core 有遥测，需配置导出</td>
-<td>Flow/Crew 追踪与可观测性集成</td>
-<td>Logfire / OpenTelemetry</td>
-<td>OpenTelemetry / Application Insights</td>
-<td>LangSmith / 其他集成</td>
-</tr>
-<tr>
-<td><strong>迁移负担</strong></td>
-<td>消息、Team 策略；维护模式需评估 MAF</td>
-<td>Task 上下文、Flow 状态和运行服务</td>
-<td>消息格式、重试/工具语义、持久执行后端</td>
-<td>Plugin、Filter、线程及 MAF 迁移</td>
-<td>reducer、检查点与中断语义</td>
+<td>谁确认，什么时候确认</td>
+<td>有权调整项目范围的负责人；涉及政策的部分另请政策负责人确认</td>
 </tr>
 </tbody>
 </table>
-<p>这是核对清单，不是「最严格/最成熟/最低锁定」排名。新 .NET/Python 项目应另外评估 <a href="../../04-semantic-kernel/19-process-and-agent-framework/">MAF</a>，不要默认选处于维护模式的 AutoGen 或 SK 实验 Process。PydanticAI 的持久执行也需要部署相应引擎，运维负担并未因为提供集成而消失。</p>
-<p>已有会话可通过 <code>message_history</code> 传给下一次 run；这与依赖注入不同，也不等于崩溃恢复。恢复长任务时要按 Temporal、DBOS 等后端的语义划定可重放步骤，避免把数据库连接或授权令牌作为历史数据持久保存。</p>
-<h2 id="215">21.5 常见错误<a class="headerlink" href="#215" title="Permanent link">&para;</a></h2>
-<h3 id="2151">21.5.1 认为类型校验能替代模型能力评测<a class="headerlink" href="#2151" title="Permanent link">&para;</a></h3>
-<p><code>output_type</code> 校验能保证「格式正确」，不能保证「内容正确」——一个格式完全合法但语义错误的 <code>Sentiment</code> 对象照样能通过校验，仍然需要独立的评测流程判断内容质量。</p>
-<h3 id="2152">21.5.2 把依赖注入当作可选的代码风格<a class="headerlink" href="#2152" title="Permanent link">&para;</a></h3>
-<p><code>RunContext</code> 是一种方便的可测试边界，并非唯一方法；普通函数参数或服务适配器也能隔离依赖。关键是不要把用户身份与全局可变连接耦合，让测试可以替换外部服务。</p>
-<h3 id="2153">21.5.3 只看决策矩阵的单一维度就下结论<a class="headerlink" href="#2153" title="Permanent link">&para;</a></h3>
-<p>Python 类型容易复用，不代表会话格式、工具重试与持久运行时可以零成本迁移。应按具体集成评估，而不是把 PydanticAI 一概归为「无状态、恢复全自建」。</p>
-<h3 id="2154">21.5.4 把角色化框架的「团队隐喻」当作技术架构本身<a class="headerlink" href="#2154" title="Permanent link">&para;</a></h3>
-<p>CrewAI 的 <code>role</code>/<code>goal</code>/<code>backstory</code> 是 Prompt 工程的组织方式，不代表底层有类似人类团队的组织架构或权限体系，不能替代真实的权限与审批设计。</p>
-<p>类型系统相关的追问应落到失败样本：合法的 <code>score=0.9</code> 能否证明评论积极？能否通过 validator 检测相互矛盾字段？若校验期间查询订单状态发生变化，结果该按哪个版本提交？前两项由评测和业务校验覆盖，最后一项需要业务事务或版本检查，不能靠 Pydantic 类型解决。</p>
-<h2 id="216">21.6 本章总结<a class="headerlink" href="#216" title="Permanent link">&para;</a></h2>
-<ol>
-<li><strong>PydanticAI 把「Agent 开发」重新定义为「类型安全的函数调用」</strong>：<code>output_type</code> 保证输出可被自动校验并重试，<code>RunContext</code> 提供可测试的依赖注入入口；</li>
-<li><strong>类型注解帮助生成工具 Schema</strong>，供应商支持的 Schema 子集、输出模式和校验语义仍需核对；</li>
-<li><strong>类型校验解决的是「格式正确性」，不是「内容正确性」</strong>，仍然需要独立的评测体系判断语义质量；</li>
-<li><strong>AutoGen、CrewAI、PydanticAI 在状态模型、持久化、工具契约、可观测性和 lock-in 风险上呈现出明显不同的取舍</strong>，没有一个框架在全部维度上都最优；</li>
-<li><strong>框架选型应该先明确项目最看重的两三个维度</strong>，再对照决策矩阵找最匹配的框架，而不是寻找一个「全能」选项。</li>
-</ol>
-<p>如果说 AutoGen 和 CrewAI 主要回答「多个 Agent 怎么协作」，那么 PydanticAI 处理的是另一层问题：单个 Agent 的输入输出能否获得和普通 Python 函数类似的类型安全保障。三者对应的是不同优化方向，而不是同一赛道上的直接替代关系。</p>
-<h2 id="_1">参考资料<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://ai.pydantic.dev/">PydanticAI 官方文档</a></li>
-<li><a href="https://pydantic.dev/docs/ai/core-concepts/agent/">PydanticAI: Agents 核心概念</a></li>
-<li><a href="https://ai.pydantic.dev/tools/">PydanticAI: Function Tools</a></li>
-<li><a href="https://ai.pydantic.dev/dependencies/">PydanticAI: Dependencies 依赖注入</a></li>
-<li><a href="https://microsoft.github.io/autogen/stable/">AutoGen 官方文档</a></li>
-<li><a href="https://docs.crewai.com/">CrewAI 官方文档</a></li>
-<li><a href="https://pydantic.dev/docs/ai/core-concepts/output/">PydanticAI: 输出模式与校验</a></li>
-<li><a href="https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/">PydanticAI: Durable Execution</a></li>
-<li><a href="https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html">AutoGen: State</a></li>
-</ul>
-<p>原文与图示：Polo Li，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授权。</p>
+<p>记录要标明“待确认、同意、拒绝或延期”，而不是开完会就默认客户接受了。改范围后，验收条件、交付计划和费用约定也要一起看。</p>
+<pre class="mermaid"><code>flowchart LR
+    A["保留原来的约定"] --&gt; B["写清现场发现的冲突"]
+    B --&gt; C["说明影响与备选方案"]
+    C --&gt; D{"有权负责人确认新范围?"}
+    D --&gt;|否| E["保留待决事项&lt;br/&gt;不执行新增动作"]
+    D --&gt;|是| F["更新范围、验收与计划"]
+    F --&gt; G["按确认后的范围实施"]</code></pre>
+<p>另一个常见问题是“顺手再做一点”。FDEOps 的 <a href="https://github.com/suboss87/fdeops/blob/cc96340955b8a1de1aac8d5f971f794c4f8e6d6c/skills/fde/references/hold-scope.md">hold-scope</a>建议把新增要求的提出人、影响和处理决定记下来，再讨论放在本期、下一期，还是另开项目。</p>
+<p>比如客户要求助手顺便预留库存，工程师要说明这已经涉及写入权限、并发占用和失败后的核对。可以讨论怎么做，但不能先答应“顺手加上”，到延期时才解释工作量。</p>
+<h2 id="22">2.2 “等客户确认”不能永远挂在任务栏<a class="headerlink" href="#22" title="Permanent link">&para;</a></h2>
+<p>“ERP 权限还没开”“库存字段需要确认”“业务有空再看”都像是在跟进，实际却看不出谁应该做什么。</p>
+<p>FDEstack 把待确认问题放进 <a href="https://github.com/Dan-Cleary/fdestack/blob/552446066986969c789d3f44beb42b0cc4d6ad66/templates/unknowns.md"><code>unknowns.md</code></a>，再由客户上下文、任务分诊和复盘流程反复带出来。值得借鉴的是：<strong>重要问题没有答案时，不让它随着聊天记录沉下去。</strong></p>
+<p>问题可以写得比“待确认”再具体一点：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>找谁确认</th>
+<th>没有答案会挡住什么</th>
+<th>约定下一步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可用库存是否扣除了已预留数量</td>
+<td>ERP 接口负责人</td>
+<td>不能判断还有多少货可分配</td>
+<td>对照一张有预留记录的订单，核对接口结果</td>
+</tr>
+<tr>
+<td>采购预计到货能否对外展示</td>
+<td>客服政策负责人</td>
+<td>客户草稿暂不显示这个日期</td>
+<td>提供当前政策或明确的审批记录</td>
+</tr>
+<tr>
+<td>谁能签收第一期交付</td>
+<td>项目负责人</td>
+<td>无法安排正式验收</td>
+<td>在演示前确认业务验收人及其权限</td>
+</tr>
+</tbody>
+</table>
+<p>再给每项约定一个时间。到期没解决，要问的是“该升级找谁、换什么方案，还是先停下受影响的部分”，不是机械地把截止日期往后挪。</p>
+<p>也要分清<strong>不知道</strong>和<strong>知道但还没做好</strong>。不知道服务账号能访问哪些订单，需要调查；已经确认要按客服权限过滤，只是连接器还没实现，那是开发任务。两者混在一起，团队会一直讨论，却没人开始做。</p>
+<p>客户的话同样要分开记录。负责人说“系统太慢”，这是已知反馈；工程师猜测“他其实担心季度考核”，只是推测。推测可以提醒你下次怎么问，不能直接变成客户档案里的事实。</p>
+<h2 id="23-poc">2.3 PoC 跑通以后，别只留下代码<a class="headerlink" href="#23-poc" title="Permanent link">&para;</a></h2>
+<p>PoC 结束时，最容易留下的是一个能演示的目录。最容易丢掉的，是为了跑通它，工程师到底发现了什么。</p>
+<p>FDEstack 的 <a href="https://github.com/Dan-Cleary/fdestack/blob/552446066986969c789d3f44beb42b0cc4d6ad66/skills/poc/SKILL.md"><code>/poc</code></a>要求把技术发现、设计决定和可复用经验分别写回项目记录。它的 <a href="https://github.com/Dan-Cleary/fdestack/blob/552446066986969c789d3f44beb42b0cc4d6ad66/skills/integrate/SKILL.md"><code>/integrate</code></a>更进一步，约定不读取 PoC 目录，而是根据这些记录重新实现生产版本。</p>
+<p>不必照搬“所有 PoC 都重写”，但应该把结论留下。订单助手的试验结束后，接手的人至少要能看懂下面几类事情：</p>
+<table>
+<thead>
+<tr>
+<th>PoC 中发生了什么</th>
+<th>应该留下什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发现某些订单没有采购预计到货日</td>
+<td>确认空值是正常情况还是数据问题，留下授权可用的样本引用和核对环境</td>
+</tr>
+<tr>
+<td>模型把采购到货写成客户送达</td>
+<td>错误输出、正确处理方式，以及防止再次出现的测试</td>
+</tr>
+<tr>
+<td>为了演示，库存用的是固定 JSON</td>
+<td>哪个接口尚未接通，不能把这次结果当成实时库存验证</td>
+</tr>
+<tr>
+<td>旧 CRM 保存草稿超时后，可能已经写入</td>
+<td>是否能查回执、是否支持去重；没确认前不自动重试写入</td>
+</tr>
+</tbody>
+</table>
+<p>这里要保留验证条件。在测试环境能查询，不等于生产服务账号也有权限；一张订单没有出错，不等于全部订单类型都支持。把环境、样本范围和仍未解决的部分写清楚，下一位工程师才能决定哪些结论可以沿用。</p>
+<p>代码是否保留，可以按部分判断。已经有测试的纯计算函数和接口适配逻辑，审查后可以复用；固定数据、临时凭据处理、绕过鉴权的演示分支，则要移除或重新实现。<strong>复用经过确认的东西，比争论“全留还是全扔”更有用。</strong></p>
+<p>FDEstack 的“不读 PoC”也是 Skill 的行为约定，不是操作系统权限隔离。它能提醒助手按规定工作，真正的文件访问限制还得由运行环境提供。</p>
+<h2 id="24">2.4 项目记忆不是把会议纪要全塞给模型<a class="headerlink" href="#24" title="Permanent link">&para;</a></h2>
+<p>接手一个项目时，人经常想问的不是“上次会议说了哪些话”，而是：</p>
+<blockquote>
+<p>“为什么现在只能生成草稿？当时是谁决定的？这个限制还有效吗？”</p>
+</blockquote>
+<p>OpenFDE 的<a href="https://github.com/memovai/openfde/blob/e2dec1608f7cdebd8cfe587cd94fc0c346bff6bb/ARCHITECTURE.md">设计</a>把材料、事实和任务分开保存。访谈和文档是来源，从中提取出的目标、约束、决定等进入项目记忆，任务再取用相关上下文。事实保留出处，变化通过新记录替代旧记录，而不是直接抹去过去。</p>
+<p>不用先搭知识图谱，也能采用这个思路。一条有用的项目记录应能回答：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前约定</td>
+<td>本期只保存回复草稿，不自动外发</td>
+</tr>
+<tr>
+<td>来源</td>
+<td>哪次会议、哪份政策、哪位有权负责人的确认记录</td>
+</tr>
+<tr>
+<td>原因</td>
+<td>交期需要人工确认，自动发送尚未获准</td>
+</tr>
+<tr>
+<td>适用范围</td>
+<td>当前客户、当前试点和指定工单类型</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>何时生效，是否已被后续决定替代</td>
+</tr>
+<tr>
+<td>影响到哪里</td>
+<td>发信工具权限、工作流配置、验收用例和操作说明</td>
+</tr>
+</tbody>
+</table>
+<p>后来负责人同意对某类通知开放自动发送，也不该把旧记录简单改成“允许自动发送”。要留下新决定的适用范围和生效时间，并检查原来的工具权限、审批方式和测试是否需要跟着调整。<strong>记忆里更新了一句话，不会自动改变系统授权。</strong></p>
+<p>给 Agent 分任务时，也不必把全部历史资料都带上。让它修订单查询，就给它当前权限约束、接口说明、已确认的字段含义和相关失败样本；过期方案放在历史记录里，需要追溯时再读。</p>
+<p>出处能帮助追查，但不能单独证明内容正确。一个销售承诺和一条业务政策都可能有来源，发生冲突时仍要找有权决定的人处理。</p>
+<h2 id="25">2.5 测试过了，谁说这次交付完成了<a class="headerlink" href="#25" title="Permanent link">&para;</a></h2>
+<p>“已经上线”“效果不错”“客户接受了”经常出现在同一份周报里，但它们回答的是不同问题。</p>
+<p>FDEOps 的<a href="https://github.com/suboss87/fdeops/blob/cc96340955b8a1de1aac8d5f971f794c4f8e6d6c/skills/fde/references/close.md">交接流程</a>要求区分承诺、测到的结果和客户接受的结果。这个区别可以直接放进项目沟通里：</p>
+<table>
+<thead>
+<tr>
+<th>现在能确认什么</th>
+<th>需要什么依据</th>
+<th>还不能顺便宣布什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实现满足技术要求</td>
+<td>对应版本的测试、接口行为和故障处理记录</td>
+<td>客服一定省了时间</td>
+</tr>
+<tr>
+<td>试点达到了约定目标</td>
+<td>同范围工单的结果、统计方法和业务验收人的确认</td>
+<td>所有客户和所有工单都适用</td>
+</tr>
+<tr>
+<td>接手团队能够维护</td>
+<td>接手人员实际完成操作演练</td>
+<td>原开发者可以不再承担尚未交清的支持责任</td>
+</tr>
+</tbody>
+</table>
+<p>在订单助手里，工程师可以演示草稿生成正确，但客服还可能花更多时间检查它。即使试点看起来省时，也要说明哪些工单算进来了，生成失败和转人工有没有被排除，以及业务验收人是否接受这个口径。</p>
+<p>如果客户说“先上线试试，收益下个月再看”，就把它记成带条件的试用决定，写明下次看什么、由谁决定继续。不要把它写成“项目价值已验收”。项目负责人同意试用，也不能代替数据、权限或业务政策要求的审批。</p>
+<p>工具中的状态也容易造成误会。OpenFDE 在本章引用版本中已有 <a href="https://github.com/memovai/openfde/blob/e2dec1608f7cdebd8cfe587cd94fc0c346bff6bb/apps/cli/src/commands/eval.ts"><code>eval</code> 命令</a>，会记录评判结果；但<a href="https://github.com/memovai/openfde/blob/e2dec1608f7cdebd8cfe587cd94fc0c346bff6bb/packages/core/src/dispatch/tasks.ts">任务状态转换</a>没有把评测通过设为进入 <code>accepted</code> 的硬条件。因此，看见任务卡变绿之前，还得知道是谁确认、依据是什么。</p>
+<h2 id="26">2.6 交接时，换一个人处理故障<a class="headerlink" href="#26" title="Permanent link">&para;</a></h2>
+<p>文档讲得很清楚，原开发者演示也很顺，不代表接手团队真的会用。</p>
+<p>Applied AI Field Guide 的<a href="https://github.com/davidahmann/applied-ai-field-guide/blob/6b557eb74ae1cc8dd82ab8048991c8fa54ce6a02/examples/invoice-exception/engagement/adoption-and-handoff.md">交接案例</a>把接手方需要完成的事情单独列出来：添加评测样本、发布和回滚、处理异常、支持用户。FDEOps 则强调，交接说明要能帮接到告警的人解决问题，而不只是介绍架构。</p>
+<p>订单助手交接时，可以在测试环境安排三次操作，由接手同事动手，原工程师只观察：</p>
+<p><strong>第一次，让 ERP 暂时不可用。</strong>接手的人能否看懂告警，找到失败请求，停用受影响的功能，并让客服继续按原流程处理？如果还得打电话问原工程师“这个开关在哪”，就把这一步补进操作说明，再做一次。</p>
+<p><strong>第二次，调整一条政策。</strong>请接手同事更新测试政策、确认检索取到了新版本，再加入一条“不允许承诺交期”的回归样本。这样能看到他是否理解政策、索引、提示词和测试之间的关系，而不只是会重启服务。</p>
+<p><strong>第三次，处理一次保存状态未知。</strong>模拟 CRM 已收到请求但返回超时，让他查回执、核对有没有重复草稿，再决定怎样恢复。不要把“点重试直到成功”当成故障处理方法。</p>
+<p>每次演练只记三件事：谁操作、哪里卡住、下一次怎样才能不再依赖原工程师。若接手团队缺少生产账号、权限或支持时间，要由双方明确补齐安排；多写几页文档解决不了这些问题。</p>
+<p>到正式交接时，至少能找到日常维护人、备用联系人、故障升级路径，以及仍由原交付团队承担的事项。客户知道出了事该找谁，接手的人也知道自己需要负责到哪里。</p>
+<h2 id="27">2.7 第二个客户来了，不要复制第一个客户的全部做法<a class="headerlink" href="#27" title="Permanent link">&para;</a></h2>
+<p>FDEstack 的跨客户经验记录，以及 FDEOps 的<a href="https://github.com/suboss87/fdeops/blob/cc96340955b8a1de1aac8d5f971f794c4f8e6d6c/skills/fde/references/encode-pattern.md">模式整理</a>，都希望下一次项目不用从零开始。真正值得带走的是排查方法、接口设计和测试思路，不是客户的原始材料。</p>
+<p>比如“库存字段名相同，含义也可能不同”是一条值得复用的提醒；第一家客户的订单、价格和内部政策，则不能直接进入共享经验库。把经验写成“接库存接口前，核对是否扣除了预留数量”，下一家仍然要用自己的数据确认。</p>
+<p>也不要把一次观察变成行业规则。“在客户 A 的当前网关配置下，某种鉴权方式不可用”有明确范围；“这种 ERP 都不支持该鉴权方式”就说过头了。保留环境、来源和待验证条件，复用才不会变成传播旧误会。</p>
+<p>项目记录放在哪里，同样要按客户要求决定。FDEstack 使用私有 Git 仓库，FDEOps 默认使用本地文件，OpenFDE 使用本地数据库，但这些选择都不自动等于“数据不会离开机器”。编程助手读取文件后可能发送给模型服务，电脑也可能启用了云同步。</p>
+<p>OpenFDE 的<a href="https://github.com/memovai/openfde/blob/e2dec1608f7cdebd8cfe587cd94fc0c346bff6bb/packages/core/src/extraction/anthropic.ts">Claude 抽取实现</a>会发送待抽取的文本或附件；FDEOps 的<a href="https://github.com/suboss87/fdeops/blob/cc96340955b8a1de1aac8d5f971f794c4f8e6d6c/PRIVACY.md">隐私说明</a>也区分了本地 CLI 和模型服务的数据传输。不能只看见 local-first，就直接导入客户会议纪要。</p>
+<p>开始时，一份范围约定、一张待确认问题表、一份决策与试验记录，再加验收和交接说明，通常已经能把工作接起来。等资料多到难以查找，再考虑自动提取、图谱和任务工作台，不必为了采用一个工具先填写它的全部模板。</p>
+<h2 id="28">2.8 来源与继续阅读<a class="headerlink" href="#28" title="Permanent link">&para;</a></h2>
+<p>资料核对日期：<strong>2026-09-10</strong>。本章借鉴工作方法并用订单场景重新组织，不把原项目的全部流程当作通用标准。链接固定到阅读时的提交，方便对照。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>建议先看哪里</th>
+<th>引用版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/davidahmann/applied-ai-field-guide">Applied AI Field Guide</a></td>
+<td><a href="https://github.com/davidahmann/applied-ai-field-guide/blob/6b557eb74ae1cc8dd82ab8048991c8fa54ce6a02/guide/field-guide-in-five-minutes.md">五分钟导读</a>、发票案例中的范围调整和接手演练</td>
+<td><code>6b557eb</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/Dan-Cleary/fdestack">FDEstack</a></td>
+<td><a href="https://github.com/Dan-Cleary/fdestack/blob/552446066986969c789d3f44beb42b0cc4d6ad66/README.md">八个 Skills 的总览</a>，尤其是待确认问题、PoC 结论和生产实现之间的衔接</td>
+<td><code>5524460</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/memovai/openfde">OpenFDE</a></td>
+<td><a href="https://github.com/memovai/openfde/blob/e2dec1608f7cdebd8cfe587cd94fc0c346bff6bb/ARCHITECTURE.md">架构说明</a>，看来源、事实、任务和上下文怎样连接</td>
+<td><code>e2dec16</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/suboss87/fdeops">FDEOps</a></td>
+<td><a href="https://github.com/suboss87/fdeops/blob/cc96340955b8a1de1aac8d5f971f794c4f8e6d6c/README.md">项目总览</a>、需求变更和交接技能</td>
+<td><code>cc96340</code></td>
+</tr>
+</tbody>
+</table>
+<p>需要补技术实现时，可以继续读<a href="../../../engineering/02-request-reliability/04-retry-timeout-idempotency-circuit-breaker/">重试与幂等</a>、<a href="../../../engineering/05-release-pipeline/09-prompt-model-data-versioning/">版本管理</a>和<a href="../../../engineering/06-performance-operations/13-feedback-loop-data-flywheel/">反馈数据处理</a>。</p>
+<p>原创文档与图示：Polo Li，采用 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>。第三方资料与代码遵循各自项目的许可。</p>
+<p>返回 <a href="../">现场经验模块</a>。</p>
 
 
 
@@ -8779,7 +8798,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月8日 11:06:09 CST">2026-09-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月10日 13:49:20 CST">2026-09-10</span>
   </span>
 
     
@@ -8789,7 +8808,7 @@
     <span class="md-icon" title="创建日期">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年8月31日 17:30:27 CST">2026-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="2026年9月10日 13:49:20 CST">2026-09-10</span>
   </span>
 
     
@@ -8824,7 +8843,7 @@
       <nav class="md-footer__inner md-grid" aria-label="页脚" >
         
           
-          <a href="../20-autogen-and-crewai/" class="md-footer__link md-footer__link--prev" aria-label="上一页: AutoGen 与 CrewAI">
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="上一页: 模块导览">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -8834,27 +8853,11 @@
                 上一页
               </span>
               <div class="md-ellipsis">
-                AutoGen 与 CrewAI
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../../06-selection-portability/" class="md-footer__link md-footer__link--next" aria-label="下一页: 模块导览">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                下一页
-              </span>
-              <div class="md-ellipsis">
                 模块导览
               </div>
             </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
           </a>
+        
         
       </nav>
     
